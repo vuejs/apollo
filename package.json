@@ -1,0 +1,27 @@
+{
+  "name": "vue-apollo",
+  "version": "1.0.0",
+  "description": "Vue apollo integration",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Akryum/vue-apollo.git"
+  },
+  "keywords": [
+    "vue",
+    "apollo",
+    "graphql"
+  ],
+  "author": "Guillaume Chau <guillaume.b.chau@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Akryum/vue-apollo/issues"
+  },
+  "homepage": "https://github.com/Akryum/vue-apollo#readme",
+  "dependencies": {
+    "lodash": "^4.15.0"
+  }
+}
