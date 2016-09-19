@@ -18,6 +18,7 @@ import Vue from 'vue';
 import ApolloClient, { createNetworkInterface, addTypename } from './apollo-client';
 import VueApollo from 'vue-apollo';
 
+// Create the apollo client
 const apolloClient = new ApolloClient({
   networkInterface: createNetworkInterface({
     uri: 'http://localhost:8080/graphql',
@@ -26,6 +27,7 @@ const apolloClient = new ApolloClient({
   queryTransformer: addTypename,
 });
 
+// Install the vue plugin
 Vue.use(VueApollo, {
   apolloClient,
 });
@@ -47,7 +49,7 @@ You can access the [apollo-client](http://dev.apollodata.com/core/apollo-client-
 
 ### Queries
 
-In the `query` object, add an attribute for each property you want to feed with the result of an Apollo query.
+In the `apollo` object, add an attribute for each property you want to feed with the result of an Apollo query.
 
 #### Simple query
 
@@ -61,11 +63,8 @@ Put the [gql](http://docs.apollostack.com/apollo-client/core.html#gql) query dir
 
 ```javascript
 apollo: {
-  // Non-reactive query
-  query: {
-    // Simple query that will update the 'hello' vue property
-    hello: gql`{hello}`,
-  },
+  // Simple query that will update the 'hello' vue property
+  hello: gql`{hello}`,
 },
 ```
 
@@ -133,46 +132,43 @@ You can add variables (read parameters) to your `gql` query by declaring `query`
 ```javascript
 // Apollo-specific options
 apollo: {
-  // Non-reactive query
-  query: {
-    // Query with parameters
-    ping: {
-      // gql query
-      query: gql`query PingMessage($message: String!) {
-        ping(message: $message)
-      }`,
-      // Static parameters
-      variables: {
-        message: 'Meow',
-      },
+  // Query with parameters
+  ping: {
+    // gql query
+    query: gql`query PingMessage($message: String!) {
+      ping(message: $message)
+    }`,
+    // Static parameters
+    variables: {
+      message: 'Meow',
     },
   },
 },
 ```
 
-You can use the apollo options in the object, like:
+You can use the apollo `watchQuery` options in the object, like:
  - `forceFetch`
  - `fragments`
+ - `returnPartialData`
+ - `pollInterval`
  - ...
 
-See the [apollo doc](http://dev.apollodata.com/core/apollo-client-api.html#ApolloClient\.query) for more details.
+See the [apollo doc](http://dev.apollodata.com/core/apollo-client-api.html#ApolloClient\.watchQuery) for more details.
 
 For example, you could add the `forceFetch` apollo option like this:
 
 ```javascript
 apollo: {
-  query: {
-    // Query with parameters
-    ping: {
-      query: gql`query PingMessage($message: String!) {
-        ping(message: $message)
-      }`,
-      variables: {
-        message: 'Meow'
-      },
-      // Additional options here
-      forceFetch: true,
+  // Query with parameters
+  ping: {
+    query: gql`query PingMessage($message: String!) {
+      ping(message: $message)
+    }`,
+    variables: {
+      message: 'Meow'
     },
+    // Additional options here
+    forceFetch: true,
   },
 },
 ```
@@ -239,20 +235,17 @@ Use a function instead to make the parameters reactive with vue properties:
 ```javascript
 // Apollo-specific options
 apollo: {
-  // Non-reactive query
-  query: {
-    // Query with parameters
-    ping: {
-      query: gql`query PingMessage($message: String!) {
-        ping(message: $message)
-      }`,
-      // Reactive parameters
-      variables() {
-        // Use vue reactive properties here
-        return {
-            message: this.pingInput,
-        };
-      },
+  // Query with parameters
+  ping: {
+    query: gql`query PingMessage($message: String!) {
+      ping(message: $message)
+    }`,
+    // Reactive parameters
+    variables() {
+      // Use vue reactive properties here
+      return {
+          message: this.pingInput,
+      };
     },
   },
 },
@@ -285,51 +278,48 @@ These are the available advanced options you can use:
 ```javascript
 // Apollo-specific options
 apollo: {
-  // Non-reactive query
-  query: {
-    // Advanced query with parameters
-    // The 'variables' method is watched by vue
-    pingMessage: {
-      query: gql`query PingMessage($message: String!) {
-        ping(message: $message)
-      }`,
-      // Reactive parameters
-      variables() {
-        // Use vue reactive properties here
-        return {
-            message: this.pingInput,
-        };
-      },
-      // We use a custom update callback because
-      // the field names don't match
-      // By default, the 'pingMessage' attribute
-      // would be used on the 'data' result object
-      // Here we know the result is in the 'ping' attribute
-      // considering the way the apollo server works
-      update(data) {
-        console.log(data);
-        // The returned value will update
-        // the vue property 'pingMessage'
-        return data.ping;
-      },
-      // Optional result hook
-      result(data) {
-        console.log("We got some result!");
-      },
-      // Error handling
-      error(error) {
-        console.error('We\'ve got an error!', error);
-      },
-      // Loading state
-      // loadingKey is the name of the data property
-      // that will be incremented when the query is loading
-      // and decremented when it no longer is.
-      loadingKey: 'loadingQueriesCount',
-      // watchLoading will be called whenever the loading state changes
-      watchLoading(isLoading, countModifier) {
-        // isLoading is a boolean
-        // countModifier is either 1 or -1
-      },
+  // Advanced query with parameters
+  // The 'variables' method is watched by vue
+  pingMessage: {
+    query: gql`query PingMessage($message: String!) {
+      ping(message: $message)
+    }`,
+    // Reactive parameters
+    variables() {
+      // Use vue reactive properties here
+      return {
+          message: this.pingInput,
+      };
+    },
+    // We use a custom update callback because
+    // the field names don't match
+    // By default, the 'pingMessage' attribute
+    // would be used on the 'data' result object
+    // Here we know the result is in the 'ping' attribute
+    // considering the way the apollo server works
+    update(data) {
+      console.log(data);
+      // The returned value will update
+      // the vue property 'pingMessage'
+      return data.ping;
+    },
+    // Optional result hook
+    result(data) {
+      console.log("We got some result!");
+    },
+    // Error handling
+    error(error) {
+      console.error('We\'ve got an error!', error);
+    },
+    // Loading state
+    // loadingKey is the name of the data property
+    // that will be incremented when the query is loading
+    // and decremented when it no longer is.
+    loadingKey: 'loadingQueriesCount',
+    // watchLoading will be called whenever the loading state changes
+    watchLoading(isLoading, countModifier) {
+      // isLoading is a boolean
+      // countModifier is either 1 or -1
     },
   },
 },
@@ -341,41 +331,25 @@ If you use `ES2015`, you can also write the `update` like this:
 update: data => data.ping
 ```
 
-### Reactive Queries
+### Reactive Query Example
 
-For more info, see the [apollo doc](http://dev.apollodata.com/core/apollo-client-api.html#ApolloClient\.watchQuery).
-
-Add your queries in a `watchQuery` object instead of `data`:
+Here is a reactive query example using polling:
 
 ```javascript
 // Apollo-specific options
 apollo: {
-  // Reactive query
-  watchQuery: {
-    // 'tags' data property on vue instance
-    tags: {
-      query: gql`query tagList {
-        tags {
-          id,
-          label
-        }
-      }`,
-      pollInterval: 300, // ms
-    },
+  // 'tags' data property on vue instance
+  tags: {
+    query: gql`query tagList {
+      tags {
+        id,
+        label
+      }
+    }`,
+    pollInterval: 300, // ms
   },
 },
 ```
-
-You can use the apollo options, for example:
- - `forceFetch`
- - `returnPartialData`
- - `pollInterval`
- - `fragments`
- - ...
-
-See the [apollo doc](http://dev.apollodata.com/core/apollo-client-api.html#ApolloClient\.watchQuery) for more details.
-
-You can also use the advanced options detailed above, like `result` or `watchLoading`.
 
 Here is how the server-side looks like:
 
