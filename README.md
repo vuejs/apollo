@@ -275,9 +275,9 @@ This will re-fetch the query each time a parameter changes, for example:
 #### Advanced options
 
 These are the available advanced options you can use:
-- `update(data) {return ...}` to customize the value that is set in the vue property, for example if the field names don't match
-- `result(data)` is a hook called when a result is received
-- `error(errors, type)` is a hook called when there are errors, `type` value can either be `'sending'` or `'execution'`
+- `update(data) {return ...}` to customize the value that is set in the vue property, for example if the field names don't match.
+- `result(data)` is a hook called when a result is received.
+- `error(error)` is a hook called when there are errors, `error` being an Apollo error object with either a `graphQLErrors` property or a `networkError` property.
 - `loadingKey` will update the component data property you pass as the value. You should initialize this property to `0` in the component `data()` hook. When the query is loading, this property will be incremented by 1 and as soon as it no longer is, the property will be decremented by 1. That way, the property can represent a counter of currently loading queries.
 - `watchLoading(isLoading, countModifier)` is a hook called when the loading state of the query changes. The `countModifier` parameter is either equal to `1` when the query is now loading, or `-1` when the query is no longer loading.
 
@@ -317,8 +317,8 @@ apollo: {
         console.log("We got some result!");
       },
       // Error handling
-      error(errors, type) {
-        console.error(`We've got ${errors.length} errors of type '${type}'`);
+      error(error) {
+        console.error('We\'ve got an error!', error);
       },
       // Loading state
       // loadingKey is the name of the data property
