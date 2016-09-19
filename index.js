@@ -1,2 +1,1 @@
-import VueApollo from './lib/vue-plugin';
-export default VueApollo;
+module.exports = require('./lib/vue-plugin');

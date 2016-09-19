@@ -1,6 +1,6 @@
 {
   "name": "vue-apollo",
-  "version": "1.0.0-beta1",
+  "version": "1.0.0-beta4",
   "description": "Vue apollo integration",
   "main": "index.js",
   "scripts": {
@@ -23,5 +23,8 @@
   "homepage": "https://github.com/Akryum/vue-apollo#readme",
   "peerDependencies": {
     "apollo-client": "^0.4.15"
+  },
+  "dependencies": {
+    "lodash.omit": "^4.5.0"
   }
 }
