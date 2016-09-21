@@ -1,6 +1,6 @@
 {
   "name": "vue-apollo",
-  "version": "1.0.0-beta7",
+  "version": "1.0.0-beta7-1",
   "description": "Vue apollo integration",
   "main": "index.js",
   "scripts": {
