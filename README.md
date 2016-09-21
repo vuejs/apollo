@@ -2,7 +2,7 @@
 
 Integrates [apollo](http://www.apollostack.com/) in your vue components with declarative queries.
 
-[See a simple Apollo server example](https://github.com/Akryum/apollo-server-example)
+[Apollo "hello world" app](https://github.com/Akryum/frontpage-vue-app)
 
 ## Installation
 
