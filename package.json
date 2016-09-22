@@ -1,9 +1,11 @@
 {
   "name": "vue-apollo",
-  "version": "1.0.0-beta10",
+  "version": "1.0.0-beta11",
   "description": "Vue apollo integration",
   "main": "index.js",
   "scripts": {
+    "compile": "babel --presets es2015 -d lib/ src/",
+    "prepublish": "npm run compile",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -26,5 +28,9 @@
   },
   "dependencies": {
     "lodash.omit": "^4.5.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.14.0",
+    "babel-preset-es2015": "^6.14.0"
   }
 }
