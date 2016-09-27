@@ -159,7 +159,15 @@ class DollarApollo {
 function prepare() {
   this._apolloSubscriptions = [];
 
-  this.$apollo = new DollarApollo(this);
+  // Lazy creation
+  Object.defineProperty(this, '$apollo', {
+    get: () => {
+      if(!this._apollo) {
+        this._apollo = new DollarApollo(this);
+      }
+      return this._apollo;
+    }
+  });
 }
 
 function launch() {
@@ -201,8 +209,8 @@ module.exports = {
           sub.unsubscribe();
         });
         this._apolloSubscriptions = null;
-        if (this.$apollo) {
-          this.$apollo = null;
+        if (this._apollo) {
+          this._apollo = null;
         }
       }
 
