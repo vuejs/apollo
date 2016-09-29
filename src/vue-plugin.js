@@ -156,7 +156,7 @@ class DollarApollo {
   }
 }
 
-function prepare() {
+const prepare = function prepare() {
   this._apolloSubscriptions = [];
 
   // Lazy creation
@@ -170,7 +170,7 @@ function prepare() {
   });
 }
 
-function launch() {
+const launch = function launch() {
   let apollo = this.$options.apollo;
 
   if (apollo) {
