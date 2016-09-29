@@ -15,7 +15,7 @@ Integrates [apollo](http://www.apollostack.com/) in your vue components with dec
 
 ```javascript
 import Vue from 'vue';
-import ApolloClient, { createNetworkInterface, addTypename } from './apollo-client';
+import ApolloClient, { createNetworkInterface, addTypename } from 'apollo-client';
 import VueApollo from 'vue-apollo';
 
 // Create the apollo client
