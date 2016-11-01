@@ -31,14 +31,7 @@ Vue.use(VueApollo, {
   apolloClient,
 });
 
-// The Vue app is now Apollo-enabled!
-
-import App from './App.vue'
-
-new Vue({
-  el: '#app',
-  render: h => h(App)
-});
+// Your Vue app is now Apollo-enabled!
 ```
 
 ### Usage in components
