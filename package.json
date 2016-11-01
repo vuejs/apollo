@@ -1,12 +1,15 @@
 {
   "name": "vue-apollo",
-  "version": "1.0.0-rc.1",
+  "version": "1.0.0-rc.2",
   "description": "Vue apollo integration",
   "main": "index.js",
   "scripts": {
     "compile": "babel --presets es2015 -d lib/ src/",
     "prepublish": "npm run compile",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "watch": "npm-watch"
+  },
+  "watch": {
+    "compile": "src/*.js"
   },
   "repository": {
     "type": "git",
@@ -24,7 +27,7 @@
   },
   "homepage": "https://github.com/Akryum/vue-apollo#readme",
   "peerDependencies": {
-    "apollo-client": "^0.4.15"
+    "apollo-client": "^0.5.0"
   },
   "dependencies": {
     "lodash.omit": "^4.5.0"

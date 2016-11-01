@@ -2,6 +2,8 @@ import omit from 'lodash.omit';
 
 let apolloClient = null;
 
+let defineReactive = function() {};
+
 class DollarApollo {
   constructor(vm) {
     this.vm = vm;
@@ -50,6 +52,9 @@ class DollarApollo {
     // Simple query
     if (!options.query) {
       query = options;
+      options = {
+        query,
+      };
     }
 
     function generateApolloOptions(variables) {
@@ -74,6 +79,9 @@ class DollarApollo {
         observer.refetch(variables, {
           forceFetch: !!options.forceFetch
         });
+      } else if(observer) {
+        // Update variables
+        observer.setVariables(variables);
       } else {
         if (sub) {
           sub.unsubscribe();
@@ -168,30 +176,35 @@ const prepare = function prepare() {
       return this._apollo;
     }
   });
-}
 
-const launch = function launch() {
+  // Prepare properties
   let apollo = this.$options.apollo;
-
   if (apollo) {
-    const queries = omit(apollo, [
+    this._apolloQueries = omit(apollo, [
       'subscribe',
     ]);
 
     // watchQuery
-    for (let key in queries) {
-      this.$apollo.option(key, queries[key]);
+    for (let key in this._apolloQueries) {
+      // this.$data[key] = null;
+      defineReactive(this, key, null);
     }
+  }
+}
 
-    // subscribe
-    if (apollo.subscribe) {
-      // TODO
+const launch = function launch() {
+  if (this._apolloQueries) {
+    // watchQuery
+    for (let key in this._apolloQueries) {
+      this.$apollo.option(key, this._apolloQueries[key]);
     }
   }
 }
 
 module.exports = {
   install(Vue, options) {
+
+    defineReactive = Vue.util.defineReactive;
 
     apolloClient = options.apolloClient;
 
