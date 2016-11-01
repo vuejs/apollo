@@ -4,6 +4,20 @@ Integrates [apollo](http://www.apollostack.com/) in your vue components with dec
 
 [Apollo "hello world" app](https://github.com/Akryum/frontpage-vue-app)
 
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Configuration](#configuration)
+  - [Usage in components](#usage-in-components)
+  - [Queries](#queries)
+    - [Simple query](#simple-query)
+    - [Query with parameters](#query-with-parameters)
+    - [Reactive parameters](#reactive-parameters)
+    - [Advanced options](#advanced-options)
+  - [Reactive Query Example](#reactive-query-example)
+  - [Mutations](#mutations)
+  - [Subscriptions](#subscriptions)
+  - [Pagination with `fetchMore`](#pagination-with-fetchMore)
+
 ## Installation
 
 
@@ -68,6 +82,8 @@ apollo: {
   hello: gql`{hello}`,
 },
 ```
+
+You can then access the subscription `ObservableQuery` object with `this.$apollo.queries.<name>`.
 
 You can initialize the property in your vue component's `data` hook:
 
@@ -627,8 +643,95 @@ apollo: {
   },
 },
 ```
+
+You can then access the subscription `ObservableQuery` object with `this.$apollo.subscriptions.<name>`.
+
 For the server implementation, you can take a look at [this simple example](https://github.com/Akryum/apollo-server-example).
 
+### Pagination with `fetchMore`
+
+Use the `fetchMore()` method on the query:
+
+```javascript
+<template>
+  <div id="app">
+    <h2>Pagination</h2>
+    <div class="tag-list" v-if="tagsPage">
+      <div class="tag-list-item" v-for="tag in tagsPage.tags">
+        {{ tag.id }} - {{ tag.label }} - {{ tag.type }}
+      </div>
+      <div class="actions">
+        <button v-if="showMoreEnabled" @click="showMore">Show more</button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import gql from 'graphql-tag';
+
+const pageSize = 10;
+
+export default {
+  name: 'app',
+  data: () => ({
+    page: 0,
+    showMoreEnabled: true,
+  }),
+  apollo: {
+    // Pages
+    tagsPage: {
+      // GraphQL Query
+      query: gql`query tagsPage ($page: Int!, $pageSize: Int!) {
+        tagsPage(page: $page, size: $pageSize) {
+          tags {
+            id
+            label
+            type
+          }
+          hasMore
+        }
+      }`,
+      // Initial variables
+      variables: {
+        page: 0,
+        pageSize,
+      },
+    },
+  },
+  methods: {
+    showMore() {
+      this.page ++;
+      // Fetch more data and transform the original result
+      this.$apollo.queries.tagsPage.fetchMore({
+        // New variables
+        variables: {
+          page: this.page,
+          pageSize,
+        },
+        // Transform the previous result with new data
+        updateQuery: (previousResult, { fetchMoreResult }) => {
+          const newTags = fetchMoreResult.data.tagsPage.tags;
+          const hasMore = fetchMoreResult.data.tagsPage.hasMore;
+
+          this.showMoreEnabled = hasMore;
+
+          return {
+            tagsPage: {
+              // Merging the tag list
+              tags: [...previousResult.tagsPage.tags, ...newTags],
+              hasMore,
+            },
+          };
+        },
+      });
+    },
+  },
+};
+</script>
+```
+
+[Here](https://github.com/Akryum/apollo-server-example/blob/master/schema.js#L21) is a simple example for the server.
 
 ---
 

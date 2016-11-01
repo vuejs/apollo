@@ -23,7 +23,8 @@ function addGraphQLSubscriptions(networkInterface, wsClient) {
 class DollarApollo {
   constructor(vm) {
     this.vm = vm;
-    this.querySubscriptions = {};
+    this.queries = {};
+    this.subscriptions = {};
   }
 
   get client() {
@@ -117,6 +118,7 @@ class DollarApollo {
 
         // Create observer
         observer = $apollo.watchQuery(generateApolloOptions(variables));
+        $apollo.queries[key] = observer;
 
         // Create subscription
         sub = observer.subscribe({
@@ -208,14 +210,13 @@ class DollarApollo {
     }
 
     function q(variables) {
-      console.log(variables);
-
       if (sub) {
         sub.unsubscribe();
       }
 
       // Create observer
       observer = $apollo.subscribe(generateApolloOptions(variables));
+      $apollo.subscriptions[key] = observer;
 
       // Create subscription
       sub = observer.subscribe({
