@@ -1,8 +1,24 @@
 import omit from 'lodash.omit';
+import { print } from 'graphql-tag/printer';
 
 let apolloClient = null;
 
 let defineReactive = function() {};
+
+// quick way to add the subscribe and unsubscribe functions to the network interface
+function addGraphQLSubscriptions(networkInterface, wsClient) {
+  return Object.assign(networkInterface, {
+    subscribe(request, handler) {
+      return wsClient.subscribe({
+        query: print(request.query),
+        variables: request.variables,
+      }, handler);
+    },
+    unsubscribe(id) {
+      wsClient.unsubscribe(id);
+    },
+  });
+}
 
 class DollarApollo {
   constructor(vm) {
@@ -32,6 +48,18 @@ class DollarApollo {
 
   get mutate() {
     return this.client.mutate;
+  }
+
+  subscribe(options) {
+    const vm = this.vm;
+    const observable = this.client.subscribe(options);
+    const _subscribe = observable.subscribe.bind(observable);
+    observable.subscribe = (function(options) {
+      let sub = _subscribe(options);
+      vm._apolloSubscriptions.push(sub);
+      return sub;
+    }).bind(observable);
+    return observable;
   }
 
   option(key, options) {
@@ -162,6 +190,73 @@ class DollarApollo {
       }
     }
   }
+
+  subscribeOption(key, options) {
+    const vm = this.vm;
+    const $apollo = this;
+
+    let observer, sub;
+
+    function generateApolloOptions(variables) {
+      const apolloOptions = omit(options, [
+        'variables',
+        'result',
+        'error',
+      ]);
+      apolloOptions.variables = variables;
+      return apolloOptions;
+    }
+
+    function q(variables) {
+      console.log(variables);
+
+      if (sub) {
+        sub.unsubscribe();
+      }
+
+      // Create observer
+      observer = $apollo.subscribe(generateApolloOptions(variables));
+
+      // Create subscription
+      sub = observer.subscribe({
+        next: nextResult,
+        error: catchError
+      });
+    }
+
+    if (typeof options.variables === 'function') {
+      vm.$watch(options.variables.bind(vm), q, {
+        immediate: true
+      });
+    } else {
+      q(options.variables);
+    }
+
+    function nextResult(data) {
+      if (typeof options.result === 'function') {
+        options.result.call(vm, data);
+      }
+    }
+
+    function catchError(error) {
+      loadingDone();
+
+      if (error.graphQLErrors && error.graphQLErrors.length !== 0) {
+        console.error(`GraphQL execution errors for subscription ${query}`);
+        for (let e of error.graphQLErrors) {
+          console.error(e);
+        }
+      } else if (error.networkError) {
+        console.error(`Error sending the subscription ${query}`, error.networkError);
+      } else {
+        console.error(error);
+      }
+
+      if (typeof options.error === 'function') {
+        options.error(error);
+      }
+    }
+  }
 }
 
 const prepare = function prepare() {
@@ -199,9 +294,18 @@ const launch = function launch() {
       this.$apollo.option(key, this._apolloQueries[key]);
     }
   }
+
+  let apollo = this.$options.apollo;
+  if(apollo && apollo.subscribe) {
+    for (let key in apollo.subscribe) {
+      this.$apollo.subscribeOption(key, apollo.subscribe[key]);
+    }
+  }
 }
 
 module.exports = {
+  addGraphQLSubscriptions,
+
   install(Vue, options) {
 
     defineReactive = Vue.util.defineReactive;

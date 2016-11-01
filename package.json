@@ -1,6 +1,6 @@
 {
   "name": "vue-apollo",
-  "version": "1.0.0-rc.2",
+  "version": "1.1.0-beta.0",
   "description": "Vue apollo integration",
   "main": "index.js",
   "scripts": {
@@ -30,6 +30,7 @@
     "apollo-client": "^0.5.0"
   },
   "dependencies": {
+    "graphql-tag": "^0.1.15",
     "lodash.omit": "^4.5.0"
   },
   "devDependencies": {
