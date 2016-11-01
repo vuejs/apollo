@@ -7,27 +7,24 @@ Integrates [apollo](http://www.apollostack.com/) in your vue components with dec
 ## Table of contents
 
 - [Installation](#installation)
-- [Usage](#usage)
-  - [Configuration](#configuration)
-  - [Usage in components](#usage-in-components)
-  - [Queries](#queries)
-    - [Simple query](#simple-query)
-    - [Query with parameters](#query-with-parameters)
-    - [Reactive parameters](#reactive-parameters)
-    - [Advanced options](#advanced-options)
-    - [Reactive Query Example](#reactive-query-example)
-  - [Mutations](#mutations)
-  - [Subscriptions](#subscriptions)
-  - [Pagination with `fetchMore`](#pagination-with-fetchmore)
+- [Configuration](#configuration)
+- [Usage in components](#usage-in-components)
+- [Queries](#queries)
+  - [Simple query](#simple-query)
+  - [Query with parameters](#query-with-parameters)
+  - [Reactive parameters](#reactive-parameters)
+  - [Advanced options](#advanced-options)
+  - [Reactive Query Example](#reactive-query-example)
+- [Mutations](#mutations)
+- [Subscriptions](#subscriptions)
+- [Pagination with `fetchMore`](#pagination-with-fetchmore)
 
 ## Installation
 
 
     npm install --save vue-apollo apollo-client
 
-## Usage
-
-### Configuration
+## Configuration
 
 ```javascript
 import Vue from 'vue';
@@ -50,7 +47,7 @@ Vue.use(VueApollo, {
 // Your Vue app is now Apollo-enabled!
 ```
 
-### Usage in components
+## Usage in components
 
 To declare apollo queries in your Vue component, add an `apollo` object :
 
@@ -64,11 +61,11 @@ new Vue({
 
 You can access the [apollo-client](http://dev.apollodata.com/core/apollo-client-api.html) instance with `this.$apollo.client` in all your vue components.
 
-### Queries
+## Queries
 
 In the `apollo` object, add an attribute for each property you want to feed with the result of an Apollo query.
 
-#### Simple query
+### Simple query
 
 Use `gql` to write your GraphQL queries:
 
@@ -144,7 +141,7 @@ You can then use your property as usual in your vue component:
 </template>
 ```
 
-#### Query with parameters
+### Query with parameters
 
 You can add variables (read parameters) to your `gql` query by declaring `query` and `variables` in an object:
 
@@ -247,7 +244,7 @@ And then use it in your vue component:
 </template>
 ```
 
-#### Reactive parameters
+### Reactive parameters
 
 Use a function instead to make the parameters reactive with vue properties:
 
@@ -284,7 +281,7 @@ This will re-fetch the query each time a parameter changes, for example:
 </template>
 ```
 
-#### Advanced options
+### Advanced options
 
 These are the available advanced options you can use:
 - `update(data) {return ...}` to customize the value that is set in the vue property, for example if the field names don't match.
@@ -350,7 +347,7 @@ If you use `ES2015`, you can also write the `update` like this:
 update: data => data.ping
 ```
 
-#### Reactive Query Example
+### Reactive Query Example
 
 Here is a reactive query example using polling:
 
@@ -416,7 +413,7 @@ export const resolvers = {
 };
 ```
 
-### Mutations
+## Mutations
 
 Mutations are queries that changes your data state on your apollo server. For more info, visit the [apollo doc](http://dev.apollodata.com/core/apollo-client-api.html#ApolloClient\.mutate).
 
@@ -534,7 +531,7 @@ export const resolvers = {
 };
 ```
 
-### Subscriptions
+## Subscriptions
 
 To make enable the websocket-based subscription, a bit of additional setup is required:
 
@@ -650,7 +647,7 @@ You can then access the subscription `ObservableQuery` object with `this.$apollo
 
 For the server implementation, you can take a look at [this simple example](https://github.com/Akryum/apollo-server-example).
 
-### Pagination with `fetchMore`
+## Pagination with `fetchMore`
 
 Use the `fetchMore()` method on the query:
 
