@@ -627,7 +627,7 @@ apollo: {
   },
 },
 ```
-For the server implementation, you can take a look at [this simple example](https://github.com/Akryum/apollo-server-example)
+For the server implementation, you can take a look at [this simple example](https://github.com/Akryum/apollo-server-example).
 
 
 ---
