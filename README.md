@@ -1,6 +1,6 @@
-# Apollo in Vue
+# Apollo and GraphQL for Vue.js
 
-Integrates [apollo](http://www.apollostack.com/) in your vue components with declarative queries.
+Integrates [apollo](http://www.apollostack.com/) in your [Vue](http://vuejs.org) components with declarative queries.
 
 [Apollo "hello world" app](https://github.com/Akryum/frontpage-vue-app)
 
