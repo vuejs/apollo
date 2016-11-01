@@ -30,6 +30,15 @@ const apolloClient = new ApolloClient({
 Vue.use(VueApollo, {
   apolloClient,
 });
+
+// The Vue app is now Apollo-enabled!
+
+import App from './App.vue'
+
+new Vue({
+  el: '#app',
+  render: h => h(App)
+});
 ```
 
 ### Usage in components
@@ -513,6 +522,120 @@ export const resolvers = {
   },
 };
 ```
+
+### Subscriptions
+
+To make enable the websocket-based subscription, a bit of additional setup is required:
+
+```javascript
+import Vue from 'vue'
+import ApolloClient, { createNetworkInterface } from 'apollo-client';
+// New Imports
+import { Client } from 'subscriptions-transport-ws';
+import VueApollo, { addGraphQLSubscriptions } from 'vue-apollo';
+
+// Create the network interface
+const networkInterface = createNetworkInterface({
+  uri: 'http://localhost:3000/graphql',
+  transportBatching: true,
+});
+
+// Create the subscription websocket client
+const wsClient = new Client('ws://localhost:3030');
+
+// Extend the network interface with the subscription client
+const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
+  networkInterface,
+  wsClient,
+);
+
+// Create the apollo client with the new network interface
+const apolloClient = new ApolloClient({
+  networkInterface: networkInterfaceWithSubscriptions,
+});
+
+// Install the plugin like before
+Vue.use(VueApollo, {
+  apolloClient,
+});
+
+// Your app is now subscription-ready!
+
+import App from './App.vue'
+
+new Vue({
+  el: '#app',
+  render: h => h(App)
+});
+
+```
+
+Use the `$apollo.subscribe()` method to subscribe to a GraphQL subscription that will get killed automatically when the component is destroyed:
+
+```javascript
+mounted() {
+  const subQuery = gql`subscription tags($type: String!) {
+    tagAdded(type: $type) {
+      id
+      label
+      type
+    }
+  }`;
+
+  const observer = this.$apollo.subscribe({
+    query: subQuery,
+    variables: {
+      type: 'City',
+    },
+  });
+
+  observer.subscribe({
+    next(data) {
+      console.log(data);
+    },
+    error(error) {
+      console.error(error);
+    },
+  });
+},
+```
+
+You can declare subscriptions in the `apollo` option with the `subscribe` keyword:
+
+```javascript
+apollo: {
+  // Subscriptions
+  subscribe: {
+    // When a tag is added
+    tags: {
+      query: gql`subscription tags($type: String!) {
+        tagAdded(type: $type) {
+          id
+          label
+          type
+        }
+      }`,
+      // Reactive variables
+      variables() {
+        // This works just like regular queries
+        // and will re-subscribe with the right variables
+        // each time the values change
+        return {
+          type: this.type,
+        };
+      },
+      // Result hook
+      result(data) {
+        console.log(data);
+        // Let's update the local data
+        this.tags.push(data.tagAdded);
+      },
+    },
+  },
+},
+```
+For the server implementation, you can take a look at [this simple example](https://github.com/Akryum/apollo-server-example)
+
 
 ---
 
