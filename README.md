@@ -13,7 +13,7 @@ Integrates [apollo](http://www.apollostack.com/) in your vue components with dec
     - [Query with parameters](#query-with-parameters)
     - [Reactive parameters](#reactive-parameters)
     - [Advanced options](#advanced-options)
-  - [Reactive Query Example](#reactive-query-example)
+    - [Reactive Query Example](#reactive-query-example)
   - [Mutations](#mutations)
   - [Subscriptions](#subscriptions)
   - [Pagination with `fetchMore`](#pagination-with-fetchMore)
@@ -348,7 +348,7 @@ If you use `ES2015`, you can also write the `update` like this:
 update: data => data.ping
 ```
 
-### Reactive Query Example
+#### Reactive Query Example
 
 Here is a reactive query example using polling:
 
