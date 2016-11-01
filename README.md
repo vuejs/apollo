@@ -15,7 +15,7 @@ Integrates [apollo](http://www.apollostack.com/) in your vue components with dec
 
 ```javascript
 import Vue from 'vue';
-import ApolloClient, { createNetworkInterface, addTypename } from 'apollo-client';
+import ApolloClient, { createNetworkInterface } from 'apollo-client';
 import VueApollo from 'vue-apollo';
 
 // Create the apollo client
@@ -24,7 +24,6 @@ const apolloClient = new ApolloClient({
     uri: 'http://localhost:8080/graphql',
     transportBatching: true,
   }),
-  queryTransformer: addTypename,
 });
 
 // Install the vue plugin
@@ -68,7 +67,7 @@ apollo: {
 },
 ```
 
-Don't forget to initialize your property in your vue component:
+You can initialize the property in your vue component's `data` hook:
 
 ```javascript
 data () {
@@ -173,7 +172,7 @@ apollo: {
 },
 ```
 
-Don't forget to initialize your property in your vue component:
+Again, you can initialize your property in your vue component:
 
 ```javascript
 data () {
