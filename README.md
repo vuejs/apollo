@@ -4,6 +4,8 @@ Integrates [apollo](http://www.apollostack.com/) in your vue components with dec
 
 [Apollo "hello world" app](https://github.com/Akryum/frontpage-vue-app)
 
+## Table of contents
+
 - [Installation](#installation)
 - [Usage](#usage)
   - [Configuration](#configuration)
@@ -16,7 +18,7 @@ Integrates [apollo](http://www.apollostack.com/) in your vue components with dec
     - [Reactive Query Example](#reactive-query-example)
   - [Mutations](#mutations)
   - [Subscriptions](#subscriptions)
-  - [Pagination with `fetchMore`](#pagination-with-fetchMore)
+  - [Pagination with `fetchMore`](#pagination-with-fetchmore)
 
 ## Installation
 
