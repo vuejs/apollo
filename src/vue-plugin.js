@@ -1,92 +1,92 @@
-import omit from 'lodash.omit';
-import { print } from 'graphql-tag/printer';
+import omit from 'lodash.omit'
+import { print } from 'graphql-tag/printer'
 
-let apolloClient = null;
+let apolloClient = null
 
-let defineReactive = function() {};
+let defineReactive = function () {}
 
 // quick way to add the subscribe and unsubscribe functions to the network interface
-function addGraphQLSubscriptions(networkInterface, wsClient) {
+function addGraphQLSubscriptions (networkInterface, wsClient) {
   return Object.assign(networkInterface, {
-    subscribe(request, handler) {
+    subscribe (request, handler) {
       return wsClient.subscribe({
         query: print(request.query),
         variables: request.variables,
-      }, handler);
+      }, handler)
     },
-    unsubscribe(id) {
-      wsClient.unsubscribe(id);
+    unsubscribe (id) {
+      wsClient.unsubscribe(id)
     },
-  });
+  })
 }
 
 class DollarApollo {
-  constructor(vm) {
-    this.vm = vm;
-    this.queries = {};
-    this.subscriptions = {};
+  constructor (vm) {
+    this.vm = vm
+    this.queries = {}
+    this.subscriptions = {}
   }
 
-  get client() {
-    return apolloClient;
+  get client () {
+    return apolloClient
   }
 
-  get query() {
-    return this.client.query;
+  get query () {
+    return this.client.query
   }
 
-  watchQuery(options) {
-    const vm = this.vm;
-    const observable = this.client.watchQuery(options);
-    const _subscribe = observable.subscribe.bind(observable);
-    observable.subscribe = (function(options) {
-      let sub = _subscribe(options);
-      vm._apolloSubscriptions.push(sub);
-      return sub;
-    }).bind(observable);
-    return observable;
+  watchQuery (options) {
+    const vm = this.vm
+    const observable = this.client.watchQuery(options)
+    const _subscribe = observable.subscribe.bind(observable)
+    observable.subscribe = function (options) {
+      let sub = _subscribe(options)
+      vm._apolloSubscriptions.push(sub)
+      return sub
+    }
+    return observable
   }
 
-  get mutate() {
-    return this.client.mutate;
+  get mutate () {
+    return this.client.mutate
   }
 
-  subscribe(options) {
-    const vm = this.vm;
-    const observable = this.client.subscribe(options);
-    const _subscribe = observable.subscribe.bind(observable);
-    observable.subscribe = (function(options) {
-      let sub = _subscribe(options);
-      vm._apolloSubscriptions.push(sub);
-      return sub;
-    }).bind(observable);
-    return observable;
+  subscribe (options) {
+    const vm = this.vm
+    const observable = this.client.subscribe(options)
+    const _subscribe = observable.subscribe.bind(observable)
+    observable.subscribe = function (options) {
+      let sub = _subscribe(options)
+      vm._apolloSubscriptions.push(sub)
+      return sub
+    }
+    return observable
   }
 
-  option(key, options) {
-    const vm = this.vm;
-    const $apollo = this;
+  option (key, options) {
+    const vm = this.vm
+    const $apollo = this
 
-    let query, observer, sub;
+    let query, observer, sub
 
-    let firstLoadingDone = false;
+    let firstLoadingDone = false
 
-    let loadingKey = options.loadingKey;
-    let loadingChangeCb = options.watchLoading;
+    let loadingKey = options.loadingKey
+    let loadingChangeCb = options.watchLoading
 
     if (typeof loadingChangeCb === 'function') {
-      loadingChangeCb = loadingChangeCb.bind(vm);
+      loadingChangeCb = loadingChangeCb.bind(vm)
     }
 
     // Simple query
     if (!options.query) {
-      query = options;
+      query = options
       options = {
         query,
-      };
+      }
     }
 
-    function generateApolloOptions(variables) {
+    function generateApolloOptions (variables) {
       const apolloOptions = omit(options, [
         'variables',
         'watch',
@@ -95,211 +95,209 @@ class DollarApollo {
         'error',
         'loadingKey',
         'watchLoading',
-      ]);
-      apolloOptions.variables = variables;
-      return apolloOptions;
+      ])
+      apolloOptions.variables = variables
+      return apolloOptions
     }
 
-    function q(variables) {
-      applyLoadingModifier(1);
+    function q (variables) {
+      applyLoadingModifier(1)
 
       if (options.forceFetch && observer) {
         // Refresh query
         observer.refetch(variables, {
-          forceFetch: !!options.forceFetch
-        });
-      } else if(observer) {
+          forceFetch: !!options.forceFetch,
+        })
+      } else if (observer) {
         // Update variables
-        observer.setVariables(variables);
+        observer.setVariables(variables)
       } else {
         if (sub) {
-          sub.unsubscribe();
+          sub.unsubscribe()
         }
 
         // Create observer
-        observer = $apollo.watchQuery(generateApolloOptions(variables));
-        $apollo.queries[key] = observer;
+        observer = $apollo.watchQuery(generateApolloOptions(variables))
+        $apollo.queries[key] = observer
 
         // Create subscription
         sub = observer.subscribe({
           next: nextResult,
-          error: catchError
-        });
+          error: catchError,
+        })
       }
     }
 
     if (typeof options.variables === 'function') {
       vm.$watch(options.variables.bind(vm), q, {
-        immediate: true
-      });
+        immediate: true,
+      })
     } else {
-      q(options.variables);
+      q(options.variables)
     }
 
-    function nextResult({ data }) {
-      applyData(data);
+    function nextResult ({ data }) {
+      applyData(data)
     }
 
-    function applyData(data) {
-      loadingDone();
+    function applyData (data) {
+      loadingDone()
 
       if (typeof options.update === 'function') {
-        vm[key] = options.update.call(vm, data);
+        vm[key] = options.update.call(vm, data)
       } else if (data[key] === undefined) {
-        console.error(`Missing ${key} attribute on result`, data);
+        console.error(`Missing ${key} attribute on result`, data)
       } else {
-        vm[key] = data[key];
+        vm[key] = data[key]
       }
 
       if (typeof options.result === 'function') {
-        options.result.call(vm, data);
+        options.result.call(vm, data)
       }
     }
 
-    function applyLoadingModifier(value) {
+    function applyLoadingModifier (value) {
       if (loadingKey) {
-        vm[loadingKey] += value;
+        vm[loadingKey] += value
       }
 
       if (loadingChangeCb) {
-        loadingChangeCb(value === 1, value);
+        loadingChangeCb(value === 1, value)
       }
     }
 
-    function loadingDone() {
+    function loadingDone () {
       if (!firstLoadingDone) {
-        applyLoadingModifier(-1);
-        firstLoadingDone = true;
+        applyLoadingModifier(-1)
+        firstLoadingDone = true
       }
     }
 
-    function catchError(error) {
-      loadingDone();
+    function catchError (error) {
+      loadingDone()
 
       if (error.graphQLErrors && error.graphQLErrors.length !== 0) {
-        console.error(`GraphQL execution errors for query ${query}`);
+        console.error(`GraphQL execution errors for query ${query}`)
         for (let e of error.graphQLErrors) {
-          console.error(e);
+          console.error(e)
         }
       } else if (error.networkError) {
-        console.error(`Error sending the query ${query}`, error.networkError);
+        console.error(`Error sending the query ${query}`, error.networkError)
       } else {
-        console.error(error);
+        console.error(error)
       }
 
       if (typeof options.error === 'function') {
-        options.error(error);
+        options.error(error)
       }
     }
   }
 
-  subscribeOption(key, options) {
-    const vm = this.vm;
-    const $apollo = this;
+  subscribeOption (key, options) {
+    const vm = this.vm
+    const $apollo = this
 
-    let observer, sub;
+    let observer, sub
 
-    function generateApolloOptions(variables) {
+    function generateApolloOptions (variables) {
       const apolloOptions = omit(options, [
         'variables',
         'result',
         'error',
-      ]);
-      apolloOptions.variables = variables;
-      return apolloOptions;
+      ])
+      apolloOptions.variables = variables
+      return apolloOptions
     }
 
-    function q(variables) {
+    function q (variables) {
       if (sub) {
-        sub.unsubscribe();
+        sub.unsubscribe()
       }
 
       // Create observer
-      observer = $apollo.subscribe(generateApolloOptions(variables));
-      $apollo.subscriptions[key] = observer;
+      observer = $apollo.subscribe(generateApolloOptions(variables))
+      $apollo.subscriptions[key] = observer
 
       // Create subscription
       sub = observer.subscribe({
         next: nextResult,
-        error: catchError
-      });
+        error: catchError,
+      })
     }
 
     if (typeof options.variables === 'function') {
       vm.$watch(options.variables.bind(vm), q, {
-        immediate: true
-      });
+        immediate: true,
+      })
     } else {
-      q(options.variables);
+      q(options.variables)
     }
 
-    function nextResult(data) {
+    function nextResult (data) {
       if (typeof options.result === 'function') {
-        options.result.call(vm, data);
+        options.result.call(vm, data)
       }
     }
 
-    function catchError(error) {
-      loadingDone();
-
+    function catchError (error) {
       if (error.graphQLErrors && error.graphQLErrors.length !== 0) {
-        console.error(`GraphQL execution errors for subscription ${query}`);
+        console.error(`GraphQL execution errors for subscription ${key}`)
         for (let e of error.graphQLErrors) {
-          console.error(e);
+          console.error(e)
         }
       } else if (error.networkError) {
-        console.error(`Error sending the subscription ${query}`, error.networkError);
+        console.error(`Error sending the subscription ${key}`, error.networkError)
       } else {
-        console.error(error);
+        console.error(error)
       }
 
       if (typeof options.error === 'function') {
-        options.error(error);
+        options.error(error)
       }
     }
   }
 }
 
-const prepare = function prepare() {
-  this._apolloSubscriptions = [];
+const prepare = function prepare () {
+  this._apolloSubscriptions = []
 
   // Lazy creation
   Object.defineProperty(this, '$apollo', {
     get: () => {
-      if(!this._apollo) {
-        this._apollo = new DollarApollo(this);
+      if (!this._apollo) {
+        this._apollo = new DollarApollo(this)
       }
-      return this._apollo;
-    }
-  });
+      return this._apollo
+    },
+  })
 
   // Prepare properties
-  let apollo = this.$options.apollo;
+  let apollo = this.$options.apollo
   if (apollo) {
     this._apolloQueries = omit(apollo, [
       'subscribe',
-    ]);
+    ])
 
     // watchQuery
     for (let key in this._apolloQueries) {
       // this.$data[key] = null;
-      defineReactive(this, key, null);
+      defineReactive(this, key, null)
     }
   }
 }
 
-const launch = function launch() {
+const launch = function launch () {
   if (this._apolloQueries) {
     // watchQuery
     for (let key in this._apolloQueries) {
-      this.$apollo.option(key, this._apolloQueries[key]);
+      this.$apollo.option(key, this._apolloQueries[key])
     }
   }
 
-  let apollo = this.$options.apollo;
-  if(apollo && apollo.subscribe) {
+  let apollo = this.$options.apollo
+  if (apollo && apollo.subscribe) {
     for (let key in apollo.subscribe) {
-      this.$apollo.subscribeOption(key, apollo.subscribe[key]);
+      this.$apollo.subscribeOption(key, apollo.subscribe[key])
     }
   }
 }
@@ -307,11 +305,10 @@ const launch = function launch() {
 module.exports = {
   addGraphQLSubscriptions,
 
-  install(Vue, options) {
+  install (Vue, options) {
+    defineReactive = Vue.util.defineReactive
 
-    defineReactive = Vue.util.defineReactive;
-
-    apolloClient = options.apolloClient;
+    apolloClient = options.apolloClient
 
     Vue.mixin({
 
@@ -322,17 +319,16 @@ module.exports = {
 
       created: launch,
 
-      destroyed: function() {
+      destroyed: function () {
         this._apolloSubscriptions.forEach((sub) => {
-          sub.unsubscribe();
-        });
-        this._apolloSubscriptions = null;
+          sub.unsubscribe()
+        })
+        this._apolloSubscriptions = null
         if (this._apollo) {
-          this._apollo = null;
+          this._apollo = null
         }
-      }
+      },
 
-    });
-
-  }
-};
+    })
+  },
+}
