@@ -35,6 +35,7 @@
   },
   "devDependencies": {
     "babel-cli": "^6.14.0",
-    "babel-preset-es2015": "^6.14.0"
+    "babel-preset-es2015": "^6.14.0",
+    "npm-watch": "^0.1.6"
   }
 }
