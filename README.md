@@ -6,6 +6,8 @@ Integrates [apollo](http://www.apollostack.com/) in your [Vue](http://vuejs.org)
 
 [Apollo "hello world" app](https://github.com/Akryum/frontpage-vue-app)
 
+[<img src="https://cdn-static-1.medium.com/_/fp/icons/favicon-medium.TAS6uQ-Y7kcKgi0xjcYHXw.ico" alt="icon" width="16" height="16"/> Howto on Medium](https://dev-blog.apollodata.com/use-apollo-in-your-vuejs-app-89812429d8b2#.pdd4hmcrc)
+
 ## Table of contents
 
 - [Installation](#installation)
