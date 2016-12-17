@@ -2,6 +2,8 @@
 
 [![npm](https://img.shields.io/npm/v/vue-apollo.svg) ![npm](https://img.shields.io/npm/dm/vue-apollo.svg)](https://www.npmjs.com/package/vue-apollo)
 
+![schema](https://cdn-images-1.medium.com/max/800/1*H9AANoofLqjS10Xd5TwRYw.png)
+
 Integrates [apollo](http://www.apollostack.com/) in your [Vue](http://vuejs.org) components with declarative queries.
 
 [Apollo "hello world" app](https://github.com/Akryum/frontpage-vue-app)
