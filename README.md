@@ -1,7 +1,6 @@
 # Apollo and GraphQL for Vue.js
 
-[![npm](https://img.shields.io/npm/v/vue-apollo.svg)]()
-[![npm](https://img.shields.io/npm/dm/vue-apollo.svg)]()
+[![npm](https://img.shields.io/npm/v/vue-apollo.svg) ![npm](https://img.shields.io/npm/dm/vue-apollo.svg)](https://www.npmjs.com/package/vue-apollo)
 
 Integrates [apollo](http://www.apollostack.com/) in your [Vue](http://vuejs.org) components with declarative queries.
 
