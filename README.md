@@ -8,6 +8,8 @@
 Integrates [apollo](http://www.apollostack.com/) in your [Vue](http://vuejs.org) components with declarative queries. Compatible with Vue 1.0+ and 2.0+
 
 [Apollo "hello world" example app](https://github.com/Akryum/frontpage-vue-app)
+[More vue-apollo examples](https://github.com/Akryum/vue-apollo-example)
+[Apollo graphql server example](https://github.com/Akryum/apollo-server-example)
 
 [<img src="https://cdn-static-1.medium.com/_/fp/icons/favicon-medium.TAS6uQ-Y7kcKgi0xjcYHXw.ico" alt="icon" width="16" height="16"/> Howto on Medium](https://dev-blog.apollodata.com/use-apollo-in-your-vuejs-app-89812429d8b2#.pdd4hmcrc)
 
@@ -41,7 +43,7 @@ import VueApollo from 'vue-apollo';
 // Create the apollo client
 const apolloClient = new ApolloClient({
   networkInterface: createNetworkInterface({
-    uri: 'http://localhost:8080/graphql',
+    uri: 'http://localhost:3020/graphql',
     transportBatching: true,
   }),
 });
@@ -89,7 +91,7 @@ apollo: {
 },
 ```
 
-You can then access the subscription `ObservableQuery` object with `this.$apollo.queries.<name>`.
+You can then access the query with `this.$apollo.queries.<name>`.
 
 You can initialize the property in your vue component's `data` hook:
 
@@ -251,6 +253,65 @@ And then use it in your vue component:
 </template>
 ```
 
+### Option function
+
+You can use a function to initialize the key:
+
+```javascript
+// Apollo-specific options
+apollo: {
+  // Query with parameters
+  ping () {
+    // This will called one when the component is created
+    // It must return the option object
+    return {
+      // gql query
+      query: gql`query PingMessage($message: String!) {
+        ping(message: $message)
+      }`,
+      // Static parameters
+      variables: {
+        message: 'Meow',
+      },
+    }
+  },
+},
+```
+
+**This will called one when the component is created and it must return the option object.**
+
+### Reactive query definition
+
+You can use a function for the `query` option, that will update the graphql query definition automatically:
+
+```javascript
+// The featured tag can be either a random tag or the last added tag
+featuredTag: {
+  query () {
+    // Here you can access the component instance with 'this'
+    if (this.showTag === 'random') {
+      return gql`{
+        randomTag {
+          id
+          label
+          type
+        }
+      }`
+    } else if (this.showTag === 'last') {
+      return gql`{
+        lastTag {
+          id
+          label
+          type
+        }
+      }`
+    }
+  },
+  // We need this to assign the value of the 'featuredTag' component property
+  update: data => data.randomTag || data.lastTag,
+},
+```
+
 ### Reactive parameters
 
 Use a function instead to make the parameters reactive with vue properties:
@@ -286,6 +347,43 @@ This will re-fetch the query each time a parameter changes, for example:
     </p>
   </div>
 </template>
+```
+
+### Skipping the query
+
+If the query is skipped, it will disable it and the result will not be updated anymore. You can use the `skip` option:
+
+```javascript
+// Apollo-specific options
+apollo: {
+  tags: {
+    // GraphQL Query
+    query: gql`query tagList ($type: String!) {
+      tags(type: $type) {
+        id
+        label
+      }
+    }`,
+    // Reactive variables
+    variables() {
+      return {
+        type: this.type,
+      };
+    },
+    // Disable the query
+    skip() {
+      return this.skipQuery
+    },
+  },
+},
+```
+
+Here, `skip` will be called automatically when the `skipQuery` component property changes.
+
+You can also access the query directly and set the `skip` property:
+
+```javascript
+this.$apollo.quries.tags.skip = true
 ```
 
 ### Advanced options
@@ -650,9 +748,55 @@ apollo: {
 },
 ```
 
-You can then access the subscription `ObservableQuery` object with `this.$apollo.subscriptions.<name>`.
+You can then access the subscription with `this.$apollo.subscriptions.<name>`.
 
 For the server implementation, you can take a look at [this simple example](https://github.com/Akryum/apollo-server-example).
+
+### Skipping the subscription
+
+If the subscription is skipped, it will disable it and it will not be updated anymore. You can use the `skip` option:
+
+```javascript
+// Apollo-specific options
+apollo: {
+  // Subscriptions
+  subscribe: {
+    // When a tag is added
+    tags: {
+      query: gql`subscription tags($type: String!) {
+        tagAdded(type: $type) {
+          id
+          label
+          type
+        }
+      }`,
+      // Reactive variables
+      variables() {
+        return {
+          type: this.type,
+        };
+      },
+      // Result hook
+      result(data) {
+        // Let's update the local data
+        this.tags.push(data.tagAdded);
+      },
+      // Skip the subscription
+      skip() {
+        return this.skipSubscription;
+      }
+    },
+  },
+},
+```
+
+Here, `skip` will be called automatically when the `skipSubscription` component property changes.
+
+You can also access the subscription directly and set the `skip` property:
+
+```javascript
+this.$apollo.subscriptions.tags.skip = true
+```
 
 ## Pagination with `fetchMore`
 
