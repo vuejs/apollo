@@ -12,12 +12,11 @@ class SmartApollo {
 
     // Query callback
     if (typeof this.options.query === 'function') {
-      const queryCb = this.options.query
-      this.vm.$watch(queryCb.bind(this.vm), query => {
+      const queryCb = this.options.query.bind(this.vm)
+      this.options.query = queryCb()
+      this.vm.$watch(queryCb, query => {
         this.options.query = query
         this.refresh()
-      }, {
-        immediate: true,
       })
     }
 
