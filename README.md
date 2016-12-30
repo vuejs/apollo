@@ -8,7 +8,9 @@
 Integrates [apollo](http://www.apollostack.com/) in your [Vue](http://vuejs.org) components with declarative queries. Compatible with Vue 1.0+ and 2.0+
 
 [Apollo "hello world" example app](https://github.com/Akryum/frontpage-vue-app)
+
 [More vue-apollo examples](https://github.com/Akryum/vue-apollo-example)
+
 [Apollo graphql server example](https://github.com/Akryum/apollo-server-example)
 
 [<img src="https://cdn-static-1.medium.com/_/fp/icons/favicon-medium.TAS6uQ-Y7kcKgi0xjcYHXw.ico" alt="icon" width="16" height="16"/> Howto on Medium](https://dev-blog.apollodata.com/use-apollo-in-your-vuejs-app-89812429d8b2#.pdd4hmcrc)
