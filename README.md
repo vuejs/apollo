@@ -284,6 +284,8 @@ apollo: {
 
 **This will called one when the component is created and it must return the option object.**
 
+*This also works for [subscriptions](#subscriptions).*
+
 ### Reactive query definition
 
 You can use a function for the `query` option, that will update the graphql query definition automatically:
@@ -315,6 +317,8 @@ featuredTag: {
   update: data => data.randomTag || data.lastTag,
 },
 ```
+
+*This also works for [subscriptions](#subscriptions).*
 
 ### Reactive parameters
 
@@ -755,6 +759,8 @@ apollo: {
 You can then access the subscription with `this.$apollo.subscriptions.<name>`.
 
 For the server implementation, you can take a look at [this simple example](https://github.com/Akryum/apollo-server-example).
+
+*Just like queries, you can declare the subscription [with a function](#option-function), and you can declare the `query` option [with a reactive function](#reactive-query-definition).*
 
 ### Skipping the subscription
 
