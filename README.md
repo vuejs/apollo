@@ -284,7 +284,7 @@ apollo: {
 },
 ```
 
-**This will called one when the component is created and it must return the option object.**
+**This will called once when the component is created and it must return the option object.**
 
 *This also works for [subscriptions](#subscriptions).*
 
