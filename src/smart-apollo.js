@@ -109,7 +109,7 @@ class SmartApollo {
     }
 
     if (typeof this.options.error === 'function') {
-      this.options.error(error)
+      this.options.error.call(this.vm, error)
     }
   }
 }
