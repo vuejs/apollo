@@ -166,7 +166,8 @@ export class SmartQuery extends SmartApollo {
       })
     } else if (this.observer) {
       // Update variables
-      this.observer.setVariables(variables)
+      // Don't use setVariables directly or it will ignore cache
+      this.observer.setOptions(this.generateApolloOptions(variables))
     } else {
       if (this.sub) {
         this.sub.unsubscribe()
@@ -184,7 +185,9 @@ export class SmartQuery extends SmartApollo {
 
     const currentResult = this.observer.currentResult()
     if (currentResult.loading) {
-      this.applyLoadingModifier(1)
+      if (!this.loading) {
+        this.applyLoadingModifier(1)
+      }
       this.loading = true
     }
 
