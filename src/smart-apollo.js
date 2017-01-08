@@ -1,4 +1,5 @@
 import omit from 'lodash.omit'
+import { throttle, debounce } from './utils'
 
 class SmartApollo {
   type = null
@@ -62,7 +63,10 @@ class SmartApollo {
   start () {
     this.starting = true
     if (typeof this.options.variables === 'function') {
-      this.unwatchVariables = this.vm.$watch(this.options.variables.bind(this.vm), this.executeApollo.bind(this), {
+      let cb = this.executeApollo.bind(this)
+      cb = this.options.throttle ? throttle(cb, this.options.throttle) : cb
+      cb = this.options.debounce ? debounce(cb, this.options.debounce) : cb
+      this.unwatchVariables = this.vm.$watch(this.options.variables.bind(this.vm), cb, {
         immediate: true,
       })
     } else {
@@ -125,6 +129,8 @@ export class SmartQuery extends SmartApollo {
     'loadingKey',
     'watchLoading',
     'skip',
+    'throttle',
+    'debounce',
   ]
 
   constructor (vm, key, options) {
@@ -245,6 +251,8 @@ export class SmartSubscription extends SmartApollo {
     'variables',
     'result',
     'error',
+    'throttle',
+    'debounce',
   ]
 
   constructor (vm, key, options) {
