@@ -161,9 +161,6 @@ export class SmartQuery extends SmartApollo {
 
   executeApollo (variables) {
     const oldForceFetch = this.options.forceFetch
-    if (this.starting) {
-      this.options.forceFetch = true
-    }
 
     if (this.options.forceFetch && this.observer) {
       // Refresh query
