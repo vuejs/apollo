@@ -33,6 +33,7 @@ Integrates [apollo](http://www.apollostack.com/) in your [Vue](http://vuejs.org)
 - [Subscriptions](#subscriptions)
   - [Skipping the subscription](#skipping-the-subscription)
 - [Pagination with `fetchMore`](#pagination-with-fetchmore)
+- [Skip all](#skip-all)
 
 ## Installation
 
@@ -723,12 +724,12 @@ mounted() {
 },
 ```
 
-You can declare subscriptions in the `apollo` option with the `subscribe` keyword:
+You can declare subscriptions in the `apollo` option with the `$subscribe` keyword:
 
 ```javascript
 apollo: {
   // Subscriptions
-  subscribe: {
+  $subscribe: {
     // When a tag is added
     tags: {
       query: gql`subscription tags($type: String!) {
@@ -772,7 +773,7 @@ If the subscription is skipped, it will disable it and it will not be updated an
 // Apollo-specific options
 apollo: {
   // Subscriptions
-  subscribe: {
+  $subscribe: {
     // When a tag is added
     tags: {
       query: gql`subscription tags($type: String!) {
@@ -894,6 +895,34 @@ export default {
 ```
 
 [Here](https://github.com/Akryum/apollo-server-example/blob/master/schema.js#L21) is a simple example for the server.
+
+## Skip all
+
+You can disable all the queries for the component with `skipAllQueries`, all the subscriptions with `skipAllSubscriptions` and both with `skipAll`:
+
+```javascript
+this.$apollo.skipAllQueries = true
+this.$apollo.skipAllSubscriptions = true
+this.$apollo.skipAll = true
+```
+
+You can also declare these properties in the `apollo` option of the component. It can be booleans:
+
+```javascript
+apollo: {
+  $skipAll: true
+}
+```
+
+Or reactive functions:
+
+```javascript
+apollo: {
+  $skipAll () {
+    return this.foo === 42
+  }
+}
+```
 
 ---
 

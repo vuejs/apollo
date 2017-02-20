@@ -10,15 +10,16 @@ class SmartApollo {
     this.key = key
     this.options = options
     this._skip = false
+    this._watchers = []
 
     // Query callback
     if (typeof this.options.query === 'function') {
       const queryCb = this.options.query.bind(this.vm)
       this.options.query = queryCb()
-      this.vm.$watch(queryCb, query => {
+      this._watchers.push(this.vm.$watch(queryCb, query => {
         this.options.query = query
         this.refresh()
-      })
+      }))
     }
 
     this.autostart()
@@ -26,9 +27,9 @@ class SmartApollo {
 
   autostart () {
     if (typeof this.options.skip === 'function') {
-      this.vm.$watch(this.options.skip.bind(this.vm), this.skipChanged.bind(this), {
+      this._watchers.push(this.vm.$watch(this.options.skip.bind(this.vm), this.skipChanged.bind(this), {
         immediate: true,
-      })
+      }))
     } else if (!this.options.skip) {
       this.start()
     } else {
@@ -56,8 +57,10 @@ class SmartApollo {
   }
 
   refresh () {
-    this.stop()
-    this.start()
+    if (!this._skip) {
+      this.stop()
+      this.start()
+    }
   }
 
   start () {
@@ -114,6 +117,13 @@ class SmartApollo {
 
     if (typeof this.options.error === 'function') {
       this.options.error.call(this.vm, error)
+    }
+  }
+
+  destroy () {
+    this.stop()
+    for (const unwatch of this._watchers) {
+      unwatch()
     }
   }
 }
@@ -237,8 +247,10 @@ export class SmartQuery extends SmartApollo {
     this.loading = false
   }
 
-  get fetchMore () {
-    return this.observer.fetchMore.bind(this.observer)
+  fetchMore (...args) {
+    if (this.observer) {
+      this.observer.fetchMore(...args)
+    }
   }
 }
 

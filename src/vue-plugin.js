@@ -2,6 +2,7 @@ import omit from 'lodash.omit'
 import { print } from 'graphql-tag/printer'
 import { SmartQuery, SmartSubscription } from './smart-apollo'
 
+let Vue
 let apolloClient = null
 
 let defineReactive = function () {}
@@ -23,6 +24,9 @@ function addGraphQLSubscriptions (networkInterface, wsClient) {
 
 class DollarApollo {
   constructor (vm) {
+    this._apolloSubscriptions = []
+    this._watchers = []
+
     this.vm = vm
     this.queries = {}
     this.subscriptions = {}
@@ -37,12 +41,11 @@ class DollarApollo {
   }
 
   watchQuery (options) {
-    const vm = this.vm
     const observable = this.client.watchQuery(options)
     const _subscribe = observable.subscribe.bind(observable)
-    observable.subscribe = function (options) {
+    observable.subscribe = (options) => {
       let sub = _subscribe(options)
-      vm._apolloSubscriptions.push(sub)
+      this._apolloSubscriptions.push(sub)
       return sub
     }
     return observable
@@ -53,12 +56,11 @@ class DollarApollo {
   }
 
   subscribe (options) {
-    const vm = this.vm
     const observable = this.client.subscribe(options)
     const _subscribe = observable.subscribe.bind(observable)
-    observable.subscribe = function (options) {
+    observable.subscribe = (options) => {
       let sub = _subscribe(options)
-      vm._apolloSubscriptions.push(sub)
+      this._apolloSubscriptions.push(sub)
       return sub
     }
     return observable
@@ -71,11 +73,52 @@ class DollarApollo {
   subscribeOption (key, options) {
     this.subscriptions[key] = new SmartSubscription(this.vm, key, options)
   }
+
+  defineReactiveSetter (key, func) {
+    this._watchers.push(this.vm.$watch(func, value => {
+      console.log(value)
+      this[key] = value
+    }, {
+      immediate: true,
+    }))
+  }
+
+  set skipAllQueries (value) {
+    for (let key in this.queries) {
+      this.queries[key].skip = value
+    }
+  }
+
+  set skipAllSubscriptions (value) {
+    for (let key in this.subscriptions) {
+      this.subscriptions[key].skip = value
+    }
+  }
+
+  set skipAll (value) {
+    this.skipAllQueries = value
+    this.skipAllSubscriptions = value
+  }
+
+  destroy () {
+    for (const unwatch of this._watchers) {
+      unwatch()
+    }
+    for (let key in this.queries) {
+      this.queries[key].destroy()
+    }
+    for (let key in this.subscriptions) {
+      this.subscriptions[key].destroy()
+    }
+    this._apolloSubscriptions.forEach((sub) => {
+      sub.unsubscribe()
+    })
+    this._apolloSubscriptions = null
+    this.vm = null
+  }
 }
 
 const prepare = function prepare () {
-  this._apolloSubscriptions = []
-
   // Lazy creation
   Object.defineProperty(this, '$apollo', {
     get: () => {
@@ -91,6 +134,10 @@ const prepare = function prepare () {
   if (apollo) {
     this._apolloQueries = omit(apollo, [
       'subscribe',
+      '$subscribe',
+      '$skipAll',
+      '$skipAllQueries',
+      '$skipAllSubscriptions',
     ])
 
     // watchQuery
@@ -110,9 +157,32 @@ const launch = function launch () {
   }
 
   let apollo = this.$options.apollo
-  if (apollo && apollo.subscribe) {
-    for (let key in apollo.subscribe) {
-      this.$apollo.subscribeOption(key, apollo.subscribe[key])
+  if (apollo) {
+    if (apollo.subscribe) {
+      Vue.util.warn('vue-apollo -> `subscribe` option is deprecated. Use the `$subscribe` option instead.')
+      for (let key in apollo.subscribe) {
+        this.$apollo.subscribeOption(key, apollo.subscribe[key])
+      }
+    }
+
+    if (apollo.$subscribe) {
+      for (let key in apollo.$subscribe) {
+        this.$apollo.subscribeOption(key, apollo.$subscribe[key])
+      }
+    }
+
+    defineReactiveSetter(this.$apollo, 'skipAll', apollo.$skipAll)
+    defineReactiveSetter(this.$apollo, 'skipAllQueries', apollo.$skipAllQueries)
+    defineReactiveSetter(this.$apollo, 'skipAllSubscriptions', apollo.$skipAllSubscriptions)
+  }
+}
+
+function defineReactiveSetter ($apollo, key, value) {
+  if (typeof value !== 'undefined') {
+    if (typeof value === 'function') {
+      $apollo.defineReactiveSetter(key, value)
+    } else {
+      $apollo[key] = value
     }
   }
 }
@@ -120,9 +190,9 @@ const launch = function launch () {
 module.exports = {
   addGraphQLSubscriptions,
 
-  install (Vue, options) {
+  install (pVue, options) {
+    Vue = pVue
     defineReactive = Vue.util.defineReactive
-
     apolloClient = options.apolloClient
 
     Vue.mixin({
@@ -135,11 +205,8 @@ module.exports = {
       created: launch,
 
       destroyed: function () {
-        this._apolloSubscriptions.forEach((sub) => {
-          sub.unsubscribe()
-        })
-        this._apolloSubscriptions = null
         if (this._apollo) {
+          this._apollo.destroy()
           this._apollo = null
         }
       },
