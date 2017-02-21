@@ -22,6 +22,11 @@ class SmartApollo {
       }))
     }
 
+    // Init loadingKey
+    if (this.options.loadingKey) {
+      this.vm[this.options.loadingKey] = 0
+    }
+
     this.autostart()
   }
 
