@@ -5,10 +5,18 @@ import { SmartQuery, SmartSubscription } from './smart-apollo'
 let Vue
 let apolloClient = null
 
+const keywords = [
+  'subscribe',
+  '$subscribe',
+  '$skipAll',
+  '$skipAllQueries',
+  '$skipAllSubscriptions',
+]
+
 let defineReactive = function () {}
 
 // quick way to add the subscribe and unsubscribe functions to the network interface
-function addGraphQLSubscriptions (networkInterface, wsClient) {
+export function addGraphQLSubscriptions (networkInterface, wsClient) {
   return Object.assign(networkInterface, {
     subscribe (request, handler) {
       return wsClient.subscribe({
@@ -76,7 +84,6 @@ class DollarApollo {
 
   defineReactiveSetter (key, func) {
     this._watchers.push(this.vm.$watch(func, value => {
-      console.log(value)
       this[key] = value
     }, {
       immediate: true,
@@ -119,6 +126,9 @@ class DollarApollo {
 }
 
 const prepare = function prepare () {
+  if (this._apolloPrepared) return
+  this._apolloPrepared = true
+
   // Lazy creation
   Object.defineProperty(this, '$apollo', {
     get: () => {
@@ -132,13 +142,7 @@ const prepare = function prepare () {
   // Prepare properties
   let apollo = this.$options.apollo
   if (apollo) {
-    this._apolloQueries = omit(apollo, [
-      'subscribe',
-      '$subscribe',
-      '$skipAll',
-      '$skipAllQueries',
-      '$skipAllSubscriptions',
-    ])
+    this._apolloQueries = omit(apollo, keywords)
 
     // watchQuery
     for (let key in this._apolloQueries) {
@@ -149,6 +153,9 @@ const prepare = function prepare () {
 }
 
 const launch = function launch () {
+  if (this._apolloLaunched) return
+  this._apolloLaunched = true
+
   if (this._apolloQueries) {
     // watchQuery
     for (let key in this._apolloQueries) {
@@ -187,30 +194,46 @@ function defineReactiveSetter ($apollo, key, value) {
   }
 }
 
-module.exports = {
-  addGraphQLSubscriptions,
+export default function install (pVue, options) {
+  if (install.installed) return
+  install.installed = true
 
-  install (pVue, options) {
-    Vue = pVue
-    defineReactive = Vue.util.defineReactive
-    apolloClient = options.apolloClient
+  Vue = pVue
+  defineReactive = Vue.util.defineReactive
+  apolloClient = options.apolloClient
 
-    Vue.mixin({
+  const merge = Vue.config.optionMergeStrategies.methods
+  Vue.config.optionMergeStrategies.apollo = function (toVal, fromVal, vm) {
+    if (!toVal) return fromVal
+    if (!fromVal) return toVal
 
-      // Vue 1.x
-      init: prepare,
-      // Vue 2.x
-      beforeCreate: prepare,
+    const toData = Object.assign({}, omit(toVal, keywords), toVal.data)
+    const fromData = Object.assign({}, omit(fromVal, keywords), fromVal.data)
 
-      created: launch,
+    const map = {}
+    for (let i = 0; i < keywords.length; i++) {
+      const key = keywords[i]
+      map[key] = merge(toVal[key], fromVal[key])
+    }
 
-      destroyed: function () {
-        if (this._apollo) {
-          this._apollo.destroy()
-          this._apollo = null
-        }
-      },
+    return Object.assign(map, merge(toData, fromData))
+  }
 
-    })
-  },
+  Vue.mixin({
+
+    // Vue 1.x
+    init: prepare,
+    // Vue 2.x
+    beforeCreate: prepare,
+
+    created: launch,
+
+    destroyed: function () {
+      if (this._apollo) {
+        this._apollo.destroy()
+        this._apollo = null
+      }
+    },
+
+  })
 }

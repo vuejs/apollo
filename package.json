@@ -1,8 +1,8 @@
 {
   "name": "vue-apollo",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Vue apollo integration",
-  "main": "index.js",
+  "main": "lib/vue-plugin.js",
   "scripts": {
     "compile": "babel --presets es2015,stage-0 -d lib/ src/",
     "prepublish": "npm run compile",
