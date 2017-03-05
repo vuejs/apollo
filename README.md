@@ -37,8 +37,9 @@ Integrates [apollo](http://www.apollostack.com/) in your [Vue](http://vuejs.org)
 
 ## Installation
 
+Try and install this packages before server side set (of packages), add apollo to meteor.js before then, too.
 
-    npm install --save vue-apollo apollo-client
+    npm install --save vue-apollo apollo-client@^0.5.0
 
 ## Configuration
 
