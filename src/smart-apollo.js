@@ -235,8 +235,8 @@ export class SmartQuery extends SmartApollo {
       this.vm[this.options.loadingKey] += value
     }
 
-    if (this.options.loadingChangeCb) {
-      this.options.loadingChangeCb.call(this.vm, value === 1, value)
+    if (this.options.watchLoading) {
+      this.options.watchLoading.call(this.vm, value === 1, value)
     }
   }
 
