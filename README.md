@@ -46,9 +46,9 @@ Try and install this packages before server side set (of packages), add apollo t
 ## Configuration
 
 ```javascript
-import Vue from 'vue';
-import ApolloClient, { createNetworkInterface } from 'apollo-client';
-import VueApollo from 'vue-apollo';
+import Vue from 'vue'
+import ApolloClient, { createNetworkInterface } from 'apollo-client'
+import VueApollo from 'vue-apollo'
 
 // Create the apollo client
 const apolloClient = new ApolloClient({
@@ -57,12 +57,12 @@ const apolloClient = new ApolloClient({
     transportBatching: true,
   }),
   connectToDevTools: true,
-});
+})
 
 // Install the vue plugin
 Vue.use(VueApollo, {
   apolloClient,
-});
+})
 
 // Your Vue app is now Apollo-enabled!
 ```
@@ -76,7 +76,7 @@ new Vue({
     apollo: {
         // Apollo specific options
     },
-});
+})
 ```
 
 You can access the [apollo-client](http://dev.apollodata.com/core/apollo-client-api.html) instance with `this.$apollo.client` in all your vue components.
@@ -90,7 +90,7 @@ In the `apollo` object, add an attribute for each property you want to feed with
 Use `gql` to write your GraphQL queries:
 
 ```javascript
-import gql from 'graphql-tag';
+import gql from 'graphql-tag'
 ```
 
 Put the [gql](http://docs.apollostack.com/apollo-client/core.html#gql) query directly as the value:
@@ -126,15 +126,15 @@ type Query {
 schema {
   query: Query
 }
-`;
+`
 
 export const resolvers = {
   Query: {
     hello(root, args, context) {
-      return "Hello world!";
+      return "Hello world!"
     },
   },
-};
+}
 ```
 
 For more info, visit the [apollo doc](http://dev.apollodata.com/tools/).
@@ -205,7 +205,7 @@ data () {
   return {
     // Initialize your apollo data
     ping: '',
-  };
+  }
 },
 ```
 
@@ -220,15 +220,15 @@ type Query {
 schema {
   query: Query
 }
-`;
+`
 
 export const resolvers = {
   Query: {
     ping(root, { message }, context) {
-      return `Answering ${message}`;
+      return `Answering ${message}`
     },
   },
-};
+}
 ```
 
 And then use it in your vue component:
@@ -324,7 +324,7 @@ apollo: {
       // Use vue reactive properties here
       return {
           message: this.pingInput,
-      };
+      }
     },
   },
 },
@@ -363,7 +363,7 @@ apollo: {
     variables() {
       return {
         type: this.type,
-      };
+      }
     },
     // Disable the query
     skip() {
@@ -405,7 +405,7 @@ apollo: {
       // Use vue reactive properties here
       return {
           message: this.pingInput,
-      };
+      }
     },
     // We use a custom update callback because
     // the field names don't match
@@ -414,18 +414,18 @@ apollo: {
     // Here we know the result is in the 'ping' attribute
     // considering the way the apollo server works
     update(data) {
-      console.log(data);
+      console.log(data)
       // The returned value will update
       // the vue property 'pingMessage'
-      return data.ping;
+      return data.ping
     },
     // Optional result hook
     result(data) {
-      console.log("We got some result!");
+      console.log("We got some result!")
     },
     // Error handling
     error(error) {
-      console.error('We\'ve got an error!', error);
+      console.error('We\'ve got an error!', error)
     },
     // Loading state
     // loadingKey is the name of the data property
@@ -483,34 +483,34 @@ type Query {
 schema {
   query: Query
 }
-`;
+`
 
 // Fake word generator
-import casual from 'casual';
+import casual from 'casual'
 
 // Let's generate some tags
-var id = 0;
-var tags = [];
+var id = 0
+var tags = []
 for (let i = 0; i < 42; i++) {
-  addTag(casual.word);
+  addTag(casual.word)
 }
 
 function addTag(label) {
   let t = {
     id: id++,
     label,
-  };
-  tags.push(t);
-  return t;
+  }
+  tags.push(t)
+  return t
 }
 
 export const resolvers = {
   Query: {
     tags(root, args, context) {
-      return tags;
+      return tags
     },
   },
-};
+}
 ```
 
 ## Mutations
@@ -521,9 +521,9 @@ Mutations are queries that changes your data state on your apollo server. For mo
 methods: {
   addTag() {
     // We save the user input in case of an error
-    const newTag = this.newTag;
+    const newTag = this.newTag
     // We clear it early to give the UI a snappy feel
-    this.newTag = '';
+    this.newTag = ''
     // Call to the graphql mutation
     this.$apollo.mutate({
       // Query
@@ -547,7 +547,7 @@ methods: {
           // into the 'tagList' query we set up earlier
           return {
             tags: [...previousResult.tags, mutationResult.data.addTag],
-          };
+          }
         },
       },
       // Optimistic UI
@@ -563,13 +563,13 @@ methods: {
       },
     }).then((data) => {
       // Result
-      console.log(data);
+      console.log(data)
     }).catch((error) => {
       // Error
-      console.error(error);
+      console.error(error)
       // We restore the initial user input
-      this.newTag = newTag;
-    });
+      this.newTag = newTag
+    })
   },
 },
 ```
@@ -595,40 +595,40 @@ schema {
   query: Query
   mutation: Mutation
 }
-`;
+`
 
 // Fake word generator
-import faker from 'faker';
+import faker from 'faker'
 
 // Let's generate some tags
-var id = 0;
-var tags = [];
+var id = 0
+var tags = []
 for (let i = 0; i < 42; i++) {
-  addTag(faker.random.word());
+  addTag(faker.random.word())
 }
 
 function addTag(label) {
   let t = {
     id: id++,
     label,
-  };
-  tags.push(t);
-  return t;
+  }
+  tags.push(t)
+  return t
 }
 
 export const resolvers = {
   Query: {
     tags(root, args, context) {
-      return tags;
+      return tags
     },
   },
   Mutation: {
     addTag(root, { label }, context) {
-      console.log(`adding tag '${label}'`);
-      return addTag(label);
+      console.log(`adding tag '${label}'`)
+      return addTag(label)
     },
   },
-};
+}
 ```
 
 ## Subscriptions
@@ -639,16 +639,16 @@ To make enable the websocket-based subscription, a bit of additional setup is re
 
 ```javascript
 import Vue from 'vue'
-import ApolloClient, { createNetworkInterface } from 'apollo-client';
+import ApolloClient, { createNetworkInterface } from 'apollo-client'
 // New Imports
 import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws'
-import VueApollo from 'vue-apollo';
+import VueApollo from 'vue-apollo'
 
 // Create the network interface
 const networkInterface = createNetworkInterface({
   uri: 'http://localhost:3000/graphql',
   transportBatching: true,
-});
+})
 
 // Create the subscription websocket client
 const wsClient = new SubscriptionClient('ws://localhost:3000/subscriptions', {
@@ -659,18 +659,18 @@ const wsClient = new SubscriptionClient('ws://localhost:3000/subscriptions', {
 const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
   networkInterface,
   wsClient,
-);
+)
 
 // Create the apollo client with the new network interface
 const apolloClient = new ApolloClient({
   networkInterface: networkInterfaceWithSubscriptions,
   connectToDevTools: true,
-});
+})
 
 // Install the plugin like before
 Vue.use(VueApollo, {
   apolloClient,
-});
+})
 
 // Your app is now subscription-ready!
 
@@ -679,13 +679,35 @@ import App from './App.vue'
 new Vue({
   el: '#app',
   render: h => h(App)
-});
+})
 
 ```
 
 ### subscribeToMore
 
-(WIP)
+If you need to update a query result from a subscription, the best way is using the `subscribeToMore` query method. You can access the queries you defined in the `apollo` option with `this.$apollo.queries.<name>`, so it would look like this:
+
+```javascript
+this.$apollo.queries.tags.subscribeToMore({
+  // GraphQL document
+  document: gql`subscription name($param: String!) {
+    itemAdded(param: $param) {
+      id
+      label
+    }
+  }`,
+  // Variables passed to the subscription
+  variables: {
+    param: '42',
+  },
+  // Mutate the previous result
+  updateQuery: (previousResult, { subscriptionData }) => {
+    // Here, return the new result from the previous with the new data
+  },
+})
+```
+
+Here is an example:
 
 ```javascript
 // Subscription GraphQL document
@@ -695,7 +717,7 @@ const TAG_ADDED = gql`subscription tags($type: String!) {
     label
     type
   }
-}`;
+}`
 
 // SubscribeToMore tags
 // We have different types of tags
@@ -737,7 +759,7 @@ this.$watch(() => this.type, (type, oldType) => {
 
 ### subscribe
 
-**:warning: If you want to update a query with the result of the subscription, use `subscribeForMore``. The methods below are suitable for a 'notify' use case.**
+**:warning: If you want to update a query with the result of the subscription, use `subscribeForMore`. The methods below are suitable for a 'notify' use case.**
 
 Use the `$apollo.subscribe()` method to subscribe to a GraphQL subscription that will get killed automatically when the component is destroyed:
 
@@ -749,23 +771,23 @@ mounted() {
       label
       type
     }
-  }`;
+  }`
 
   const observer = this.$apollo.subscribe({
     query: subQuery,
     variables: {
       type: 'City',
     },
-  });
+  })
 
   observer.subscribe({
     next(data) {
-      console.log(data);
+      console.log(data)
     },
     error(error) {
-      console.error(error);
+      console.error(error)
     },
-  });
+  })
 },
 ```
 
@@ -791,11 +813,11 @@ apollo: {
         // each time the values change
         return {
           type: this.type,
-        };
+        }
       },
       // Result hook
       result(data) {
-        console.log(data);
+        console.log(data)
       },
     },
   },
@@ -828,16 +850,16 @@ apollo: {
       variables() {
         return {
           type: this.type,
-        };
+        }
       },
       // Result hook
       result(data) {
         // Let's update the local data
-        this.tags.push(data.tagAdded);
+        this.tags.push(data.tagAdded)
       },
       // Skip the subscription
       skip() {
-        return this.skipSubscription;
+        return this.skipSubscription
       }
     },
   },
@@ -874,9 +896,9 @@ Use the `fetchMore()` method on the query:
 </template>
 
 <script>
-import gql from 'graphql-tag';
+import gql from 'graphql-tag'
 
-const pageSize = 10;
+const pageSize = 10
 
 export default {
   name: 'app',
@@ -907,7 +929,7 @@ export default {
   },
   methods: {
     showMore() {
-      this.page ++;
+      this.page ++
       // Fetch more data and transform the original result
       this.$apollo.queries.tagsPage.fetchMore({
         // New variables
@@ -917,10 +939,10 @@ export default {
         },
         // Transform the previous result with new data
         updateQuery: (previousResult, { fetchMoreResult }) => {
-          const newTags = fetchMoreResult.tagsPage.tags;
-          const hasMore = fetchMoreResult.tagsPage.hasMore;
+          const newTags = fetchMoreResult.tagsPage.tags
+          const hasMore = fetchMoreResult.tagsPage.hasMore
 
-          this.showMoreEnabled = hasMore;
+          this.showMoreEnabled = hasMore
 
           return {
             tagsPage: {
@@ -928,12 +950,12 @@ export default {
               tags: [...previousResult.tagsPage.tags, ...newTags],
               hasMore,
             },
-          };
+          }
         },
-      });
+      })
     },
   },
-};
+}
 </script>
 ```
 
