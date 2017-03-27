@@ -47,7 +47,7 @@ Try and install this packages before server side set (of packages), add apollo t
 
 ```javascript
 import Vue from 'vue'
-import ApolloClient, { createNetworkInterface } from 'apollo-client'
+import { ApolloClient, createNetworkInterface } from 'apollo-client'
 import VueApollo from 'vue-apollo'
 
 // Create the apollo client
@@ -639,7 +639,7 @@ To make enable the websocket-based subscription, a bit of additional setup is re
 
 ```javascript
 import Vue from 'vue'
-import ApolloClient, { createNetworkInterface } from 'apollo-client'
+import { ApolloClient, createNetworkInterface } from 'apollo-client'
 // New Imports
 import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws'
 import VueApollo from 'vue-apollo'
