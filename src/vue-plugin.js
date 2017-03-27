@@ -1,34 +1,15 @@
 import omit from 'lodash.omit'
-import { print } from 'graphql-tag/printer'
 import { SmartQuery, SmartSubscription } from './smart-apollo'
 
 let Vue
 let apolloClient = null
 
 const keywords = [
-  'subscribe',
   '$subscribe',
   '$skipAll',
   '$skipAllQueries',
   '$skipAllSubscriptions',
 ]
-
-let defineReactive = function () {}
-
-// quick way to add the subscribe and unsubscribe functions to the network interface
-export function addGraphQLSubscriptions (networkInterface, wsClient) {
-  return Object.assign(networkInterface, {
-    subscribe (request, handler) {
-      return wsClient.subscribe({
-        query: print(request.query),
-        variables: request.variables,
-      }, handler)
-    },
-    unsubscribe (id) {
-      wsClient.unsubscribe(id)
-    },
-  })
-}
 
 class DollarApollo {
   constructor (vm) {
@@ -125,6 +106,25 @@ class DollarApollo {
   }
 }
 
+function noop () {}
+
+const sharedPropertyDefinition = {
+  enumerable: true,
+  configurable: true,
+  get: noop,
+  set: noop,
+}
+
+export function proxy (target, sourceKey, key) {
+  sharedPropertyDefinition.get = function proxyGetter () {
+    return this[sourceKey][key]
+  }
+  sharedPropertyDefinition.set = function proxySetter (val) {
+    this[sourceKey][key] = val
+  }
+  Object.defineProperty(target, key, sharedPropertyDefinition)
+}
+
 const prepare = function prepare () {
   if (this._apolloPrepared) return
   this._apolloPrepared = true
@@ -142,12 +142,15 @@ const prepare = function prepare () {
   // Prepare properties
   let apollo = this.$options.apollo
   if (apollo) {
-    this._apolloQueries = omit(apollo, keywords)
+    this._apolloQueries = {}
+    this._apolloInitData = {}
 
     // watchQuery
-    for (let key in this._apolloQueries) {
-      // this.$data[key] = null;
-      defineReactive(this, key, null)
+    for (let key in apollo) {
+      if (key.charAt(0) !== '$') {
+        this._apolloInitData[key] = null
+        this._apolloQueries[key] = apollo[key]
+      }
     }
   }
 }
@@ -167,9 +170,6 @@ const launch = function launch () {
   if (apollo) {
     if (apollo.subscribe) {
       Vue.util.warn('vue-apollo -> `subscribe` option is deprecated. Use the `$subscribe` option instead.')
-      for (let key in apollo.subscribe) {
-        this.$apollo.subscribeOption(key, apollo.subscribe[key])
-      }
     }
 
     if (apollo.$subscribe) {
@@ -199,7 +199,6 @@ export default function install (pVue, options) {
   install.installed = true
 
   Vue = pVue
-  defineReactive = Vue.util.defineReactive
   apolloClient = options.apolloClient
 
   const merge = Vue.config.optionMergeStrategies.methods
@@ -225,6 +224,11 @@ export default function install (pVue, options) {
     init: prepare,
     // Vue 2.x
     beforeCreate: prepare,
+
+    // Better devtools support
+    data () {
+      return this._apolloInitData || {}
+    },
 
     created: launch,
 

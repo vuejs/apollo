@@ -31,6 +31,8 @@ Integrates [apollo](http://www.apollostack.com/) in your [Vue](http://vuejs.org)
   - [Reactive Query Example](#reactive-query-example)
 - [Mutations](#mutations)
 - [Subscriptions](#subscriptions)
+  - [subscribeToMore](#subscribetomore)
+  - [subscribe](#subscribe)
   - [Skipping the subscription](#skipping-the-subscription)
 - [Pagination with `fetchMore`](#pagination-with-fetchmore)
 - [Skip all](#skip-all)
@@ -54,6 +56,7 @@ const apolloClient = new ApolloClient({
     uri: 'http://localhost:3020/graphql',
     transportBatching: true,
   }),
+  connectToDevTools: true,
 });
 
 // Install the vue plugin
@@ -110,15 +113,6 @@ data () {
     hello: '',
   },
 },
-```
-
-Or with the `ES2015` syntax:
-
-```javascript
-data: () => ({
-  // Initialize your apollo data
-  hello: '',
-}),
 ```
 
 Server-side, add the corresponding schema and resolver:
@@ -180,9 +174,7 @@ apollo: {
 ```
 
 You can use the apollo `watchQuery` options in the object, like:
- - `forceFetch`
- - `fragments`
- - `returnPartialData`
+ - `fetchPolicy`
  - `pollInterval`
  - ...
 
@@ -201,7 +193,7 @@ apollo: {
       message: 'Meow'
     },
     // Additional options here
-    forceFetch: true,
+    fetchPolicy: 'cache-and-network',
   },
 },
 ```
@@ -215,15 +207,6 @@ data () {
     ping: '',
   };
 },
-```
-
-Or with the `ES2015` syntax:
-
-```javascript
-data: () => ({
-  // Initialize your apollo data
-  ping: '',
-}),
 ```
 
 Server-side, add the corresponding schema and resolver:
@@ -559,11 +542,11 @@ methods: {
       // that will be updated with the optimistic response
       // and the result of the mutation
       updateQueries: {
-        tagList: (previousQueryResult, { mutationResult }) => {
+        tagList: (previousResult, { mutationResult }) => {
           // We incorporate any received result (either optimistic or real)
           // into the 'tagList' query we set up earlier
           return {
-            tags: [...previousQueryResult.tags, mutationResult.data.addTag],
+            tags: [...previousResult.tags, mutationResult.data.addTag],
           };
         },
       },
@@ -650,14 +633,16 @@ export const resolvers = {
 
 ## Subscriptions
 
+*For the server implementation, you can take a look at [this simple example](https://github.com/Akryum/apollo-server-example).*
+
 To make enable the websocket-based subscription, a bit of additional setup is required:
 
 ```javascript
 import Vue from 'vue'
 import ApolloClient, { createNetworkInterface } from 'apollo-client';
 // New Imports
-import { Client } from 'subscriptions-transport-ws';
-import VueApollo, { addGraphQLSubscriptions } from 'vue-apollo';
+import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws'
+import VueApollo from 'vue-apollo';
 
 // Create the network interface
 const networkInterface = createNetworkInterface({
@@ -666,7 +651,9 @@ const networkInterface = createNetworkInterface({
 });
 
 // Create the subscription websocket client
-const wsClient = new Client('ws://localhost:3030');
+const wsClient = new SubscriptionClient('ws://localhost:3000/subscriptions', {
+  reconnect: true,
+})
 
 // Extend the network interface with the subscription client
 const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
@@ -677,6 +664,7 @@ const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
 // Create the apollo client with the new network interface
 const apolloClient = new ApolloClient({
   networkInterface: networkInterfaceWithSubscriptions,
+  connectToDevTools: true,
 });
 
 // Install the plugin like before
@@ -694,6 +682,62 @@ new Vue({
 });
 
 ```
+
+### subscribeToMore
+
+(WIP)
+
+```javascript
+// Subscription GraphQL document
+const TAG_ADDED = gql`subscription tags($type: String!) {
+  tagAdded(type: $type) {
+    id
+    label
+    type
+  }
+}`;
+
+// SubscribeToMore tags
+// We have different types of tags
+// with one subscription 'channel' for each type
+this.$watch(() => this.type, (type, oldType) => {
+  if (type !== oldType || !this.tagsSub) {
+    // We need to unsubscribe before re-subscribing
+    if (this.tagsSub) {
+      this.tagsSub.unsubscribe()
+    }
+    // Subscribe on the query
+    this.tagsSub = this.$apollo.queries.tags.subscribeToMore({
+      document: TAG_ADDED,
+      variables: {
+        type,
+      },
+      // Mutate the previous result
+      updateQuery: (previousResult, { subscriptionData }) => {
+        // If we added the tag already don't do anything
+        // This can be caused by the `updateQuery` of our addTag mutation
+        if (previousResult.tags.find(tag => tag.id === subscriptionData.data.tagAdded.id)) {
+          return previousResult
+        }
+
+        return {
+          tags: [
+            ...previousResult.tags,
+            // Add the new tag
+            subscriptionData.data.tagAdded,
+          ],
+        }
+      },
+    })
+  }
+}, {
+  immediate: true,
+})
+```
+
+### subscribe
+
+**:warning: If you want to update a query with the result of the subscription, use `subscribeForMore``. The methods below are suitable for a 'notify' use case.**
 
 Use the `$apollo.subscribe()` method to subscribe to a GraphQL subscription that will get killed automatically when the component is destroyed:
 
@@ -752,8 +796,6 @@ apollo: {
       // Result hook
       result(data) {
         console.log(data);
-        // Let's update the local data
-        this.tags.push(data.tagAdded);
       },
     },
   },
@@ -761,8 +803,6 @@ apollo: {
 ```
 
 You can then access the subscription with `this.$apollo.subscriptions.<name>`.
-
-For the server implementation, you can take a look at [this simple example](https://github.com/Akryum/apollo-server-example).
 
 *Just like queries, you can declare the subscription [with a function](#option-function), and you can declare the `query` option [with a reactive function](#reactive-query-definition).*
 
@@ -813,6 +853,8 @@ this.$apollo.subscriptions.tags.skip = true
 ```
 
 ## Pagination with `fetchMore`
+
+*[Here](https://github.com/Akryum/apollo-server-example/blob/master/schema.js#L21) is a simple example for the server.*
 
 Use the `fetchMore()` method on the query:
 
@@ -875,8 +917,8 @@ export default {
         },
         // Transform the previous result with new data
         updateQuery: (previousResult, { fetchMoreResult }) => {
-          const newTags = fetchMoreResult.data.tagsPage.tags;
-          const hasMore = fetchMoreResult.data.tagsPage.hasMore;
+          const newTags = fetchMoreResult.tagsPage.tags;
+          const hasMore = fetchMoreResult.tagsPage.hasMore;
 
           this.showMoreEnabled = hasMore;
 
@@ -894,8 +936,6 @@ export default {
 };
 </script>
 ```
-
-[Here](https://github.com/Akryum/apollo-server-example/blob/master/schema.js#L21) is a simple example for the server.
 
 ## Skip all
 

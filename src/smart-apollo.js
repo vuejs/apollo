@@ -3,7 +3,7 @@ import { throttle, debounce } from './utils'
 
 class SmartApollo {
   type = null
-  apolloOptionsKeys = []
+  vueApolloSpecialKeys = []
 
   constructor (vm, key, options) {
     this.vm = vm
@@ -90,7 +90,7 @@ class SmartApollo {
   }
 
   generateApolloOptions (variables) {
-    const apolloOptions = omit(this.options, this.apolloOptionsKeys)
+    const apolloOptions = omit(this.options, this.vueApolloSpecialKeys)
     apolloOptions.variables = variables
     return apolloOptions
   }
@@ -130,7 +130,7 @@ class SmartApollo {
 
 export class SmartQuery extends SmartApollo {
   type = 'query'
-  apolloOptionsKeys = [
+  vueApolloSpecialKeys = [
     'variables',
     'watch',
     'update',
@@ -170,14 +170,7 @@ export class SmartQuery extends SmartApollo {
   }
 
   executeApollo (variables) {
-    const oldForceFetch = this.options.forceFetch
-
-    if (this.options.forceFetch && this.observer) {
-      // Refresh query
-      this.observer.refetch(variables, {
-        forceFetch: !!this.options.forceFetch,
-      })
-    } else if (this.observer) {
+    if (this.observer) {
       // Update variables
       // Don't use setVariables directly or it will ignore cache
       this.observer.setOptions(this.generateApolloOptions(variables))
@@ -204,15 +197,15 @@ export class SmartQuery extends SmartApollo {
       this.loading = true
     }
 
-    this.options.forceFetch = oldForceFetch
-
     super.executeApollo(variables)
   }
 
   nextResult ({ data }) {
     this.loadingDone()
 
-    if (typeof this.options.update === 'function') {
+    if (typeof data === 'undefined') {
+      // No result
+    } else if (typeof this.options.update === 'function') {
       this.vm[this.key] = this.options.update.call(this.vm, data)
     } else if (data[this.key] === undefined) {
       console.error(`Missing ${this.key} attribute on result`, data)
@@ -249,14 +242,22 @@ export class SmartQuery extends SmartApollo {
 
   fetchMore (...args) {
     if (this.observer) {
-      this.observer.fetchMore(...args)
+      return this.observer.fetchMore(...args)
+    }
+  }
+
+  subscribeToMore (...args) {
+    if (this.observer) {
+      return {
+        unsubscribe: this.observer.subscribeToMore(...args),
+      }
     }
   }
 }
 
 export class SmartSubscription extends SmartApollo {
   type = 'subscription'
-  apolloOptionsKeys = [
+  vueApolloSpecialKeys = [
     'variables',
     'result',
     'error',
