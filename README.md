@@ -707,6 +707,8 @@ this.$apollo.queries.tags.subscribeToMore({
 })
 ```
 
+If the related query is stopped, the subscription will be automatically destroyed.
+
 Here is an example:
 
 ```javascript
