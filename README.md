@@ -18,7 +18,7 @@ Integrates [apollo](http://www.apollostack.com/) in your [Vue](http://vuejs.org)
 ## Table of contents
 
 - [Installation](#installation)
-- [Configuration](#configuration)
+- [Create a provider](#create-a-provider)
 - [Usage in components](#usage-in-components)
 - [Queries](#queries)
   - [Simple query](#simple-query)
@@ -36,6 +36,8 @@ Integrates [apollo](http://www.apollostack.com/) in your [Vue](http://vuejs.org)
   - [Skipping the subscription](#skipping-the-subscription)
 - [Pagination with `fetchMore`](#pagination-with-fetchmore)
 - [Skip all](#skip-all)
+- [Multiple clients](#multiple-clients)
+- [Server-Side Rendering](#server-side-rendering)
 
 ## Installation
 
@@ -43,7 +45,7 @@ Try and install this packages before server side set (of packages), add apollo t
 
     npm install --save vue-apollo apollo-client@^0.5.0
 
-## Configuration
+In your app, create an `ApolloClient` instance and install the `VueApollo` plugin:
 
 ```javascript
 import Vue from 'vue'
@@ -60,11 +62,23 @@ const apolloClient = new ApolloClient({
 })
 
 // Install the vue plugin
-Vue.use(VueApollo, {
-  apolloClient,
+Vue.use(VueApollo)
+```
+
+## Create a provider
+
+Like `vue-router` or `vuex`, you need to specify the `apolloProvider` object on your root components. A provider holds the apollo client instances that can then be used by all the child components.
+
+```javascript
+const apolloProvider = new VueApollo({
+  defaultClient: apolloClient,
 })
 
-// Your Vue app is now Apollo-enabled!
+new Vue({
+  el: '#app',
+  apolloProvider,
+  render: h => h(App),
+})
 ```
 
 ## Usage in components
@@ -985,6 +999,57 @@ apollo: {
     return this.foo === 42
   }
 }
+```
+
+## Multiple clients
+
+You can specify multiple apollo clients if your app needs to connect to different GraphQL endpoints:
+
+```javascript
+const apolloProvider = new VueApollo({
+  clients: {
+    a: apolloClient,
+    b: otherApolloClient,
+  },
+  defaultClient: apolloClient,
+})
+```
+
+In the component `apollo` option, you can define the client for all the queries, subscriptions and mutations with `$client` (only for this component):
+
+```javascript
+export default {
+  apollo: {
+    $client: 'b',
+  },
+}
+```
+
+You can also specify the client in individual queries, subscriptions and mutations with the `client` property in the options:
+
+```javascript
+tags: {
+  query: gql`...`,
+  client: 'b',
+}
+```
+
+## Server-Side Rendering
+
+(Work in progress)
+
+```javascript
+const ensureReady = apolloProvider.collect()
+
+new Vue({
+  el: '#app',
+  apolloProvider,
+  render: h => h(App),
+})
+
+ensureReady().then((...results) => {
+  console.log('ready', results.length)
+})
 ```
 
 ---

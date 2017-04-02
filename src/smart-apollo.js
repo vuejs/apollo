@@ -69,7 +69,7 @@ class SmartApollo {
       let cb = this.executeApollo.bind(this)
       cb = this.options.throttle ? throttle(cb, this.options.throttle) : cb
       cb = this.options.debounce ? debounce(cb, this.options.debounce) : cb
-      this.unwatchVariables = this.vm.$watch(this.options.variables.bind(this.vm), cb, {
+      this.unwatchVariables = this.vm.$watch(() => this.options.variables.bind(this.vm)(), cb, {
         immediate: true,
       })
     } else {
@@ -105,14 +105,19 @@ class SmartApollo {
 
   catchError (error) {
     if (error.graphQLErrors && error.graphQLErrors.length !== 0) {
-      console.error(`GraphQL execution errors for ${this.type} ${this.key}`)
+      console.error(`GraphQL execution errors for ${this.type} '${this.key}'`)
       for (let e of error.graphQLErrors) {
         console.error(e)
       }
     } else if (error.networkError) {
-      console.error(`Error sending the ${this.type} ${this.key}`, error.networkError)
+      console.error(`Error sending the ${this.type} '${this.key}'`, error.networkError)
     } else {
-      console.error(error)
+      console.error(`[vue-apollo] An error has occured for ${this.type} '${this.key}'`)
+      if (Array.isArray(error)) {
+        console.error(...error)
+      } else {
+        console.error(error)
+      }
     }
 
     if (typeof this.options.error === 'function') {
@@ -251,6 +256,39 @@ export class SmartQuery extends SmartApollo {
       return {
         unsubscribe: this.observer.subscribeToMore(...args),
       }
+    }
+  }
+
+  refetch (variables) {
+    variables && (this.options.variables = variables)
+    if (this.observer) {
+      return this.observer.refetch(variables)
+    }
+  }
+
+  setVariables (variables, tryFetch) {
+    this.options.variables = variables
+    if (this.observer) {
+      return this.observer.setVariables(variables, tryFetch)
+    }
+  }
+
+  setOptions (options) {
+    Object.assign(this.options, options)
+    if (this.observer) {
+      return this.observer.setOptions(options)
+    }
+  }
+
+  startPolling (...args) {
+    if (this.observer) {
+      return this.observer.startPolling(...args)
+    }
+  }
+
+  stopPolling (...args) {
+    if (this.observer) {
+      return this.observer.stopPolling(...args)
     }
   }
 }
