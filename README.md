@@ -399,7 +399,7 @@ this.$apollo.quries.tags.skip = true
 
 These are the available advanced options you can use:
 - `update(data) {return ...}` to customize the value that is set in the vue property, for example if the field names don't match.
-- `result(data)` is a hook called when a result is received.
+- `result(ApolloResult)` is a hook called when a result is received (see documentation for [ApolloResult](http://dev.apollodata.com/core/apollo-client-api.html#ApolloQueryResult)).
 - `error(error)` is a hook called when there are errors, `error` being an Apollo error object with either a `graphQLErrors` property or a `networkError` property.
 - `loadingKey` will update the component data property you pass as the value. You should initialize this property to `0` in the component `data()` hook. When the query is loading, this property will be incremented by 1 and as soon as it no longer is, the property will be decremented by 1. That way, the property can represent a counter of currently loading queries.
 - `watchLoading(isLoading, countModifier)` is a hook called when the loading state of the query changes. The `countModifier` parameter is either equal to `1` when the query is now loading, or `-1` when the query is no longer loading.
@@ -434,7 +434,7 @@ apollo: {
       return data.ping
     },
     // Optional result hook
-    result(data) {
+    result({ data, loader, networkStatus }) {
       console.log("We got some result!")
     },
     // Error handling
@@ -1040,8 +1040,13 @@ tags: {
 
 (Work in progress)
 
+Use `apolloProvider.collect()` to being collect queries made against this provider. You get a function that returns a promise when all queries collected are ready. Note that the provider stops collecting queries when you call the function.
+
 ```javascript
-const ensureReady = apolloProvider.collect()
+const ensureReady = apolloProvider.collect({
+  // If set to false, may resolve when partial/cache result is emitted
+  waitForLoaded: true, // default
+})
 
 new Vue({
   el: '#app',
@@ -1049,10 +1054,12 @@ new Vue({
   render: h => h(App),
 })
 
-ensureReady().then((...results) => {
-  console.log('ready', results.length)
+ensureReady().then(results => {
+  console.log(results.length, 'queries ready')
 })
 ```
+
+[White paper](./ssr.js)
 
 ---
 
