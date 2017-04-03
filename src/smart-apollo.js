@@ -219,7 +219,7 @@ export class SmartQuery extends SmartApollo {
     }
 
     if (typeof this.options.result === 'function') {
-      this.options.result.call(this.vm, data)
+      this.options.result.call(this.vm, result)
     }
   }
 
