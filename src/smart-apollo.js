@@ -205,8 +205,12 @@ export class SmartQuery extends SmartApollo {
     super.executeApollo(variables)
   }
 
-  nextResult ({ data }) {
-    this.loadingDone()
+  nextResult (result) {
+    const { data, loading } = result
+
+    if (!loading) {
+      this.loadingDone()
+    }
 
     if (typeof data === 'undefined') {
       // No result
