@@ -21,7 +21,9 @@ export class DollarApollo {
       this.provider._waitFor(new Promise((resolve, reject) => {
         sub = query.subscribe({
           next: result => {
-            resolve(result)
+            if (!this.provider._collectingOptions.waitForLoaded || !result.loading) {
+              resolve(result)
+            }
           },
           error: error => {
             reject(error)

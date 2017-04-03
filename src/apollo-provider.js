@@ -8,8 +8,12 @@ export class ApolloProvider {
     this._collecting = false
   }
 
-  collect () {
+  collect (options) {
+    const finalOptions = Object.assign({}, {
+      waitForLoaded: true,
+    }, options)
     this._promises = []
+    this._collectingOptions = finalOptions
     this._isCollecting = true
     return () => this._ensureReady()
   }
