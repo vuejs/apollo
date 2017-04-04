@@ -93,7 +93,7 @@ new Vue({
 })
 ```
 
-You can access the [apollo-client](http://dev.apollodata.com/core/apollo-client-api.html) instance with `this.$apollo.client` in all your vue components.
+You can access the [apollo-client](http://dev.apollodata.com/core/apollo-client-api.html) instances with `this.$apollo.provider.defaultClient` or `this.$apollo.provider.clients.<key>` (for [Multiple clients](#multiple-clients)) in all your vue components.
 
 ## Queries
 
