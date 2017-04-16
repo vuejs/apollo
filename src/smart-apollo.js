@@ -5,7 +5,7 @@ class SmartApollo {
   type = null
   vueApolloSpecialKeys = []
 
-  constructor (vm, key, options) {
+  constructor (vm, key, options, autostart = true) {
     this.vm = vm
     this.key = key
     this.options = options
@@ -22,7 +22,9 @@ class SmartApollo {
       }))
     }
 
-    this.autostart()
+    if (autostart) {
+      this.autostart()
+    }
   }
 
   autostart () {
@@ -148,7 +150,7 @@ export class SmartQuery extends SmartApollo {
     'debounce',
   ]
 
-  constructor (vm, key, options) {
+  constructor (vm, key, options, autostart = true) {
     // Options object callback
     while (typeof options === 'function') {
       options = options.call(vm)
@@ -162,7 +164,7 @@ export class SmartQuery extends SmartApollo {
       }
     }
 
-    super(vm, key, options)
+    super(vm, key, options, autostart)
   }
 
   stop () {
@@ -307,13 +309,13 @@ export class SmartSubscription extends SmartApollo {
     'debounce',
   ]
 
-  constructor (vm, key, options) {
+  constructor (vm, key, options, autostart = true) {
     // Options object callback
     while (typeof options === 'function') {
       options = options.call(vm)
     }
 
-    super(vm, key, options)
+    super(vm, key, options, autostart)
   }
 
   executeApollo (variables) {
