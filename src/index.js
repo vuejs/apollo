@@ -6,10 +6,6 @@ let Vue
 
 const keywords = [
   '$subscribe',
-  '$skipAll',
-  '$skipAllQueries',
-  '$skipAllSubscriptions',
-  '$client',
 ]
 
 const prepare = function prepare () {
