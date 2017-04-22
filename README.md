@@ -29,11 +29,13 @@ Integrates [apollo](http://www.apollostack.com/) in your [Vue](http://vuejs.org)
   - [Skipping the query](#skipping-the-query)
   - [Advanced options](#advanced-options)
   - [Reactive Query Example](#reactive-query-example)
+  - [Manually adding a smart Query](#manually-adding-a-smart-query)
 - [Mutations](#mutations)
 - [Subscriptions](#subscriptions)
   - [subscribeToMore](#subscribetomore)
   - [subscribe](#subscribe)
   - [Skipping the subscription](#skipping-the-subscription)
+  - [Manually adding a smart Subscription](#manually-adding-a-smart-subscription)
 - [Pagination with `fetchMore`](#pagination-with-fetchmore)
 - [Skip all](#skip-all)
 - [Multiple clients](#multiple-clients)
@@ -527,6 +529,20 @@ export const resolvers = {
 }
 ```
 
+### Manually adding a smart Query
+
+You can manually add a smart query with the `$apollo.addSmartQuery(key, options)` method:
+
+```javascript
+created () {
+  this.$apollo.addSmartQuery('comments', {
+    // Same options like above
+  })
+}
+```
+
+*Internally, this method is called for each query entry in the component `apollo` option.*
+
 ## Mutations
 
 Mutations are queries that changes your data state on your apollo server. For more info, visit the [apollo doc](http://dev.apollodata.com/core/apollo-client-api.html#ApolloClient\.mutate).
@@ -814,7 +830,7 @@ apollo: {
   // Subscriptions
   $subscribe: {
     // When a tag is added
-    tags: {
+    tagAdded: {
       query: gql`subscription tags($type: String!) {
         tagAdded(type: $type) {
           id
@@ -889,6 +905,20 @@ You can also access the subscription directly and set the `skip` property:
 ```javascript
 this.$apollo.subscriptions.tags.skip = true
 ```
+
+### Manually adding a smart Subscription
+
+You can manually add a smart subscription with the `$apollo.addSmartSubscription(key, options)` method:
+
+```javascript
+created () {
+  this.$apollo.addSmartSubscription('tagAdded', {
+    // Same options like '$subscribe' above
+  })
+}
+```
+
+*Internally, this method is called for each entry of the `$subscribe` object in the component `apollo` option.*
 
 ## Pagination with `fetchMore`
 

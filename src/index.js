@@ -39,7 +39,7 @@ const launch = function launch () {
   if (this._apolloQueries) {
     // watchQuery
     for (let key in this._apolloQueries) {
-      this.$apollo.option(key, this._apolloQueries[key])
+      this.$apollo.addSmartQuery(key, this._apolloQueries[key])
     }
   }
 
@@ -51,7 +51,7 @@ const launch = function launch () {
 
     if (apollo.$subscribe) {
       for (let key in apollo.$subscribe) {
-        this.$apollo.subscribeOption(key, apollo.$subscribe[key])
+        this.$apollo.addSmartSubscription(key, apollo.$subscribe[key])
       }
     }
 
