@@ -17,7 +17,7 @@ export class ApolloProvider {
     this._collectingOptions = finalOptions
     this._isCollecting = true
     this._ensureReadyPromise = null
-    return this.ensureReady
+    return this.ensureReady.bind(this)
   }
 
   ensureReady () {
