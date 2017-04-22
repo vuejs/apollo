@@ -97,16 +97,12 @@ export class DollarApollo {
 
   option (key, options) {
     const smart = this.queries[key] = new SmartQuery(this.vm, key, options, false)
-    this.vm.$nextTick(() => {
-      smart.autostart()
-    })
+    smart.autostart()
   }
 
   subscribeOption (key, options) {
     const smart = this.subscriptions[key] = new SmartSubscription(this.vm, key, options, false)
-    this.vm.$nextTick(() => {
-      smart.autostart()
-    })
+    smart.autostart()
   }
 
   defineReactiveSetter (key, func) {

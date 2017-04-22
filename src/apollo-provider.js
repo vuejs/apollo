@@ -3,8 +3,8 @@ export class ApolloProvider {
     if (!options) {
       throw new Error('Options argument required')
     }
-    this.clients = options.clients
-    this.defaultClient = options.defaultClient
+    this.clients = options.clients || {}
+    this.clients.defaultClient = this.defaultClient = options.defaultClient
     this._collecting = false
   }
 
@@ -12,10 +12,23 @@ export class ApolloProvider {
     const finalOptions = Object.assign({}, {
       waitForLoaded: true,
     }, options)
+    this._ready = false
     this._promises = []
     this._collectingOptions = finalOptions
     this._isCollecting = true
-    return () => this._ensureReady()
+    this._ensureReadyPromise = null
+    return this.ensureReady
+  }
+
+  ensureReady () {
+    if (this._ready) {
+      return Promise.resolve()
+    } else {
+      if (!this._ensureReadyPromise) {
+        this._ensureReadyPromise = this._ensureReady()
+      }
+      return this._ensureReadyPromise
+    }
   }
 
   _waitFor (promise) {
@@ -26,6 +39,9 @@ export class ApolloProvider {
 
   _ensureReady () {
     this._isCollecting = false
-    return Promise.all(this._promises)
+    return Promise.all(this._promises).then((result) => {
+      this._ready = true
+      return result
+    })
   }
 }
