@@ -149,6 +149,7 @@ export class SmartQuery extends SmartApollo {
     'throttle',
     'debounce',
   ]
+  loading = false
 
   constructor (vm, key, options, autostart = true) {
     // Options object callback
@@ -196,15 +197,19 @@ export class SmartQuery extends SmartApollo {
       })
     }
 
+    this.maySetLoading()
+
+    super.executeApollo(variables)
+  }
+
+  maySetLoading (force = false) {
     const currentResult = this.observer.currentResult()
-    if (currentResult.loading) {
+    if (force || currentResult.loading) {
       if (!this.loading) {
         this.applyLoadingModifier(1)
       }
       this.loading = true
     }
-
-    super.executeApollo(variables)
   }
 
   nextResult (result) {
@@ -253,6 +258,7 @@ export class SmartQuery extends SmartApollo {
 
   fetchMore (...args) {
     if (this.observer) {
+      this.maySetLoading(true)
       return this.observer.fetchMore(...args)
     }
   }
@@ -268,21 +274,27 @@ export class SmartQuery extends SmartApollo {
   refetch (variables) {
     variables && (this.options.variables = variables)
     if (this.observer) {
-      return this.observer.refetch(variables)
+      const result = this.observer.refetch(variables)
+      this.maySetLoading()
+      return result
     }
   }
 
   setVariables (variables, tryFetch) {
     this.options.variables = variables
     if (this.observer) {
-      return this.observer.setVariables(variables, tryFetch)
+      const result = this.observer.setVariables(variables, tryFetch)
+      this.maySetLoading()
+      return result
     }
   }
 
   setOptions (options) {
     Object.assign(this.options, options)
     if (this.observer) {
-      return this.observer.setOptions(options)
+      const result = this.observer.setOptions(options)
+      this.maySetLoading()
+      return result
     }
   }
 
