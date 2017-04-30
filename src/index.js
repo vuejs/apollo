@@ -1,8 +1,7 @@
 import omit from 'lodash.omit'
 import { DollarApollo } from './dollar-apollo'
 import { ApolloProvider } from './apollo-provider'
-
-let Vue
+import { Globals } from './utils'
 
 const keywords = [
   '$subscribe',
@@ -46,7 +45,7 @@ const launch = function launch () {
   let apollo = this.$options.apollo
   if (apollo) {
     if (apollo.subscribe) {
-      Vue.util.warn('vue-apollo -> `subscribe` option is deprecated. Use the `$subscribe` option instead.')
+      Globals.Vue.util.warn('vue-apollo -> `subscribe` option is deprecated. Use the `$subscribe` option instead.')
     }
 
     if (apollo.$subscribe) {
@@ -72,11 +71,11 @@ function defineReactiveSetter ($apollo, key, value) {
   }
 }
 
-function install (pVue, options) {
+function install (Vue, options) {
   if (install.installed) return
   install.installed = true
 
-  Vue = pVue
+  Globals.Vue = Vue
 
   // Options merging
   const merge = Vue.config.optionMergeStrategies.methods
@@ -133,3 +132,5 @@ function install (pVue, options) {
 ApolloProvider.install = install
 
 export default ApolloProvider
+
+export { willPrefetch } from './apollo-provider'

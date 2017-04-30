@@ -1,5 +1,6 @@
 import omit from 'lodash.omit'
 import { throttle, debounce } from './utils'
+import { VUE_APOLLO_QUERY_KEYWORDS } from './consts'
 
 class SmartApollo {
   type = null
@@ -137,18 +138,7 @@ class SmartApollo {
 
 export class SmartQuery extends SmartApollo {
   type = 'query'
-  vueApolloSpecialKeys = [
-    'variables',
-    'watch',
-    'update',
-    'result',
-    'error',
-    'loadingKey',
-    'watchLoading',
-    'skip',
-    'throttle',
-    'debounce',
-  ]
+  vueApolloSpecialKeys = VUE_APOLLO_QUERY_KEYWORDS
   loading = false
 
   constructor (vm, key, options, autostart = true) {

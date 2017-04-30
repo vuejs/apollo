@@ -11,7 +11,7 @@ Integrates [apollo](http://www.apollostack.com/) in your [Vue](http://vuejs.org)
 
 [<img src="https://assets-cdn.github.com/favicon.ico" alt="icon" width="16" height="16"/> Apollo graphql server example](https://github.com/Akryum/apollo-server-example)
 
-[<img src="https://assets-cdn.github.com/favicon.ico" alt="icon" width="16" height="16"/> Apollo "hello world" example app](https://github.com/Akryum/frontpage-vue-app)
+[<img src="https://assets-cdn.github.com/favicon.ico" alt="icon" width="16" height="16"/> Apollo "hello world" example app](https://github.com/Akryum/frontpage-vue-app) (outdated)
 
 [<img src="https://cdn-static-1.medium.com/_/fp/icons/favicon-medium.TAS6uQ-Y7kcKgi0xjcYHXw.ico" alt="icon" width="16" height="16"/> Howto on Medium](https://dev-blog.apollodata.com/use-apollo-in-your-vuejs-app-89812429d8b2#.pdd4hmcrc)
 
@@ -1068,28 +1068,298 @@ tags: {
 
 ## Server-Side Rendering
 
-(Work in progress)
+### Prefetch components
 
-Use `apolloProvider.collect()` to being collect queries made against this provider. You get a function that returns a promise when all queries collected are ready. Note that the provider stops collecting queries when you call the function.
+On the queries you want to prefetch on the server, add the `prefetch` option. It can either be:
+ - a variables object,
+ - a function that gets the context object (which can contain the URL for example) and return a variables object,
+ - `true` (query's `variables` is reused).
+
+**Warning! You don't have access to the component instance when doing prefetching on the server. Don't use `this` in `prefetch`!**
+
+Example:
 
 ```javascript
-const ensureReady = apolloProvider.collect({
-  // If set to false, may resolve when partial/cache result is emitted
-  waitForLoaded: true, // default
-})
+export default {
+  apollo: {
+    allPosts: {
+      query: gql`query AllPosts {
+        allPosts {
+          id
+          imageUrl
+          description
+        }
+      }`,
+      prefetch: true,
+    }
+  }
+}
+```
 
-new Vue({
-  el: '#app',
-  apolloProvider,
-  render: h => h(App),
-})
+Example 2:
 
-ensureReady().then(results => {
-  console.log(results.length, 'queries ready')
+```javascript
+export default {
+  apollo: {
+    post: {
+      query: gql`query Post($id: ID!) {
+        post (id: $id) {
+          id
+          imageUrl
+          description
+        }
+      }`,
+      prefetch: ({ route }) => {
+        return {
+          id: route.params.id,
+        }
+      },
+      variables () {
+        return {
+          id: this.id,
+        }
+      },
+    }
+  }
+}
+```
+
+You can also tell vue-apollo that some components not used in a `router-view` (and thus not in vue-router `matchedComponents`) need to be prefetched, with the `willPrefetch` method:
+
+```javascript
+import { willPrefetch } from 'vue-apollo'
+
+export default willPrefetch({
+  apollo: {
+    allPosts: {
+      query: gql`query AllPosts {
+        allPosts {
+          id
+          imageUrl
+          description
+        }
+      }`,
+      prefetch: true, // Don't forget this
+    }
+  }
 })
 ```
 
-[White paper](./ssr.js)
+### On the server
+
+To prefetch all the apollo queries you marked, use the `apolloProvider.prefetchAll` method. The first argument is the context object passed to the `prefetch` hooks (see above). It is recommended to pass the vue-router `currentRoute` object. The second argument is the array of component definition to include (e.g. from `router.getMatchedComponents` method). The third argument is an optional `options` object. It returns a promise resolved when all the apollo queries are loaded.
+
+Here is an example with vue-router and a Vuex store:
+
+```javascript
+return new Promise((resolve, reject) => {
+  const { app, router, store, apolloProvider } = CreateApp({
+    ssr: true,
+  })
+
+  // set router's location
+  router.push(context.url)
+
+  // wait until router has resolved possible async hooks
+  router.onReady(() => {
+    const matchedComponents = router.getMatchedComponents()
+
+    // no matched routes
+    if (!matchedComponents.length) {
+      reject({ code: 404 })
+    }
+
+    let js = ''
+
+    // Call preFetch hooks on components matched by the route.
+    // A preFetch hook dispatches a store action and returns a Promise,
+    // which is resolved when the action is complete and store state has been
+    // updated.
+    Promise.all([
+      // Vuex Store prefetch
+      ...matchedComponents.map(component => {
+        return component.preFetch && component.preFetch(store)
+      }),
+      // Apollo prefetch
+      apolloProvider.prefetchAll({
+        route: router.currentRoute,
+      }, matchedComponents),
+    ]).then(() => {
+      // Inject the Vuex state and the Apollo cache on the page.
+      // This will prevent unecessary queries.
+
+      // Vuex
+      js += `window.__INITIAL_STATE__=${JSON.stringify(store.state)};`
+
+      // Apollo
+      js += apolloProvider.exportStates()
+
+      resolve({
+        app,
+        js,
+      })
+    }).catch(reject)
+  })
+})
+```
+
+The `options` argument defaults to:
+
+```javascript
+{
+  // Include components outside of the routes
+  // that are registered with `willPrefetch`
+  includeGlobal: true,
+}
+```
+
+Use the `apolloProvider.exportStates` method to get the JavaScript code you need to inject into the generated page to pass the apollo cache data to the client.
+
+It takes an `options` argument which defaults to:
+
+```javascript
+{
+  // Global variable name
+  globalName: '__APOLLO_STATE__',
+  // Global object on which the variable is set
+  attachTo: 'window',
+  // Prefix for the keys of each apollo client state
+  exportNamespace: '',
+}
+```
+
+### Creating the Apollo Clients
+
+It is recommended to create the apollo clients inside a function with an `ssr` argument, which is `true` on the server and `false` on the client.
+
+Here is an example:
+
+```javascript
+// src/api/apollo.js
+
+import Vue from 'vue'
+import { ApolloClient, createNetworkInterface } from 'apollo-client'
+import VueApollo from 'vue-apollo'
+
+// Install the vue plugin
+Vue.use(VueApollo)
+
+// Create the apollo client
+export function createApolloClient (ssr = false) {
+  let initialState
+
+  // If on the client, recover the injected state
+  if (!ssr && typeof window !== 'undefined') {
+    const state = window.__APOLLO_STATE__
+    if (state) {
+      // If you have multiple clients, use `state.<client_id>`
+      initialState = state.defaultClient
+    }
+  }
+
+  const apolloClient = new ApolloClient({
+    networkInterface: createNetworkInterface({
+      // You should use an absolute URL here
+      uri: 'https://api.graph.cool/simple/v1/cj1jvw20v3n310152sv0sirl7',
+      transportBatching: true,
+    }),
+    ...(ssr ? {
+      // Set this on the server to optimize queries when SSR
+      ssrMode: true,
+    } : {
+      // Inject the state on the client
+      initialState,
+      // This will temporary disable query force-fetching
+      ssrForceFetchDelay: 100,
+    }),
+  })
+
+  return apolloClient
+}
+```
+
+Example for common `CreateApp` method:
+
+```javascript
+import Vue from 'vue'
+
+import VueRouter from 'vue-router'
+Vue.use(VueRouter)
+
+import Vuex from 'vuex'
+Vue.use(Vuex)
+
+import { sync } from 'vuex-router-sync'
+
+import VueApollo from 'vue-apollo'
+import { createApolloClient } from './api/apollo'
+
+import App from './ui/App.vue'
+import routes from './routes'
+import storeOptions from './store'
+
+function createApp (context) {
+  const router = new VueRouter({
+    mode: 'history',
+    routes,
+  })
+
+  const store = new Vuex.Store(storeOptions)
+
+  // sync the router with the vuex store.
+  // this registers `store.state.route`
+  sync(store, router)
+
+  // Apollo
+  const apolloClient = createApolloClient(context.ssr)
+  const apolloProvider = new VueApollo({
+    defaultClient: apolloClient,
+  })
+
+  return {
+    app: new Vue({
+      el: '#app',
+      router,
+      store,
+      apolloProvider,
+      ...App,
+    }),
+    router,
+    store,
+    apolloProvider,
+  }
+}
+
+export default createApp
+```
+
+On the client:
+
+```javascript
+import CreateApp from './app'
+
+CreateApp({
+  ssr: false,
+})
+```
+
+On the server:
+
+```javascript
+import { CreateApp } from './app'
+
+const { app, router, store, apolloProvider } = CreateApp({
+  ssr: true,
+})
+
+// set router's location
+router.push(context.url)
+
+// wait until router has resolved possible async hooks
+router.onReady(() => {
+  // Prefetch, render HTML (see above)
+})
+```
 
 ---
 

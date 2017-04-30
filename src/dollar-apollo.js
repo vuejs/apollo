@@ -15,33 +15,8 @@ export class DollarApollo {
     return this._apolloProvider || this.vm.$root._apolloProvider
   }
 
-  _autoCollect (query) {
-    if (this.provider._isCollecting) {
-      let sub
-      this.provider._waitFor(new Promise((resolve, reject) => {
-        sub = query.subscribe({
-          next: result => {
-            if (!this.provider._collectingOptions.waitForLoaded || !result.loading) {
-              resolve(result)
-            }
-          },
-          error: error => {
-            reject(error)
-          },
-        })
-      }).then(result => {
-        sub.unsubscribe()
-        return result
-      }, error => {
-        sub.unsubscribe()
-        return error
-      }))
-    }
-    return query
-  }
-
   query (options) {
-    return this._autoCollect(this.getClient(options).query(options))
+    return this.getClient(options).query(options)
   }
 
   getClient (options) {
@@ -77,7 +52,7 @@ export class DollarApollo {
       this._apolloSubscriptions.push(sub)
       return sub
     }
-    return this._autoCollect(observable)
+    return observable
   }
 
   mutate (options) {
