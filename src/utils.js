@@ -20,3 +20,10 @@ export const debounce = factory(loDebounce)
 export function getMergedDefinition (def) {
   return Globals.Vue.util.mergeOptions({}, def)
 }
+
+export function reapply (options, context) {
+  while (typeof options === 'function') {
+    options = options.call(context)
+  }
+  return options
+}

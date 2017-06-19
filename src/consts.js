@@ -9,4 +9,5 @@ export const VUE_APOLLO_QUERY_KEYWORDS = [
   'skip',
   'throttle',
   'debounce',
+  'subscribeToMore',
 ]

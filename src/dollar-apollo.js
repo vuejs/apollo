@@ -1,4 +1,5 @@
 import { SmartQuery, SmartSubscription } from './smart-apollo'
+import { reapply } from './utils'
 
 export class DollarApollo {
   constructor (vm) {
@@ -71,14 +72,27 @@ export class DollarApollo {
   }
 
   addSmartQuery (key, options) {
+    options = reapply(options, this.vm)
+
     const smart = this.queries[key] = new SmartQuery(this.vm, key, options, false)
     smart.autostart()
+
+    if (options.subscribeToMore) {
+      this.addSmartSubscription(key, {
+        ...options.subscribeToMore,
+        linkedQuery: smart,
+      })
+    }
+
     return smart
   }
 
   addSmartSubscription (key, options) {
+    options = reapply(options, this.vm)
+
     const smart = this.subscriptions[key] = new SmartSubscription(this.vm, key, options, false)
     smart.autostart()
+
     return smart
   }
 

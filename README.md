@@ -568,17 +568,15 @@ methods: {
         label: newTag,
       },
       // Update the cache with the result
-      // 'tagList' is the name of the query declared before
-      // that will be updated with the optimistic response
-      // and the result of the mutation
-      updateQueries: {
-        tagList: (previousResult, { mutationResult }) => {
-          // We incorporate any received result (either optimistic or real)
-          // into the 'tagList' query we set up earlier
-          return {
-            tags: [...previousResult.tags, mutationResult.data.addTag],
-          }
-        },
+      // The query will be updated with the optimistic response
+      // and then with the real result of the mutation
+      update: (store, { data: { newTag } }) => {
+        // Read the data from our cache for this query.
+        const data = store.readQuery({ query: TAGS_QUERY })
+        // Add our tag from the mutation to the end
+        data.tags.push(newTag)
+        // Write our data back to the cache.
+        store.writeQuery({ query: TAGS_QUERY, data })
       },
       // Optimistic UI
       // Will be treated as a 'fake' result as soon as the request is made
@@ -715,7 +713,38 @@ new Vue({
 
 ### subscribeToMore
 
-If you need to update a query result from a subscription, the best way is using the `subscribeToMore` query method. You can access the queries you defined in the `apollo` option with `this.$apollo.queries.<name>`, so it would look like this:
+If you need to update a query result from a subscription, the best way is using the `subscribeToMore` query method. Just add a `subscribeToMore` to your query:
+
+```javascript
+apollo: {
+  tags: {
+    query: TAGS_QUERY,
+    subscribeToMore: {
+      document: gql`subscription name($param: String!) {
+        itemAdded(param: $param) {
+          id
+          label
+        }
+      }`,
+      // Variables passed to the subscription
+      variables () {
+        // Reactive if a function (like previously)
+        return {
+          param: this.param,
+        }
+      },
+      // Mutate the previous result
+      updateQuery: (previousResult, { subscriptionData }) => {
+        // Here, return the new result from the previous with the new data
+      },
+    }
+  }
+}
+```
+
+#### Alternate usage
+
+You can access the queries you defined in the `apollo` option with `this.$apollo.queries.<name>`, so it would look like this:
 
 ```javascript
 this.$apollo.queries.tags.subscribeToMore({

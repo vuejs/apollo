@@ -22,6 +22,15 @@ class SmartApollo {
         this.refresh()
       }))
     }
+    // Query callback
+    if (typeof this.options.document === 'function') {
+      const queryCb = this.options.document.bind(this.vm)
+      this.options.document = queryCb()
+      this._watchers.push(this.vm.$watch(queryCb, document => {
+        this.options.document = document
+        this.refresh()
+      }))
+    }
 
     if (autostart) {
       this.autostart()
@@ -142,11 +151,6 @@ export class SmartQuery extends SmartApollo {
   loading = false
 
   constructor (vm, key, options, autostart = true) {
-    // Options object callback
-    while (typeof options === 'function') {
-      options = options.call(vm)
-    }
-
     // Simple query
     if (!options.query) {
       const query = options
@@ -309,30 +313,28 @@ export class SmartSubscription extends SmartApollo {
     'error',
     'throttle',
     'debounce',
+    'linkedQuery',
   ]
-
-  constructor (vm, key, options, autostart = true) {
-    // Options object callback
-    while (typeof options === 'function') {
-      options = options.call(vm)
-    }
-
-    super(vm, key, options, autostart)
-  }
 
   executeApollo (variables) {
     if (this.sub) {
       this.sub.unsubscribe()
     }
 
-    // Create observer
-    this.observer = this.vm.$apollo.subscribe(this.generateApolloOptions(variables))
+    const apolloOptions = this.generateApolloOptions(variables)
 
-    // Create subscription
-    this.sub = this.observer.subscribe({
-      next: this.nextResult.bind(this),
-      error: this.catchError.bind(this),
-    })
+    if (this.options.linkedQuery) {
+      this.sub = this.options.linkedQuery.subscribeToMore(apolloOptions)
+    } else {
+      // Create observer
+      this.observer = this.vm.$apollo.subscribe(apolloOptions)
+
+      // Create subscription
+      this.sub = this.observer.subscribe({
+        next: this.nextResult.bind(this),
+        error: this.catchError.bind(this),
+      })
+    }
 
     super.executeApollo(variables)
   }
