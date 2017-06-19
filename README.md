@@ -394,7 +394,7 @@ Here, `skip` will be called automatically when the `skipQuery` component propert
 You can also access the query directly and set the `skip` property:
 
 ```javascript
-this.$apollo.quries.tags.skip = true
+this.$apollo.queries.tags.skip = true
 ```
 
 ### Advanced options
