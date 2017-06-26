@@ -265,7 +265,7 @@ export class SmartQuery extends SmartApollo {
     variables && (this.options.variables = variables)
     if (this.observer) {
       const result = this.observer.refetch(variables).then((result) => {
-        if (result.loading === false) {
+        if (!result.loading) {
           this.loadingDone()
         }
       })
