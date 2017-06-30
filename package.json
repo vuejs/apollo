@@ -2,14 +2,14 @@
   "name": "vue-apollo",
   "version": "2.1.0-beta.9",
   "description": "Vue apollo integration",
-  "main": "lib/index.js",
+  "main": "dist/main.min.js",
   "scripts": {
-    "compile": "babel --presets es2015,stage-0 -d lib/ src/",
-    "prepublish": "npm run compile",
+    "build": "rimraf ./dist && ./node_modules/.bin/rollup -c",
+    "prepublish": "npm run build",
     "dev": "npm-watch"
   },
   "watch": {
-    "compile": "src/*.js"
+    "build": "src/*.js"
   },
   "repository": {
     "type": "git",
@@ -38,12 +38,18 @@
   "devDependencies": {
     "babel-cli": "^6.14.0",
     "babel-eslint": "^7.1.1",
-    "babel-preset-es2015": "^6.14.0",
-    "babel-preset-stage-0": "^6.16.0",
+    "babel-preset-stage-0": "^6.24.1",
     "eslint": "^3.12.1",
     "eslint-config-standard": "^7.1.0",
     "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-standard": "^2.0.1",
-    "npm-watch": "^0.1.6"
+    "npm-watch": "^0.1.6",
+    "rimraf": "^2.6.1",
+    "rollup": "^0.41.6",
+    "rollup-plugin-babel": "^2.7.1",
+    "rollup-plugin-commonjs": "^8.0.2",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-uglify": "^1.0.2",
+    "uglify-js-harmony": "^2.7.7"
   }
 }
