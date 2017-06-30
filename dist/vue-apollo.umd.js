@@ -3453,6 +3453,21 @@ function install(Vue, options) {
 
 ApolloProvider$1.install = install;
 
+var ApolloProvider$$1 = ApolloProvider$1;
+
+// Auto-install
+var GlobalVue = null;
+if (typeof window !== 'undefined') {
+  GlobalVue = window.Vue;
+} else if (typeof global !== 'undefined') {
+  GlobalVue = global.Vue;
+}
+if (GlobalVue) {
+  GlobalVue.use(ApolloProvider$1);
+}
+
+exports.install = install;
+exports.ApolloProvider = ApolloProvider$$1;
 exports['default'] = ApolloProvider$1;
 exports.willPrefetch = willPrefetch;
 

@@ -1,6 +1,6 @@
 import omit from 'lodash.omit'
 import { DollarApollo } from './dollar-apollo'
-import { ApolloProvider } from './apollo-provider'
+import { ApolloProvider as apolloProvider } from './apollo-provider'
 import { Globals } from './utils'
 
 const keywords = [
@@ -71,7 +71,7 @@ function defineReactiveSetter ($apollo, key, value) {
   }
 }
 
-function install (Vue, options) {
+export function install (Vue, options) {
   if (install.installed) return
   install.installed = true
 
@@ -129,8 +129,21 @@ function install (Vue, options) {
   })
 }
 
-ApolloProvider.install = install
+apolloProvider.install = install
 
-export default ApolloProvider
+export const ApolloProvider = apolloProvider
 
 export { willPrefetch } from './apollo-provider'
+
+// Auto-install
+let GlobalVue = null
+if (typeof window !== 'undefined') {
+  GlobalVue = window.Vue
+} else if (typeof global !== 'undefined') {
+  GlobalVue = global.Vue
+}
+if (GlobalVue) {
+  GlobalVue.use(apolloProvider)
+}
+
+export default apolloProvider

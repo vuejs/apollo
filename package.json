@@ -1,6 +1,6 @@
 {
   "name": "vue-apollo",
-  "version": "2.1.0-beta.12",
+  "version": "2.1.0-beta.18",
   "description": "Vue apollo integration",
   "main": "dist/vue-apollo.umd.js",
   "module": "dist/vue-apollo.esm.js",
@@ -35,7 +35,6 @@
     "apollo-client": "^1.0.1"
   },
   "dependencies": {
-    "graphql-tag": "^2.0.0",
     "lodash.debounce": "^4.0.8",
     "lodash.omit": "^4.5.0",
     "lodash.throttle": "^4.1.1"

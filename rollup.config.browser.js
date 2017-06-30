@@ -9,7 +9,7 @@ export default {
   dest: 'dist/vue-apollo.min.js',
   format: 'iife',
   exports: 'named',
-  moduleName: 'vue-apollo',
+  moduleName: 'VueApollo',
   plugins: [
     resolve({
       jsnext: true,
