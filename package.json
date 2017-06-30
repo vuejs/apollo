@@ -1,10 +1,15 @@
 {
   "name": "vue-apollo",
-  "version": "2.1.0-beta.9",
+  "version": "2.1.0-beta.12",
   "description": "Vue apollo integration",
-  "main": "dist/main.min.js",
+  "main": "dist/vue-apollo.umd.js",
+  "module": "dist/vue-apollo.esm.js",
+  "unpkg": "dist/vue-apollo.min.js",
   "scripts": {
-    "build": "rimraf ./dist && ./node_modules/.bin/rollup -c",
+    "build": "rimraf ./dist && npm run build:browser && npm run build:es && npm run build:umd",
+    "build:browser": "rollup --config rollup.config.browser.js",
+    "build:es": "rollup --config rollup.config.es.js",
+    "build:umd": "rollup --config rollup.config.umd.js",
     "prepublish": "npm run build",
     "dev": "npm-watch"
   },
@@ -38,6 +43,8 @@
   "devDependencies": {
     "babel-cli": "^6.14.0",
     "babel-eslint": "^7.1.1",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "eslint": "^3.12.1",
     "eslint-config-standard": "^7.1.0",
