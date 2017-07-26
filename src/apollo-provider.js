@@ -128,20 +128,28 @@ export class ApolloProvider {
     })
   }
 
-  exportStates (options) {
+  getStates (options) {
     const finalOptions = Object.assign({}, {
       exportNamespace: '',
-      globalName: '__APOLLO_STATE__',
-      attachTo: 'window',
     }, options)
-
-    let js = `${finalOptions.attachTo}.${finalOptions.globalName} = {`
+    const states = {}
     for (const key in this.clients) {
       const client = this.clients[key]
       const state = { [client.reduxRootKey || 'apollo']: client.getInitialState() }
-      js += `['${finalOptions.exportNamespace}${key}']:${JSON.stringify(state)},`
+      states[`${finalOptions.exportNamespace}${key}`] = state
     }
-    js += `};`
+    return states
+  }
+
+  exportStates (options) {
+    const finalOptions = Object.assign({}, {
+      globalName: '__APOLLO_STATE__',
+      attachTo: 'window',
+    }, options)
+    const states = this.getStates({
+      exportNamespace: options.exportNamespace,
+    })
+    const js = `${finalOptions.attachTo}.${finalOptions.globalName} = ${JSON.stringify(states)};`
     return js
   }
 }
