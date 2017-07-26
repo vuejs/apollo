@@ -1258,6 +1258,17 @@ It takes an `options` argument which defaults to:
 }
 ```
 
+You can also use the `apolloProvider.getStates` method to get the JS object instead of the script string.
+
+It takes an `options` argument which defaults to:
+
+```javascript
+{
+  // Prefix for the keys of each apollo client state
+  exportNamespace: '',
+}
+```
+
 ### Creating the Apollo Clients
 
 It is recommended to create the apollo clients inside a function with an `ssr` argument, which is `true` on the server and `false` on the client.
