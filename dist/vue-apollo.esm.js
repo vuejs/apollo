@@ -3292,21 +3292,30 @@ var ApolloProvider$1 = function () {
       });
     }
   }, {
-    key: 'exportStates',
-    value: function exportStates(options) {
+    key: 'getStates',
+    value: function getStates(options) {
       var finalOptions = Object.assign({}, {
-        exportNamespace: '',
-        globalName: '__APOLLO_STATE__',
-        attachTo: 'window'
+        exportNamespace: ''
       }, options);
-
-      var js = finalOptions.attachTo + '.' + finalOptions.globalName + ' = {';
+      var states = {};
       for (var key in this.clients) {
         var client = this.clients[key];
         var state = defineProperty({}, client.reduxRootKey || 'apollo', client.getInitialState());
-        js += '[\'' + finalOptions.exportNamespace + key + '\']:' + JSON.stringify(state) + ',';
+        states['' + finalOptions.exportNamespace + key] = state;
       }
-      js += '};';
+      return states;
+    }
+  }, {
+    key: 'exportStates',
+    value: function exportStates(options) {
+      var finalOptions = Object.assign({}, {
+        globalName: '__APOLLO_STATE__',
+        attachTo: 'window'
+      }, options);
+      var states = this.getStates({
+        exportNamespace: options.exportNamespace
+      });
+      var js = finalOptions.attachTo + '.' + finalOptions.globalName + ' = ' + JSON.stringify(states) + ';';
       return js;
     }
   }]);
