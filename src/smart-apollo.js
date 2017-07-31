@@ -81,7 +81,7 @@ class SmartApollo {
       let cb = this.executeApollo.bind(this)
       cb = this.options.throttle ? throttle(cb, this.options.throttle) : cb
       cb = this.options.debounce ? debounce(cb, this.options.debounce) : cb
-      this.unwatchVariables = this.vm.$watch(() => this.options.variables.bind(this.vm)(), cb, {
+      this.unwatchVariables = this.vm.$watch(() => this.options.variables.call(this.vm), cb, {
         immediate: true,
       })
     } else {
