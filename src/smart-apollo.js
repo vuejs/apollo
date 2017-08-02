@@ -1,6 +1,7 @@
 import omit from 'lodash.omit'
 import { throttle, debounce } from './utils'
 import { VUE_APOLLO_QUERY_KEYWORDS } from './consts'
+import gql from 'graphql-tag'
 
 class SmartApollo {
   type = null
@@ -12,6 +13,11 @@ class SmartApollo {
     this.options = Object.assign({}, options)
     this._skip = false
     this._watchers = []
+
+    // If query is a string it needs to be compiled to a valid query document
+    if (typeof this.options.query === 'string') {
+      this.options.query = gql(this.options.query)
+    }
 
     // Query callback
     if (typeof this.options.query === 'function') {

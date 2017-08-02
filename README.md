@@ -104,18 +104,12 @@ In the `apollo` object, add an attribute for each property you want to feed with
 
 ### Simple query
 
-Use `gql` to write your GraphQL queries:
-
-```javascript
-import gql from 'graphql-tag'
-```
-
 Put the [gql](http://docs.apollostack.com/apollo-client/core.html#gql) query directly as the value:
 
 ```javascript
 apollo: {
   // Simple query that will update the 'hello' vue property
-  hello: gql`{hello}`,
+  hello: `{hello}`,
 },
 ```
 
