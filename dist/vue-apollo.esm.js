@@ -2507,7 +2507,7 @@ var SmartApollo = function () {
 
     this.vm = vm;
     this.key = key;
-    this.options = options;
+    this.options = Object.assign({}, options);
     this._skip = false;
     this._watchers = [];
 
@@ -2574,7 +2574,7 @@ var SmartApollo = function () {
         cb = this.options.throttle ? throttle(cb, this.options.throttle) : cb;
         cb = this.options.debounce ? debounce(cb, this.options.debounce) : cb;
         this.unwatchVariables = this.vm.$watch(function () {
-          return _this2.options.variables.bind(_this2.vm)();
+          return _this2.options.variables.call(_this2.vm);
         }, cb, {
           immediate: true
         });
