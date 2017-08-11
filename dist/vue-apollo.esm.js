@@ -3313,7 +3313,7 @@ var ApolloProvider$1 = function () {
         attachTo: 'window'
       }, options);
       var states = this.getStates({
-        exportNamespace: options.exportNamespace
+        exportNamespace: finalOptions.exportNamespace
       });
       var js = finalOptions.attachTo + '.' + finalOptions.globalName + ' = ' + JSON.stringify(states) + ';';
       return js;
