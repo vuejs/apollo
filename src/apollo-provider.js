@@ -9,6 +9,9 @@ export class ApolloProvider {
     }
     this.clients = options.clients || {}
     this.clients.defaultClient = this.defaultClient = options.defaultClient
+    this.defaultOptions = options.defaultOptions
+    this.watchLoading = options.watchLoading
+    this.errorHandler = options.errorHandler
 
     this.prefetchQueries = []
   }

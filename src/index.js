@@ -8,8 +8,11 @@ const keywords = [
 ]
 
 const prepare = function prepare () {
+  let apolloProvider
   if (this.$options.apolloProvider) {
-    this._apolloProvider = this.$options.apolloProvider
+    apolloProvider = this._apolloProvider = this.$options.apolloProvider
+  } else {
+    apolloProvider = this.$root._apolloProvider
   }
 
   if (this._apolloPrepared) return
@@ -17,9 +20,20 @@ const prepare = function prepare () {
 
   // Prepare properties
   let apollo = this.$options.apollo
+
   if (apollo) {
     this._apolloQueries = {}
     this._apolloInitData = {}
+    this.$apollo = new DollarApollo(this)
+
+    if (!apollo.$init) {
+      apollo.$init = true
+
+      // Default options applied to `apollo` options
+      if (apolloProvider.defaultOptions) {
+        apollo = this.$options.apollo = Object.assign({}, apolloProvider.defaultOptions, apollo)
+      }
+    }
 
     // watchQuery
     for (let key in apollo) {
@@ -35,6 +49,16 @@ const launch = function launch () {
   if (this._apolloLaunched) return
   this._apolloLaunched = true
 
+  let apollo = this.$options.apollo
+  if (apollo) {
+    defineReactiveSetter(this.$apollo, 'skipAll', apollo.$skipAll)
+    defineReactiveSetter(this.$apollo, 'skipAllQueries', apollo.$skipAllQueries)
+    defineReactiveSetter(this.$apollo, 'skipAllSubscriptions', apollo.$skipAllSubscriptions)
+    defineReactiveSetter(this.$apollo, 'client', apollo.$client)
+    defineReactiveSetter(this.$apollo, 'loadingKey', apollo.$loadingKey)
+    defineReactiveSetter(this.$apollo, 'error', apollo.$error)
+  }
+
   if (this._apolloQueries) {
     // watchQuery
     for (let key in this._apolloQueries) {
@@ -42,7 +66,6 @@ const launch = function launch () {
     }
   }
 
-  let apollo = this.$options.apollo
   if (apollo) {
     if (apollo.subscribe) {
       Globals.Vue.util.warn('vue-apollo -> `subscribe` option is deprecated. Use the `$subscribe` option instead.')
@@ -53,11 +76,6 @@ const launch = function launch () {
         this.$apollo.addSmartSubscription(key, apollo.$subscribe[key])
       }
     }
-
-    defineReactiveSetter(this.$apollo, 'skipAll', apollo.$skipAll)
-    defineReactiveSetter(this.$apollo, 'skipAllQueries', apollo.$skipAllQueries)
-    defineReactiveSetter(this.$apollo, 'skipAllSubscriptions', apollo.$skipAllSubscriptions)
-    defineReactiveSetter(this.$apollo, 'client', apollo.$client)
   }
 }
 
@@ -94,16 +112,6 @@ export function install (Vue, options) {
 
     return Object.assign(map, merge(toData, fromData))
   }
-
-  // Lazy creation
-  Object.defineProperty(Vue.prototype, '$apollo', {
-    get () {
-      if (!this._apollo) {
-        this._apollo = new DollarApollo(this)
-      }
-      return this._apollo
-    },
-  })
 
   Vue.mixin({
 

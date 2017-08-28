@@ -10,6 +10,8 @@ export class DollarApollo {
     this.queries = {}
     this.subscriptions = {}
     this.client = undefined
+    this.loadingKey = undefined
+    this.error = undefined
   }
 
   get provider () {

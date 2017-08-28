@@ -115,6 +115,12 @@ class SmartApollo {
     throw new Error('Not implemented')
   }
 
+  errorHandler (...args) {
+    this.options.error && this.options.error.call(this.vm, ...args)
+    this.vm.$apollo.error && this.vm.$apollo.error.call(this.vm, ...args)
+    this.vm.$apollo.provider.errorHandler && this.vm.$apollo.provider.errorHandler.call(this.vm, ...args)
+  }
+
   catchError (error) {
     if (error.graphQLErrors && error.graphQLErrors.length !== 0) {
       console.error(`GraphQL execution errors for ${this.type} '${this.key}'`)
@@ -132,9 +138,7 @@ class SmartApollo {
       }
     }
 
-    if (typeof this.options.error === 'function') {
-      this.options.error.call(this.vm, error)
-    }
+    this.errorHandler(error)
   }
 
   destroy () {
@@ -233,14 +237,23 @@ export class SmartQuery extends SmartApollo {
     this.loadingDone()
   }
 
+  get loadingKey () {
+    return this.options.loadingKey || this.vm.$apollo.loadingKey
+  }
+
+  watchLoading (...args) {
+    this.options.watchLoading && this.options.watchLoading.call(this.vm, ...args)
+    this.vm.$apollo.watchLoading && this.vm.$apollo.watchLoading.call(this.vm, ...args)
+    this.vm.$apollo.provider.watchLoading && this.vm.$apollo.provider.watchLoading.call(this.vm, ...args)
+  }
+
   applyLoadingModifier (value) {
-    if (this.options.loadingKey) {
-      this.vm[this.options.loadingKey] += value
+    const loadingKey = this.loadingKey
+    if (loadingKey && typeof this.vm[loadingKey] === 'number') {
+      this.vm[loadingKey] += value
     }
 
-    if (this.options.watchLoading) {
-      this.options.watchLoading.call(this.vm, value === 1, value)
-    }
+    this.watchLoading(value === 1, value)
   }
 
   loadingDone () {
