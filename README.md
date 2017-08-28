@@ -743,6 +743,8 @@ apollo: {
 }
 ```
 
+*Note that you can pass an array of subscriptions to `subscribeToMore` to subscribe to multiple subcribtions on this query.*
+
 #### Alternate usage
 
 You can access the queries you defined in the `apollo` option with `this.$apollo.queries.<name>`, so it would look like this:

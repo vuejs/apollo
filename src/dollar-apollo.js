@@ -77,11 +77,21 @@ export class DollarApollo {
     const smart = this.queries[key] = new SmartQuery(this.vm, key, options, false)
     smart.autostart()
 
-    if (options.subscribeToMore) {
-      this.addSmartSubscription(key, {
-        ...options.subscribeToMore,
-        linkedQuery: smart,
-      })
+    const subs = options.subscribeToMore
+    if (subs) {
+      if (Array.isArray(subs)) {
+        subs.forEach((sub, index) => {
+          this.addSmartSubscription(`${key}${index}`, {
+            ...sub,
+            linkedQuery: smart,
+          })
+        })
+      } else {
+        this.addSmartSubscription(key, {
+          ...subs,
+          linkedQuery: smart,
+        })
+      }
     }
 
     return smart
