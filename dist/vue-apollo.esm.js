@@ -2613,6 +2613,19 @@ var SmartApollo = function () {
       throw new Error('Not implemented');
     }
   }, {
+    key: 'errorHandler',
+    value: function errorHandler() {
+      var _options$error, _vm$$apollo$error, _vm$$apollo$provider$;
+
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      this.options.error && (_options$error = this.options.error).call.apply(_options$error, [this.vm].concat(args));
+      this.vm.$apollo.error && (_vm$$apollo$error = this.vm.$apollo.error).call.apply(_vm$$apollo$error, [this.vm].concat(args));
+      this.vm.$apollo.provider.errorHandler && (_vm$$apollo$provider$ = this.vm.$apollo.provider.errorHandler).call.apply(_vm$$apollo$provider$, [this.vm].concat(args));
+    }
+  }, {
     key: 'catchError',
     value: function catchError(error) {
       if (error.graphQLErrors && error.graphQLErrors.length !== 0) {
@@ -2654,9 +2667,7 @@ var SmartApollo = function () {
         }
       }
 
-      if (typeof this.options.error === 'function') {
-        this.options.error.call(this.vm, error);
-      }
+      this.errorHandler(error);
     }
   }, {
     key: 'destroy',
@@ -2808,15 +2819,27 @@ var SmartQuery = function (_SmartApollo) {
       this.loadingDone();
     }
   }, {
-    key: 'applyLoadingModifier',
-    value: function applyLoadingModifier(value) {
-      if (this.options.loadingKey) {
-        this.vm[this.options.loadingKey] += value;
+    key: 'watchLoading',
+    value: function watchLoading() {
+      var _options$watchLoading, _vm$$apollo$watchLoad, _vm$$apollo$provider$2;
+
+      for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        args[_key2] = arguments[_key2];
       }
 
-      if (this.options.watchLoading) {
-        this.options.watchLoading.call(this.vm, value === 1, value);
+      this.options.watchLoading && (_options$watchLoading = this.options.watchLoading).call.apply(_options$watchLoading, [this.vm].concat(args));
+      this.vm.$apollo.watchLoading && (_vm$$apollo$watchLoad = this.vm.$apollo.watchLoading).call.apply(_vm$$apollo$watchLoad, [this.vm].concat(args));
+      this.vm.$apollo.provider.watchLoading && (_vm$$apollo$provider$2 = this.vm.$apollo.provider.watchLoading).call.apply(_vm$$apollo$provider$2, [this.vm].concat(args));
+    }
+  }, {
+    key: 'applyLoadingModifier',
+    value: function applyLoadingModifier(value) {
+      var loadingKey = this.loadingKey;
+      if (loadingKey && typeof this.vm[loadingKey] === 'number') {
+        this.vm[loadingKey] += value;
       }
+
+      this.watchLoading(value === 1, value);
     }
   }, {
     key: 'loadingDone',
@@ -2909,6 +2932,11 @@ var SmartQuery = function (_SmartApollo) {
         return (_observer4 = this.observer).stopPolling.apply(_observer4, arguments);
       }
     }
+  }, {
+    key: 'loadingKey',
+    get: function get$$1() {
+      return this.options.loadingKey || this.vm.$apollo.loadingKey;
+    }
   }]);
   return SmartQuery;
 }(SmartApollo);
@@ -2923,8 +2951,8 @@ var SmartSubscription = function (_SmartApollo2) {
 
     classCallCheck(this, SmartSubscription);
 
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
+    for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+      args[_key3] = arguments[_key3];
     }
 
     return _ret = (_temp = (_this6 = possibleConstructorReturn(this, (_ref = SmartSubscription.__proto__ || Object.getPrototypeOf(SmartSubscription)).call.apply(_ref, [this].concat(args))), _this6), _this6.type = 'subscription', _this6.vueApolloSpecialKeys = ['variables', 'result', 'error', 'throttle', 'debounce', 'linkedQuery'], _temp), possibleConstructorReturn(_this6, _ret);
@@ -2976,6 +3004,8 @@ var DollarApollo = function () {
     this.queries = {};
     this.subscriptions = {};
     this.client = undefined;
+    this.loadingKey = undefined;
+    this.error = undefined;
   }
 
   createClass(DollarApollo, [{
@@ -3168,6 +3198,9 @@ var ApolloProvider$1 = function () {
     }
     this.clients = options.clients || {};
     this.clients.defaultClient = this.defaultClient = options.defaultClient;
+    this.defaultOptions = options.defaultOptions;
+    this.watchLoading = options.watchLoading;
+    this.errorHandler = options.errorHandler;
 
     this.prefetchQueries = [];
   }
@@ -3286,16 +3319,19 @@ var ApolloProvider$1 = function () {
             result = prefetch;
           }
 
-          var optVariables = queryOptions.variables;
-
           if (!result) {
             return Promise.resolve();
-          } else if (prefetchType === 'boolean' && typeof optVariables !== 'undefined') {
-            // Reuse `variables` option with `prefetch: true`
-            if (typeof optVariables === 'function') {
-              variables = optVariables.call(context);
+          } else if (prefetchType === 'boolean') {
+            var optVariables = queryOptions.variables;
+            if (typeof optVariables !== 'undefined') {
+              // Reuse `variables` option with `prefetch: true`
+              if (typeof optVariables === 'function') {
+                variables = optVariables.call(context);
+              } else {
+                variables = optVariables;
+              }
             } else {
-              variables = optVariables;
+              variables = undefined;
             }
           } else {
             variables = result;
@@ -3351,8 +3387,11 @@ function willPrefetch(component) {
 var keywords = ['$subscribe'];
 
 var prepare = function prepare() {
+  var apolloProvider = void 0;
   if (this.$options.apolloProvider) {
-    this._apolloProvider = this.$options.apolloProvider;
+    apolloProvider = this._apolloProvider = this.$options.apolloProvider;
+  } else {
+    apolloProvider = this.$root._apolloProvider;
   }
 
   if (this._apolloPrepared) return;
@@ -3360,9 +3399,20 @@ var prepare = function prepare() {
 
   // Prepare properties
   var apollo = this.$options.apollo;
+
   if (apollo) {
     this._apolloQueries = {};
     this._apolloInitData = {};
+    this.$apollo = new DollarApollo(this);
+
+    if (!apollo.$init) {
+      apollo.$init = true;
+
+      // Default options applied to `apollo` options
+      if (apolloProvider.defaultOptions) {
+        apollo = this.$options.apollo = Object.assign({}, apolloProvider.defaultOptions, apollo);
+      }
+    }
 
     // watchQuery
     for (var key in apollo) {
@@ -3378,6 +3428,16 @@ var launch = function launch() {
   if (this._apolloLaunched) return;
   this._apolloLaunched = true;
 
+  var apollo = this.$options.apollo;
+  if (apollo) {
+    defineReactiveSetter(this.$apollo, 'skipAll', apollo.$skipAll);
+    defineReactiveSetter(this.$apollo, 'skipAllQueries', apollo.$skipAllQueries);
+    defineReactiveSetter(this.$apollo, 'skipAllSubscriptions', apollo.$skipAllSubscriptions);
+    defineReactiveSetter(this.$apollo, 'client', apollo.$client);
+    defineReactiveSetter(this.$apollo, 'loadingKey', apollo.$loadingKey);
+    defineReactiveSetter(this.$apollo, 'error', apollo.$error);
+  }
+
   if (this._apolloQueries) {
     // watchQuery
     for (var key in this._apolloQueries) {
@@ -3385,7 +3445,6 @@ var launch = function launch() {
     }
   }
 
-  var apollo = this.$options.apollo;
   if (apollo) {
     if (apollo.subscribe) {
       Globals.Vue.util.warn('vue-apollo -> `subscribe` option is deprecated. Use the `$subscribe` option instead.');
@@ -3396,11 +3455,6 @@ var launch = function launch() {
         this.$apollo.addSmartSubscription(_key, apollo.$subscribe[_key]);
       }
     }
-
-    defineReactiveSetter(this.$apollo, 'skipAll', apollo.$skipAll);
-    defineReactiveSetter(this.$apollo, 'skipAllQueries', apollo.$skipAllQueries);
-    defineReactiveSetter(this.$apollo, 'skipAllSubscriptions', apollo.$skipAllSubscriptions);
-    defineReactiveSetter(this.$apollo, 'client', apollo.$client);
   }
 };
 
@@ -3437,16 +3491,6 @@ function install(Vue, options) {
 
     return Object.assign(map, merge(toData, fromData));
   };
-
-  // Lazy creation
-  Object.defineProperty(Vue.prototype, '$apollo', {
-    get: function get() {
-      if (!this._apollo) {
-        this._apollo = new DollarApollo(this);
-      }
-      return this._apollo;
-    }
-  });
 
   Vue.mixin({
 
