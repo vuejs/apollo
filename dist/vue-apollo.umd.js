@@ -2835,11 +2835,18 @@ var SmartQuery = function (_SmartApollo) {
   }, {
     key: 'fetchMore',
     value: function fetchMore() {
+      var _this4 = this;
+
       if (this.observer) {
         var _observer;
 
         this.maySetLoading(true);
-        return (_observer = this.observer).fetchMore.apply(_observer, arguments);
+        return (_observer = this.observer).fetchMore.apply(_observer, arguments).then(function (result) {
+          if (!result.loading) {
+            _this4.loadingDone();
+          }
+          return result;
+        });
       }
     }
   }, {
@@ -2856,14 +2863,15 @@ var SmartQuery = function (_SmartApollo) {
   }, {
     key: 'refetch',
     value: function refetch(variables) {
-      var _this4 = this;
+      var _this5 = this;
 
       variables && (this.options.variables = variables);
       if (this.observer) {
         var result = this.observer.refetch(variables).then(function (result) {
           if (!result.loading) {
-            _this4.loadingDone();
+            _this5.loadingDone();
           }
+          return result;
         });
         this.maySetLoading();
         return result;
@@ -2917,7 +2925,7 @@ var SmartSubscription = function (_SmartApollo2) {
   function SmartSubscription() {
     var _ref;
 
-    var _temp, _this5, _ret;
+    var _temp, _this6, _ret;
 
     classCallCheck(this, SmartSubscription);
 
@@ -2925,7 +2933,7 @@ var SmartSubscription = function (_SmartApollo2) {
       args[_key] = arguments[_key];
     }
 
-    return _ret = (_temp = (_this5 = possibleConstructorReturn(this, (_ref = SmartSubscription.__proto__ || Object.getPrototypeOf(SmartSubscription)).call.apply(_ref, [this].concat(args))), _this5), _this5.type = 'subscription', _this5.vueApolloSpecialKeys = ['variables', 'result', 'error', 'throttle', 'debounce', 'linkedQuery'], _temp), possibleConstructorReturn(_this5, _ret);
+    return _ret = (_temp = (_this6 = possibleConstructorReturn(this, (_ref = SmartSubscription.__proto__ || Object.getPrototypeOf(SmartSubscription)).call.apply(_ref, [this].concat(args))), _this6), _this6.type = 'subscription', _this6.vueApolloSpecialKeys = ['variables', 'result', 'error', 'throttle', 'debounce', 'linkedQuery'], _temp), possibleConstructorReturn(_this6, _ret);
   }
 
   createClass(SmartSubscription, [{

@@ -253,7 +253,12 @@ export class SmartQuery extends SmartApollo {
   fetchMore (...args) {
     if (this.observer) {
       this.maySetLoading(true)
-      return this.observer.fetchMore(...args)
+      return this.observer.fetchMore(...args).then(result => {
+        if (!result.loading) {
+          this.loadingDone()
+        }
+        return result
+      })
     }
   }
 
@@ -272,6 +277,7 @@ export class SmartQuery extends SmartApollo {
         if (!result.loading) {
           this.loadingDone()
         }
+        return result
       })
       this.maySetLoading()
       return result
