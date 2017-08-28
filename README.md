@@ -1474,7 +1474,9 @@ const apolloProvider = new VueApollo({
   defaultClient: apolloClient,
   // Default 'apollo' definition
   defaultOptions: {
-    // See 'apollo' defintion
+    // See 'apollo' definition
+    // For example: default loading key
+    $loadingKey: 'loading',
   },
   // Watch loading state for all queries
   // See the 'watchLoading' advanced option
