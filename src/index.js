@@ -57,6 +57,7 @@ const launch = function launch () {
     defineReactiveSetter(this.$apollo, 'client', apollo.$client)
     defineReactiveSetter(this.$apollo, 'loadingKey', apollo.$loadingKey)
     defineReactiveSetter(this.$apollo, 'error', apollo.$error)
+    defineReactiveSetter(this.$apollo, 'watchLoading', apollo.$watchLoading)
   }
 
   if (this._apolloQueries) {
