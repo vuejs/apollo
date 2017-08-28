@@ -1493,7 +1493,7 @@ function stubArray() {
   return [];
 }
 
-var index = omit;
+var lodash_omit = omit;
 
 /**
  * lodash (Custom Build) <https://lodash.com/>
@@ -1933,7 +1933,7 @@ function toNumber(value) {
     : (reIsBadHex.test(value) ? NAN : +value);
 }
 
-var index$1 = throttle$1;
+var lodash_throttle = throttle$1;
 
 /**
  * lodash (Custom Build) <https://lodash.com/>
@@ -2311,7 +2311,7 @@ function toNumber$1(value) {
     : (reIsBadHex$1.test(value) ? NAN$1 : +value);
 }
 
-var index$2 = debounce$2;
+var lodash_debounce = debounce$2;
 
 var Globals = {};
 
@@ -2325,9 +2325,9 @@ function factory(action) {
   };
 }
 
-var throttle = factory(index$1);
+var throttle = factory(lodash_throttle);
 
-var debounce = factory(index$2);
+var debounce = factory(lodash_debounce);
 
 function getMergedDefinition(def) {
   return Globals.Vue.util.mergeOptions({}, def);
@@ -2604,7 +2604,7 @@ var SmartApollo = function () {
   }, {
     key: 'generateApolloOptions',
     value: function generateApolloOptions(variables) {
-      var apolloOptions = index(this.options, this.vueApolloSpecialKeys);
+      var apolloOptions = lodash_omit(this.options, this.vueApolloSpecialKeys);
       apolloOptions.variables = variables;
       return apolloOptions;
     }
@@ -3043,15 +3043,26 @@ var DollarApollo = function () {
   }, {
     key: 'addSmartQuery',
     value: function addSmartQuery(key, options) {
+      var _this3 = this;
+
       options = reapply(options, this.vm);
 
       var smart = this.queries[key] = new SmartQuery(this.vm, key, options, false);
       smart.autostart();
 
-      if (options.subscribeToMore) {
-        this.addSmartSubscription(key, _extends({}, options.subscribeToMore, {
-          linkedQuery: smart
-        }));
+      var subs = options.subscribeToMore;
+      if (subs) {
+        if (Array.isArray(subs)) {
+          subs.forEach(function (sub, index) {
+            _this3.addSmartSubscription('' + key + index, _extends({}, sub, {
+              linkedQuery: smart
+            }));
+          });
+        } else {
+          this.addSmartSubscription(key, _extends({}, subs, {
+            linkedQuery: smart
+          }));
+        }
       }
 
       return smart;
@@ -3069,10 +3080,10 @@ var DollarApollo = function () {
   }, {
     key: 'defineReactiveSetter',
     value: function defineReactiveSetter(key, func) {
-      var _this3 = this;
+      var _this4 = this;
 
       this._watchers.push(this.vm.$watch(func, function (value) {
-        _this3[key] = value;
+        _this4[key] = value;
       }, {
         immediate: true
       }));
@@ -3292,7 +3303,7 @@ var ApolloProvider$1 = function () {
 
       // Query
       return new Promise(function (resolve, reject) {
-        var options = index(queryOptions, VUE_APOLLO_QUERY_KEYWORDS);
+        var options = lodash_omit(queryOptions, VUE_APOLLO_QUERY_KEYWORDS);
         options.variables = variables;
         client.query(options).then(resolve, reject);
       });
@@ -3413,8 +3424,8 @@ function install(Vue, options) {
     if (!toVal) return fromVal;
     if (!fromVal) return toVal;
 
-    var toData = Object.assign({}, index(toVal, keywords), toVal.data);
-    var fromData = Object.assign({}, index(fromVal, keywords), fromVal.data);
+    var toData = Object.assign({}, lodash_omit(toVal, keywords), toVal.data);
+    var fromData = Object.assign({}, lodash_omit(fromVal, keywords), fromVal.data);
 
     var map = {};
     for (var i = 0; i < keywords.length; i++) {

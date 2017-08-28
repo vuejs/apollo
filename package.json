@@ -1,12 +1,12 @@
 {
   "name": "vue-apollo",
-  "version": "2.1.0-beta.21",
+  "version": "2.1.0-beta.22",
   "description": "Vue apollo integration",
   "main": "dist/vue-apollo.umd.js",
   "module": "dist/vue-apollo.esm.js",
   "unpkg": "dist/vue-apollo.min.js",
   "scripts": {
-    "build": "rimraf ./dist && npm run build:browser && npm run build:es && npm run build:umd",
+    "build": "npm run build:browser && npm run build:es && npm run build:umd",
     "build:browser": "rollup --config rollup.config.browser.js",
     "build:es": "rollup --config rollup.config.es.js",
     "build:umd": "rollup --config rollup.config.umd.js",
