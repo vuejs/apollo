@@ -103,16 +103,19 @@ export class ApolloProvider {
           result = prefetch
         }
 
-        const optVariables = queryOptions.variables
-
         if (!result) {
           return Promise.resolve()
-        } else if (prefetchType === 'boolean' && typeof optVariables !== 'undefined') {
-          // Reuse `variables` option with `prefetch: true`
-          if (typeof optVariables === 'function') {
-            variables = optVariables.call(context)
+        } else if (prefetchType === 'boolean') {
+          const optVariables = queryOptions.variables
+          if (typeof optVariables !== 'undefined') {
+            // Reuse `variables` option with `prefetch: true`
+            if (typeof optVariables === 'function') {
+              variables = optVariables.call(context)
+            } else {
+              variables = optVariables
+            }
           } else {
-            variables = optVariables
+            variables = undefined
           }
         } else {
           variables = result
