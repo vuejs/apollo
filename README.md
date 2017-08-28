@@ -1024,6 +1024,7 @@ export default {
 
           return {
             tagsPage: {
+              __typename: previousResult.tagsPage.__typename,
               // Merging the tag list
               tags: [...previousResult.tagsPage.tags, ...newTags],
               hasMore,
@@ -1036,6 +1037,8 @@ export default {
 }
 </script>
 ```
+
+**Don't forget to include the `__typename` to the new result.**
 
 ## Skip all
 
