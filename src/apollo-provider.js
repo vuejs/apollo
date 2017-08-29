@@ -154,9 +154,7 @@ export class ApolloProvider {
       globalName: '__APOLLO_STATE__',
       attachTo: 'window',
     }, options)
-    const states = this.getStates({
-      exportNamespace: finalOptions.exportNamespace,
-    })
+    const states = this.getStates(finalOptions)
     const js = `${finalOptions.attachTo}.${finalOptions.globalName} = ${JSON.stringify(states)};`
     return js
   }
