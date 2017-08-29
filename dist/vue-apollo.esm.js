@@ -3367,9 +3367,7 @@ var ApolloProvider$1 = function () {
         globalName: '__APOLLO_STATE__',
         attachTo: 'window'
       }, options);
-      var states = this.getStates({
-        exportNamespace: finalOptions.exportNamespace
-      });
+      var states = this.getStates(finalOptions);
       var js = finalOptions.attachTo + '.' + finalOptions.globalName + ' = ' + JSON.stringify(states) + ';';
       return js;
     }
