@@ -3226,7 +3226,7 @@ var ApolloProvider$1 = function () {
       var componentClient = apolloOptions.$client;
       for (var key in apolloOptions) {
         var options = apolloOptions[key];
-        if (!options.query || (typeof options.ssr === 'undefined' || options.ssr) && typeof options.prefetch !== 'undefined' && options.prefetch) {
+        if (key.charAt(0) !== '$' && (!options.query || (typeof options.ssr === 'undefined' || options.ssr) && typeof options.prefetch !== 'undefined' && options.prefetch)) {
           this.willPrefetchQuery(options, options.client || componentClient);
         }
       }
@@ -3403,7 +3403,6 @@ var prepare = function prepare() {
   if (apollo) {
     this._apolloQueries = {};
     this._apolloInitData = {};
-    this.$apollo = new DollarApollo(this);
 
     if (!apollo.$init) {
       apollo.$init = true;
@@ -3492,6 +3491,16 @@ function install(Vue, options) {
 
     return Object.assign(map, merge(toData, fromData));
   };
+
+  // Lazy creation
+  Object.defineProperty(Vue.prototype, '$apollo', {
+    get: function get() {
+      if (!this._apollo) {
+        this._apollo = new DollarApollo(this);
+      }
+      return this._apollo;
+    }
+  });
 
   Vue.mixin({
 
