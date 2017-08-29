@@ -35,9 +35,11 @@ export class ApolloProvider {
     for (let key in apolloOptions) {
       const options = apolloOptions[key]
       if (
-        !options.query || (
-          (typeof options.ssr === 'undefined' || options.ssr) &&
-          (typeof options.prefetch !== 'undefined' && options.prefetch)
+        key.charAt(0) !== '$' && (
+          !options.query || (
+            (typeof options.ssr === 'undefined' || options.ssr) &&
+            (typeof options.prefetch !== 'undefined' && options.prefetch)
+          )
         )
       ) {
         this.willPrefetchQuery(options, options.client || componentClient)
