@@ -24,7 +24,6 @@ const prepare = function prepare () {
   if (apollo) {
     this._apolloQueries = {}
     this._apolloInitData = {}
-    this.$apollo = new DollarApollo(this)
 
     if (!apollo.$init) {
       apollo.$init = true
@@ -113,6 +112,16 @@ export function install (Vue, options) {
 
     return Object.assign(map, merge(toData, fromData))
   }
+
+  // Lazy creation
+  Object.defineProperty(Vue.prototype, '$apollo', {
+    get () {
+      if (!this._apollo) {
+        this._apollo = new DollarApollo(this)
+      }
+      return this._apollo
+    },
+  })
 
   Vue.mixin({
 
