@@ -2961,9 +2961,15 @@ var SmartSubscription = function (_SmartApollo2) {
   createClass(SmartSubscription, [{
     key: 'executeApollo',
     value: function executeApollo(variables) {
+      var variablesJson = JSON.stringify(variables);
       if (this.sub) {
+        // do nothing if subscription is already running using exactly the same variables
+        if (variablesJson === this.previousVariablesJson) {
+          return;
+        }
         this.sub.unsubscribe();
       }
+      this.previousVariablesJson = variablesJson;
 
       var apolloOptions = this.generateApolloOptions(variables);
 
