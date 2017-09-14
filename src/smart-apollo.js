@@ -344,9 +344,15 @@ export class SmartSubscription extends SmartApollo {
   ]
 
   executeApollo (variables) {
+    const variablesJson = JSON.stringify(variables)
     if (this.sub) {
+      // do nothing if subscription is already running using exactly the same variables
+      if (variablesJson === this.previousVariablesJson) {
+        return
+      }
       this.sub.unsubscribe()
     }
+    this.previousVariablesJson = variablesJson
 
     const apolloOptions = this.generateApolloOptions(variables)
 

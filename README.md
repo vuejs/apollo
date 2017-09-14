@@ -1168,6 +1168,8 @@ On the queries you want to prefetch on the server, add the `prefetch` option. It
  - a variables object,
  - a function that gets the context object (which can contain the URL for example) and return a variables object,
  - `true` (query's `variables` is reused).
+ 
+If you are returning a variables object in the `prefetch` option make sure it matches with the result of the `variables` option. If they do not match the query's data property will not be populated while rendering the template server-side.
 
 **Warning! You don't have access to the component instance when doing prefetching on the server. Don't use `this` in `prefetch`!**
 
