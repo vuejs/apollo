@@ -2798,17 +2798,21 @@ var SmartQuery = function (_SmartApollo) {
         this.loadingDone();
       }
 
+      var hasResultCallback = typeof this.options.result === 'function';
+
       if (typeof data === 'undefined') {
         // No result
       } else if (typeof this.options.update === 'function') {
         this.vm[this.key] = this.options.update.call(this.vm, data);
       } else if (data[this.key] === undefined) {
         console.error('Missing ' + this.key + ' attribute on result', data);
-      } else {
+      } else if (!this.options.manual) {
         this.vm[this.key] = data[this.key];
+      } else if (!hasResultCallback) {
+        console.error(this.key + ' query must have a \'result\' hook in manual mode');
       }
 
-      if (typeof this.options.result === 'function') {
+      if (hasResultCallback) {
         this.options.result.call(this.vm, result);
       }
     }
