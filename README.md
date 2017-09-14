@@ -13,7 +13,7 @@ Integrates [apollo](http://www.apollostack.com/) in your [Vue](http://vuejs.org)
 
 [<img src="https://www.howtographql.com/static/howtographql.d1a2e5b4.svg" alt="icon" width="16" height="16"/> How to GraphQL](https://www.howtographql.com/vue-apollo/0-introduction/)
 
-💬 [VueConf 2017 demo](https://github.com/Akryum/vueconf-2017-demo) &amp; [slides](http://slides.com/akryum/graphql#/)
+[<img src="https://conf.vuejs.org/img/logo-48.png" alt="icon" width="16" height="16"/> VueConf 2017 demo](https://github.com/Akryum/vueconf-2017-demo) &amp; [slides](http://slides.com/akryum/graphql#/)
 
 ## Table of contents
 
