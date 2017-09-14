@@ -11,8 +11,6 @@ Integrates [apollo](http://www.apollostack.com/) in your [Vue](http://vuejs.org)
 
 [<img src="https://assets-cdn.github.com/favicon.ico" alt="icon" width="16" height="16"/> Apollo graphql server example](https://github.com/Akryum/apollo-server-example)
 
-[<img src="https://assets-cdn.github.com/favicon.ico" alt="icon" width="16" height="16"/> Apollo "hello world" example app](https://github.com/Akryum/frontpage-vue-app) (outdated)
-
 [<img src="https://www.howtographql.com/static/howtographql.d1a2e5b4.svg" alt="icon" width="16" height="16"/> How to GraphQL](https://www.howtographql.com/vue-apollo/0-introduction/)
 
 💬 [VueConf 2017 demo](https://github.com/Akryum/vueconf-2017-demo) &amp; [slides](http://slides.com/akryum/graphql#/)
@@ -1168,7 +1166,7 @@ On the queries you want to prefetch on the server, add the `prefetch` option. It
  - a variables object,
  - a function that gets the context object (which can contain the URL for example) and return a variables object,
  - `true` (query's `variables` is reused).
- 
+
 If you are returning a variables object in the `prefetch` option make sure it matches with the result of the `variables` option. If they do not match the query's data property will not be populated while rendering the template server-side.
 
 **Warning! You don't have access to the component instance when doing prefetching on the server. Don't use `this` in `prefetch`!**
