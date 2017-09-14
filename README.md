@@ -408,6 +408,7 @@ These are the available advanced options you can use:
 - `error(error)` is a hook called when there are errors, `error` being an Apollo error object with either a `graphQLErrors` property or a `networkError` property.
 - `loadingKey` will update the component data property you pass as the value. You should initialize this property to `0` in the component `data()` hook. When the query is loading, this property will be incremented by 1 and as soon as it no longer is, the property will be decremented by 1. That way, the property can represent a counter of currently loading queries.
 - `watchLoading(isLoading, countModifier)` is a hook called when the loading state of the query changes. The `countModifier` parameter is either equal to `1` when the query is now loading, or `-1` when the query is no longer loading.
+- `manual` is a boolean that disable the automatic property update. You then need to specify a `result` callback (see example below).
 
 
 ```javascript
@@ -464,6 +465,20 @@ If you use `ES2015`, you can also write the `update` like this:
 
 ```javascript
 update: data => data.ping
+```
+
+Manual mode example:
+
+```javascript
+{
+  query: gql`...`,
+  manual: true,
+  result ({ data, loading }) {
+    if (!loading) {
+      this.items = data.items
+    }
+  },
+}
 ```
 
 ### Reactive Query Example
