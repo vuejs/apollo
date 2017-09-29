@@ -46,7 +46,7 @@ Integrates [apollo](http://www.apollostack.com/) in your [Vue](http://vuejs.org)
 
 ## Installation
 
-Try and install this packages before server side set (of packages), add apollo to meteor.js before then, too.
+Try and install these packages before server side set (of packages), add apollo to meteor.js before then, too.
 
     npm install --save vue-apollo apollo-client
 
@@ -287,13 +287,13 @@ apollo: {
 },
 ```
 
-**This will called once when the component is created and it must return the option object.**
+**This will be called once when the component is created and it must return the option object.**
 
 *This also works for [subscriptions](#subscriptions).*
 
 ### Reactive query definition
 
-You can use a function for the `query` option, that will update the graphql query definition automatically:
+You can use a function for the `query` option. This will update the graphql query definition automatically:
 
 ```javascript
 // The featured tag can be either a random tag or the last added tag
@@ -404,10 +404,10 @@ this.$apollo.queries.tags.skip = true
 These are the available advanced options you can use:
 - `update(data) {return ...}` to customize the value that is set in the vue property, for example if the field names don't match.
 - `result(ApolloQueryResult)` is a hook called when a result is received (see documentation for [ApolloQueryResult](http://dev.apollodata.com/core/apollo-client-api.html#ApolloQueryResult)).
-- `error(error)` is a hook called when there are errors, `error` being an Apollo error object with either a `graphQLErrors` property or a `networkError` property.
-- `loadingKey` will update the component data property you pass as the value. You should initialize this property to `0` in the component `data()` hook. When the query is loading, this property will be incremented by 1 and as soon as it no longer is, the property will be decremented by 1. That way, the property can represent a counter of currently loading queries.
-- `watchLoading(isLoading, countModifier)` is a hook called when the loading state of the query changes. The `countModifier` parameter is either equal to `1` when the query is now loading, or `-1` when the query is no longer loading.
-- `manual` is a boolean that disable the automatic property update. You then need to specify a `result` callback (see example below).
+- `error(error)` is a hook called when there are errors. `error` is an Apollo error object with either a `graphQLErrors` property or a `networkError` property.
+- `loadingKey` will update the component data property you pass as the value. You should initialize this property to `0` in the component `data()` hook. When the query is loading, this property will be incremented by 1; when it is no longer loading, it will be decremented by 1. That way, the property can represent a counter of currently loading queries.
+- `watchLoading(isLoading, countModifier)` is a hook called when the loading state of the query changes. The `countModifier` parameter is either equal to `1` when the query is loading, or `-1` when the query is no longer loading.
+- `manual` is a boolean to disable the automatic property update. If you use it, you then need to specify a `result` callback (see example below).
 
 
 ```javascript
@@ -562,7 +562,7 @@ created () {
 
 ## Mutations
 
-Mutations are queries that changes your data state on your apollo server. For more info, visit the [apollo doc](http://dev.apollodata.com/core/apollo-client-api.html#ApolloClient\.mutate).
+Mutations are queries that change your data state on your apollo server. For more info, visit the [apollo doc](http://dev.apollodata.com/core/apollo-client-api.html#ApolloClient\.mutate).
 
 ```javascript
 methods: {
@@ -743,9 +743,9 @@ apollo: {
           label
         }
       }`,
-      // Variables passed to the subscription
+      // Variables passed to the subscription. Since we're using a function,
+      // they are reactive
       variables () {
-        // Reactive if a function (like previously)
         return {
           param: this.param,
         }
@@ -759,7 +759,7 @@ apollo: {
 }
 ```
 
-*Note that you can pass an array of subscriptions to `subscribeToMore` to subscribe to multiple subcribtions on this query.*
+*Note that you can pass an array of subscriptions to `subscribeToMore` to subscribe to multiple subscriptions on this query.*
 
 #### Alternate usage
 
@@ -906,7 +906,7 @@ apollo: {
 
 You can then access the subscription with `this.$apollo.subscriptions.<name>`.
 
-*Just like queries, you can declare the subscription [with a function](#option-function), and you can declare the `query` option [with a reactive function](#reactive-query-definition).*
+*Just like for queries, you can declare the subscription [with a function](#option-function), and you can declare the `query` option [with a reactive function](#reactive-query-definition).*
 
 ### Skipping the subscription
 
@@ -1058,7 +1058,7 @@ export default {
 
 ## Special options
 
-The special options being with `$` in the `apollo` object.
+The special options begin with `$` in the `apollo` object.
 
 - `$skip` to disable all queries and subscriptions (see below)
 - `$skipAllQueries` to disable all queries (see below)
@@ -1108,7 +1108,7 @@ this.$apollo.skipAllSubscriptions = true
 this.$apollo.skipAll = true
 ```
 
-You can also declare these properties in the `apollo` option of the component. It can be booleans:
+You can also declare these properties in the `apollo` option of the component. They can be booleans:
 
 ```javascript
 apollo: {
@@ -1168,7 +1168,7 @@ On the queries you want to prefetch on the server, add the `prefetch` option. It
  - a function that gets the context object (which can contain the URL for example) and return a variables object,
  - `true` (query's `variables` is reused).
 
-If you are returning a variables object in the `prefetch` option make sure it matches with the result of the `variables` option. If they do not match the query's data property will not be populated while rendering the template server-side.
+If you are returning a variables object in the `prefetch` option, make sure it matches the result of the `variables` option. If they do not match, the query's data property will not be populated while rendering the template server-side.
 
 **Warning! You don't have access to the component instance when doing prefetching on the server. Don't use `this` in `prefetch`!**
 
@@ -1219,7 +1219,7 @@ export default {
 }
 ```
 
-You can also tell vue-apollo that some components not used in a `router-view` (and thus not in vue-router `matchedComponents`) need to be prefetched, with the `willPrefetch` method:
+You can also tell vue-apollo that some components not used in a `router-view` (and thus, not in vue-router `matchedComponents`) need to be prefetched, with the `willPrefetch` method:
 
 ```javascript
 import { willPrefetch } from 'vue-apollo'
@@ -1281,7 +1281,7 @@ return new Promise((resolve, reject) => {
       }, matchedComponents),
     ]).then(() => {
       // Inject the Vuex state and the Apollo cache on the page.
-      // This will prevent unecessary queries.
+      // This will prevent unnecessary queries.
 
       // Vuex
       js += `window.__INITIAL_STATE__=${JSON.stringify(store.state)};`
