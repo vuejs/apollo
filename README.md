@@ -562,7 +562,7 @@ created () {
 
 ## Mutations
 
-Mutations are queries that change your data state on your apollo server. For more info, visit the [apollo doc](http://dev.apollodata.com/core/apollo-client-api.html#ApolloClient\.mutate).
+Mutations are queries that change your data state on your apollo server. For more info, visit the [apollo doc](http://dev.apollodata.com/core/apollo-client-api.html#ApolloClient\.mutate). There is a mutation-focused [example app](https://github.com/Akryum/vue-apollo-todos) you can look at.
 
 ```javascript
 methods: {
