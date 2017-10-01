@@ -839,7 +839,7 @@ this.$watch(() => this.type, (type, oldType) => {
 
 ### subscribe
 
-**:warning: If you want to update a query with the result of the subscription, use `subscribeForMore`. The methods below are suitable for a 'notify' use case.**
+**:warning: If you want to update a query with the result of the subscription, use `subscribeToMore`. The methods below are suitable for a 'notify' use case.**
 
 Use the `$apollo.subscribe()` method to subscribe to a GraphQL subscription that will get killed automatically when the component is destroyed:
 
