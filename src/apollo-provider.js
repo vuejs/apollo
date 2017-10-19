@@ -130,8 +130,12 @@ export class ApolloProvider {
 
     // Query
     return new Promise((resolve, reject) => {
-      const options = omit(queryOptions, VUE_APOLLO_QUERY_KEYWORDS)
+      const options = omit(queryOptions, [
+        ...VUE_APOLLO_QUERY_KEYWORDS,
+        'fetchPolicy',
+      ])
       options.variables = variables
+      options.fetchPolicy = 'network-only'
       client.query(options).then(resolve, reject)
     })
   }

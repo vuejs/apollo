@@ -32,6 +32,10 @@ class SmartApollo {
       }))
     }
 
+    if (this.vm.$isServer) {
+      this.options.fetchPolicy = 'cache-first'
+    }
+
     if (autostart) {
       this.autostart()
     }

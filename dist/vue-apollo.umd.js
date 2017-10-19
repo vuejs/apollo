@@ -2340,7 +2340,7 @@ function reapply(options, context) {
   return options;
 }
 
-var VUE_APOLLO_QUERY_KEYWORDS = ['variables', 'watch', 'update', 'result', 'error', 'loadingKey', 'watchLoading', 'skip', 'throttle', 'debounce', 'subscribeToMore'];
+var VUE_APOLLO_QUERY_KEYWORDS = ['variables', 'watch', 'update', 'result', 'error', 'loadingKey', 'watchLoading', 'skip', 'throttle', 'debounce', 'subscribeToMore', 'prefetch', 'manual'];
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
@@ -2534,6 +2534,10 @@ var SmartApollo = function () {
         _this.options.document = document;
         _this.refresh();
       }));
+    }
+
+    if (this.vm.$isServer) {
+      this.options.fetchPolicy = 'cache-first';
     }
 
     if (autostart) {
@@ -3079,14 +3083,16 @@ var DollarApollo = function () {
     value: function subscribe(options) {
       var _this2 = this;
 
-      var observable = this.getClient(options).subscribe(options);
-      var _subscribe = observable.subscribe.bind(observable);
-      observable.subscribe = function (options) {
-        var sub = _subscribe(options);
-        _this2._apolloSubscriptions.push(sub);
-        return sub;
-      };
-      return observable;
+      if (!this.vm.$isServer) {
+        var observable = this.getClient(options).subscribe(options);
+        var _subscribe = observable.subscribe.bind(observable);
+        observable.subscribe = function (options) {
+          var sub = _subscribe(options);
+          _this2._apolloSubscriptions.push(sub);
+          return sub;
+        };
+        return observable;
+      }
     }
   }, {
     key: 'addSmartQuery',
@@ -3098,18 +3104,20 @@ var DollarApollo = function () {
       var smart = this.queries[key] = new SmartQuery(this.vm, key, options, false);
       smart.autostart();
 
-      var subs = options.subscribeToMore;
-      if (subs) {
-        if (Array.isArray(subs)) {
-          subs.forEach(function (sub, index) {
-            _this3.addSmartSubscription('' + key + index, _extends({}, sub, {
+      if (!this.vm.$isServer) {
+        var subs = options.subscribeToMore;
+        if (subs) {
+          if (Array.isArray(subs)) {
+            subs.forEach(function (sub, index) {
+              _this3.addSmartSubscription('' + key + index, _extends({}, sub, {
+                linkedQuery: smart
+              }));
+            });
+          } else {
+            this.addSmartSubscription(key, _extends({}, subs, {
               linkedQuery: smart
             }));
-          });
-        } else {
-          this.addSmartSubscription(key, _extends({}, subs, {
-            linkedQuery: smart
-          }));
+          }
         }
       }
 
@@ -3118,12 +3126,14 @@ var DollarApollo = function () {
   }, {
     key: 'addSmartSubscription',
     value: function addSmartSubscription(key, options) {
-      options = reapply(options, this.vm);
+      if (!this.vm.$isServer) {
+        options = reapply(options, this.vm);
 
-      var smart = this.subscriptions[key] = new SmartSubscription(this.vm, key, options, false);
-      smart.autostart();
+        var smart = this.subscriptions[key] = new SmartSubscription(this.vm, key, options, false);
+        smart.autostart();
 
-      return smart;
+        return smart;
+      }
     }
   }, {
     key: 'defineReactiveSetter',
@@ -3357,8 +3367,9 @@ var ApolloProvider$1 = function () {
 
       // Query
       return new Promise(function (resolve, reject) {
-        var options = lodash_omit(queryOptions, VUE_APOLLO_QUERY_KEYWORDS);
+        var options = lodash_omit(queryOptions, [].concat(toConsumableArray(VUE_APOLLO_QUERY_KEYWORDS), ['fetchPolicy']));
         options.variables = variables;
+        options.fetchPolicy = 'network-only';
         client.query(options).then(resolve, reject);
       });
     }
