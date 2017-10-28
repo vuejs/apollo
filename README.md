@@ -46,6 +46,7 @@ Integrates [apollo](http://www.apollodata.com/) in your [Vue](http://vuejs.org) 
 - [Skip all](#skip-all)
 - [Multiple clients](#multiple-clients)
 - [Server-Side Rendering](#server-side-rendering)
+- [Migration](#migration)
 - [API Reference](#api-reference)
 
 ## Installation
@@ -1501,13 +1502,13 @@ The main changes are related to the apollo client setup. Your components code sh
 
 #### Packages
 
-**Before**
+Before:
 
 ```
 npm install --save vue-apollo apollo-client
 ```
 
-**After**
+After:
 
 ```
 npm install --save vue-apollo@next graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
@@ -1515,7 +1516,7 @@ npm install --save vue-apollo@next graphql apollo-client apollo-link apollo-link
 
 #### Imports
 
-**Before**
+Before:
 
 ```js
 import Vue from 'vue'
@@ -1523,7 +1524,7 @@ import { ApolloClient, createBatchingNetworkInterface } from 'apollo-client'
 import VueApollo from 'vue-apollo'
 ```
 
-**After**
+After:
 
 ```js
 import Vue from 'vue'
@@ -1535,7 +1536,7 @@ import VueApollo from 'vue-apollo'
 
 #### Plugin Setup
 
-**Before**
+Before:
 
 ```js
 // Create the apollo client
@@ -1550,7 +1551,7 @@ const apolloClient = new ApolloClient({
 Vue.use(VueApollo)
 ```
 
-**After**
+After:
 
 ```js
 const httpLink = new HttpLink({
@@ -1577,13 +1578,13 @@ Query reducers have been removed. Use the `update` API to update the cache now.
 
 #### Packages
 
-**Before**
+Before:
 
 ```
 npm install --save subscriptions-transport-ws
 ```
 
-**After**
+After:
 
 ```
 npm install --save apollo-link-ws apollo-utilities
@@ -1591,13 +1592,13 @@ npm install --save apollo-link-ws apollo-utilities
 
 #### Imports
 
-**Before**
+Before:
 
 ```js
 import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws'
 ```
 
-**After**
+After:
 
 ```js
 import { split } from 'apollo-link'
@@ -1607,7 +1608,7 @@ import { getMainDefinition } from 'apollo-utilities'
 
 #### Apollo Setup
 
-**Before**
+Before:
 
 ```js
 // Create the network interface
@@ -1637,7 +1638,7 @@ const apolloClient = new ApolloClient({
 Vue.use(VueApollo)
 ```
 
-**After**
+After:
 
 ```js
 const httpLink = new HttpLink({
