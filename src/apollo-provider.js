@@ -147,7 +147,7 @@ export class ApolloProvider {
     const states = {}
     for (const key in this.clients) {
       const client = this.clients[key]
-      const state = { [client.reduxRootKey || 'apollo']: client.getInitialState() }
+      const state = client.cache.extract()
       states[`${finalOptions.exportNamespace}${key}`] = state
     }
     return states
