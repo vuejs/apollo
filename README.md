@@ -6,6 +6,8 @@
 
 ![schema](https://cdn-images-1.medium.com/max/800/1*H9AANoofLqjS10Xd5TwRYw.png)
 
+**Apollo 2.x support in preview, [read more here](https://github.com/Akryum/vue-apollo/tree/next#migrating-from-vue-apollo-2x-and-apollo-1x)!**
+
 Integrates [apollo](http://www.apollostack.com/) in your [Vue](http://vuejs.org) components with declarative queries. Compatible with Vue 1.0+ and 2.0+. [Live demo](https://jsfiddle.net/Akryum/oyejk2qL/)
 
 [<img src="https://assets-cdn.github.com/favicon.ico" alt="icon" width="16" height="16"/> More vue-apollo examples](https://github.com/Akryum/vue-apollo-example)
