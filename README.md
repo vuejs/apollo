@@ -684,6 +684,10 @@ export const resolvers = {
 
 To make enable the websocket-based subscription, a bit of additional setup is required:
 
+```
+npm install --save subscriptions-transport-ws
+```
+
 ```javascript
 import Vue from 'vue'
 import { ApolloClient, createNetworkInterface } from 'apollo-client'
@@ -715,19 +719,7 @@ const apolloClient = new ApolloClient({
 })
 
 // Install the plugin like before
-Vue.use(VueApollo, {
-  apolloClient,
-})
-
-// Your app is now subscription-ready!
-
-import App from './App.vue'
-
-new Vue({
-  el: '#app',
-  render: h => h(App)
-})
-
+Vue.use(VueApollo)
 ```
 
 ### subscribeToMore
