@@ -2386,20 +2386,7 @@ var createClass = function () {
 
 
 
-var defineProperty = function (obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
 
-  return obj;
-};
 
 var _extends = Object.assign || function (target) {
   for (var i = 1; i < arguments.length; i++) {
@@ -3382,7 +3369,7 @@ var ApolloProvider$1 = function () {
       var states = {};
       for (var key in this.clients) {
         var client = this.clients[key];
-        var state = defineProperty({}, client.reduxRootKey || 'apollo', client.getInitialState());
+        var state = client.cache.extract();
         states['' + finalOptions.exportNamespace + key] = state;
       }
       return states;

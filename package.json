@@ -1,6 +1,6 @@
 {
   "name": "vue-apollo",
-  "version": "2.1.0-rc.8",
+  "version": "3.0.0-alpha.1",
   "description": "Vue apollo integration",
   "main": "dist/vue-apollo.umd.js",
   "module": "dist/vue-apollo.esm.js",
@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/Akryum/vue-apollo#readme",
   "peerDependencies": {
-    "apollo-client": "^1.0.1"
+    "apollo-client": "^2.0.0"
   },
   "dependencies": {
     "lodash.debounce": "^4.0.8",
