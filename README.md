@@ -1,12 +1,14 @@
 # Apollo and GraphQL for Vue.js
 
 [![npm](https://img.shields.io/npm/v/vue-apollo.svg) ![npm](https://img.shields.io/npm/dm/vue-apollo.svg)](https://www.npmjs.com/package/vue-apollo)
-[![vue1](https://img.shields.io/badge/apollo-1.x-blue.svg)](http://apollodata.com/)
+[![vue1](https://img.shields.io/badge/apollo-2.x-blue.svg)](http://apollodata.com/)
 [![vue1](https://img.shields.io/badge/vue-1.x-brightgreen.svg) ![vue2](https://img.shields.io/badge/vue-2.x-brightgreen.svg)](https://vuejs.org/)
 
 ![schema](https://cdn-images-1.medium.com/max/800/1*H9AANoofLqjS10Xd5TwRYw.png)
 
-Integrates [apollo](http://www.apollostack.com/) in your [Vue](http://vuejs.org) components with declarative queries. Compatible with Vue 1.0+ and 2.0+. [Live demo](https://jsfiddle.net/Akryum/oyejk2qL/)
+**Warning! This README is related to the next version of vue-apollo. For the stable release, see [here](https://github.com/Akryum/vue-apollo/tree/master).**
+
+Integrates [apollo](http://www.apollodata.com/) in your [Vue](http://vuejs.org) components with declarative queries. Compatible with Vue 1.0+ and 2.0+. [Live demo](https://jsfiddle.net/Akryum/oyejk2qL/)
 
 [<img src="https://assets-cdn.github.com/favicon.ico" alt="icon" width="16" height="16"/> More vue-apollo examples](https://github.com/Akryum/vue-apollo-example)
 
@@ -50,20 +52,26 @@ Integrates [apollo](http://www.apollostack.com/) in your [Vue](http://vuejs.org)
 
 Try and install these packages before server side set (of packages), add apollo to meteor.js before then, too.
 
-    npm install --save vue-apollo apollo-client
+    npm install --save vue-apollo@next graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
 
 In your app, create an `ApolloClient` instance and install the `VueApollo` plugin:
 
 ```javascript
 import Vue from 'vue'
-import { ApolloClient, createBatchingNetworkInterface } from 'apollo-client'
+import { ApolloClient } from 'apollo-client'
+import { HttpLink } from 'apollo-link-http'
+import { InMemoryCache } from 'apollo-cache-inmemory'
 import VueApollo from 'vue-apollo'
+
+const httpLink = new HttpLink({
+  // You should use an absolute URL here
+  uri: 'http://localhost:3020/graphql',
+})
 
 // Create the apollo client
 const apolloClient = new ApolloClient({
-  networkInterface: createBatchingNetworkInterface({
-    uri: 'http://localhost:3020/graphql',
-  }),
+  link: httpLink,
+  cache: new InMemoryCache(),
   connectToDevTools: true,
 })
 
@@ -684,50 +692,57 @@ export const resolvers = {
 
 To make enable the websocket-based subscription, a bit of additional setup is required:
 
+```
+npm install --save apollo-link-ws apollo-utilities
+```
+
 ```javascript
 import Vue from 'vue'
-import { ApolloClient, createNetworkInterface } from 'apollo-client'
+import { ApolloClient } from 'apollo-client'
+import { HttpLink } from 'apollo-link-http'
+import { InMemoryCache } from 'apollo-cache-inmemory'
 // New Imports
-import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws'
+import { split } from 'apollo-link'
+import { WebSocketLink } from 'apollo-link-ws'
+import { getMainDefinition } from 'apollo-utilities'
+
 import VueApollo from 'vue-apollo'
 
-// Create the network interface
-const networkInterface = createNetworkInterface({
-  uri: 'http://localhost:3000/graphql',
-  transportBatching: true,
+const httpLink = new HttpLink({
+  // You should use an absolute URL here
+  uri: 'http://localhost:3020/graphql',
 })
 
-// Create the subscription websocket client
-const wsClient = new SubscriptionClient('ws://localhost:3000/subscriptions', {
-  reconnect: true,
+// Create the subscription websocket link
+const wsLink = new WebSocketLink({
+  uri: 'ws://localhost:3000/subscriptions',
+  options: {
+    reconnect: true,
+  },
 })
 
-// Extend the network interface with the subscription client
-const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
-  networkInterface,
-  wsClient,
+// using the ability to split links, you can send data to each link
+// depending on what kind of operation is being sent
+const link = split(
+  // split based on operation type
+  ({ query }) => {
+    const { kind, operation } = getMainDefinition(query)
+    return kind === 'OperationDefinition' &&
+      operation === 'subscription'
+  },
+  wsLink,
+  httpLink
 )
 
-// Create the apollo client with the new network interface
+// Create the apollo client
 const apolloClient = new ApolloClient({
-  networkInterface: networkInterfaceWithSubscriptions,
+  link,
+  cache: new InMemoryCache(),
   connectToDevTools: true,
 })
 
-// Install the plugin like before
-Vue.use(VueApollo, {
-  apolloClient,
-})
-
-// Your app is now subscription-ready!
-
-import App from './App.vue'
-
-new Vue({
-  el: '#app',
-  render: h => h(App)
-})
-
+// Install the vue plugin like before
+Vue.use(VueApollo)
 ```
 
 ### subscribeToMore
@@ -1346,7 +1361,9 @@ Here is an example:
 // src/api/apollo.js
 
 import Vue from 'vue'
-import { ApolloClient, createNetworkInterface } from 'apollo-client'
+import { ApolloClient } from 'apollo-client'
+import { HttpLink } from 'apollo-link-http'
+import { InMemoryCache } from 'apollo-cache-inmemory'
 import VueApollo from 'vue-apollo'
 
 // Install the vue plugin
@@ -1354,29 +1371,32 @@ Vue.use(VueApollo)
 
 // Create the apollo client
 export function createApolloClient (ssr = false) {
-  let initialState
+  const httpLink = new HttpLink({
+    // You should use an absolute URL here
+    uri: ENDPOINT + '/graphql',
+  })
+
+  const cache = new InMemoryCache()
 
   // If on the client, recover the injected state
-  if (!ssr && typeof window !== 'undefined') {
-    const state = window.__APOLLO_STATE__
-    if (state) {
-      // If you have multiple clients, use `state.<client_id>`
-      initialState = state.defaultClient
+  if (!ssr) {
+    // If on the client, recover the injected state
+    if (typeof window !== 'undefined') {
+      const state = window.__APOLLO_STATE__
+      if (state) {
+        // If you have multiple clients, use `state.<client_id>`
+        cache.restore(state.defaultClient)
+      }
     }
   }
 
   const apolloClient = new ApolloClient({
-    networkInterface: createNetworkInterface({
-      // You should use an absolute URL here
-      uri: 'https://api.graph.cool/simple/v1/cj1jvw20v3n310152sv0sirl7',
-      transportBatching: true,
-    }),
+    link: httpLink,
+    cache,
     ...(ssr ? {
       // Set this on the server to optimize queries when SSR
       ssrMode: true,
     } : {
-      // Inject the state on the client
-      initialState,
       // This will temporary disable query force-fetching
       ssrForceFetchDelay: 100,
     }),
