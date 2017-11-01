@@ -2872,7 +2872,11 @@ var SmartQuery = function (_SmartApollo) {
         });
       }
 
-      this.maySetLoading();
+      var currentResult = this.maySetLoading();
+
+      if (!currentResult.loading) {
+        this.nextResult(currentResult);
+      }
 
       get(SmartQuery.prototype.__proto__ || Object.getPrototypeOf(SmartQuery.prototype), 'executeApollo', this).call(this, variables);
     }
@@ -2888,6 +2892,7 @@ var SmartQuery = function (_SmartApollo) {
         }
         this.loading = true;
       }
+      return currentResult;
     }
   }, {
     key: 'nextResult',
@@ -3647,7 +3652,7 @@ function install(Vue, options) {
 ApolloProvider$1.install = install;
 
 // eslint-disable-next-line no-undef
-ApolloProvider$1.version = "3.0.0-alpha.1";
+ApolloProvider$1.version = "3.0.0-alpha.2";
 
 var ApolloProvider$$1 = ApolloProvider$1;
 
