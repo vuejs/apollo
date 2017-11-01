@@ -199,7 +199,11 @@ export class SmartQuery extends SmartApollo {
       })
     }
 
-    this.maySetLoading()
+    const currentResult = this.maySetLoading()
+
+    if (!currentResult.loading) {
+      this.nextResult(currentResult)
+    }
 
     super.executeApollo(variables)
   }
@@ -212,6 +216,7 @@ export class SmartQuery extends SmartApollo {
       }
       this.loading = true
     }
+    return currentResult
   }
 
   nextResult (result) {
