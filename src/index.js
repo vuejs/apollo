@@ -149,6 +149,9 @@ export function install (Vue, options) {
 
 apolloProvider.install = install
 
+// eslint-disable-next-line no-undef
+apolloProvider.version = VERSION
+
 export const ApolloProvider = apolloProvider
 
 export { willPrefetch } from './apollo-provider'
