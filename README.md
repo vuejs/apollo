@@ -58,14 +58,17 @@ In your app, create an `ApolloClient` instance and install the `VueApollo` plugi
 
 ```javascript
 import Vue from 'vue'
-import { ApolloClient, createBatchingNetworkInterface } from 'apollo-client'
 import VueApollo from 'vue-apollo'
+import { ApolloClient } from 'apollo-client'
+import { HttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory'
 
 // Create the apollo client
 const apolloClient = new ApolloClient({
-  networkInterface: createBatchingNetworkInterface({
+  link: HttpLink({
     uri: 'http://localhost:3020/graphql',
   }),
+  cache: new InMemoryCache(),
   connectToDevTools: true,
 })
 
