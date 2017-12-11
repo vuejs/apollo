@@ -52,21 +52,24 @@ Integrates [apollo](http://www.apollostack.com/) in your [Vue](http://vuejs.org)
 
 Try and install these packages before server side set (of packages), add apollo to meteor.js before then, too.
 
-    npm install --save vue-apollo apollo-client
+    npm install --save vue-apollo apollo-client apollo-cache-inmemory apollo-link-http
 
 In your app, create an `ApolloClient` instance and install the `VueApollo` plugin:
 
 ```javascript
 import Vue from 'vue'
-import { ApolloClient, createBatchingNetworkInterface } from 'apollo-client'
+import { InMemoryCache } from 'apollo-cache-inmemory'
+import ApolloClient from 'apollo-client'
+import { HttpLink } from 'apollo-link-http'
 import VueApollo from 'vue-apollo'
 
 // Create the apollo client
 const apolloClient = new ApolloClient({
-  networkInterface: createBatchingNetworkInterface({
+  link: new HttpLink({
     uri: 'http://localhost:3020/graphql',
   }),
-  connectToDevTools: true,
+  cache: new InMemoryCache(),
+  connectToDevTools: true
 })
 
 // Install the vue plugin
