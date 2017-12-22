@@ -3658,7 +3658,7 @@ function install(Vue, options) {
 ApolloProvider$1.install = install;
 
 // eslint-disable-next-line no-undef
-ApolloProvider$1.version = "3.0.0-alpha.2";
+ApolloProvider$1.version = "3.0.0-alpha.3";
 
 var ApolloProvider$$1 = ApolloProvider$1;
 

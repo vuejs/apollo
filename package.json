@@ -1,6 +1,6 @@
 {
   "name": "vue-apollo",
-  "version": "3.0.0-alpha.2",
+  "version": "3.0.0-alpha.3",
   "description": "Vue apollo integration",
   "main": "dist/vue-apollo.umd.js",
   "module": "dist/vue-apollo.esm.js",
@@ -11,8 +11,9 @@
     "build:browser": "rollup --config build/rollup.config.browser.js",
     "build:es": "rollup --config build/rollup.config.es.js",
     "build:umd": "rollup --config build/rollup.config.umd.js",
-    "prepublish": "npm run build",
+    "prepublishOnly": "npm run test && npm run build",
     "dev": "npm-watch",
+    "test": "npm run test:types",
     "test:types": "tsc -p types/test"
   },
   "watch": {
