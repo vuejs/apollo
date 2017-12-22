@@ -9,10 +9,19 @@ import { subscribe } from 'graphql/subscription/subscribe';
 type Diff<T extends string, U extends string> = ({ [P in T]: P } & { [P in U]: never } & { [x: string]: never })[T];
 type Omit<T, K extends keyof T> = { [P in Diff<keyof T, K>]?: T[P] };
 
+type VueApolloOptions = {
+  $skip?: boolean,
+  $skipAllQueries?: boolean,
+  $skipAllSubscriptions?: boolean,
+  $client?: string,
+  $loadingKey?: string,
+  $error?: Function
+}
+
 export class VueApollo implements PluginObject<{}> {
   [key: string]: any;
   install: PluginFunction<{}>;
-  constructor (options: {defaultClient: ApolloClient<{}>});
+  constructor (options: { defaultClient: ApolloClient<{}>, defaultOptions?: VueApolloOptions });
   static install(pVue: typeof Vue, options?:{} | undefined): void;
 }
 
@@ -69,9 +78,7 @@ export interface ApolloProperty<V> {
 type QueryComponentProperty<V> = ((this: ApolloVueThisType<V>) => VueApolloQueryOptions<V, any>) | VueApolloQueryOptions<V, any>
 type SubscribeComponentProperty<V> = VueApolloSubscriptionOptions<V, any> | { [key: string]: VueApolloSubscriptionOptions<V, any> }
 
-export interface VueApolloComponentOption<V> {
-  [key: string]: QueryComponentProperty<V> | SubscribeComponentProperty<V> | string | undefined;
+export interface VueApolloComponentOption<V> extends VueApolloOptions {
+  [key: string]: QueryComponentProperty<V> | SubscribeComponentProperty<V> | string | boolean | Function | undefined;
   $subscribe?: SubscribeComponentProperty<V>;
-  $client?: string;
-  $loadingKey?: string;
 }
