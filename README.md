@@ -1,14 +1,14 @@
 # Apollo and GraphQL for Vue.js
 
 [![npm](https://img.shields.io/npm/v/vue-apollo/next.svg) ![npm](https://img.shields.io/npm/dm/vue-apollo.svg)](https://www.npmjs.com/package/vue-apollo)
-[![vue1](https://img.shields.io/badge/apollo-2.x-blue.svg)](http://apollodata.com/)
+[![vue1](https://img.shields.io/badge/apollo-2.x-blue.svg)](https://www.apollographql.com/)
 [![vue1](https://img.shields.io/badge/vue-1.x-brightgreen.svg) ![vue2](https://img.shields.io/badge/vue-2.x-brightgreen.svg)](https://vuejs.org/)
 
 ![schema](https://cdn-images-1.medium.com/max/800/1*H9AANoofLqjS10Xd5TwRYw.png)
 
 **Warning! This README is related to the next version of vue-apollo (that supports Apollo 2.x). For the old release (supporting only Apollo 1.x), see [here](https://github.com/Akryum/vue-apollo/tree/master).**
 
-Integrates [apollo](http://www.apollodata.com/) in your [Vue](http://vuejs.org) components with declarative queries. Compatible with Vue 1.0+ and 2.0+. [Live demo](https://jsfiddle.net/Akryum/oyejk2qL/)
+Integrates [apollo](https://www.apollographql.com/) in your [Vue](http://vuejs.org) components with declarative queries. Compatible with Vue 1.0+ and 2.0+. [Live demo](https://jsfiddle.net/Akryum/oyejk2qL/)
 
 [<img src="https://assets-cdn.github.com/favicon.ico" alt="icon" width="16" height="16"/> More vue-apollo examples](https://github.com/Akryum/vue-apollo-example)
 
@@ -108,7 +108,7 @@ new Vue({
 })
 ```
 
-You can access the [apollo-client](http://dev.apollodata.com/core/apollo-client-api.html) instances with `this.$apollo.provider.defaultClient` or `this.$apollo.provider.clients.<key>` (for [Multiple clients](#multiple-clients)) in all your vue components.
+You can access the [apollo-client](https://www.apollographql.com/docs/react/) instances with `this.$apollo.provider.defaultClient` or `this.$apollo.provider.clients.<key>` (for [Multiple clients](#multiple-clients)) in all your vue components.
 
 ## Queries
 
@@ -122,7 +122,7 @@ Use `gql` to write your GraphQL queries:
 import gql from 'graphql-tag'
 ```
 
-Put the [gql](http://docs.apollostack.com/apollo-client/core.html#gql) query directly as the value:
+Put the [gql](https://github.com/apollographql/graphql-tag) query directly as the value:
 
 ```javascript
 apollo: {
@@ -166,7 +166,7 @@ export const resolvers = {
 }
 ```
 
-For more info, visit the [apollo doc](http://dev.apollodata.com/tools/).
+For more info, visit the [apollo doc](https://www.apollographql.com/docs/apollo-server/).
 
 You can then use your property as usual in your vue component:
 
@@ -207,9 +207,9 @@ You can use the apollo `watchQuery` options in the object, like:
  - `pollInterval`
  - ...
 
-See the [apollo doc](http://dev.apollodata.com/core/apollo-client-api.html#ApolloClient\.watchQuery) for more details.
+See the [apollo doc](https://www.apollographql.com/docs/react/reference/index.html#ApolloClient\.watchQuery) for more details.
 
-For example, you could add the `forceFetch` apollo option like this:
+For example, you could add the `fetchPolicy` apollo option like this:
 
 ```javascript
 apollo: {
@@ -414,7 +414,7 @@ this.$apollo.queries.tags.skip = true
 
 These are the available advanced options you can use:
 - `update(data) {return ...}` to customize the value that is set in the vue property, for example if the field names don't match.
-- `result(ApolloQueryResult)` is a hook called when a result is received (see documentation for [ApolloQueryResult](http://dev.apollodata.com/core/apollo-client-api.html#ApolloQueryResult)).
+- `result(ApolloQueryResult)` is a hook called when a result is received (see documentation for [ApolloQueryResult](https://github.com/apollographql/apollo-client/blob/master/packages/apollo-client/src/core/types.ts)).
 - `error(error)` is a hook called when there are errors. `error` is an Apollo error object with either a `graphQLErrors` property or a `networkError` property.
 - `loadingKey` will update the component data property you pass as the value. You should initialize this property to `0` in the component `data()` hook. When the query is loading, this property will be incremented by 1; when it is no longer loading, it will be decremented by 1. That way, the property can represent a counter of currently loading queries.
 - `watchLoading(isLoading, countModifier)` is a hook called when the loading state of the query changes. The `countModifier` parameter is either equal to `1` when the query is loading, or `-1` when the query is no longer loading.
@@ -573,7 +573,9 @@ created () {
 
 ## Mutations
 
-Mutations are queries that change your data state on your apollo server. For more info, visit the [apollo doc](http://dev.apollodata.com/core/apollo-client-api.html#ApolloClient\.mutate). There is a mutation-focused [example app](https://github.com/Akryum/vue-apollo-todos) you can look at.
+Mutations are queries that change your data state on your apollo server. For more info, visit the [apollo doc](https://www.apollographql.com/docs/react/reference/index.html#ApolloClient\.mutate). There is a mutation-focused [example app](https://github.com/Akryum/vue-apollo-todos) you can look at.
+
+**You shouldn't send the `__typename` fields in the variables, so it is not recommended to send an Apollo result object directly.**
 
 ```javascript
 methods: {
