@@ -2307,35 +2307,6 @@ function toNumber$1(value) {
 
 var lodash_debounce = debounce$2;
 
-var Globals = {};
-
-function factory(action) {
-  return function (cb, options) {
-    if (typeof options === 'number') {
-      return action(cb, options);
-    } else {
-      return action(cb, options.wait, options);
-    }
-  };
-}
-
-var throttle = factory(lodash_throttle);
-
-var debounce = factory(lodash_debounce);
-
-function getMergedDefinition(def) {
-  return Globals.Vue.util.mergeOptions({}, def);
-}
-
-function reapply(options, context) {
-  while (typeof options === 'function') {
-    options = options.call(context);
-  }
-  return options;
-}
-
-var VUE_APOLLO_QUERY_KEYWORDS = ['variables', 'watch', 'update', 'result', 'error', 'loadingKey', 'watchLoading', 'skip', 'throttle', 'debounce', 'subscribeToMore', 'prefetch', 'manual'];
-
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
 } : function (obj) {
@@ -2593,6 +2564,38 @@ var toConsumableArray = function (arr) {
     return Array.from(arr);
   }
 };
+
+var Globals = {};
+
+function factory(action) {
+  return function (cb, options) {
+    if (typeof options === 'number') {
+      return action(cb, options);
+    } else {
+      return action(cb, options.wait, options);
+    }
+  };
+}
+
+var throttle = factory(lodash_throttle);
+
+var debounce = factory(lodash_debounce);
+
+function getMergedDefinition(def) {
+  return Globals.Vue.util.mergeOptions({}, def);
+}
+
+function reapply(options, context) {
+  while (typeof options === 'function') {
+    options = options.call(context);
+  }
+  return options;
+}
+
+var isNode = (typeof global === 'undefined' ? 'undefined' : _typeof(global)) === 'object';
+var isBrowser = (typeof window === 'undefined' ? 'undefined' : _typeof(window)) === 'object';
+
+var VUE_APOLLO_QUERY_KEYWORDS = ['variables', 'watch', 'update', 'result', 'error', 'loadingKey', 'watchLoading', 'skip', 'throttle', 'debounce', 'subscribeToMore', 'prefetch', 'manual'];
 
 var SmartApollo = function () {
   function SmartApollo(vm, key, options) {
@@ -3066,7 +3069,7 @@ var SmartSubscription = function (_SmartApollo2) {
       args[_key3] = arguments[_key3];
     }
 
-    return _ret = (_temp = (_this6 = possibleConstructorReturn(this, (_ref = SmartSubscription.__proto__ || Object.getPrototypeOf(SmartSubscription)).call.apply(_ref, [this].concat(args))), _this6), _this6.type = 'subscription', _this6.vueApolloSpecialKeys = ['variables', 'result', 'error', 'throttle', 'debounce', 'linkedQuery'], _temp), possibleConstructorReturn(_this6, _ret);
+    return _ret = (_temp = (_this6 = babelHelpers.possibleConstructorReturn(this, (_ref = SmartSubscription.__proto__ || Object.getPrototypeOf(SmartSubscription)).call.apply(_ref, [this].concat(args))), _this6), _this6.type = 'subscription', _this6.vueApolloSpecialKeys = ['variables', 'result', 'error', 'throttle', 'debounce', 'linkedQuery'], _temp), babelHelpers.possibleConstructorReturn(_this6, _ret);
   }
 
   createClass(SmartSubscription, [{
@@ -3402,7 +3405,11 @@ var ApolloProvider$1 = function () {
       }
 
       if (finalOptions.includeGlobal) {
-        this.willPrefetchComponents(globalPrefetchs);
+        if (isNode || isWindow) {
+          this.willPrefetchComponents(isNode ? global.globalPrefetchs : window.globalPrefetchs);
+        } else {
+          this.willPrefetchComponents(globalPrefetchs);
+        }
       }
 
       return Promise.all(this.prefetchQueries.map(function (o) {
@@ -3501,8 +3508,20 @@ var ApolloProvider$1 = function () {
 
 var globalPrefetchs = [];
 
+if (isNode) {
+  global.globalPrefetchs = [];
+} else if (isBrowser) {
+  window.globalPrefetchs = [];
+}
+
 function willPrefetch(component) {
-  globalPrefetchs.push(component);
+  if (isNode) {
+    global.globalPrefetchs.push(component);
+  } else if (isBrowser) {
+    window.globalPrefetchs.push(component);
+  } else {
+    globalPrefetchs.push(component);
+  }
   return component;
 }
 

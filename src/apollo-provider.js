@@ -1,6 +1,6 @@
 import omit from 'lodash.omit'
 import { VUE_APOLLO_QUERY_KEYWORDS } from './consts'
-import { getMergedDefinition } from './utils'
+import { getMergedDefinition, isNode, isBrowser } from './utils'
 
 export class ApolloProvider {
   constructor (options) {
@@ -69,7 +69,11 @@ export class ApolloProvider {
     }
 
     if (finalOptions.includeGlobal) {
-      this.willPrefetchComponents(globalPrefetchs)
+      if (isNode || isWindow) {
+        this.willPrefetchComponents(isNode ? global.globalPrefetchs : window.globalPrefetchs)
+      } else {
+        this.willPrefetchComponents(globalPrefetchs)
+      }
     }
 
     return Promise.all(this.prefetchQueries.map(
@@ -166,7 +170,19 @@ export class ApolloProvider {
 
 const globalPrefetchs = []
 
+if (isNode) {
+  global.globalPrefetchs = []
+} else if (isBrowser) {
+  window.globalPrefetchs = []
+}
+
 export function willPrefetch (component) {
-  globalPrefetchs.push(component)
+  if (isNode) {
+    global.globalPrefetchs.push(component)
+  } else if (isBrowser) {
+    window.globalPrefetchs.push(component)
+  } else {
+    globalPrefetchs.push(component)
+  }
   return component
 }
