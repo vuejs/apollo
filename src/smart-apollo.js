@@ -232,7 +232,7 @@ export class SmartQuery extends SmartApollo {
       // No result
     } else if (typeof this.options.update === 'function') {
       this.vm[this.key] = this.options.update.call(this.vm, data)
-    } else if (data[this.key] === undefined) {
+    } else if (data[this.key] === undefined && !this.options.manual) {
       console.error(`Missing ${this.key} attribute on result`, data)
     } else if (!this.options.manual) {
       this.vm[this.key] = data[this.key]
