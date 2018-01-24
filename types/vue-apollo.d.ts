@@ -21,7 +21,7 @@ type VueApolloOptions = {
 export class VueApollo implements PluginObject<{}> {
   [key: string]: any;
   install: PluginFunction<{}>;
-  constructor (options: { defaultClient: ApolloClient<{}>, defaultOptions?: VueApolloOptions });
+  constructor (options: { defaultClient: ApolloClient<{}>, defaultOptions?: VueApolloOptions, clients: { [key: string]:any } });
   static install(pVue: typeof Vue, options?:{} | undefined): void;
 }
 
