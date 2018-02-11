@@ -1,12 +1,12 @@
 # Apollo and GraphQL for Vue.js
 
-[![npm](https://img.shields.io/npm/v/vue-apollo/next.svg) ![npm](https://img.shields.io/npm/dm/vue-apollo.svg)](https://www.npmjs.com/package/vue-apollo)
+[![npm](https://img.shields.io/npm/v/vue-apollo.svg) ![npm](https://img.shields.io/npm/dm/vue-apollo.svg)](https://www.npmjs.com/package/vue-apollo)
 [![vue1](https://img.shields.io/badge/apollo-2.x-blue.svg)](https://www.apollographql.com/)
 [![vue1](https://img.shields.io/badge/vue-1.x-brightgreen.svg) ![vue2](https://img.shields.io/badge/vue-2.2+-brightgreen.svg)](https://vuejs.org/)
 
 ![schema](https://cdn-images-1.medium.com/max/800/1*H9AANoofLqjS10Xd5TwRYw.png)
 
-**Warning! This README is related to the next version of vue-apollo (that supports Apollo 2.x). For the old release (supporting only Apollo 1.x), see [here](https://github.com/Akryum/vue-apollo/tree/master).**
+**Warning! This README is related to the next version of vue-apollo (that supports Apollo 2.x). For the old release (supporting only Apollo 1.x), see [here](https://github.com/Akryum/vue-apollo/tree/apollo-1).**
 
 Integrates [apollo](https://www.apollographql.com/) in your [Vue](http://vuejs.org) components with declarative queries. Compatible with Vue 1.0+ and 2.0+. [Live demo](https://jsfiddle.net/Akryum/oyejk2qL/)
 
