@@ -6,7 +6,7 @@
 
 ![schema](https://cdn-images-1.medium.com/max/800/1*H9AANoofLqjS10Xd5TwRYw.png)
 
-**Apollo 2.x support in preview, [read more here](https://github.com/Akryum/vue-apollo/tree/next#migrating-from-vue-apollo-2x-and-apollo-1x)!**
+**You are on the Apollo 1.x branch. For Apollo 2.x support, [see here](https://github.com/Akryum/vue-apollo/tree/next#migrating-from-vue-apollo-2x-and-apollo-1x)!**
 
 Integrates [apollo](http://www.apollostack.com/) in your [Vue](http://vuejs.org) components with declarative queries. Compatible with Vue 1.0+ and 2.0+. [Live demo](https://jsfiddle.net/Akryum/oyejk2qL/)
 
@@ -52,7 +52,7 @@ Integrates [apollo](http://www.apollostack.com/) in your [Vue](http://vuejs.org)
 
 Try and install these packages before server side set (of packages), add apollo to meteor.js before then, too.
 
-    npm install --save vue-apollo apollo-client
+    npm install --save vue-apollo@^2.1.0-rc.8 apollo-client
 
 In your app, create an `ApolloClient` instance and install the `VueApollo` plugin:
 
