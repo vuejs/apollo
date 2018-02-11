@@ -48,8 +48,8 @@ Integrates [apollo](https://www.apollographql.com/) in your [Vue](http://vuejs.o
 - [Special options](#special-options)
 - [Skip all](#skip-all)
 - [Multiple clients](#multiple-clients)
-- [Server-Side Rendering](#server-side-rendering)
 - [Query Components](#query-components)
+- [Server-Side Rendering](#server-side-rendering)
 - [Migration](#migration)
 - [API Reference](#api-reference)
 
@@ -1199,6 +1199,91 @@ tags: {
 }
 ```
 
+## Query components
+
+(WIP) You can use the `ApolloQuery` (or `apollo-query`) component to make watched Apollo queries directly in your template:
+
+```html
+<ApolloQuery
+  :query="require('../graphql/HelloWorld.gql')"
+  :variables="{ name }"
+>
+  <template slot-scope="{ result: { loading, error, data } }">
+    <!-- Loading -->
+    <div v-if="loading" class="loading apollo">Loading...</div>
+
+    <!-- Error -->
+    <div v-else-if="error" class="error apollo">An error occured</div>
+
+    <!-- Result -->
+    <div v-else-if="data" class="result apollo">{{ data.hello }}</div>
+
+    <!-- No result -->
+    <div v-else class="no-result apollo">No result :(</div>
+  </template>
+</ApolloQuery>
+```
+
+Props:
+
+- `query`: GraphQL query (transformed by `graphql-tag`)
+- `variables`: Object of GraphQL variables
+- `fetchPolicy`: See [apollo fetchPolicy](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-fetchPolicy)
+- `pollInterval`: See [apollo pollInterval](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-pollInterval)
+- `notifyOnNetworkStatusChange`: See [apollo notifyOnNetworkStatusChange](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-notifyOnNetworkStatusChange)
+- `context`: See [apollo context](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-context)
+- `skip`: Boolean disabling query fetching
+- `clienId`: Used to resolve the Apollo Client used (defined in ApolloProvider)
+- `tag`: String HTML tag name (default: `div`)
+
+Scoped slot props:
+- `result`: Apollo Query result
+  - `result.data`: Data returned by the query
+  - `result.loading`: Boolean indicating that a request is in flight
+  - `result.error`: Eventual error for the current result
+  - `result.networkStatus`: See [apollo networkStatus](https://www.apollographql.com/docs/react/basics/queries.html#graphql-query-data-networkStatus)
+- `query`: Smart Query associated with the component
+
+(WIP) You can subscribe to more data with the `ApolloSubscribeToMore` (or `apollo-subscribe-to-more`) component:
+
+```html
+<template>
+  <ApolloQuery :query="...">
+    <ApolloSubscribeToMore
+      :document="require('../gql/MessageAdded.gql')"
+      :variables="{ channel }"
+      :updateQuery="onMessageAdded"
+    />
+
+    <!-- ... -->
+  </ApolloQuery>
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+      channel: 'general',
+    }
+  },
+
+  methods: {
+    onMessageAdded (previousResult, { subscriptionData }) {
+      // The previous result is immutable
+      const newResult = {
+        messages: [...previousResult.messages],
+      }
+      // Add the question to the list
+      newResult.messages.push(subscriptionData.data.messageAdded)
+      return newResult
+    },
+  },
+}
+</script>
+```
+
+*You can put as many of those as you want inside a `<ApolloQuery>` component.*
+
 ## Server-Side Rendering
 
 ### Prefetch components
@@ -1480,7 +1565,7 @@ function createApp (context) {
       el: '#app',
       router,
       store,
-      apolloProvider,
+      provide: apolloProvider.provide(),
       ...App,
     }),
     router,
@@ -1519,89 +1604,6 @@ router.onReady(() => {
   // Prefetch, render HTML (see above)
 })
 ```
-
-## Query components
-
-(WIP) You can use the `ApolloQuery` (or `apollo-query`) component to make watched Apollo queries directly in your template:
-
-```html
-<ApolloQuery
-  :query="require('../graphql/HelloWorld.gql')"
-  :variables="{ name }"
->
-  <template slot-scope="{ result: { loading, error, data } }">
-    <!-- Loading -->
-    <div v-if="loading" class="loading apollo">Loading...</div>
-
-    <!-- Error -->
-    <div v-else-if="error" class="error apollo">An error occured</div>
-
-    <!-- Result -->
-    <div v-else-if="data" class="result apollo">{{ data.hello }}</div>
-
-    <!-- No result -->
-    <div v-else class="no-result apollo">No result :(</div>
-  </template>
-</ApolloQuery>
-```
-
-Props:
-
-- `query`: GraphQL query (transformed by `graphql-tag`)
-- `variables`: Object of GraphQL variables
-- `fetchPolicy`: See [apollo fetchPolicy](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-fetchPolicy)
-- `pollInterval`: See [apollo pollInterval](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-pollInterval)
-- `notifyOnNetworkStatusChange`: See [apollo notifyOnNetworkStatusChange](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-notifyOnNetworkStatusChange)
-- `context`: See [apollo context](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-context)
-- `skip`: Boolean disabling query fetching
-- `clienId`: Used to resolve the Apollo Client used (defined in ApolloProvider)
-- `tag`: String HTML tag name (default: `div`)
-
-Scoped slot props:
-- `result`: Apollo Query result
-  - `result.data`: Data returned by the query
-  - `result.loading`: Boolean indicating that a request is in flight
-  - `result.error`: Eventual error for the current result
-  - `result.networkStatus`: See [apollo networkStatus](https://www.apollographql.com/docs/react/basics/queries.html#graphql-query-data-networkStatus)
-- `query`: Smart Query associated with the component
-
-(WIP) You can subscribe to mode data with the `ApolloSubscribeToMore` (or `apollo-subscribe-to-more`) component:
-
-```html
-<template>
-  <ApolloQuery>
-    <ApolloSubscribeToMore
-      :document="require('../gql/MessageAdded.gql')"
-      :variables="{ channel }"
-      :updateQuery="onMessageAdded"
-    />
-  </ApolloQuery>
-</template>
-
-<script>
-export default {
-  data () {
-    return {
-      channel: 'general',
-    }
-  },
-
-  methods: {
-    onMessageAdded (previousResult, { subscriptionData }) {
-      // The previous result is immutable
-      const newResult = {
-        messages: [...previousResult.messages],
-      }
-      // Add the question to the list
-      newResult.messages.push(subscriptionData.data.messageAdded)
-      return newResult
-    },
-  },
-}
-</script>
-```
-
-*You can put as many of those as you want inside a `<ApolloQuery>` component.*
 
 ---
 
