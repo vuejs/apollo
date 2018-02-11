@@ -6,7 +6,7 @@
 
 ![schema](https://cdn-images-1.medium.com/max/800/1*H9AANoofLqjS10Xd5TwRYw.png)
 
-**You are on the Apollo 1.x branch. For Apollo 2.x support, [see here](https://github.com/Akryum/vue-apollo/tree/next#migrating-from-vue-apollo-2x-and-apollo-1x)!**
+**You are on the Apollo 1.x branch. For Apollo 2.x support, [see here](https://github.com/Akryum/vue-apollo/tree/master#migrating-from-vue-apollo-2x-and-apollo-1x)!**
 
 Integrates [apollo](http://www.apollostack.com/) in your [Vue](http://vuejs.org) components with declarative queries. Compatible with Vue 1.0+ and 2.0+. [Live demo](https://jsfiddle.net/Akryum/oyejk2qL/)
 
