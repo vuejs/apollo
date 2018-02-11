@@ -2,13 +2,15 @@
 
 [![npm](https://img.shields.io/npm/v/vue-apollo/next.svg) ![npm](https://img.shields.io/npm/dm/vue-apollo.svg)](https://www.npmjs.com/package/vue-apollo)
 [![vue1](https://img.shields.io/badge/apollo-2.x-blue.svg)](https://www.apollographql.com/)
-[![vue1](https://img.shields.io/badge/vue-1.x-brightgreen.svg) ![vue2](https://img.shields.io/badge/vue-2.x-brightgreen.svg)](https://vuejs.org/)
+[![vue1](https://img.shields.io/badge/vue-1.x-brightgreen.svg) ![vue2](https://img.shields.io/badge/vue-2.2+-brightgreen.svg)](https://vuejs.org/)
 
 ![schema](https://cdn-images-1.medium.com/max/800/1*H9AANoofLqjS10Xd5TwRYw.png)
 
 **Warning! This README is related to the next version of vue-apollo (that supports Apollo 2.x). For the old release (supporting only Apollo 1.x), see [here](https://github.com/Akryum/vue-apollo/tree/master).**
 
 Integrates [apollo](https://www.apollographql.com/) in your [Vue](http://vuejs.org) components with declarative queries. Compatible with Vue 1.0+ and 2.0+. [Live demo](https://jsfiddle.net/Akryum/oyejk2qL/)
+
+[<img src="https://assets-cdn.github.com/favicon.ico" alt="icon" width="16" height="16"/> Vue-cli plugin](https://github.com/Akryum/vue-cli-plugin-apollo)
 
 [<img src="https://assets-cdn.github.com/favicon.ico" alt="icon" width="16" height="16"/> More vue-apollo examples](https://github.com/Akryum/vue-apollo-example)
 
@@ -28,6 +30,7 @@ Integrates [apollo](https://www.apollographql.com/) in your [Vue](http://vuejs.o
 - [Queries](#queries)
   - [Simple query](#simple-query)
   - [Query with parameters](#query-with-parameters)
+  - [Loading state](#loading-state)
   - [Option function](#option-function)
   - [Reactive query definition](#reactive-query-definition)
   - [Reactive parameters](#reactive-parameters)
@@ -46,14 +49,17 @@ Integrates [apollo](https://www.apollographql.com/) in your [Vue](http://vuejs.o
 - [Skip all](#skip-all)
 - [Multiple clients](#multiple-clients)
 - [Server-Side Rendering](#server-side-rendering)
+- [Query Components](#query-components)
 - [Migration](#migration)
 - [API Reference](#api-reference)
 
 ## Installation
 
+**If you are using vue-cli 3.x, you can [use this vue-cli plugin](https://github.com/Akryum/vue-cli-plugin-apollo) to get started in a few minutes!**
+
 Try and install these packages before server side set (of packages), add apollo to meteor.js before then, too.
 
-    npm install --save vue-apollo@next graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
+    npm install --save vue-apollo graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
 
 In your app, create an `ApolloClient` instance and install the `VueApollo` plugin:
 
@@ -91,7 +97,7 @@ const apolloProvider = new VueApollo({
 
 new Vue({
   el: '#app',
-  apolloProvider,
+  provide: apolloProvider.provide(),
   render: h => h(App),
 })
 ```
@@ -267,10 +273,24 @@ And then use it in your vue component:
   <div class="apollo">
     <h3>Ping</h3>
     <p>
-      {{ping}}
+      {{ ping }}
     </p>
   </div>
 </template>
+```
+
+### Loading state
+
+You can display a loading state thanks to the `$apollo.loading` prop:
+
+```html
+<div v-if="$apollo.loading">Loading...</div>
+```
+
+Or for this specific `ping` query:
+
+```html
+<div v-if="$apollo.queries.ping.loading">Loading...</div>
 ```
 
 ### Option function
@@ -1260,6 +1280,14 @@ export default willPrefetch({
 })
 ```
 
+The second parameter is optional: it's a callback that gets the context and should return a boolean indicating if the component should be prefetched:
+
+```js
+willPrefetch({
+  // Component definition...
+}, context => context.url === '/foo')
+```
+
 ### On the server
 
 To prefetch all the apollo queries you marked, use the `apolloProvider.prefetchAll` method. The first argument is the context object passed to the `prefetch` hooks (see above). It is recommended to pass the vue-router `currentRoute` object. The second argument is the array of component definition to include (e.g. from `router.getMatchedComponents` method). The third argument is an optional `options` object. It returns a promise resolved when all the apollo queries are loaded.
@@ -1491,6 +1519,89 @@ router.onReady(() => {
   // Prefetch, render HTML (see above)
 })
 ```
+
+## Query components
+
+(WIP) You can use the `ApolloQuery` (or `apollo-query`) component to make watched Apollo queries directly in your template:
+
+```html
+<ApolloQuery
+  :query="require('../graphql/HelloWorld.gql')"
+  :variables="{ name }"
+>
+  <template slot-scope="{ result: { loading, error, data } }">
+    <!-- Loading -->
+    <div v-if="loading" class="loading apollo">Loading...</div>
+
+    <!-- Error -->
+    <div v-else-if="error" class="error apollo">An error occured</div>
+
+    <!-- Result -->
+    <div v-else-if="data" class="result apollo">{{ data.hello }}</div>
+
+    <!-- No result -->
+    <div v-else class="no-result apollo">No result :(</div>
+  </template>
+</ApolloQuery>
+```
+
+Props:
+
+- `query`: GraphQL query (transformed by `graphql-tag`)
+- `variables`: Object of GraphQL variables
+- `fetchPolicy`: See [apollo fetchPolicy](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-fetchPolicy)
+- `pollInterval`: See [apollo pollInterval](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-pollInterval)
+- `notifyOnNetworkStatusChange`: See [apollo notifyOnNetworkStatusChange](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-notifyOnNetworkStatusChange)
+- `context`: See [apollo context](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-context)
+- `skip`: Boolean disabling query fetching
+- `clienId`: Used to resolve the Apollo Client used (defined in ApolloProvider)
+- `tag`: String HTML tag name (default: `div`)
+
+Scoped slot props:
+- `result`: Apollo Query result
+  - `result.data`: Data returned by the query
+  - `result.loading`: Boolean indicating that a request is in flight
+  - `result.error`: Eventual error for the current result
+  - `result.networkStatus`: See [apollo networkStatus](https://www.apollographql.com/docs/react/basics/queries.html#graphql-query-data-networkStatus)
+- `query`: Smart Query associated with the component
+
+(WIP) You can subscribe to mode data with the `ApolloSubscribeToMore` (or `apollo-subscribe-to-more`) component:
+
+```html
+<template>
+  <ApolloQuery>
+    <ApolloSubscribeToMore
+      :document="require('../gql/MessageAdded.gql')"
+      :variables="{ channel }"
+      :updateQuery="onMessageAdded"
+    />
+  </ApolloQuery>
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+      channel: 'general',
+    }
+  },
+
+  methods: {
+    onMessageAdded (previousResult, { subscriptionData }) {
+      // The previous result is immutable
+      const newResult = {
+        messages: [...previousResult.messages],
+      }
+      // Add the question to the list
+      newResult.messages.push(subscriptionData.data.messageAdded)
+      return newResult
+    },
+  },
+}
+</script>
+```
+
+*You can put as many of those as you want inside a `<ApolloQuery>` component.*
 
 ---
 

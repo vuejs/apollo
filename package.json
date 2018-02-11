@@ -12,12 +12,10 @@
     "build:es": "rollup --config build/rollup.config.es.js",
     "build:umd": "rollup --config build/rollup.config.umd.js",
     "prepublishOnly": "npm run test && npm run build",
-    "dev": "npm-watch",
-    "test": "npm run test:types",
+    "dev": "nodemon --exec 'npm run build' --watch src",
+    "test": "npm run test:eslint && npm run test:types",
+    "test:eslint": "eslint --ext .js src",
     "test:types": "tsc -p types/test"
-  },
-  "watch": {
-    "build": "src/*.js"
   },
   "repository": {
     "type": "git",
@@ -61,7 +59,7 @@
     "eslint-plugin-standard": "^3.0.1",
     "graphql": "^0.12.3",
     "graphql-tag": "^2.5.0",
-    "npm-watch": "^0.3.0",
+    "nodemon": "^1.14.12",
     "rimraf": "^2.6.1",
     "rollup": "^0.55.3",
     "rollup-plugin-babel": "^3.0.2",

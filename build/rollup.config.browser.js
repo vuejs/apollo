@@ -6,8 +6,8 @@ const config = Object.assign({}, base, {
   output: {
     file: 'dist/vue-apollo.min.js',
     format: 'iife',
+    name: 'VueApollo',
   },
-  name: 'VueApollo',
 })
 
 config.plugins.push(uglify({}, minify))

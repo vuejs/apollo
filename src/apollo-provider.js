@@ -16,14 +16,20 @@ export class ApolloProvider {
     this.prefetchQueries = []
   }
 
-  willPrefetchQuery (queryOptions, client) {
+  provide (key = '$apolloProvider') {
+    return {
+      [key]: this,
+    }
+  }
+
+  addQueryToPrefetch (queryOptions, client) {
     this.prefetchQueries.push({
       queryOptions,
       client,
     })
   }
 
-  willPrefetch (component) {
+  prefetchComponent (component, context) {
     component = getMergedDefinition(component)
     const apolloOptions = component.apollo
 
@@ -42,14 +48,14 @@ export class ApolloProvider {
           )
         )
       ) {
-        this.willPrefetchQuery(options, options.client || componentClient)
+        this.addQueryToPrefetch(options, options.client || componentClient)
       }
     }
   }
 
-  willPrefetchComponents (definitions) {
+  prefetchComponents (definitions) {
     for (const def of definitions) {
-      this.willPrefetch(def)
+      this.prefetchComponent(def)
     }
   }
 
@@ -65,11 +71,21 @@ export class ApolloProvider {
     }, options)
 
     if (components) {
-      this.willPrefetchComponents(components)
+      this.prefetchComponents(components)
     }
 
     if (finalOptions.includeGlobal) {
-      this.willPrefetchComponents(globalPrefetchs)
+      this.prefetchComponents(globalPrefetchs.filter(
+        ({ component, contextCallback }) => {
+          let result = true
+          if (typeof contextCallback === 'function') {
+            result = !!contextCallback(context)
+          }
+          return result
+        }
+      ).map(
+        ({ component }) => component
+      ), context)
     }
 
     return Promise.all(this.prefetchQueries.map(
@@ -166,7 +182,14 @@ export class ApolloProvider {
 
 const globalPrefetchs = []
 
-export function willPrefetch (component) {
-  globalPrefetchs.push(component)
+export function willPrefetch (component, contextCallback = null) {
+  globalPrefetchs.push({ component, contextCallback })
   return component
+}
+
+// Global access for libraries
+if (typeof window !== 'undefined') {
+  window.vueApolloWillPrefetch = willPrefetch
+} else if (typeof global !== 'undefined') {
+  global.vueApolloWillPrefetch = willPrefetch
 }

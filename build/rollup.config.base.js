@@ -7,7 +7,6 @@ const config = require('../package.json')
 
 export default {
   input: 'src/index.js',
-  name: 'vue-apollo',
   plugins: [
     resolve({
       jsnext: true,

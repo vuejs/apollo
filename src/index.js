@@ -1,30 +1,24 @@
 import omit from 'lodash.omit'
 import { DollarApollo } from './dollar-apollo'
 import { ApolloProvider as apolloProvider } from './apollo-provider'
+import CApolloQuery from './components/ApolloQuery'
+import CApolloSubscribeToMore from './components/ApolloSubscribeToMore'
 import { Globals } from './utils'
 
 const keywords = [
   '$subscribe',
 ]
 
-const prepare = function prepare () {
-  let apolloProvider
-  if (this.$options.apolloProvider) {
-    apolloProvider = this._apolloProvider = this.$options.apolloProvider
-  } else {
-    apolloProvider = this.$root._apolloProvider
-  }
+const launch = function launch () {
+  const apolloProvider = this.$apolloProvider
 
-  if (this._apolloPrepared) return
-  this._apolloPrepared = true
+  if (this._apolloLaunched || !apolloProvider) return
+  this._apolloLaunched = true
 
   // Prepare properties
   let apollo = this.$options.apollo
 
   if (apollo) {
-    this._apolloQueries = {}
-    this._apolloInitData = {}
-
     if (!apollo.$init) {
       apollo.$init = true
 
@@ -34,22 +28,6 @@ const prepare = function prepare () {
       }
     }
 
-    // watchQuery
-    for (let key in apollo) {
-      if (key.charAt(0) !== '$') {
-        this._apolloInitData[key] = null
-        this._apolloQueries[key] = apollo[key]
-      }
-    }
-  }
-}
-
-const launch = function launch () {
-  if (this._apolloLaunched) return
-  this._apolloLaunched = true
-
-  let apollo = this.$options.apollo
-  if (apollo) {
     defineReactiveSetter(this.$apollo, 'skipAll', apollo.$skipAll)
     defineReactiveSetter(this.$apollo, 'skipAllQueries', apollo.$skipAllQueries)
     defineReactiveSetter(this.$apollo, 'skipAllSubscriptions', apollo.$skipAllSubscriptions)
@@ -57,16 +35,14 @@ const launch = function launch () {
     defineReactiveSetter(this.$apollo, 'loadingKey', apollo.$loadingKey)
     defineReactiveSetter(this.$apollo, 'error', apollo.$error)
     defineReactiveSetter(this.$apollo, 'watchLoading', apollo.$watchLoading)
-  }
 
-  if (this._apolloQueries) {
     // watchQuery
-    for (let key in this._apolloQueries) {
-      this.$apollo.addSmartQuery(key, this._apolloQueries[key])
+    for (let key in apollo) {
+      if (key.charAt(0) !== '$') {
+        this.$apollo.addSmartQuery(key, apollo[key])
+      }
     }
-  }
 
-  if (apollo) {
     if (apollo.subscribe) {
       Globals.Vue.util.warn('vue-apollo -> `subscribe` option is deprecated. Use the `$subscribe` option instead.')
     }
@@ -123,17 +99,35 @@ export function install (Vue, options) {
     },
   })
 
+  const vueVersion = Vue.version.substr(0, Vue.version.indexOf('.'))
+
   Vue.mixin({
+    ...vueVersion === '1' ? {
+      init () {
+        let apolloProvider
+        if (this.$options.apolloProvider) {
+          apolloProvider = this._apolloProvider = this.$options.apolloProvider
+        } else {
+          apolloProvider = this.$root._apolloProvider
+        }
+        this.$apolloProvider = apolloProvider
+      },
+    } : {},
 
-    // Vue 1.x
-    init: prepare,
-    // Vue 2.x
-    beforeCreate: prepare,
+    ...vueVersion === '2' ? {
+      inject: {
+        $apolloProvider: { default: null },
+      },
 
-    // Better devtools support
-    data () {
-      return this._apolloInitData || {}
-    },
+      data () {
+        return this.$options.apollo ? {
+          '$apolloData': {
+            queries: {},
+            loading: 0,
+          },
+        } : {}
+      },
+    } : {},
 
     created: launch,
 
@@ -145,6 +139,13 @@ export function install (Vue, options) {
     },
 
   })
+
+  if (vueVersion === '2') {
+    Vue.component('apollo-query', CApolloQuery)
+    Vue.component('ApolloQuery', CApolloQuery)
+    Vue.component('apollo-subscribe-to-more', CApolloSubscribeToMore)
+    Vue.component('ApolloSubscribeToMore', CApolloSubscribeToMore)
+  }
 }
 
 apolloProvider.install = install
@@ -152,9 +153,13 @@ apolloProvider.install = install
 // eslint-disable-next-line no-undef
 apolloProvider.version = VERSION
 
+// Apollo provider
 export const ApolloProvider = apolloProvider
-
 export { willPrefetch } from './apollo-provider'
+
+// Components
+export const ApolloQuery = CApolloQuery
+export const ApolloSubscribeToMore = CApolloSubscribeToMore
 
 // Auto-install
 let GlobalVue = null
