@@ -1,11 +1,13 @@
 import base from './rollup.config.base'
 import uglify from 'rollup-plugin-uglify'
-import { minify } from 'uglify-js-harmony'
+import { minify } from 'uglify-es'
 
 const config = Object.assign({}, base, {
-  dest: 'dist/vue-apollo.min.js',
-  format: 'iife',
-  moduleName: 'VueApollo',
+  output: {
+    file: 'dist/vue-apollo.min.js',
+    format: 'iife',
+    name: 'VueApollo',
+  },
 })
 
 config.plugins.push(uglify({}, minify))

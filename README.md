@@ -1,14 +1,16 @@
 # Apollo and GraphQL for Vue.js
 
 [![npm](https://img.shields.io/npm/v/vue-apollo.svg) ![npm](https://img.shields.io/npm/dm/vue-apollo.svg)](https://www.npmjs.com/package/vue-apollo)
-[![vue1](https://img.shields.io/badge/apollo-1.x-blue.svg)](http://apollodata.com/)
-[![vue1](https://img.shields.io/badge/vue-1.x-brightgreen.svg) ![vue2](https://img.shields.io/badge/vue-2.x-brightgreen.svg)](https://vuejs.org/)
+[![vue1](https://img.shields.io/badge/apollo-2.x-blue.svg)](https://www.apollographql.com/)
+[![vue1](https://img.shields.io/badge/vue-1.x-brightgreen.svg) ![vue2](https://img.shields.io/badge/vue-2.2+-brightgreen.svg)](https://vuejs.org/)
 
 ![schema](https://cdn-images-1.medium.com/max/800/1*H9AANoofLqjS10Xd5TwRYw.png)
 
-**Apollo 2.x support in preview, [read more here](https://github.com/Akryum/vue-apollo/tree/next#migrating-from-vue-apollo-2x-and-apollo-1x)!**
+**Warning! This README is related to the next version of vue-apollo (that supports Apollo 2.x). For the old release (supporting only Apollo 1.x), see [here](https://github.com/Akryum/vue-apollo/tree/apollo-1).**
 
-Integrates [apollo](http://www.apollostack.com/) in your [Vue](http://vuejs.org) components with declarative queries. Compatible with Vue 1.0+ and 2.0+. [Live demo](https://jsfiddle.net/Akryum/oyejk2qL/)
+Integrates [apollo](https://www.apollographql.com/) in your [Vue](http://vuejs.org) components with declarative queries. Compatible with Vue 1.0+ and 2.0+. [Live demo](https://jsfiddle.net/Akryum/oyejk2qL/)
+
+[<img src="https://assets-cdn.github.com/favicon.ico" alt="icon" width="16" height="16"/> Vue-cli plugin](https://github.com/Akryum/vue-cli-plugin-apollo)
 
 [<img src="https://assets-cdn.github.com/favicon.ico" alt="icon" width="16" height="16"/> More vue-apollo examples](https://github.com/Akryum/vue-apollo-example)
 
@@ -28,6 +30,7 @@ Integrates [apollo](http://www.apollostack.com/) in your [Vue](http://vuejs.org)
 - [Queries](#queries)
   - [Simple query](#simple-query)
   - [Query with parameters](#query-with-parameters)
+  - [Loading state](#loading-state)
   - [Option function](#option-function)
   - [Reactive query definition](#reactive-query-definition)
   - [Reactive parameters](#reactive-parameters)
@@ -46,26 +49,36 @@ Integrates [apollo](http://www.apollostack.com/) in your [Vue](http://vuejs.org)
 - [Skip all](#skip-all)
 - [Multiple clients](#multiple-clients)
 - [Server-Side Rendering](#server-side-rendering)
+- [Query Components](#query-components)
+- [Migration](#migration)
 - [API Reference](#api-reference)
 
 ## Installation
 
+**If you are using vue-cli 3.x, you can [use this vue-cli plugin](https://github.com/Akryum/vue-cli-plugin-apollo) to get started in a few minutes!**
+
 Try and install these packages before server side set (of packages), add apollo to meteor.js before then, too.
 
-    npm install --save vue-apollo apollo-client
+    npm install --save vue-apollo graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
 
 In your app, create an `ApolloClient` instance and install the `VueApollo` plugin:
 
 ```javascript
 import Vue from 'vue'
-import { ApolloClient, createBatchingNetworkInterface } from 'apollo-client'
+import { ApolloClient } from 'apollo-client'
+import { HttpLink } from 'apollo-link-http'
+import { InMemoryCache } from 'apollo-cache-inmemory'
 import VueApollo from 'vue-apollo'
+
+const httpLink = new HttpLink({
+  // You should use an absolute URL here
+  uri: 'http://localhost:3020/graphql',
+})
 
 // Create the apollo client
 const apolloClient = new ApolloClient({
-  networkInterface: createBatchingNetworkInterface({
-    uri: 'http://localhost:3020/graphql',
-  }),
+  link: httpLink,
+  cache: new InMemoryCache(),
   connectToDevTools: true,
 })
 
@@ -84,7 +97,7 @@ const apolloProvider = new VueApollo({
 
 new Vue({
   el: '#app',
-  apolloProvider,
+  provide: apolloProvider.provide(),
   render: h => h(App),
 })
 ```
@@ -101,7 +114,7 @@ new Vue({
 })
 ```
 
-You can access the [apollo-client](http://dev.apollodata.com/core/apollo-client-api.html) instances with `this.$apollo.provider.defaultClient` or `this.$apollo.provider.clients.<key>` (for [Multiple clients](#multiple-clients)) in all your vue components.
+You can access the [apollo-client](https://www.apollographql.com/docs/react/) instances with `this.$apollo.provider.defaultClient` or `this.$apollo.provider.clients.<key>` (for [Multiple clients](#multiple-clients)) in all your vue components.
 
 ## Queries
 
@@ -115,7 +128,7 @@ Use `gql` to write your GraphQL queries:
 import gql from 'graphql-tag'
 ```
 
-Put the [gql](http://docs.apollostack.com/apollo-client/core.html#gql) query directly as the value:
+Put the [gql](https://github.com/apollographql/graphql-tag) query directly as the value:
 
 ```javascript
 apollo: {
@@ -159,7 +172,7 @@ export const resolvers = {
 }
 ```
 
-For more info, visit the [apollo doc](http://dev.apollodata.com/tools/).
+For more info, visit the [apollo doc](https://www.apollographql.com/docs/apollo-server/).
 
 You can then use your property as usual in your vue component:
 
@@ -200,9 +213,9 @@ You can use the apollo `watchQuery` options in the object, like:
  - `pollInterval`
  - ...
 
-See the [apollo doc](http://dev.apollodata.com/core/apollo-client-api.html#ApolloClient\.watchQuery) for more details.
+See the [apollo doc](https://www.apollographql.com/docs/react/reference/index.html#ApolloClient\.watchQuery) for more details.
 
-For example, you could add the `forceFetch` apollo option like this:
+For example, you could add the `fetchPolicy` apollo option like this:
 
 ```javascript
 apollo: {
@@ -260,10 +273,24 @@ And then use it in your vue component:
   <div class="apollo">
     <h3>Ping</h3>
     <p>
-      {{ping}}
+      {{ ping }}
     </p>
   </div>
 </template>
+```
+
+### Loading state
+
+You can display a loading state thanks to the `$apollo.loading` prop:
+
+```html
+<div v-if="$apollo.loading">Loading...</div>
+```
+
+Or for this specific `ping` query:
+
+```html
+<div v-if="$apollo.queries.ping.loading">Loading...</div>
 ```
 
 ### Option function
@@ -407,7 +434,7 @@ this.$apollo.queries.tags.skip = true
 
 These are the available advanced options you can use:
 - `update(data) {return ...}` to customize the value that is set in the vue property, for example if the field names don't match.
-- `result(ApolloQueryResult)` is a hook called when a result is received (see documentation for [ApolloQueryResult](http://dev.apollodata.com/core/apollo-client-api.html#ApolloQueryResult)).
+- `result(ApolloQueryResult)` is a hook called when a result is received (see documentation for [ApolloQueryResult](https://github.com/apollographql/apollo-client/blob/master/packages/apollo-client/src/core/types.ts)).
 - `error(error)` is a hook called when there are errors. `error` is an Apollo error object with either a `graphQLErrors` property or a `networkError` property.
 - `loadingKey` will update the component data property you pass as the value. You should initialize this property to `0` in the component `data()` hook. When the query is loading, this property will be incremented by 1; when it is no longer loading, it will be decremented by 1. That way, the property can represent a counter of currently loading queries.
 - `watchLoading(isLoading, countModifier)` is a hook called when the loading state of the query changes. The `countModifier` parameter is either equal to `1` when the query is loading, or `-1` when the query is no longer loading.
@@ -566,7 +593,9 @@ created () {
 
 ## Mutations
 
-Mutations are queries that change your data state on your apollo server. For more info, visit the [apollo doc](http://dev.apollodata.com/core/apollo-client-api.html#ApolloClient\.mutate). There is a mutation-focused [example app](https://github.com/Akryum/vue-apollo-todos) you can look at.
+Mutations are queries that change your data state on your apollo server. For more info, visit the [apollo doc](https://www.apollographql.com/docs/react/reference/index.html#ApolloClient\.mutate). There is a mutation-focused [example app](https://github.com/Akryum/vue-apollo-todos) you can look at.
+
+**You shouldn't send the `__typename` fields in the variables, so it is not recommended to send an Apollo result object directly.**
 
 ```javascript
 methods: {
@@ -687,40 +716,55 @@ export const resolvers = {
 To make enable the websocket-based subscription, a bit of additional setup is required:
 
 ```
-npm install --save subscriptions-transport-ws
+npm install --save apollo-link-ws apollo-utilities
 ```
 
 ```javascript
 import Vue from 'vue'
-import { ApolloClient, createNetworkInterface } from 'apollo-client'
+import { ApolloClient } from 'apollo-client'
+import { HttpLink } from 'apollo-link-http'
+import { InMemoryCache } from 'apollo-cache-inmemory'
 // New Imports
-import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws'
+import { split } from 'apollo-link'
+import { WebSocketLink } from 'apollo-link-ws'
+import { getMainDefinition } from 'apollo-utilities'
+
 import VueApollo from 'vue-apollo'
 
-// Create the network interface
-const networkInterface = createNetworkInterface({
-  uri: 'http://localhost:3000/graphql',
-  transportBatching: true,
+const httpLink = new HttpLink({
+  // You should use an absolute URL here
+  uri: 'http://localhost:3020/graphql',
 })
 
-// Create the subscription websocket client
-const wsClient = new SubscriptionClient('ws://localhost:3000/subscriptions', {
-  reconnect: true,
+// Create the subscription websocket link
+const wsLink = new WebSocketLink({
+  uri: 'ws://localhost:3000/subscriptions',
+  options: {
+    reconnect: true,
+  },
 })
 
-// Extend the network interface with the subscription client
-const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
-  networkInterface,
-  wsClient,
+// using the ability to split links, you can send data to each link
+// depending on what kind of operation is being sent
+const link = split(
+  // split based on operation type
+  ({ query }) => {
+    const { kind, operation } = getMainDefinition(query)
+    return kind === 'OperationDefinition' &&
+      operation === 'subscription'
+  },
+  wsLink,
+  httpLink
 )
 
-// Create the apollo client with the new network interface
+// Create the apollo client
 const apolloClient = new ApolloClient({
-  networkInterface: networkInterfaceWithSubscriptions,
+  link,
+  cache: new InMemoryCache(),
   connectToDevTools: true,
 })
 
-// Install the plugin like before
+// Install the vue plugin like before
 Vue.use(VueApollo)
 ```
 
@@ -1236,6 +1280,14 @@ export default willPrefetch({
 })
 ```
 
+The second parameter is optional: it's a callback that gets the context and should return a boolean indicating if the component should be prefetched:
+
+```js
+willPrefetch({
+  // Component definition...
+}, context => context.url === '/foo')
+```
+
 ### On the server
 
 To prefetch all the apollo queries you marked, use the `apolloProvider.prefetchAll` method. The first argument is the context object passed to the `prefetch` hooks (see above). It is recommended to pass the vue-router `currentRoute` object. The second argument is the array of component definition to include (e.g. from `router.getMatchedComponents` method). The third argument is an optional `options` object. It returns a promise resolved when all the apollo queries are loaded.
@@ -1340,7 +1392,9 @@ Here is an example:
 // src/api/apollo.js
 
 import Vue from 'vue'
-import { ApolloClient, createNetworkInterface } from 'apollo-client'
+import { ApolloClient } from 'apollo-client'
+import { HttpLink } from 'apollo-link-http'
+import { InMemoryCache } from 'apollo-cache-inmemory'
 import VueApollo from 'vue-apollo'
 
 // Install the vue plugin
@@ -1348,29 +1402,32 @@ Vue.use(VueApollo)
 
 // Create the apollo client
 export function createApolloClient (ssr = false) {
-  let initialState
+  const httpLink = new HttpLink({
+    // You should use an absolute URL here
+    uri: ENDPOINT + '/graphql',
+  })
+
+  const cache = new InMemoryCache()
 
   // If on the client, recover the injected state
-  if (!ssr && typeof window !== 'undefined') {
-    const state = window.__APOLLO_STATE__
-    if (state) {
-      // If you have multiple clients, use `state.<client_id>`
-      initialState = state.defaultClient
+  if (!ssr) {
+    // If on the client, recover the injected state
+    if (typeof window !== 'undefined') {
+      const state = window.__APOLLO_STATE__
+      if (state) {
+        // If you have multiple clients, use `state.<client_id>`
+        cache.restore(state.defaultClient)
+      }
     }
   }
 
   const apolloClient = new ApolloClient({
-    networkInterface: createNetworkInterface({
-      // You should use an absolute URL here
-      uri: 'https://api.graph.cool/simple/v1/cj1jvw20v3n310152sv0sirl7',
-      transportBatching: true,
-    }),
+    link: httpLink,
+    cache,
     ...(ssr ? {
       // Set this on the server to optimize queries when SSR
       ssrMode: true,
     } : {
-      // Inject the state on the client
-      initialState,
       // This will temporary disable query force-fetching
       ssrForceFetchDelay: 100,
     }),
@@ -1462,6 +1519,282 @@ router.onReady(() => {
   // Prefetch, render HTML (see above)
 })
 ```
+
+## Query components
+
+(WIP) You can use the `ApolloQuery` (or `apollo-query`) component to make watched Apollo queries directly in your template:
+
+```html
+<ApolloQuery
+  :query="require('../graphql/HelloWorld.gql')"
+  :variables="{ name }"
+>
+  <template slot-scope="{ result: { loading, error, data } }">
+    <!-- Loading -->
+    <div v-if="loading" class="loading apollo">Loading...</div>
+
+    <!-- Error -->
+    <div v-else-if="error" class="error apollo">An error occured</div>
+
+    <!-- Result -->
+    <div v-else-if="data" class="result apollo">{{ data.hello }}</div>
+
+    <!-- No result -->
+    <div v-else class="no-result apollo">No result :(</div>
+  </template>
+</ApolloQuery>
+```
+
+Props:
+
+- `query`: GraphQL query (transformed by `graphql-tag`)
+- `variables`: Object of GraphQL variables
+- `fetchPolicy`: See [apollo fetchPolicy](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-fetchPolicy)
+- `pollInterval`: See [apollo pollInterval](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-pollInterval)
+- `notifyOnNetworkStatusChange`: See [apollo notifyOnNetworkStatusChange](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-notifyOnNetworkStatusChange)
+- `context`: See [apollo context](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-context)
+- `skip`: Boolean disabling query fetching
+- `clienId`: Used to resolve the Apollo Client used (defined in ApolloProvider)
+- `tag`: String HTML tag name (default: `div`)
+
+Scoped slot props:
+- `result`: Apollo Query result
+  - `result.data`: Data returned by the query
+  - `result.loading`: Boolean indicating that a request is in flight
+  - `result.error`: Eventual error for the current result
+  - `result.networkStatus`: See [apollo networkStatus](https://www.apollographql.com/docs/react/basics/queries.html#graphql-query-data-networkStatus)
+- `query`: Smart Query associated with the component
+
+(WIP) You can subscribe to mode data with the `ApolloSubscribeToMore` (or `apollo-subscribe-to-more`) component:
+
+```html
+<template>
+  <ApolloQuery>
+    <ApolloSubscribeToMore
+      :document="require('../gql/MessageAdded.gql')"
+      :variables="{ channel }"
+      :updateQuery="onMessageAdded"
+    />
+  </ApolloQuery>
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+      channel: 'general',
+    }
+  },
+
+  methods: {
+    onMessageAdded (previousResult, { subscriptionData }) {
+      // The previous result is immutable
+      const newResult = {
+        messages: [...previousResult.messages],
+      }
+      // Add the question to the list
+      newResult.messages.push(subscriptionData.data.messageAdded)
+      return newResult
+    },
+  },
+}
+</script>
+```
+
+*You can put as many of those as you want inside a `<ApolloQuery>` component.*
+
+---
+
+# Migration
+
+## Migrating from vue-apollo 2.x and apollo 1.x
+
+The main changes are related to the apollo client setup. Your components code shouldn't be affected. Apollo now uses a more flexible [apollo-link](https://github.com/apollographql/apollo-link) system that allows compositing multiple links together to add more features (like batching, offline support and more).
+
+### Installation
+
+#### Packages
+
+Before:
+
+```
+npm install --save vue-apollo apollo-client
+```
+
+After:
+
+```
+npm install --save vue-apollo@next graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
+```
+
+#### Imports
+
+Before:
+
+```js
+import Vue from 'vue'
+import { ApolloClient, createBatchingNetworkInterface } from 'apollo-client'
+import VueApollo from 'vue-apollo'
+```
+
+After:
+
+```js
+import Vue from 'vue'
+import { ApolloClient } from 'apollo-client'
+import { HttpLink } from 'apollo-link-http'
+import { InMemoryCache } from 'apollo-cache-inmemory'
+import VueApollo from 'vue-apollo'
+```
+
+#### Plugin Setup
+
+Before:
+
+```js
+// Create the apollo client
+const apolloClient = new ApolloClient({
+  networkInterface: createBatchingNetworkInterface({
+    uri: 'http://localhost:3020/graphql',
+  }),
+  connectToDevTools: true,
+})
+
+// Install the vue plugin
+Vue.use(VueApollo)
+```
+
+After:
+
+```js
+const httpLink = new HttpLink({
+  // You should use an absolute URL here
+  uri: 'http://localhost:3020/graphql',
+})
+
+// Create the apollo client
+const apolloClient = new ApolloClient({
+  link: httpLink,
+  cache: new InMemoryCache(),
+  connectToDevTools: true,
+})
+
+// Install the vue plugin
+Vue.use(VueApollo)
+```
+
+### Mutations
+
+Query reducers have been removed. Use the `update` API to update the cache now.
+
+### Subscriptions
+
+#### Packages
+
+Before:
+
+```
+npm install --save subscriptions-transport-ws
+```
+
+After:
+
+```
+npm install --save apollo-link-ws apollo-utilities
+```
+
+#### Imports
+
+Before:
+
+```js
+import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws'
+```
+
+After:
+
+```js
+import { split } from 'apollo-link'
+import { WebSocketLink } from 'apollo-link-ws'
+import { getMainDefinition } from 'apollo-utilities'
+```
+
+#### Apollo Setup
+
+Before:
+
+```js
+// Create the network interface
+const networkInterface = createNetworkInterface({
+  uri: 'http://localhost:3000/graphql',
+  transportBatching: true,
+})
+
+// Create the subscription websocket client
+const wsClient = new SubscriptionClient('ws://localhost:3000/subscriptions', {
+  reconnect: true,
+})
+
+// Extend the network interface with the subscription client
+const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
+  networkInterface,
+  wsClient,
+)
+
+// Create the apollo client with the new network interface
+const apolloClient = new ApolloClient({
+  networkInterface: networkInterfaceWithSubscriptions,
+  connectToDevTools: true,
+})
+
+// Install the plugin like before
+Vue.use(VueApollo)
+```
+
+After:
+
+```js
+const httpLink = new HttpLink({
+  // You should use an absolute URL here
+  uri: 'http://localhost:3020/graphql',
+})
+
+// Create the subscription websocket link
+const wsLink = new WebSocketLink({
+  uri: 'ws://localhost:3000/subscriptions',
+  options: {
+    reconnect: true,
+  },
+})
+
+// using the ability to split links, you can send data to each link
+// depending on what kind of operation is being sent
+const link = split(
+  // split based on operation type
+  ({ query }) => {
+    const { kind, operation } = getMainDefinition(query)
+    return kind === 'OperationDefinition' &&
+      operation === 'subscription'
+  },
+  wsLink,
+  httpLink
+)
+
+// Create the apollo client
+const apolloClient = new ApolloClient({
+  link,
+  cache: new InMemoryCache(),
+  connectToDevTools: true,
+})
+
+// Install the vue plugin like before
+Vue.use(VueApollo)
+```
+
+
+<br>
+
+Learn more at the [official apollo documentation](https://www.apollographql.com/docs/react/2.0-migration.html).
 
 ---
 

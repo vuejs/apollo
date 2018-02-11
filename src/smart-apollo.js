@@ -1,8 +1,7 @@
 import omit from 'lodash.omit'
 import { throttle, debounce } from './utils'
-import { VUE_APOLLO_QUERY_KEYWORDS } from './consts'
 
-class SmartApollo {
+export default class SmartApollo {
   type = null
   vueApolloSpecialKeys = []
 
@@ -12,6 +11,7 @@ class SmartApollo {
     this.options = Object.assign({}, options)
     this._skip = false
     this._watchers = []
+    this._destroyed = false
 
     // Query callback
     if (typeof this.options.query === 'function') {
@@ -28,6 +28,16 @@ class SmartApollo {
       this.options.document = queryCb()
       this._watchers.push(this.vm.$watch(queryCb, document => {
         this.options.document = document
+        this.refresh()
+      }))
+    }
+
+    // Apollo context
+    if (typeof this.options.context === 'function') {
+      const cb = this.options.context.bind(this.vm)
+      this.options.context = cb()
+      this._watchers.push(this.vm.$watch(cb, context => {
+        this.options.context = context
         this.refresh()
       }))
     }
@@ -146,239 +156,12 @@ class SmartApollo {
   }
 
   destroy () {
+    if (this._destroyed) return
+
+    this._destroyed = true
     this.stop()
     for (const unwatch of this._watchers) {
       unwatch()
-    }
-  }
-}
-
-export class SmartQuery extends SmartApollo {
-  type = 'query'
-  vueApolloSpecialKeys = VUE_APOLLO_QUERY_KEYWORDS
-  loading = false
-
-  constructor (vm, key, options, autostart = true) {
-    // Simple query
-    if (!options.query) {
-      const query = options
-      options = {
-        query,
-      }
-    }
-
-    super(vm, key, options, autostart)
-  }
-
-  stop () {
-    super.stop()
-
-    if (this.observer) {
-      this.observer.stopPolling()
-      this.observer = null
-    }
-  }
-
-  executeApollo (variables) {
-    if (this.observer) {
-      // Update variables
-      // Don't use setVariables directly or it will ignore cache
-      this.observer.setOptions(this.generateApolloOptions(variables))
-    } else {
-      if (this.sub) {
-        this.sub.unsubscribe()
-      }
-
-      // Create observer
-      this.observer = this.vm.$apollo.watchQuery(this.generateApolloOptions(variables))
-
-      // Create subscription
-      this.sub = this.observer.subscribe({
-        next: this.nextResult.bind(this),
-        error: this.catchError.bind(this),
-      })
-    }
-
-    this.maySetLoading()
-
-    super.executeApollo(variables)
-  }
-
-  maySetLoading (force = false) {
-    const currentResult = this.observer.currentResult()
-    if (force || currentResult.loading) {
-      if (!this.loading) {
-        this.applyLoadingModifier(1)
-      }
-      this.loading = true
-    }
-  }
-
-  nextResult (result) {
-    const { data, loading } = result
-
-    if (!loading) {
-      this.loadingDone()
-    }
-
-    const hasResultCallback = typeof this.options.result === 'function'
-
-    if (typeof data === 'undefined') {
-      // No result
-    } else if (typeof this.options.update === 'function') {
-      this.vm[this.key] = this.options.update.call(this.vm, data)
-    } else if (data[this.key] === undefined) {
-      console.error(`Missing ${this.key} attribute on result`, data)
-    } else if (!this.options.manual) {
-      this.vm[this.key] = data[this.key]
-    } else if (!hasResultCallback) {
-      console.error(`${this.key} query must have a 'result' hook in manual mode`)
-    }
-
-    if (hasResultCallback) {
-      this.options.result.call(this.vm, result)
-    }
-  }
-
-  catchError (error) {
-    super.catchError(error)
-    this.loadingDone()
-  }
-
-  get loadingKey () {
-    return this.options.loadingKey || this.vm.$apollo.loadingKey
-  }
-
-  watchLoading (...args) {
-    this.options.watchLoading && this.options.watchLoading.call(this.vm, ...args)
-    this.vm.$apollo.watchLoading && this.vm.$apollo.watchLoading.call(this.vm, ...args)
-    this.vm.$apollo.provider.watchLoading && this.vm.$apollo.provider.watchLoading.call(this.vm, ...args)
-  }
-
-  applyLoadingModifier (value) {
-    const loadingKey = this.loadingKey
-    if (loadingKey && typeof this.vm[loadingKey] === 'number') {
-      this.vm[loadingKey] += value
-    }
-
-    this.watchLoading(value === 1, value)
-  }
-
-  loadingDone () {
-    if (this.loading) {
-      this.applyLoadingModifier(-1)
-    }
-    this.loading = false
-  }
-
-  fetchMore (...args) {
-    if (this.observer) {
-      this.maySetLoading(true)
-      return this.observer.fetchMore(...args).then(result => {
-        if (!result.loading) {
-          this.loadingDone()
-        }
-        return result
-      })
-    }
-  }
-
-  subscribeToMore (...args) {
-    if (this.observer) {
-      return {
-        unsubscribe: this.observer.subscribeToMore(...args),
-      }
-    }
-  }
-
-  refetch (variables) {
-    variables && (this.options.variables = variables)
-    if (this.observer) {
-      const result = this.observer.refetch(variables).then((result) => {
-        if (!result.loading) {
-          this.loadingDone()
-        }
-        return result
-      })
-      this.maySetLoading()
-      return result
-    }
-  }
-
-  setVariables (variables, tryFetch) {
-    this.options.variables = variables
-    if (this.observer) {
-      const result = this.observer.setVariables(variables, tryFetch)
-      this.maySetLoading()
-      return result
-    }
-  }
-
-  setOptions (options) {
-    Object.assign(this.options, options)
-    if (this.observer) {
-      const result = this.observer.setOptions(options)
-      this.maySetLoading()
-      return result
-    }
-  }
-
-  startPolling (...args) {
-    if (this.observer) {
-      return this.observer.startPolling(...args)
-    }
-  }
-
-  stopPolling (...args) {
-    if (this.observer) {
-      return this.observer.stopPolling(...args)
-    }
-  }
-}
-
-export class SmartSubscription extends SmartApollo {
-  type = 'subscription'
-  vueApolloSpecialKeys = [
-    'variables',
-    'result',
-    'error',
-    'throttle',
-    'debounce',
-    'linkedQuery',
-  ]
-
-  executeApollo (variables) {
-    const variablesJson = JSON.stringify(variables)
-    if (this.sub) {
-      // do nothing if subscription is already running using exactly the same variables
-      if (variablesJson === this.previousVariablesJson) {
-        return
-      }
-      this.sub.unsubscribe()
-    }
-    this.previousVariablesJson = variablesJson
-
-    const apolloOptions = this.generateApolloOptions(variables)
-
-    if (this.options.linkedQuery) {
-      this.sub = this.options.linkedQuery.subscribeToMore(apolloOptions)
-    } else {
-      // Create observer
-      this.observer = this.vm.$apollo.subscribe(apolloOptions)
-
-      // Create subscription
-      this.sub = this.observer.subscribe({
-        next: this.nextResult.bind(this),
-        error: this.catchError.bind(this),
-      })
-    }
-
-    super.executeApollo(variables)
-  }
-
-  nextResult (data) {
-    if (typeof this.options.result === 'function') {
-      this.options.result.call(this.vm, data)
     }
   }
 }

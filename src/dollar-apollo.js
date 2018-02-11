@@ -1,4 +1,5 @@
-import { SmartQuery, SmartSubscription } from './smart-apollo'
+import SmartQuery from './smart-query'
+import SmartSubscription from './smart-subscription'
 import { reapply } from './utils'
 
 export class DollarApollo {
@@ -15,14 +16,14 @@ export class DollarApollo {
   }
 
   get provider () {
-    return this._apolloProvider || this.vm.$root._apolloProvider
+    return this.vm.$apolloProvider
   }
 
   query (options) {
     return this.getClient(options).query(options)
   }
 
-  getClient (options) {
+  getClient (options = null) {
     if (!options || !options.client) {
       if (typeof this.client === 'object') {
         return this.client
@@ -73,6 +74,10 @@ export class DollarApollo {
       }
       return observable
     }
+  }
+
+  get loading () {
+    return this.vm.$data.$apolloData && this.vm.$data.$apolloData.loading !== 0
   }
 
   addSmartQuery (key, options) {

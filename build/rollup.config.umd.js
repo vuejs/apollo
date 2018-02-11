@@ -1,8 +1,11 @@
 import base from './rollup.config.base'
 
 const config = Object.assign({}, base, {
-  dest: 'dist/vue-apollo.esm.js',
-  format: 'es',
+  output: {
+    file: 'dist/vue-apollo.umd.js',
+    format: 'umd',
+    name: 'vue-apollo',
+  },
 })
 
 export default config
