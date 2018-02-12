@@ -3026,6 +3026,10 @@ var SmartSubscription = function (_SmartApollo) {
 
       var apolloOptions = this.generateApolloOptions(variables);
 
+      if (typeof apolloOptions.updateQuery === 'function') {
+        apolloOptions.updateQuery = apolloOptions.updateQuery.bind(this.vm);
+      }
+
       if (this.options.linkedQuery) {
         this.sub = this.options.linkedQuery.subscribeToMore(apolloOptions);
       } else {
@@ -3431,6 +3435,9 @@ var ApolloProvider = function () {
       }
 
       // Query
+      if (typeof queryOptions.query === 'function') {
+        queryOptions.query = queryOptions.query(context);
+      }
       return new Promise(function (resolve, reject) {
         var options = lodash_omit(queryOptions, [].concat(toConsumableArray(VUE_APOLLO_QUERY_KEYWORDS), ['fetchPolicy']));
         options.variables = variables;
@@ -3719,8 +3726,6 @@ var CApolloSubscribeToMore = {
         updateQuery: this.updateQuery,
         linkedQuery: this.getApolloQuery()
       });
-
-      console.log(this.$_key, this.$_sub);
     }
   },
 
@@ -3870,7 +3875,7 @@ function install(Vue, options) {
 ApolloProvider.install = install;
 
 // eslint-disable-next-line no-undef
-ApolloProvider.version = "3.0.0-beta.1";
+ApolloProvider.version = "3.0.0-beta.2";
 
 // Apollo provider
 var ApolloProvider$1 = ApolloProvider;
