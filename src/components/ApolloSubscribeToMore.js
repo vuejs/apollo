@@ -58,8 +58,6 @@ export default {
         updateQuery: this.updateQuery,
         linkedQuery: this.getApolloQuery(),
       })
-
-      console.log(this.$_key, this.$_sub)
     },
   },
 
