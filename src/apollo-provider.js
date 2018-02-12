@@ -145,6 +145,9 @@ export class ApolloProvider {
     }
 
     // Query
+    if (typeof queryOptions.query === 'function') {
+      queryOptions.query = queryOptions.query(context)
+    }
     return new Promise((resolve, reject) => {
       const options = omit(queryOptions, [
         ...VUE_APOLLO_QUERY_KEYWORDS,
