@@ -29,6 +29,14 @@ export default class SmartSubscription extends SmartApollo {
     }
 
     if (this.options.linkedQuery) {
+      if (typeof this.options.result === 'function') {
+        const rcb = this.options.result.bind(this.vm)
+        const ucb = apolloOptions.updateQuery && apolloOptions.updateQuery.bind(this.vm)
+        apolloOptions.updateQuery = (...args) => {
+          rcb(...args)
+          ucb && ucb(...args)
+        }
+      }
       this.sub = this.options.linkedQuery.subscribeToMore(apolloOptions)
     } else {
       // Create observer
