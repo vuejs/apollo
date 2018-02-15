@@ -3037,6 +3037,14 @@ var SmartSubscription = function (_SmartApollo) {
       }
 
       if (this.options.linkedQuery) {
+        if (typeof this.options.result === 'function') {
+          var rcb = this.options.result.bind(this.vm);
+          var ucb = apolloOptions.updateQuery && apolloOptions.updateQuery.bind(this.vm);
+          apolloOptions.updateQuery = function () {
+            rcb.apply(undefined, arguments);
+            ucb && ucb.apply(undefined, arguments);
+          };
+        }
         this.sub = this.options.linkedQuery.subscribeToMore(apolloOptions);
       } else {
         // Create observer
@@ -3669,7 +3677,7 @@ var CApolloQuery = {
       query: this.$apollo.queries.query
     });
     if (Array.isArray(result)) {
-      result.concat(this.$slots.default);
+      result = result.concat(this.$slots.default);
     } else {
       result = [result].concat(this.$slots.default);
     }
@@ -3881,7 +3889,7 @@ function install(Vue, options) {
 ApolloProvider.install = install;
 
 // eslint-disable-next-line no-undef
-ApolloProvider.version = "3.0.0-beta.2";
+ApolloProvider.version = "3.0.0-beta.4";
 
 // Apollo provider
 var ApolloProvider$1 = ApolloProvider;
