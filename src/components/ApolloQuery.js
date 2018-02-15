@@ -158,7 +158,7 @@ export default {
       query: this.$apollo.queries.query,
     })
     if (Array.isArray(result)) {
-      result.concat(this.$slots.default)
+      result = result.concat(this.$slots.default)
     } else {
       result = [result].concat(this.$slots.default)
     }
