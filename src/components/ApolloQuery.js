@@ -67,6 +67,7 @@ export default {
         networkStatus: 7,
         error: null,
       },
+      isLoading: false,
     }
   },
 
@@ -105,6 +106,9 @@ export default {
         context () { return this.context },
         skip () { return this.skip },
         manual: true,
+        watchLoading(isLoading) {
+          this.isLoading = isLoading
+        },
         result (result) {
           const { errors, loading, networkStatus } = result
           let { error } = result
@@ -156,6 +160,7 @@ export default {
     let result = this.$scopedSlots.default({
       result: this.result,
       query: this.$apollo.queries.query,
+      isLoading: this.isLoading,
     })
     if (Array.isArray(result)) {
       result = result.concat(this.$slots.default)
