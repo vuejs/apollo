@@ -74,6 +74,7 @@ export interface ApolloProperty<V> {
   queries: any;
   mutate: Mutate<V>;
   subscribe: Subscribe;
+  addSmartQuery: Query<V>;
 }
 type QueryComponentProperty<V> = ((this: ApolloVueThisType<V>) => VueApolloQueryOptions<V, any>) | VueApolloQueryOptions<V, any>
 type SubscribeComponentProperty<V> = VueApolloSubscriptionOptions<V, any> | { [key: string]: VueApolloSubscriptionOptions<V, any> }
