@@ -3566,7 +3566,8 @@ var CApolloQuery = {
         data: null,
         loading: false,
         networkStatus: 7,
-        error: null
+        error: null,
+        times: 0
       }
     };
   },
@@ -3644,17 +3645,26 @@ var CApolloQuery = {
             data: isDataFilled(data) ? data : undefined,
             loading: loading,
             error: error,
-            networkStatus: networkStatus
+            networkStatus: networkStatus,
+            times: ++this.$_times
           };
+
+          this.$emit('result', this.result);
         },
         error: function error(_error) {
           this.result.loading = false;
           this.result.error = _error;
           console.log(this.$apollo.queries.query.observer.currentResult());
+          this.$emit('error', _error);
         }
       };
     }
   },
+
+  created: function created() {
+    this.$_times = 0;
+  },
+
 
   methods: {
     getDollarApollo: function getDollarApollo() {
@@ -3883,7 +3893,7 @@ function install(Vue, options) {
 ApolloProvider.install = install;
 
 // eslint-disable-next-line no-undef
-ApolloProvider.version = "3.0.0-beta.4";
+ApolloProvider.version = "3.0.0-beta.5";
 
 // Apollo provider
 var ApolloProvider$1 = ApolloProvider;
