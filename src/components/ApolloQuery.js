@@ -66,6 +66,7 @@ export default {
         loading: false,
         networkStatus: 7,
         error: null,
+        times: 0,
       },
     }
   },
@@ -131,15 +132,23 @@ export default {
             loading,
             error,
             networkStatus,
+            times: ++this.$_times,
           }
+
+          this.$emit('result', this.result)
         },
         error (error) {
           this.result.loading = false
           this.result.error = error
           console.log(this.$apollo.queries.query.observer.currentResult())
+          this.$emit('error', error)
         },
       }
     },
+  },
+
+  created () {
+    this.$_times = 0
   },
 
   methods: {
