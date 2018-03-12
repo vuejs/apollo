@@ -1,7 +1,7 @@
 {
   "name": "vue-apollo",
   "version": "3.0.0-beta.5",
-  "description": "Vue apollo integration",
+  "description": "Use Apollo and GraphQL with Vue.js",
   "main": "dist/vue-apollo.umd.js",
   "module": "dist/vue-apollo.esm.js",
   "unpkg": "dist/vue-apollo.min.js",
