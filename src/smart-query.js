@@ -30,7 +30,7 @@ export default class SmartQuery extends SmartApollo {
   }
 
   get loading () {
-    return this.vm.$data.$apolloData ? this.vm.$data.$apolloData.queries[this.key].loading : this._loading
+    return this.vm.$data.$apolloData && this.vm.$data.$apolloData.queries[this.key] ? this.vm.$data.$apolloData.queries[this.key].loading : this._loading
   }
 
   set loading (value) {
