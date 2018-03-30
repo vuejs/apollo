@@ -1,5 +1,4 @@
-import omit from 'lodash.omit'
-import { throttle, debounce } from './utils'
+import { throttle, debounce, omit } from './utils'
 
 export default class SmartApollo {
   type = null

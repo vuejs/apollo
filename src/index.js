@@ -1,9 +1,8 @@
-import omit from 'lodash.omit'
 import { DollarApollo } from './dollar-apollo'
 import { ApolloProvider as apolloProvider } from './apollo-provider'
 import CApolloQuery from './components/ApolloQuery'
 import CApolloSubscribeToMore from './components/ApolloSubscribeToMore'
-import { Globals } from './utils'
+import { Globals, omit } from './utils'
 
 const keywords = [
   '$subscribe',

@@ -36,9 +36,7 @@
     "apollo-client": "^2.0.0"
   },
   "dependencies": {
-    "lodash.debounce": "^4.0.8",
-    "lodash.omit": "^4.5.0",
-    "lodash.throttle": "^4.1.1"
+    "throttle-debounce": "^1.0.1"
   },
   "devDependencies": {
     "@types/graphql": "^0.12.3",
