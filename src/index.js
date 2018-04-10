@@ -39,6 +39,9 @@ const launch = function launch () {
     // watchQuery
     for (let key in apollo) {
       if (key.charAt(0) !== '$') {
+        if(apollo.$query) {
+          apollo[key] =  Object.assign({}, apollo.$query, apollo[key])
+        }
         this.$apollo.addSmartQuery(key, apollo[key])
       }
     }
