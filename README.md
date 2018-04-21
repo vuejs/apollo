@@ -470,7 +470,7 @@ apollo: {
       return data.ping
     },
     // Optional result hook
-    result({ data, loader, networkStatus }) {
+    result({ data, loading, networkStatus }) {
       console.log("We got some result!")
     },
     // Error handling
