@@ -213,7 +213,7 @@ You can use the apollo `watchQuery` options in the object, like:
  - `pollInterval`
  - ...
 
-See the [apollo doc](https://www.apollographql.com/docs/react/reference/index.html#ApolloClient\.watchQuery) for more details.
+See the [apollo doc](https://www.apollographql.com/docs/react/api/apollo-client.html#ApolloClient.watchQuery) for more details.
 
 For example, you could add the `fetchPolicy` apollo option like this:
 
