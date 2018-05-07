@@ -40,11 +40,13 @@ const launch = function launch () {
     // watchQuery
     for (let key in apollo) {
       if (key.charAt(0) !== '$') {
-        Object.defineProperty(this, key, {
-          get: () => this.$apolloData.data[key],
-          enumerable: true,
-          configurable: true,
-        })
+        if (!this.hasOwnProperty(key) && !this.$props.hasOwnProperty(key) && !this.$data.hasOwnProperty(key)) {
+          Object.defineProperty(this, key, {
+            get: () => this.$data.$apolloData.data[key],
+            enumerable: true,
+            configurable: true,
+          })
+        }
         this.$apollo.addSmartQuery(key, apollo[key])
       }
     }
