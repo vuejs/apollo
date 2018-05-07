@@ -4016,13 +4016,13 @@ function install(Vue, options) {
     },
 
     data: function data() {
-      return this.$options.apollo ? {
+      return {
         '$apolloData': {
           queries: {},
           loading: 0,
           data: {}
         }
-      } : {};
+      };
     }
   } : {}, {
 
@@ -4050,7 +4050,7 @@ function install(Vue, options) {
 ApolloProvider.install = install;
 
 // eslint-disable-next-line no-undef
-ApolloProvider.version = "3.0.0-beta.7";
+ApolloProvider.version = "3.0.0-beta.8";
 
 // Apollo provider
 var ApolloProvider$1 = ApolloProvider;
