@@ -103,12 +103,14 @@ export default class SmartQuery extends SmartApollo {
 
     if (typeof data === 'undefined') {
       // No result
-    } else if (typeof this.options.update === 'function') {
-      this.vm[this.key] = this.options.update.call(this.vm, data)
-    } else if (data[this.key] === undefined && !this.options.manual) {
-      console.error(`Missing ${this.key} attribute on result`, data)
     } else if (!this.options.manual) {
-      this.vm[this.key] = data[this.key]
+      if (typeof this.options.update === 'function') {
+        this.vm.$set(this.vm.$apolloData.data, this.key, this.options.update.call(this.vm, data))
+      } else if (data[this.key] === undefined) {
+        console.error(`Missing ${this.key} attribute on result`, data)
+      } else {
+        this.vm.$set(this.vm.$apolloData.data, this.key, data[this.key])
+      }
     } else if (!hasResultCallback) {
       console.error(`${this.key} query must have a 'result' hook in manual mode`)
     }

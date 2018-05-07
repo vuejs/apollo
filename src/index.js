@@ -3,6 +3,7 @@ import { DollarApollo } from './dollar-apollo'
 import { ApolloProvider as apolloProvider } from './apollo-provider'
 import CApolloQuery from './components/ApolloQuery'
 import CApolloSubscribeToMore from './components/ApolloSubscribeToMore'
+import CApolloMutation from './components/ApolloMutation'
 import { Globals } from './utils'
 
 const keywords = [
@@ -39,6 +40,11 @@ const launch = function launch () {
     // watchQuery
     for (let key in apollo) {
       if (key.charAt(0) !== '$') {
+        Object.defineProperty(this, key, {
+          get: () => this.$apolloData.data[key],
+          enumerable: true,
+          configurable: true,
+        })
         this.$apollo.addSmartQuery(key, apollo[key])
       }
     }
@@ -124,6 +130,7 @@ export function install (Vue, options) {
           '$apolloData': {
             queries: {},
             loading: 0,
+            data: {},
           },
         } : {}
       },
@@ -145,6 +152,8 @@ export function install (Vue, options) {
     Vue.component('ApolloQuery', CApolloQuery)
     Vue.component('apollo-subscribe-to-more', CApolloSubscribeToMore)
     Vue.component('ApolloSubscribeToMore', CApolloSubscribeToMore)
+    Vue.component('apollo-mutation', CApolloMutation)
+    Vue.component('ApolloMutation', CApolloMutation)
   }
 }
 
@@ -160,6 +169,7 @@ export { willPrefetch } from './apollo-provider'
 // Components
 export const ApolloQuery = CApolloQuery
 export const ApolloSubscribeToMore = CApolloSubscribeToMore
+export const ApolloMutation = CApolloMutation
 
 // Auto-install
 let GlobalVue = null
