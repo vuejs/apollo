@@ -4,7 +4,6 @@ import { VueApolloComponentOption } from './options'
 
 declare module "vue/types/options" {
   interface ComponentOptions<V extends Vue> {
-    apolloProvider?: VueApollo;
     apollo?: VueApolloComponentOption<V>;
   }
 }
