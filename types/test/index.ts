@@ -16,4 +16,5 @@ const apolloProvider = new VueApollo({ defaultClient: apolloClient })
 
 Vue.use(VueApollo)
 
-new Vue({ el: '#app', apolloProvider, render: h => h(App), })
+/* eslint no-new: 0 */
+new Vue({ el: '#app', provide: apolloProvider.provide(), render: h => h(App) })

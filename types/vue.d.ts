@@ -1,5 +1,6 @@
 import Vue from "vue";
-import { VueApollo, VueApolloComponentOption, ApolloProperty } from './vue-apollo';
+import { VueApollo, ApolloProperty } from './vue-apollo';
+import { VueApolloComponentOption } from './options'
 
 declare module "vue/types/options" {
   interface ComponentOptions<V extends Vue> {
