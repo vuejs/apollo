@@ -126,13 +126,13 @@ export function install (Vue, options) {
       },
 
       data () {
-        return this.$options.apollo ? {
+        return {
           '$apolloData': {
             queries: {},
             loading: 0,
             data: {},
           },
-        } : {}
+        }
       },
     } : {},
 
