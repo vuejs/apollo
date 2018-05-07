@@ -2867,11 +2867,11 @@ var SmartQuery = function (_SmartApollo) {
         // No result
       } else if (!this.options.manual) {
         if (typeof this.options.update === 'function') {
-          this.vm.$set(this.vm.$apolloData.data, this.key, this.options.update.call(this.vm, data));
+          this.vm.$set(this.vm.$data.$apolloData.data, this.key, this.options.update.call(this.vm, data));
         } else if (data[this.key] === undefined) {
           console.error('Missing ' + this.key + ' attribute on result', data);
         } else {
-          this.vm.$set(this.vm.$apolloData.data, this.key, data[this.key]);
+          this.vm.$set(this.vm.$data.$apolloData.data, this.key, data[this.key]);
         }
       } else if (!hasResultCallback) {
         console.error(this.key + ' query must have a \'result\' hook in manual mode');
@@ -3927,13 +3927,15 @@ var launch = function launch() {
 
     var _loop = function _loop(key) {
       if (key.charAt(0) !== '$') {
-        Object.defineProperty(_this, key, {
-          get: function get$$1() {
-            return _this.$apolloData.data[key];
-          },
-          enumerable: true,
-          configurable: true
-        });
+        if (!_this.hasOwnProperty(key) && !_this.$props.hasOwnProperty(key) && !_this.$data.hasOwnProperty(key)) {
+          Object.defineProperty(_this, key, {
+            get: function get$$1() {
+              return _this.$data.$apolloData.data[key];
+            },
+            enumerable: true,
+            configurable: true
+          });
+        }
         _this.$apollo.addSmartQuery(key, apollo[key]);
       }
     };
@@ -4050,7 +4052,7 @@ function install(Vue, options) {
 ApolloProvider.install = install;
 
 // eslint-disable-next-line no-undef
-ApolloProvider.version = "3.0.0-beta.8";
+ApolloProvider.version = "3.0.0-beta.9";
 
 // Apollo provider
 var ApolloProvider$1 = ApolloProvider;
