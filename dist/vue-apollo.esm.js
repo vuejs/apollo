@@ -2348,7 +2348,34 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 
 
+var asyncToGenerator = function (fn) {
+  return function () {
+    var gen = fn.apply(this, arguments);
+    return new Promise(function (resolve, reject) {
+      function step(key, arg) {
+        try {
+          var info = gen[key](arg);
+          var value = info.value;
+        } catch (error) {
+          reject(error);
+          return;
+        }
 
+        if (info.done) {
+          resolve(value);
+        } else {
+          return Promise.resolve(value).then(function (value) {
+            step("next", value);
+          }, function (err) {
+            step("throw", err);
+          });
+        }
+      }
+
+      return step("next");
+    });
+  };
+};
 
 var classCallCheck = function (instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -2832,12 +2859,14 @@ var SmartQuery = function (_SmartApollo) {
 
       if (typeof data === 'undefined') {
         // No result
-      } else if (typeof this.options.update === 'function') {
-        this.vm[this.key] = this.options.update.call(this.vm, data);
-      } else if (data[this.key] === undefined && !this.options.manual) {
-        console.error('Missing ' + this.key + ' attribute on result', data);
       } else if (!this.options.manual) {
-        this.vm[this.key] = data[this.key];
+        if (typeof this.options.update === 'function') {
+          this.vm.$set(this.vm.$apolloData.data, this.key, this.options.update.call(this.vm, data));
+        } else if (data[this.key] === undefined) {
+          console.error('Missing ' + this.key + ' attribute on result', data);
+        } else {
+          this.vm.$set(this.vm.$apolloData.data, this.key, data[this.key]);
+        }
       } else if (!hasResultCallback) {
         console.error(this.key + ' query must have a \'result\' hook in manual mode');
       }
@@ -3752,9 +3781,113 @@ var CApolloSubscribeToMore = {
   }
 };
 
+var CApolloMutation = {
+  props: {
+    mutation: {
+      type: Object,
+      required: true
+    },
+
+    variables: {
+      type: Object,
+      default: undefined
+    },
+
+    optimisticResponse: {
+      type: Object,
+      default: undefined
+    },
+
+    update: {
+      type: Function,
+      default: undefined
+    },
+
+    refetchQueries: {
+      type: Function,
+      default: undefined
+    },
+
+    tag: {
+      type: String,
+      default: 'div'
+    }
+  },
+
+  data: function data() {
+    return {
+      loading: false,
+      error: null
+    };
+  },
+
+
+  methods: {
+    mutate: function mutate(options) {
+      var _this = this;
+
+      return asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _this.loading = true;
+                _this.error = null;
+                _context.prev = 2;
+                _context.next = 5;
+                return _this.$apollo.mutate(_extends({
+                  mutation: _this.mutation,
+                  variables: _this.variables,
+                  optimisticResponse: _this.optimisticResponse,
+                  update: _this.update,
+                  refetchQueries: _this.refetchQueries
+                }, options));
+
+              case 5:
+                _this.$emit('done');
+                _context.next = 12;
+                break;
+
+              case 8:
+                _context.prev = 8;
+                _context.t0 = _context['catch'](2);
+
+                _this.error = _context.t0;
+                _this.$emit('error', _context.t0);
+
+              case 12:
+                _this.loading = false;
+
+              case 13:
+              case 'end':
+                return _context.stop();
+            }
+          }
+        }, _callee, _this, [[2, 8]]);
+      }))();
+    }
+  },
+
+  render: function render(h) {
+    var result = this.$scopedSlots.default({
+      mutate: this.mutate,
+      loading: this.loading,
+      error: this.error
+    });
+    if (Array.isArray(result)) {
+      result = result.concat(this.$slots.default);
+    } else {
+      result = [result].concat(this.$slots.default);
+    }
+    return h(this.tag, result);
+  }
+};
+
 var keywords = ['$subscribe'];
 
 var launch = function launch() {
+  var _this = this;
+
   var apolloProvider = this.$apolloProvider;
 
   if (this._apolloLaunched || !apolloProvider) return;
@@ -3782,10 +3915,22 @@ var launch = function launch() {
     defineReactiveSetter(this.$apollo, 'watchLoading', apollo.$watchLoading);
 
     // watchQuery
-    for (var key in apollo) {
+
+    var _loop = function _loop(key) {
       if (key.charAt(0) !== '$') {
-        this.$apollo.addSmartQuery(key, apollo[key]);
+        Object.defineProperty(_this, key, {
+          get: function get$$1() {
+            return _this.$apolloData.data[key];
+          },
+          enumerable: true,
+          configurable: true
+        });
+        _this.$apollo.addSmartQuery(key, apollo[key]);
       }
+    };
+
+    for (var key in apollo) {
+      _loop(key);
     }
 
     if (apollo.subscribe) {
@@ -3793,8 +3938,8 @@ var launch = function launch() {
     }
 
     if (apollo.$subscribe) {
-      for (var _key in apollo.$subscribe) {
-        this.$apollo.addSmartSubscription(_key, apollo.$subscribe[_key]);
+      for (var key in apollo.$subscribe) {
+        this.$apollo.addSmartSubscription(key, apollo.$subscribe[key]);
       }
     }
   }
@@ -3865,7 +4010,8 @@ function install(Vue, options) {
       return this.$options.apollo ? {
         '$apolloData': {
           queries: {},
-          loading: 0
+          loading: 0,
+          data: {}
         }
       } : {};
     }
@@ -3887,19 +4033,22 @@ function install(Vue, options) {
     Vue.component('ApolloQuery', CApolloQuery);
     Vue.component('apollo-subscribe-to-more', CApolloSubscribeToMore);
     Vue.component('ApolloSubscribeToMore', CApolloSubscribeToMore);
+    Vue.component('apollo-mutation', CApolloMutation);
+    Vue.component('ApolloMutation', CApolloMutation);
   }
 }
 
 ApolloProvider.install = install;
 
 // eslint-disable-next-line no-undef
-ApolloProvider.version = "3.0.0-beta.5";
+ApolloProvider.version = "3.0.0-beta.6";
 
 // Apollo provider
 var ApolloProvider$1 = ApolloProvider;
 // Components
 var ApolloQuery = CApolloQuery;
 var ApolloSubscribeToMore = CApolloSubscribeToMore;
+var ApolloMutation = CApolloMutation;
 
 // Auto-install
 var GlobalVue = null;
@@ -3913,4 +4062,4 @@ if (GlobalVue) {
 }
 
 export default ApolloProvider;
-export { install, ApolloProvider$1 as ApolloProvider, ApolloQuery, ApolloSubscribeToMore, willPrefetch };
+export { install, ApolloProvider$1 as ApolloProvider, ApolloQuery, ApolloSubscribeToMore, ApolloMutation, willPrefetch };
