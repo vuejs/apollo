@@ -43,7 +43,7 @@ export default {
       this.loading = true
       this.error = null
       try {
-        await this.$apollo.mutate({
+        const result = await this.$apollo.mutate({
           mutation: this.mutation,
           variables: this.variables,
           optimisticResponse: this.optimisticResponse,
@@ -51,7 +51,7 @@ export default {
           refetchQueries: this.refetchQueries,
           ...options,
         })
-        this.$emit('done')
+        this.$emit('done', result)
       } catch (e) {
         this.error = e
         this.$emit('error', e)
