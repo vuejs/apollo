@@ -3827,6 +3827,7 @@ var CApolloMutation = {
       var _this = this;
 
       return asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+        var result;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -3844,26 +3845,28 @@ var CApolloMutation = {
                 }, options));
 
               case 5:
-                _this.$emit('done');
-                _context.next = 12;
+                result = _context.sent;
+
+                _this.$emit('done', result);
+                _context.next = 13;
                 break;
 
-              case 8:
-                _context.prev = 8;
+              case 9:
+                _context.prev = 9;
                 _context.t0 = _context['catch'](2);
 
                 _this.error = _context.t0;
                 _this.$emit('error', _context.t0);
 
-              case 12:
+              case 13:
                 _this.loading = false;
 
-              case 13:
+              case 14:
               case 'end':
                 return _context.stop();
             }
           }
-        }, _callee, _this, [[2, 8]]);
+        }, _callee, _this, [[2, 9]]);
       }))();
     }
   },
@@ -4041,7 +4044,7 @@ function install(Vue, options) {
 ApolloProvider.install = install;
 
 // eslint-disable-next-line no-undef
-ApolloProvider.version = "3.0.0-beta.6";
+ApolloProvider.version = "3.0.0-beta.7";
 
 // Apollo provider
 var ApolloProvider$1 = ApolloProvider;
