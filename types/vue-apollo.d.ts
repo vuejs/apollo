@@ -4,7 +4,7 @@ import { ApolloClient } from 'apollo-client';
 import { SubscriptionOptions, ObservableQuery } from 'apollo-client'
 import { DataProxy } from 'apollo-cache';
 import { subscribe } from 'graphql/subscription/subscribe';
-import { ApolloProvider } from './apollo-provider'
+import { ApolloProvider, VueApolloComponent } from './apollo-provider'
 import { VueApolloQueryOptions, VueApolloMutationOptions, VueApolloSubscriptionOptions, ApolloVueThisType, VueApolloOptions } from './options'
 
 export class VueApollo extends ApolloProvider implements PluginObject<{}>{
@@ -23,3 +23,5 @@ export interface ApolloProperty<V> {
   mutate: Mutate<V>;
   subscribe: Subscribe;
 }
+
+export function willPrefetch (component: VueApolloComponent, contextCallback?: boolean): VueApolloComponent
