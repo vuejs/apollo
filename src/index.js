@@ -40,7 +40,12 @@ const launch = function launch () {
     // watchQuery
     for (let key in apollo) {
       if (key.charAt(0) !== '$') {
-        if (!this.hasOwnProperty(key) && !this.$props.hasOwnProperty(key) && !this.$data.hasOwnProperty(key)) {
+        let propHasKeyProperty = false
+        if (typeof this.$props !== 'undefined') {
+          propHasKeyProperty = this.$props.hasOwnProperty(key)
+        }
+
+        if (!this.hasOwnProperty(key) && !propHasKeyProperty && !this.$data.hasOwnProperty(key)) {
           Object.defineProperty(this, key, {
             get: () => this.$data.$apolloData.data[key],
             enumerable: true,

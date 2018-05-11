@@ -3927,7 +3927,12 @@ var launch = function launch() {
 
     var _loop = function _loop(key) {
       if (key.charAt(0) !== '$') {
-        if (!_this.hasOwnProperty(key) && !_this.$props.hasOwnProperty(key) && !_this.$data.hasOwnProperty(key)) {
+        var propHasKeyProperty = false;
+        if (typeof _this.$props !== 'undefined') {
+          propHasKeyProperty = _this.$props.hasOwnProperty(key);
+        }
+
+        if (!_this.hasOwnProperty(key) && !propHasKeyProperty && !_this.$data.hasOwnProperty(key)) {
           Object.defineProperty(_this, key, {
             get: function get$$1() {
               return _this.$data.$apolloData.data[key];
