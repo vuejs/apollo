@@ -1199,7 +1199,9 @@ tags: {
 }
 ```
 
-## Query components
+## Components
+
+### Query components
 
 (WIP) You can use the `ApolloQuery` (or `apollo-query`) component to make watched Apollo queries directly in your template:
 
@@ -1237,12 +1239,18 @@ Props:
 - `tag`: String HTML tag name (default: `div`)
 
 Scoped slot props:
+
 - `result`: Apollo Query result
   - `result.data`: Data returned by the query
   - `result.loading`: Boolean indicating that a request is in flight
   - `result.error`: Eventual error for the current result
   - `result.networkStatus`: See [apollo networkStatus](https://www.apollographql.com/docs/react/basics/queries.html#graphql-query-data-networkStatus)
 - `query`: Smart Query associated with the component
+
+Events:
+
+- `result(resultObject)`
+- `error(errorObject)`
 
 (WIP) You can subscribe to more data with the `ApolloSubscribeToMore` (or `apollo-subscribe-to-more`) component:
 
@@ -1283,6 +1291,46 @@ export default {
 ```
 
 *You can put as many of those as you want inside a `<ApolloQuery>` component.*
+
+### Mutation component
+
+(WIP) You can use the `ApolloMutation` (or `apollo-mutation`) component to call Apollo mutations directly in your template:
+
+```html
+<ApolloMutation
+  :mutation="require('@/graphql/userLogin.gql')"
+  :variables="{
+    email,
+    password,
+  }"
+  @done="onDone"
+>
+  <template slot-scope="{ mutate, loading, error }">
+    <button :disabled="loading" @click="mutate()">Click me</button>
+    <p v-if="error">An error occured: {{ error }}</p>
+  </template>
+</ApolloMutation>
+```
+
+Props:
+
+- `mutation`
+- `variables`
+- `optimisticResponse`
+- `update`
+- `refetchQueries`
+- `tag`
+
+Scoped slot props:
+
+- `mutate`
+- `loading`
+- `error`
+
+Events:
+
+- `done(resultObject)`
+- `error(errorObject)`
 
 ## Server-Side Rendering
 
