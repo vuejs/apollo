@@ -1247,6 +1247,7 @@ Scoped slot props:
   - `result.loading`: Boolean indicating that a request is in flight
   - `result.error`: Eventual error for the current result
   - `result.networkStatus`: See [apollo networkStatus](https://www.apollographql.com/docs/react/basics/queries.html#graphql-query-data-networkStatus)
+  - `result.times`: number of times the result was updated
 - `query`: Smart Query associated with the component
 
 Events:
