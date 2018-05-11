@@ -48,7 +48,9 @@ Integrates [apollo](https://www.apollographql.com/) in your [Vue](http://vuejs.o
 - [Special options](#special-options)
 - [Skip all](#skip-all)
 - [Multiple clients](#multiple-clients)
-- [Query Components](#query-components)
+- [Components](#components)
+  - [Query Components](#query-components)
+  - [Mutation Components](#mutation-components)
 - [Server-Side Rendering](#server-side-rendering)
 - [Migration](#migration)
 - [API Reference](#api-reference)
@@ -1314,18 +1316,18 @@ export default {
 
 Props:
 
-- `mutation`
-- `variables`
-- `optimisticResponse`
-- `update`
-- `refetchQueries`
-- `tag`
+- `mutation`: GraphQL query (transformed by `graphql-tag`)
+- `variables`: Object of GraphQL variables
+- `optimisticResponse`: See [optimistic UI](https://www.apollographql.com/docs/react/features/optimistic-ui.html)
+- `update`: See [updating cache after mutation](https://www.apollographql.com/docs/react/api/react-apollo.html#graphql-mutation-options-update)
+- `refetchQueries`: See [refetching queries after mutation](https://www.apollographql.com/docs/react/api/react-apollo.html#graphql-mutation-options-refetchQueries)
+- `tag`: String HTML tag name (default: `div`)
 
 Scoped slot props:
 
-- `mutate`
-- `loading`
-- `error`
+- `mutate(options = undefined)`: Function to call the mutation. You can override the mutation options (for example: `mutate({ variables: { foo: 'bar } })`)
+- `loading`: Boolean indicating that the request is in flight
+- `error`: Eventual error for the last mutation call
 
 Events:
 
