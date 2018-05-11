@@ -42,7 +42,7 @@ const launch = function launch () {
       if (key.charAt(0) !== '$') {
         let propHasKeyProperty = false
         if (typeof this.$props !== 'undefined') {
-          propHasKeyProperty = this.props.hasOwnProperty(key)
+          propHasKeyProperty = this.$props.hasOwnProperty(key)
         }
 
         if (!this.hasOwnProperty(key) && !propHasKeyProperty && !this.$data.hasOwnProperty(key)) {

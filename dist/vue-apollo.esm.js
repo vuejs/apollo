@@ -3923,7 +3923,7 @@ var launch = function launch() {
       if (key.charAt(0) !== '$') {
         var propHasKeyProperty = false;
         if (typeof _this.$props !== 'undefined') {
-          propHasKeyProperty = _this.props.hasOwnProperty(key);
+          propHasKeyProperty = _this.$props.hasOwnProperty(key);
         }
 
         if (!_this.hasOwnProperty(key) && !propHasKeyProperty && !_this.$data.hasOwnProperty(key)) {
