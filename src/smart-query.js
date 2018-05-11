@@ -23,6 +23,21 @@ export default class SmartQuery extends SmartApollo {
     }
 
     super(vm, key, options, autostart)
+
+    this.hasDataField = this.vm.$data.hasOwnProperty(key)
+    if (this.hasDataField) {
+      Object.defineProperty(this.vm.$data.$apolloData.data, key, {
+        get: () => this.vm.$data[key],
+        enumerable: true,
+        configurable: true,
+      })
+    } else {
+      Object.defineProperty(this.vm.$data, key, {
+        get: () => this.vm.$data.$apolloData.data[key],
+        enumerable: true,
+        configurable: true,
+      })
+    }
   }
 
   get client () {
@@ -105,11 +120,11 @@ export default class SmartQuery extends SmartApollo {
       // No result
     } else if (!this.options.manual) {
       if (typeof this.options.update === 'function') {
-        this.vm.$set(this.vm.$data.$apolloData.data, this.key, this.options.update.call(this.vm, data))
+        this.setData(this.options.update.call(this.vm, data))
       } else if (data[this.key] === undefined) {
         console.error(`Missing ${this.key} attribute on result`, data)
       } else {
-        this.vm.$set(this.vm.$data.$apolloData.data, this.key, data[this.key])
+        this.setData(data[this.key])
       }
     } else if (!hasResultCallback) {
       console.error(`${this.key} query must have a 'result' hook in manual mode`)
@@ -118,6 +133,10 @@ export default class SmartQuery extends SmartApollo {
     if (hasResultCallback) {
       this.options.result.call(this.vm, result)
     }
+  }
+
+  setData (value) {
+    this.vm.$set(this.hasDataField ? this.vm.$data : this.vm.$data.$apolloData.data, this.key, value)
   }
 
   catchError (error) {

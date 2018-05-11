@@ -10,6 +10,10 @@ const keywords = [
   '$subscribe',
 ]
 
+function hasProperty (holder, key) {
+  return typeof holder !== 'undefined' && holder.hasOwnProperty(key)
+}
+
 const launch = function launch () {
   const apolloProvider = this.$apolloProvider
 
@@ -37,15 +41,17 @@ const launch = function launch () {
     defineReactiveSetter(this.$apollo, 'error', apollo.$error)
     defineReactiveSetter(this.$apollo, 'watchLoading', apollo.$watchLoading)
 
+    // Apollo Data
+    Object.defineProperty(this, '$apolloData', {
+      get: () => this.$data.$apolloData,
+      enumerable: true,
+      configurable: true,
+    })
+
     // watchQuery
     for (let key in apollo) {
       if (key.charAt(0) !== '$') {
-        let propHasKeyProperty = false
-        if (typeof this.$props !== 'undefined') {
-          propHasKeyProperty = this.$props.hasOwnProperty(key)
-        }
-
-        if (!this.hasOwnProperty(key) && !propHasKeyProperty && !this.$data.hasOwnProperty(key)) {
+        if (!hasProperty(this, key) && !hasProperty(this.$props, key) && !hasProperty(this.$data, key)) {
           Object.defineProperty(this, key, {
             get: () => this.$data.$apolloData.data[key],
             enumerable: true,
