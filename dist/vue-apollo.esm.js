@@ -2787,6 +2787,26 @@ var SmartQuery = function (_SmartApollo) {
     _this.type = 'query';
     _this.vueApolloSpecialKeys = VUE_APOLLO_QUERY_KEYWORDS;
     _this._loading = false;
+
+
+    _this.hasDataField = _this.vm.$data.hasOwnProperty(key);
+    if (_this.hasDataField) {
+      Object.defineProperty(_this.vm.$data.$apolloData.data, key, {
+        get: function get$$1() {
+          return _this.vm.$data[key];
+        },
+        enumerable: true,
+        configurable: true
+      });
+    } else {
+      Object.defineProperty(_this.vm.$data, key, {
+        get: function get$$1() {
+          return _this.vm.$data.$apolloData.data[key];
+        },
+        enumerable: true,
+        configurable: true
+      });
+    }
     return _this;
   }
 
@@ -2861,11 +2881,11 @@ var SmartQuery = function (_SmartApollo) {
         // No result
       } else if (!this.options.manual) {
         if (typeof this.options.update === 'function') {
-          this.vm.$set(this.vm.$data.$apolloData.data, this.key, this.options.update.call(this.vm, data));
+          this.setData(this.options.update.call(this.vm, data));
         } else if (data[this.key] === undefined) {
           console.error('Missing ' + this.key + ' attribute on result', data);
         } else {
-          this.vm.$set(this.vm.$data.$apolloData.data, this.key, data[this.key]);
+          this.setData(data[this.key]);
         }
       } else if (!hasResultCallback) {
         console.error(this.key + ' query must have a \'result\' hook in manual mode');
@@ -2874,6 +2894,11 @@ var SmartQuery = function (_SmartApollo) {
       if (hasResultCallback) {
         this.options.result.call(this.vm, result);
       }
+    }
+  }, {
+    key: 'setData',
+    value: function setData(value) {
+      this.vm.$set(this.hasDataField ? this.vm.$data : this.vm.$data.$apolloData.data, this.key, value);
     }
   }, {
     key: 'catchError',
@@ -3276,7 +3301,12 @@ var DollarApollo = function () {
   }, {
     key: 'loading',
     get: function get$$1() {
-      return this.vm.$data.$apolloData && this.vm.$data.$apolloData.loading !== 0;
+      return this.vm.$data.$apolloData.loading !== 0;
+    }
+  }, {
+    key: 'data',
+    get: function get$$1() {
+      return this.vm.$data.$apolloData.data;
     }
   }, {
     key: 'skipAllQueries',
@@ -3888,6 +3918,10 @@ var CApolloMutation = {
 
 var keywords = ['$subscribe'];
 
+function hasProperty(holder, key) {
+  return typeof holder !== 'undefined' && holder.hasOwnProperty(key);
+}
+
 var launch = function launch() {
   var _this = this;
 
@@ -3917,16 +3951,20 @@ var launch = function launch() {
     defineReactiveSetter(this.$apollo, 'error', apollo.$error);
     defineReactiveSetter(this.$apollo, 'watchLoading', apollo.$watchLoading);
 
+    // Apollo Data
+    Object.defineProperty(this, '$apolloData', {
+      get: function get$$1() {
+        return _this.$data.$apolloData;
+      },
+      enumerable: true,
+      configurable: true
+    });
+
     // watchQuery
 
     var _loop = function _loop(key) {
       if (key.charAt(0) !== '$') {
-        var propHasKeyProperty = false;
-        if (typeof _this.$props !== 'undefined') {
-          propHasKeyProperty = _this.$props.hasOwnProperty(key);
-        }
-
-        if (!_this.hasOwnProperty(key) && !propHasKeyProperty && !_this.$data.hasOwnProperty(key)) {
+        if (!hasProperty(_this, key) && !hasProperty(_this.$props, key) && !hasProperty(_this.$data, key)) {
           Object.defineProperty(_this, key, {
             get: function get$$1() {
               return _this.$data.$apolloData.data[key];
@@ -4051,7 +4089,7 @@ function install(Vue, options) {
 ApolloProvider.install = install;
 
 // eslint-disable-next-line no-undef
-ApolloProvider.version = "3.0.0-beta.9";
+ApolloProvider.version = "3.0.0-beta.10";
 
 // Apollo provider
 var ApolloProvider$1 = ApolloProvider;
