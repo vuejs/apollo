@@ -52,6 +52,7 @@ Integrates [apollo](https://www.apollographql.com/) in your [Vue](http://vuejs.o
   - [Query Components](#query-components)
   - [Mutation Components](#mutation-components)
 - [Server-Side Rendering](#server-side-rendering)
+- [Local state](#local-state)
 - [Migration](#migration)
 - [API Reference](#api-reference)
 
@@ -1655,6 +1656,40 @@ router.onReady(() => {
   // Prefetch, render HTML (see above)
 })
 ```
+
+## Local state
+
+If you need to manage local data, you can do so with [apollo-link-state](https://github.com/apollographql/apollo-link-state) and the `@client` directive:
+
+```js
+export default {
+  apollo: {
+    hello: gql`
+      query {
+        hello @client {
+          msg
+        }
+      }
+    `
+  },
+  mounted() {
+    // mutate the hello message
+    this.$apollo
+      .mutate({
+        mutation: gql`
+          mutation($msg: String!) {
+            updateHello(message: $msg) @client
+          }
+        `,
+        variables: {
+          msg: 'hello from link-state!'
+        }
+      })
+  }
+}
+```
+
+[Example project](https://codesandbox.io/s/zqqj82396p) (thx @chriswingler)
 
 ---
 
