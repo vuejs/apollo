@@ -1238,7 +1238,7 @@ Props:
 - `notifyOnNetworkStatusChange`: See [apollo notifyOnNetworkStatusChange](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-notifyOnNetworkStatusChange)
 - `context`: See [apollo context](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-context)
 - `skip`: Boolean disabling query fetching
-- `clienId`: Used to resolve the Apollo Client used (defined in ApolloProvider)
+- `clientId`: Used to resolve the Apollo Client used (defined in ApolloProvider)
 - `tag`: String HTML tag name (default: `div`)
 
 Scoped slot props:
