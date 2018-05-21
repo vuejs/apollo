@@ -87,7 +87,7 @@ export default class SmartQuery extends SmartApollo {
       })
     }
 
-    if (this.options.fetchPolicy !== "no-cache") {
+    if (this.options.fetchPolicy !== 'no-cache') {
       const currentResult = this.maySetLoading()
 
       if (!currentResult.loading) {
