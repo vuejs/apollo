@@ -1247,6 +1247,7 @@ Props:
 - `context`: See [apollo context](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-context)
 - `skip`: Boolean disabling query fetching
 - `clientId`: Used to resolve the Apollo Client used (defined in ApolloProvider)
+- `deep`: Boolean to use deep Vue watchers
 - `tag`: String HTML tag name (default: `div`)
 
 Scoped slot props:

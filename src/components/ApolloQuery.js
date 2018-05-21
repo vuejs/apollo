@@ -53,6 +53,11 @@ export default {
       default: undefined,
     },
 
+    deep: {
+      type: Boolean,
+      default: undefined,
+    },
+
     tag: {
       type: String,
       default: 'div',
@@ -105,6 +110,7 @@ export default {
         notifyOnNetworkStatusChange: this.notifyOnNetworkStatusChange,
         context () { return this.context },
         skip () { return this.skip },
+        deep: this.deep,
         manual: true,
         result (result) {
           const { errors, loading, networkStatus } = result
