@@ -24,19 +24,21 @@ export default class SmartQuery extends SmartApollo {
 
     super(vm, key, options, autostart)
 
-    this.hasDataField = this.vm.$data.hasOwnProperty(key)
-    if (this.hasDataField) {
-      Object.defineProperty(this.vm.$data.$apolloData.data, key, {
-        get: () => this.vm.$data[key],
-        enumerable: true,
-        configurable: true,
-      })
-    } else {
-      Object.defineProperty(this.vm.$data, key, {
-        get: () => this.vm.$data.$apolloData.data[key],
-        enumerable: true,
-        configurable: true,
-      })
+    if (!options.manual) {
+      this.hasDataField = this.vm.$data.hasOwnProperty(key)
+      if (this.hasDataField) {
+        Object.defineProperty(this.vm.$data.$apolloData.data, key, {
+          get: () => this.vm.$data[key],
+          enumerable: true,
+          configurable: true,
+        })
+      } else {
+        Object.defineProperty(this.vm.$data, key, {
+          get: () => this.vm.$data.$apolloData.data[key],
+          enumerable: true,
+          configurable: true,
+        })
+      }
     }
   }
 

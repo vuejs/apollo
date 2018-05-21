@@ -56,7 +56,7 @@ const launch = function launch () {
           options = Object.assign({}, apollo.$query, options)
         }
         // Property proxy
-        if (!hasProperty(this, key) && !hasProperty(this.$props, key) && !hasProperty(this.$data, key)) {
+        if (!options.manual && !hasProperty(this, key) && !hasProperty(this.$props, key) && !hasProperty(this.$data, key)) {
           Object.defineProperty(this, key, {
             get: () => this.$data.$apolloData.data[key],
             enumerable: true,
