@@ -19,6 +19,8 @@ export default class SmartApollo {
       this._watchers.push(this.vm.$watch(queryCb, query => {
         this.options.query = query
         this.refresh()
+      }, {
+        deep: this.options.deep,
       }))
     }
     // Query callback
@@ -28,6 +30,8 @@ export default class SmartApollo {
       this._watchers.push(this.vm.$watch(queryCb, document => {
         this.options.document = document
         this.refresh()
+      }, {
+        deep: this.options.deep,
       }))
     }
 
@@ -38,6 +42,8 @@ export default class SmartApollo {
       this._watchers.push(this.vm.$watch(cb, context => {
         this.options.context = context
         this.refresh()
+      }, {
+        deep: this.options.deep,
       }))
     }
 
@@ -54,6 +60,7 @@ export default class SmartApollo {
     if (typeof this.options.skip === 'function') {
       this._watchers.push(this.vm.$watch(this.options.skip.bind(this.vm), this.skipChanged.bind(this), {
         immediate: true,
+        deep: this.options.deep,
       }))
     } else if (!this.options.skip) {
       this.start()
@@ -96,6 +103,7 @@ export default class SmartApollo {
       cb = this.options.debounce ? debounce(cb, this.options.debounce) : cb
       this.unwatchVariables = this.vm.$watch(() => this.options.variables.call(this.vm), cb, {
         immediate: true,
+        deep: this.options.deep,
       })
     } else {
       this.executeApollo(this.options.variables)

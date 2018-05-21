@@ -32,13 +32,13 @@ const launch = function launch () {
       }
     }
 
-    defineReactiveSetter(this.$apollo, 'skipAll', apollo.$skipAll)
-    defineReactiveSetter(this.$apollo, 'skipAllQueries', apollo.$skipAllQueries)
-    defineReactiveSetter(this.$apollo, 'skipAllSubscriptions', apollo.$skipAllSubscriptions)
-    defineReactiveSetter(this.$apollo, 'client', apollo.$client)
-    defineReactiveSetter(this.$apollo, 'loadingKey', apollo.$loadingKey)
-    defineReactiveSetter(this.$apollo, 'error', apollo.$error)
-    defineReactiveSetter(this.$apollo, 'watchLoading', apollo.$watchLoading)
+    defineReactiveSetter(this.$apollo, 'skipAll', apollo.$skipAll, apollo.$deep)
+    defineReactiveSetter(this.$apollo, 'skipAllQueries', apollo.$skipAllQueries, apollo.$deep)
+    defineReactiveSetter(this.$apollo, 'skipAllSubscriptions', apollo.$skipAllSubscriptions, apollo.$deep)
+    defineReactiveSetter(this.$apollo, 'client', apollo.$client, apollo.$deep)
+    defineReactiveSetter(this.$apollo, 'loadingKey', apollo.$loadingKey, apollo.$deep)
+    defineReactiveSetter(this.$apollo, 'error', apollo.$error, apollo.$deep)
+    defineReactiveSetter(this.$apollo, 'watchLoading', apollo.$watchLoading, apollo.$deep)
 
     // Apollo Data
     Object.defineProperty(this, '$apolloData', {
@@ -51,9 +51,11 @@ const launch = function launch () {
     for (let key in apollo) {
       if (key.charAt(0) !== '$') {
         let options = apollo[key]
+        // Default options from component
         if (apollo.$query) {
           options = Object.assign({}, apollo.$query, options)
         }
+        // Property proxy
         if (!hasProperty(this, key) && !hasProperty(this.$props, key) && !hasProperty(this.$data, key)) {
           Object.defineProperty(this, key, {
             get: () => this.$data.$apolloData.data[key],

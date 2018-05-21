@@ -442,6 +442,7 @@ These are the available advanced options you can use:
 - `loadingKey` will update the component data property you pass as the value. You should initialize this property to `0` in the component `data()` hook. When the query is loading, this property will be incremented by 1; when it is no longer loading, it will be decremented by 1. That way, the property can represent a counter of currently loading queries.
 - `watchLoading(isLoading, countModifier)` is a hook called when the loading state of the query changes. The `countModifier` parameter is either equal to `1` when the query is loading, or `-1` when the query is no longer loading.
 - `manual` is a boolean to disable the automatic property update. If you use it, you then need to specify a `result` callback (see example below).
+- `deep` is a boolean to use `deep: true` on Vue watchers.
 
 
 ```javascript
@@ -460,6 +461,8 @@ apollo: {
           message: this.pingInput,
       }
     },
+    // Variables: deep object watch
+    deep: false,
     // We use a custom update callback because
     // the field names don't match
     // By default, the 'pingMessage' attribute
@@ -1106,9 +1109,9 @@ The special options begin with `$` in the `apollo` object.
 - `$skip` to disable all queries and subscriptions (see below)
 - `$skipAllQueries` to disable all queries (see below)
 - `$skipAllSubscriptions` to disable all subscriptions (see below)
-- `$client` to use a client by default (see below)
-- `$loadingKey` for a default loading key (see `loadingKey` advanced options for smart queries)
+- `$deep` to watch with `deep: true` on the properties above when a function is provided
 - `$error` to catch errors in a default handler (see `error` advanced options for smart queries)
+- `$query` to apply default options to all the queries in the component
 
 Example:
 
@@ -1121,7 +1124,9 @@ export default {
     }
   },
   apollo: {
-    $loadingKey: 'loading',
+    $query: {
+      loadingKey: 'loading',
+    },
     query1: { ... },
     query2: { ... },
   },
@@ -1135,10 +1140,9 @@ You can define in the apollo provider a default set of options to apply to the `
 const apolloProvider = new VueApollo({
   defaultClient: apolloClient,
   defaultOptions: {
-    // apollo options applied to all components that are using apollo
-    $loadingKey: 'loading',
     // apollo options applied to all queries in components
     $query: {
+      loadingKey: 'loading',
       fetchPolicy: 'cache-and-network',
     },
   },

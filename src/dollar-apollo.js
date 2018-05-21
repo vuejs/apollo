@@ -123,11 +123,12 @@ export class DollarApollo {
     }
   }
 
-  defineReactiveSetter (key, func) {
+  defineReactiveSetter (key, func, deep) {
     this._watchers.push(this.vm.$watch(func, value => {
       this[key] = value
     }, {
       immediate: true,
+      deep,
     }))
   }
 
