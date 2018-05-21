@@ -77,7 +77,11 @@ export class DollarApollo {
   }
 
   get loading () {
-    return this.vm.$data.$apolloData && this.vm.$data.$apolloData.loading !== 0
+    return this.vm.$data.$apolloData.loading !== 0
+  }
+
+  get data () {
+    return this.vm.$data.$apolloData.data
   }
 
   addSmartQuery (key, options) {

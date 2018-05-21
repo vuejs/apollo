@@ -23,6 +23,21 @@ export default class SmartQuery extends SmartApollo {
     }
 
     super(vm, key, options, autostart)
+
+    this.hasDataField = this.vm.$data.hasOwnProperty(key)
+    if (this.hasDataField) {
+      Object.defineProperty(this.vm.$data.$apolloData.data, key, {
+        get: () => this.vm.$data[key],
+        enumerable: true,
+        configurable: true,
+      })
+    } else {
+      Object.defineProperty(this.vm.$data, key, {
+        get: () => this.vm.$data.$apolloData.data[key],
+        enumerable: true,
+        configurable: true,
+      })
+    }
   }
 
   get client () {
@@ -30,13 +45,13 @@ export default class SmartQuery extends SmartApollo {
   }
 
   get loading () {
-    return this.vm.$data.$apolloData ? this.vm.$data.$apolloData.queries[this.key].loading : this._loading
+    return this.vm.$data.$apolloData && this.vm.$data.$apolloData.queries[this.key] ? this.vm.$data.$apolloData.queries[this.key].loading : this._loading
   }
 
   set loading (value) {
     if (this._loading !== value) {
       this._loading = value
-      if (this.vm.$data.$apolloData) {
+      if (this.vm.$data.$apolloData && this.vm.$data.$apolloData.queries[this.key]) {
         this.vm.$data.$apolloData.queries[this.key].loading = value
         this.vm.$data.$apolloData.loading += value ? 1 : -1
       }
@@ -72,10 +87,12 @@ export default class SmartQuery extends SmartApollo {
       })
     }
 
-    const currentResult = this.maySetLoading()
+    if (this.options.fetchPolicy !== "no-cache") {
+      const currentResult = this.maySetLoading()
 
-    if (!currentResult.loading) {
-      this.nextResult(currentResult)
+      if (!currentResult.loading) {
+        this.nextResult(currentResult)
+      }
     }
 
     super.executeApollo(variables)
@@ -103,12 +120,14 @@ export default class SmartQuery extends SmartApollo {
 
     if (typeof data === 'undefined') {
       // No result
-    } else if (typeof this.options.update === 'function') {
-      this.vm[this.key] = this.options.update.call(this.vm, data)
-    } else if (data[this.key] === undefined && !this.options.manual) {
-      console.error(`Missing ${this.key} attribute on result`, data)
     } else if (!this.options.manual) {
-      this.vm[this.key] = data[this.key]
+      if (typeof this.options.update === 'function') {
+        this.setData(this.options.update.call(this.vm, data))
+      } else if (data[this.key] === undefined) {
+        console.error(`Missing ${this.key} attribute on result`, data)
+      } else {
+        this.setData(data[this.key])
+      }
     } else if (!hasResultCallback) {
       console.error(`${this.key} query must have a 'result' hook in manual mode`)
     }
@@ -116,6 +135,10 @@ export default class SmartQuery extends SmartApollo {
     if (hasResultCallback) {
       this.options.result.call(this.vm, result)
     }
+  }
+
+  setData (value) {
+    this.vm.$set(this.hasDataField ? this.vm.$data : this.vm.$data.$apolloData.data, this.key, value)
   }
 
   catchError (error) {

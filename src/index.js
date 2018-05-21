@@ -3,11 +3,16 @@ import { DollarApollo } from './dollar-apollo'
 import { ApolloProvider as apolloProvider } from './apollo-provider'
 import CApolloQuery from './components/ApolloQuery'
 import CApolloSubscribeToMore from './components/ApolloSubscribeToMore'
+import CApolloMutation from './components/ApolloMutation'
 import { Globals } from './utils'
 
 const keywords = [
   '$subscribe',
 ]
+
+function hasProperty (holder, key) {
+  return typeof holder !== 'undefined' && holder.hasOwnProperty(key)
+}
 
 const launch = function launch () {
   const apolloProvider = this.$apolloProvider
@@ -36,13 +41,28 @@ const launch = function launch () {
     defineReactiveSetter(this.$apollo, 'error', apollo.$error)
     defineReactiveSetter(this.$apollo, 'watchLoading', apollo.$watchLoading)
 
+    // Apollo Data
+    Object.defineProperty(this, '$apolloData', {
+      get: () => this.$data.$apolloData,
+      enumerable: true,
+      configurable: true,
+    })
+
     // watchQuery
     for (let key in apollo) {
       if (key.charAt(0) !== '$') {
+        let options = apollo[key]
         if(apollo.$query) {
-          apollo[key] =  Object.assign({}, apollo.$query, apollo[key])
+          options =  Object.assign({}, apollo.$query, options)
         }
-        this.$apollo.addSmartQuery(key, apollo[key])
+        if (!hasProperty(this, key) && !hasProperty(this.$props, key) && !hasProperty(this.$data, key)) {
+          Object.defineProperty(this, key, {
+            get: () => this.$data.$apolloData.data[key],
+            enumerable: true,
+            configurable: true,
+          })
+        }
+        this.$apollo.addSmartQuery(key, options)
       }
     }
 
@@ -123,12 +143,13 @@ export function install (Vue, options) {
       },
 
       data () {
-        return this.$options.apollo ? {
+        return {
           '$apolloData': {
             queries: {},
             loading: 0,
+            data: {},
           },
-        } : {}
+        }
       },
     } : {},
 
@@ -148,6 +169,8 @@ export function install (Vue, options) {
     Vue.component('ApolloQuery', CApolloQuery)
     Vue.component('apollo-subscribe-to-more', CApolloSubscribeToMore)
     Vue.component('ApolloSubscribeToMore', CApolloSubscribeToMore)
+    Vue.component('apollo-mutation', CApolloMutation)
+    Vue.component('ApolloMutation', CApolloMutation)
   }
 }
 
@@ -163,6 +186,7 @@ export { willPrefetch } from './apollo-provider'
 // Components
 export const ApolloQuery = CApolloQuery
 export const ApolloSubscribeToMore = CApolloSubscribeToMore
+export const ApolloMutation = CApolloMutation
 
 // Auto-install
 let GlobalVue = null
