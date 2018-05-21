@@ -22,6 +22,7 @@ export interface ApolloProperty<V> {
   queries: any;
   mutate: Mutate<V>;
   subscribe: Subscribe;
+  addSmartQuery: Query<V>;
 }
 
 export function willPrefetch (component: VueApolloComponent, contextCallback?: boolean): VueApolloComponent
