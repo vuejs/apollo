@@ -1,6 +1,5 @@
-import omit from 'lodash.omit'
 import { VUE_APOLLO_QUERY_KEYWORDS } from './consts'
-import { getMergedDefinition } from './utils'
+import { getMergedDefinition, omit } from './utils'
 
 export class ApolloProvider {
   constructor (options) {

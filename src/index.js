@@ -1,10 +1,9 @@
-import omit from 'lodash.omit'
 import { DollarApollo } from './dollar-apollo'
 import { ApolloProvider as apolloProvider } from './apollo-provider'
 import CApolloQuery from './components/ApolloQuery'
 import CApolloSubscribeToMore from './components/ApolloSubscribeToMore'
 import CApolloMutation from './components/ApolloMutation'
-import { Globals } from './utils'
+import { Globals, omit } from './utils'
 
 const keywords = [
   '$subscribe',
@@ -52,8 +51,8 @@ const launch = function launch () {
     for (let key in apollo) {
       if (key.charAt(0) !== '$') {
         let options = apollo[key]
-        if(apollo.$query) {
-          options =  Object.assign({}, apollo.$query, options)
+        if (apollo.$query) {
+          options = Object.assign({}, apollo.$query, options)
         }
         if (!hasProperty(this, key) && !hasProperty(this.$props, key) && !hasProperty(this.$data, key)) {
           Object.defineProperty(this, key, {
