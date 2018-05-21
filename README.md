@@ -48,8 +48,11 @@ Integrates [apollo](https://www.apollographql.com/) in your [Vue](http://vuejs.o
 - [Special options](#special-options)
 - [Skip all](#skip-all)
 - [Multiple clients](#multiple-clients)
-- [Query Components](#query-components)
+- [Components](#components)
+  - [Query Components](#query-components)
+  - [Mutation Components](#mutation-components)
 - [Server-Side Rendering](#server-side-rendering)
+- [Local state](#local-state)
 - [Migration](#migration)
 - [API Reference](#api-reference)
 
@@ -213,7 +216,7 @@ You can use the apollo `watchQuery` options in the object, like:
  - `pollInterval`
  - ...
 
-See the [apollo doc](https://www.apollographql.com/docs/react/reference/index.html#ApolloClient\.watchQuery) for more details.
+See the [apollo doc](https://www.apollographql.com/docs/react/api/apollo-client.html#ApolloClient.watchQuery) for more details.
 
 For example, you could add the `fetchPolicy` apollo option like this:
 
@@ -470,7 +473,7 @@ apollo: {
       return data.ping
     },
     // Optional result hook
-    result({ data, loader, networkStatus }) {
+    result({ data, loading, networkStatus }) {
       console.log("We got some result!")
     },
     // Error handling
@@ -1134,6 +1137,10 @@ const apolloProvider = new VueApollo({
   defaultOptions: {
     // apollo options applied to all components that are using apollo
     $loadingKey: 'loading',
+    // apollo options applied to all queries in components
+    $query: {
+        fetchPolicy: 'cache-and-network'
+    }
   },
 })
 ```
@@ -1199,7 +1206,9 @@ tags: {
 }
 ```
 
-## Query components
+## Components
+
+### Query components
 
 (WIP) You can use the `ApolloQuery` (or `apollo-query`) component to make watched Apollo queries directly in your template:
 
@@ -1233,16 +1242,23 @@ Props:
 - `notifyOnNetworkStatusChange`: See [apollo notifyOnNetworkStatusChange](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-notifyOnNetworkStatusChange)
 - `context`: See [apollo context](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-context)
 - `skip`: Boolean disabling query fetching
-- `clienId`: Used to resolve the Apollo Client used (defined in ApolloProvider)
+- `clientId`: Used to resolve the Apollo Client used (defined in ApolloProvider)
 - `tag`: String HTML tag name (default: `div`)
 
 Scoped slot props:
+
 - `result`: Apollo Query result
   - `result.data`: Data returned by the query
   - `result.loading`: Boolean indicating that a request is in flight
   - `result.error`: Eventual error for the current result
   - `result.networkStatus`: See [apollo networkStatus](https://www.apollographql.com/docs/react/basics/queries.html#graphql-query-data-networkStatus)
+  - `result.times`: number of times the result was updated
 - `query`: Smart Query associated with the component
+
+Events:
+
+- `result(resultObject)`
+- `error(errorObject)`
 
 (WIP) You can subscribe to more data with the `ApolloSubscribeToMore` (or `apollo-subscribe-to-more`) component:
 
@@ -1283,6 +1299,46 @@ export default {
 ```
 
 *You can put as many of those as you want inside a `<ApolloQuery>` component.*
+
+### Mutation component
+
+(WIP) You can use the `ApolloMutation` (or `apollo-mutation`) component to call Apollo mutations directly in your template:
+
+```html
+<ApolloMutation
+  :mutation="require('@/graphql/userLogin.gql')"
+  :variables="{
+    email,
+    password,
+  }"
+  @done="onDone"
+>
+  <template slot-scope="{ mutate, loading, error }">
+    <button :disabled="loading" @click="mutate()">Click me</button>
+    <p v-if="error">An error occured: {{ error }}</p>
+  </template>
+</ApolloMutation>
+```
+
+Props:
+
+- `mutation`: GraphQL query (transformed by `graphql-tag`)
+- `variables`: Object of GraphQL variables
+- `optimisticResponse`: See [optimistic UI](https://www.apollographql.com/docs/react/features/optimistic-ui.html)
+- `update`: See [updating cache after mutation](https://www.apollographql.com/docs/react/api/react-apollo.html#graphql-mutation-options-update)
+- `refetchQueries`: See [refetching queries after mutation](https://www.apollographql.com/docs/react/api/react-apollo.html#graphql-mutation-options-refetchQueries)
+- `tag`: String HTML tag name (default: `div`)
+
+Scoped slot props:
+
+- `mutate(options = undefined)`: Function to call the mutation. You can override the mutation options (for example: `mutate({ variables: { foo: 'bar } })`)
+- `loading`: Boolean indicating that the request is in flight
+- `error`: Eventual error for the last mutation call
+
+Events:
+
+- `done(resultObject)`
+- `error(errorObject)`
 
 ## Server-Side Rendering
 
@@ -1604,6 +1660,40 @@ router.onReady(() => {
   // Prefetch, render HTML (see above)
 })
 ```
+
+## Local state
+
+If you need to manage local data, you can do so with [apollo-link-state](https://github.com/apollographql/apollo-link-state) and the `@client` directive:
+
+```js
+export default {
+  apollo: {
+    hello: gql`
+      query {
+        hello @client {
+          msg
+        }
+      }
+    `
+  },
+  mounted() {
+    // mutate the hello message
+    this.$apollo
+      .mutate({
+        mutation: gql`
+          mutation($msg: String!) {
+            updateHello(message: $msg) @client
+          }
+        `,
+        variables: {
+          msg: 'hello from link-state!'
+        }
+      })
+  }
+}
+```
+
+[Example project](https://codesandbox.io/s/zqqj82396p) (thx @chriswingler)
 
 ---
 

@@ -126,7 +126,34 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 
 
+var asyncToGenerator = function (fn) {
+  return function () {
+    var gen = fn.apply(this, arguments);
+    return new Promise(function (resolve, reject) {
+      function step(key, arg) {
+        try {
+          var info = gen[key](arg);
+          var value = info.value;
+        } catch (error) {
+          reject(error);
+          return;
+        }
 
+        if (info.done) {
+          resolve(value);
+        } else {
+          return Promise.resolve(value).then(function (value) {
+            step("next", value);
+          }, function (err) {
+            step("throw", err);
+          });
+        }
+      }
+
+      return step("next");
+    });
+  };
+};
 
 var classCallCheck = function (instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -612,6 +639,26 @@ var SmartQuery = function (_SmartApollo) {
     _this.type = 'query';
     _this.vueApolloSpecialKeys = VUE_APOLLO_QUERY_KEYWORDS;
     _this._loading = false;
+
+
+    _this.hasDataField = _this.vm.$data.hasOwnProperty(key);
+    if (_this.hasDataField) {
+      Object.defineProperty(_this.vm.$data.$apolloData.data, key, {
+        get: function get$$1() {
+          return _this.vm.$data[key];
+        },
+        enumerable: true,
+        configurable: true
+      });
+    } else {
+      Object.defineProperty(_this.vm.$data, key, {
+        get: function get$$1() {
+          return _this.vm.$data.$apolloData.data[key];
+        },
+        enumerable: true,
+        configurable: true
+      });
+    }
     return _this;
   }
 
@@ -684,12 +731,14 @@ var SmartQuery = function (_SmartApollo) {
 
       if (typeof data === 'undefined') {
         // No result
-      } else if (typeof this.options.update === 'function') {
-        this.vm[this.key] = this.options.update.call(this.vm, data);
-      } else if (data[this.key] === undefined && !this.options.manual) {
-        console.error('Missing ' + this.key + ' attribute on result', data);
       } else if (!this.options.manual) {
-        this.vm[this.key] = data[this.key];
+        if (typeof this.options.update === 'function') {
+          this.setData(this.options.update.call(this.vm, data));
+        } else if (data[this.key] === undefined) {
+          console.error('Missing ' + this.key + ' attribute on result', data);
+        } else {
+          this.setData(data[this.key]);
+        }
       } else if (!hasResultCallback) {
         console.error(this.key + ' query must have a \'result\' hook in manual mode');
       }
@@ -697,6 +746,11 @@ var SmartQuery = function (_SmartApollo) {
       if (hasResultCallback) {
         this.options.result.call(this.vm, result);
       }
+    }
+  }, {
+    key: 'setData',
+    value: function setData(value) {
+      this.vm.$set(this.hasDataField ? this.vm.$data : this.vm.$data.$apolloData.data, this.key, value);
     }
   }, {
     key: 'catchError',
@@ -1099,7 +1153,12 @@ var DollarApollo = function () {
   }, {
     key: 'loading',
     get: function get$$1() {
-      return this.vm.$data.$apolloData && this.vm.$data.$apolloData.loading !== 0;
+      return this.vm.$data.$apolloData.loading !== 0;
+    }
+  }, {
+    key: 'data',
+    get: function get$$1() {
+      return this.vm.$data.$apolloData.data;
     }
   }, {
     key: 'skipAllQueries',
@@ -1604,9 +1663,120 @@ var CApolloSubscribeToMore = {
   }
 };
 
+var CApolloMutation = {
+  props: {
+    mutation: {
+      type: Object,
+      required: true
+    },
+
+    variables: {
+      type: Object,
+      default: undefined
+    },
+
+    optimisticResponse: {
+      type: Object,
+      default: undefined
+    },
+
+    update: {
+      type: Function,
+      default: undefined
+    },
+
+    refetchQueries: {
+      type: Function,
+      default: undefined
+    },
+
+    tag: {
+      type: String,
+      default: 'div'
+    }
+  },
+
+  data: function data() {
+    return {
+      loading: false,
+      error: null
+    };
+  },
+
+
+  methods: {
+    mutate: function mutate(options) {
+      var _this = this;
+
+      return asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+        var result;
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _this.loading = true;
+                _this.error = null;
+                _context.prev = 2;
+                _context.next = 5;
+                return _this.$apollo.mutate(_extends({
+                  mutation: _this.mutation,
+                  variables: _this.variables,
+                  optimisticResponse: _this.optimisticResponse,
+                  update: _this.update,
+                  refetchQueries: _this.refetchQueries
+                }, options));
+
+              case 5:
+                result = _context.sent;
+
+                _this.$emit('done', result);
+                _context.next = 13;
+                break;
+
+              case 9:
+                _context.prev = 9;
+                _context.t0 = _context['catch'](2);
+
+                _this.error = _context.t0;
+                _this.$emit('error', _context.t0);
+
+              case 13:
+                _this.loading = false;
+
+              case 14:
+              case 'end':
+                return _context.stop();
+            }
+          }
+        }, _callee, _this, [[2, 9]]);
+      }))();
+    }
+  },
+
+  render: function render(h) {
+    var result = this.$scopedSlots.default({
+      mutate: this.mutate,
+      loading: this.loading,
+      error: this.error
+    });
+    if (Array.isArray(result)) {
+      result = result.concat(this.$slots.default);
+    } else {
+      result = [result].concat(this.$slots.default);
+    }
+    return h(this.tag, result);
+  }
+};
+
 var keywords = ['$subscribe'];
 
+function hasProperty(holder, key) {
+  return typeof holder !== 'undefined' && holder.hasOwnProperty(key);
+}
+
 var launch = function launch() {
+  var _this = this;
+
   var apolloProvider = this.$apolloProvider;
 
   if (this._apolloLaunched || !apolloProvider) return;
@@ -1633,11 +1803,34 @@ var launch = function launch() {
     defineReactiveSetter(this.$apollo, 'error', apollo.$error);
     defineReactiveSetter(this.$apollo, 'watchLoading', apollo.$watchLoading);
 
+    // Apollo Data
+    Object.defineProperty(this, '$apolloData', {
+      get: function get$$1() {
+        return _this.$data.$apolloData;
+      },
+      enumerable: true,
+      configurable: true
+    });
+
     // watchQuery
-    for (var key in apollo) {
+
+    var _loop = function _loop(key) {
       if (key.charAt(0) !== '$') {
-        this.$apollo.addSmartQuery(key, apollo[key]);
+        if (!hasProperty(_this, key) && !hasProperty(_this.$props, key) && !hasProperty(_this.$data, key)) {
+          Object.defineProperty(_this, key, {
+            get: function get$$1() {
+              return _this.$data.$apolloData.data[key];
+            },
+            enumerable: true,
+            configurable: true
+          });
+        }
+        _this.$apollo.addSmartQuery(key, apollo[key]);
       }
+    };
+
+    for (var key in apollo) {
+      _loop(key);
     }
 
     if (apollo.subscribe) {
@@ -1645,8 +1838,8 @@ var launch = function launch() {
     }
 
     if (apollo.$subscribe) {
-      for (var _key in apollo.$subscribe) {
-        this.$apollo.addSmartSubscription(_key, apollo.$subscribe[_key]);
+      for (var key in apollo.$subscribe) {
+        this.$apollo.addSmartSubscription(key, apollo.$subscribe[key]);
       }
     }
   }
@@ -1714,12 +1907,13 @@ function install(Vue, options) {
     },
 
     data: function data() {
-      return this.$options.apollo ? {
+      return {
         '$apolloData': {
           queries: {},
-          loading: 0
+          loading: 0,
+          data: {}
         }
-      } : {};
+      };
     }
   } : {}, {
 
@@ -1739,19 +1933,22 @@ function install(Vue, options) {
     Vue.component('ApolloQuery', CApolloQuery);
     Vue.component('apollo-subscribe-to-more', CApolloSubscribeToMore);
     Vue.component('ApolloSubscribeToMore', CApolloSubscribeToMore);
+    Vue.component('apollo-mutation', CApolloMutation);
+    Vue.component('ApolloMutation', CApolloMutation);
   }
 }
 
 ApolloProvider.install = install;
 
 // eslint-disable-next-line no-undef
-ApolloProvider.version = "3.0.0-beta.5";
+ApolloProvider.version = "3.0.0-beta.10";
 
 // Apollo provider
 var ApolloProvider$1 = ApolloProvider;
 // Components
 var ApolloQuery = CApolloQuery;
 var ApolloSubscribeToMore = CApolloSubscribeToMore;
+var ApolloMutation = CApolloMutation;
 
 // Auto-install
 var GlobalVue = null;
@@ -1765,4 +1962,4 @@ if (GlobalVue) {
 }
 
 export default ApolloProvider;
-export { install, ApolloProvider$1 as ApolloProvider, ApolloQuery, ApolloSubscribeToMore, willPrefetch };
+export { install, ApolloProvider$1 as ApolloProvider, ApolloQuery, ApolloSubscribeToMore, ApolloMutation, willPrefetch };
