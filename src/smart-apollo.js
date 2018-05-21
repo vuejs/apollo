@@ -143,7 +143,7 @@ export default class SmartApollo {
     for (const handler of handlers) {
       if (handler) {
         catched = true
-        let result = handler.call(this.vm, ...args)
+        let result = handler.apply(this.vm, args)
         if (typeof result !== 'undefined' && !result) {
           break
         }
