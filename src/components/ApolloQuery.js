@@ -20,27 +20,27 @@ export default {
 
     variables: {
       type: Object,
-      default: null,
+      default: undefined,
     },
 
     fetchPolicy: {
       type: String,
-      default: 'cache-first',
+      default: undefined,
     },
 
     pollInterval: {
       type: Number,
-      default: 0,
+      default: undefined,
     },
 
     notifyOnNetworkStatusChange: {
       type: Boolean,
-      default: false,
+      default: undefined,
     },
 
     context: {
       type: Object,
-      default: null,
+      default: undefined,
     },
 
     skip: {

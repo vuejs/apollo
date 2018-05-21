@@ -16,12 +16,12 @@ export default {
 
     variables: {
       type: Object,
-      default: null,
+      default: undefined,
     },
 
     updateQuery: {
       type: Function,
-      default: null,
+      default: undefined,
     },
   },
 
