@@ -7,45 +7,11 @@ export default class SmartApollo {
   constructor (vm, key, options, autostart = true) {
     this.vm = vm
     this.key = key
+    this.initialOptions = options
     this.options = Object.assign({}, options)
     this._skip = false
     this._watchers = []
     this._destroyed = false
-
-    // Query callback
-    if (typeof this.options.query === 'function') {
-      const queryCb = this.options.query.bind(this.vm)
-      this.options.query = queryCb()
-      this._watchers.push(this.vm.$watch(queryCb, query => {
-        this.options.query = query
-        this.refresh()
-      }, {
-        deep: this.options.deep,
-      }))
-    }
-    // Query callback
-    if (typeof this.options.document === 'function') {
-      const queryCb = this.options.document.bind(this.vm)
-      this.options.document = queryCb()
-      this._watchers.push(this.vm.$watch(queryCb, document => {
-        this.options.document = document
-        this.refresh()
-      }, {
-        deep: this.options.deep,
-      }))
-    }
-
-    // Apollo context
-    if (typeof this.options.context === 'function') {
-      const cb = this.options.context.bind(this.vm)
-      this.options.context = cb()
-      this._watchers.push(this.vm.$watch(cb, context => {
-        this.options.context = context
-        this.refresh()
-      }, {
-        deep: this.options.deep,
-      }))
-    }
 
     if (this.vm.$isServer) {
       this.options.fetchPolicy = 'cache-first'
@@ -58,10 +24,10 @@ export default class SmartApollo {
 
   autostart () {
     if (typeof this.options.skip === 'function') {
-      this._watchers.push(this.vm.$watch(this.options.skip.bind(this.vm), this.skipChanged.bind(this), {
+      this._skipWatcher = this.vm.$watch(this.options.skip.bind(this.vm), this.skipChanged.bind(this), {
         immediate: true,
         deep: this.options.deep,
-      }))
+      })
     } else if (!this.options.skip) {
       this.start()
     } else {
@@ -97,23 +63,59 @@ export default class SmartApollo {
 
   start () {
     this.starting = true
+
+    // Query callback
+    if (typeof this.initialOptions.query === 'function') {
+      const queryCb = this.initialOptions.query.bind(this.vm)
+      this.options.query = queryCb()
+      this._watchers.push(this.vm.$watch(queryCb, query => {
+        this.options.query = query
+        this.refresh()
+      }, {
+        deep: this.options.deep,
+      }))
+    }
+    // Query callback
+    if (typeof this.initialOptions.document === 'function') {
+      const queryCb = this.initialOptions.document.bind(this.vm)
+      this.options.document = queryCb()
+      this._watchers.push(this.vm.$watch(queryCb, document => {
+        this.options.document = document
+        this.refresh()
+      }, {
+        deep: this.options.deep,
+      }))
+    }
+
+    // Apollo context
+    if (typeof this.initialOptions.context === 'function') {
+      const cb = this.initialOptions.context.bind(this.vm)
+      this.options.context = cb()
+      this._watchers.push(this.vm.$watch(cb, context => {
+        this.options.context = context
+        this.refresh()
+      }, {
+        deep: this.options.deep,
+      }))
+    }
+
+    // GraphQL Variables
     if (typeof this.options.variables === 'function') {
       let cb = this.executeApollo.bind(this)
       cb = this.options.throttle ? throttle(cb, this.options.throttle) : cb
       cb = this.options.debounce ? debounce(cb, this.options.debounce) : cb
-      this.unwatchVariables = this.vm.$watch(() => this.options.variables.call(this.vm), cb, {
+      this._watchers.push(this.vm.$watch(() => this.options.variables.call(this.vm), cb, {
         immediate: true,
         deep: this.options.deep,
-      })
+      }))
     } else {
       this.executeApollo(this.options.variables)
     }
   }
 
   stop () {
-    if (this.unwatchVariables) {
-      this.unwatchVariables()
-      this.unwatchVariables = null
+    for (const unwatch of this._watchers) {
+      unwatch()
     }
 
     if (this.sub) {
@@ -180,8 +182,8 @@ export default class SmartApollo {
 
     this._destroyed = true
     this.stop()
-    for (const unwatch of this._watchers) {
-      unwatch()
+    if (this._skipWatcher) {
+      this._skipWatcher()
     }
   }
 }
