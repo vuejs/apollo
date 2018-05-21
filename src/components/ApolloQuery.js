@@ -165,6 +165,7 @@ export default {
     let result = this.$scopedSlots.default({
       result: this.result,
       query: this.$apollo.queries.query,
+      isLoading: this.$apolloData.loading,
     })
     if (Array.isArray(result)) {
       result = result.concat(this.$slots.default)
