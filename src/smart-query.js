@@ -45,13 +45,13 @@ export default class SmartQuery extends SmartApollo {
   }
 
   get loading () {
-    return this.vm.$data.$apolloData ? this.vm.$data.$apolloData.queries[this.key].loading : this._loading
+    return this.vm.$data.$apolloData && this.vm.$data.$apolloData.queries[this.key] ? this.vm.$data.$apolloData.queries[this.key].loading : this._loading
   }
 
   set loading (value) {
     if (this._loading !== value) {
       this._loading = value
-      if (this.vm.$data.$apolloData) {
+      if (this.vm.$data.$apolloData && this.vm.$data.$apolloData.queries[this.key]) {
         this.vm.$data.$apolloData.queries[this.key].loading = value
         this.vm.$data.$apolloData.loading += value ? 1 : -1
       }
