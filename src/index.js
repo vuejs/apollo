@@ -51,6 +51,10 @@ const launch = function launch () {
     // watchQuery
     for (let key in apollo) {
       if (key.charAt(0) !== '$') {
+        let options = apollo[key]
+        if(apollo.$query) {
+          options =  Object.assign({}, apollo.$query, options)
+        }
         if (!hasProperty(this, key) && !hasProperty(this.$props, key) && !hasProperty(this.$data, key)) {
           Object.defineProperty(this, key, {
             get: () => this.$data.$apolloData.data[key],
@@ -58,7 +62,7 @@ const launch = function launch () {
             configurable: true,
           })
         }
-        this.$apollo.addSmartQuery(key, apollo[key])
+        this.$apollo.addSmartQuery(key, options)
       }
     }
 

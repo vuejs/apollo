@@ -1137,6 +1137,10 @@ const apolloProvider = new VueApollo({
   defaultOptions: {
     // apollo options applied to all components that are using apollo
     $loadingKey: 'loading',
+    // apollo options applied to all queries in components
+    $query: {
+        fetchPolicy: 'cache-and-network'
+    }
   },
 })
 ```
