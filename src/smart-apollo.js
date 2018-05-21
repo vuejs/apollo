@@ -129,12 +129,27 @@ export default class SmartApollo {
   }
 
   errorHandler (...args) {
-    this.options.error && this.options.error.call(this.vm, ...args)
-    this.vm.$apollo.error && this.vm.$apollo.error.call(this.vm, ...args)
-    this.vm.$apollo.provider.errorHandler && this.vm.$apollo.provider.errorHandler.call(this.vm, ...args)
+    let catched = false
+    if (this.options.error) {
+      this.options.error.call(this.vm, ...args)
+      catched = true
+    }
+    if (this.vm.$apollo.error) {
+      this.vm.$apollo.error.call(this.vm, ...args)
+      catched = true
+    }
+    if (this.vm.$apollo.provider.errorHandler) {
+      this.vm.$apollo.provider.errorHandler.call(this.vm, ...args)
+      catched = true
+    }
+    return catched
   }
 
   catchError (error) {
+    const catched = this.errorHandler(error)
+
+    if (catched) return
+
     if (error.graphQLErrors && error.graphQLErrors.length !== 0) {
       console.error(`GraphQL execution errors for ${this.type} '${this.key}'`)
       for (let e of error.graphQLErrors) {
@@ -150,8 +165,6 @@ export default class SmartApollo {
         console.error(error)
       }
     }
-
-    this.errorHandler(error)
   }
 
   destroy () {
