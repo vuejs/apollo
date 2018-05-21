@@ -1,69 +1,17 @@
 import Vue, { PluginObject, PluginFunction } from 'vue';
 import { DocumentNode } from 'graphql';
 import { ApolloClient } from 'apollo-client';
-import { WatchQueryOptions, MutationOptions, SubscriptionOptions, SubscribeToMoreOptions, ObservableQuery, NetworkStatus } from 'apollo-client'
+import { SubscriptionOptions, ObservableQuery } from 'apollo-client'
 import { DataProxy } from 'apollo-cache';
 import { subscribe } from 'graphql/subscription/subscribe';
+import { ApolloProvider, VueApolloComponent } from './apollo-provider'
+import { VueApolloQueryOptions, VueApolloMutationOptions, VueApolloSubscriptionOptions, ApolloVueThisType, VueApolloOptions } from './options'
 
-// include Omit type from https://github.com/Microsoft/TypeScript/issues/12215
-type Diff<T extends string, U extends string> = ({ [P in T]: P } & { [P in U]: never } & { [x: string]: never })[T];
-type Omit<T, K extends keyof T> = { [P in Diff<keyof T, K>]?: T[P] };
-
-type VueApolloOptions = {
-  $skip?: boolean,
-  $skipAllQueries?: boolean,
-  $skipAllSubscriptions?: boolean,
-  $client?: string,
-  $loadingKey?: string,
-  $error?: Function
-}
-
-export class VueApollo implements PluginObject<{}> {
+export class VueApollo extends ApolloProvider implements PluginObject<{}>{
   [key: string]: any;
   install: PluginFunction<{}>;
   constructor (options: { defaultClient: ApolloClient<{}>, defaultOptions?: VueApolloOptions, clients?: { [key: string]: ApolloClient<{}> } });
   static install(pVue: typeof Vue, options?:{} | undefined): void;
-}
-
-type ApolloVueThisType<V> = V & { [key: string]: any };
-type VariableFn<V> = ((this: ApolloVueThisType<V>) => Object) | Object;
-type ApolloVueUpdateQueryFn<V> = (this: ApolloVueThisType<V>, previousQueryResult: { [key: string]: any }, options: {
-  error: any,
-  subscriptionData: { data: any; };
-  variables?: { [key: string]: any; };
-}) => Object;
-
-interface ApolloVueSubscribeToMoreOptions<V> {
-  document: DocumentNode;
-  variables?: VariableFn<V>;
-  updateQuery?: ApolloVueUpdateQueryFn<V>;
-  onError?: (error: Error) => void;
-}
-
-type _WatchQueryOptions = Omit<WatchQueryOptions, 'query'>; // exclude query prop because it causes type incorrectly error
-export interface VueApolloQueryOptions<V, R> extends _WatchQueryOptions { 
-  query: ((this: ApolloVueThisType<V>) => DocumentNode) | DocumentNode;
-  variables?: VariableFn<V>;
-  update?: (this: ApolloVueThisType<V>, data: R) => any;
-  result?: (this: ApolloVueThisType<V>, data: R, loader: any, netWorkStatus: NetworkStatus) => void;
-  error?: (this: ApolloVueThisType<V>, error: any) => void;
-  loadingKey?: string;
-  watchLoading?: (isLoading: boolean, countModifier: number) => void;
-  skip?: (this: ApolloVueThisType<V>) => boolean | boolean;
-  manual?: boolean;
-  subscribeToMore?: ApolloVueSubscribeToMoreOptions<V> | ApolloVueSubscribeToMoreOptions<V>[];
-}
-
-export interface VueApolloMutationOptions<V, R> extends MutationOptions<R> {
-  mutation: DocumentNode;
-  variables?: VariableFn<V>;
-  optimisticResponse?: ((this: ApolloVueThisType<V>) => any) | Object;
-}
-
-export interface VueApolloSubscriptionOptions<V, R> extends SubscriptionOptions {
-  query: DocumentNode;
-  variables?: VariableFn<V>;
-  result?: (this: V, data: R) => void;
 }
 
 type Query<V> = (key: string, options: VueApolloQueryOptions<V, any>) => void;
@@ -75,10 +23,5 @@ export interface ApolloProperty<V> {
   mutate: Mutate<V>;
   subscribe: Subscribe;
 }
-type QueryComponentProperty<V> = ((this: ApolloVueThisType<V>) => VueApolloQueryOptions<V, any>) | VueApolloQueryOptions<V, any>
-type SubscribeComponentProperty<V> = VueApolloSubscriptionOptions<V, any> | { [key: string]: VueApolloSubscriptionOptions<V, any> }
 
-export interface VueApolloComponentOption<V> extends VueApolloOptions {
-  [key: string]: QueryComponentProperty<V> | SubscribeComponentProperty<V> | string | boolean | Function | undefined;
-  $subscribe?: SubscribeComponentProperty<V>;
-}
+export function willPrefetch (component: VueApolloComponent, contextCallback?: boolean): VueApolloComponent

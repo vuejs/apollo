@@ -178,7 +178,7 @@ export default Vue.extend({
       this.$apollo.queries.tags.refetch()
     },
   },
-mounted() {
+  mounted() {
     const observer = this.$apollo.subscribe({
       query: SUB_QUERY,
       variables: {
