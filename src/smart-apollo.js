@@ -138,21 +138,26 @@ export default class SmartApollo {
     throw new Error('Not implemented')
   }
 
-  errorHandler (...args) {
+  callHandlers (handlers, ...args) {
     let catched = false
-    if (this.options.error) {
-      this.options.error.call(this.vm, ...args)
-      catched = true
-    }
-    if (this.vm.$apollo.error) {
-      this.vm.$apollo.error.call(this.vm, ...args)
-      catched = true
-    }
-    if (this.vm.$apollo.provider.errorHandler) {
-      this.vm.$apollo.provider.errorHandler.call(this.vm, ...args)
-      catched = true
+    for (const handler of handlers) {
+      if (handler) {
+        catched = true
+        let result = handler.call(this.vm, ...args)
+        if (typeof result !== 'undefined' && !result) {
+          break
+        }
+      }
     }
     return catched
+  }
+
+  errorHandler (...args) {
+    return this.callHandlers([
+      this.options.error,
+      this.vm.$apollo.error,
+      this.vm.$apollo.provider.errorHandler,
+    ], ...args)
   }
 
   catchError (error) {
