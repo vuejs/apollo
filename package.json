@@ -12,7 +12,7 @@
     "build:es": "rollup --config build/rollup.config.es.js",
     "build:umd": "rollup --config build/rollup.config.umd.js",
     "prepublishOnly": "npm run test && npm run build",
-    "dev": "nodemon --exec 'npm run build' --watch src",
+    "dev": "nodemon --exec 'npm run build:es' --watch src",
     "test": "npm run test:eslint && npm run test:types",
     "test:eslint": "eslint --ext .js src",
     "test:types": "tsc -p types/test"
