@@ -1259,6 +1259,7 @@ Scoped slot props:
   - `result.networkStatus`: See [apollo networkStatus](https://www.apollographql.com/docs/react/basics/queries.html#graphql-query-data-networkStatus)
   - `result.times`: number of times the result was updated
 - `query`: Smart Query associated with the component
+- `isLoading`: Smart Query loading state
 
 Events:
 
