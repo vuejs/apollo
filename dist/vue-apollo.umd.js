@@ -375,14 +375,13 @@ function omit(obj, properties) {
         key = _ref4[0],
         val = _ref4[1];
 
-    return c[key] = val, c;
+    c[key] = val;
+    return c;
   }, {});
 }
 
 var SmartApollo = function () {
   function SmartApollo(vm, key, options) {
-    var _this = this;
-
     var autostart = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
     classCallCheck(this, SmartApollo);
     this.type = null;
@@ -390,39 +389,11 @@ var SmartApollo = function () {
 
     this.vm = vm;
     this.key = key;
+    this.initialOptions = options;
     this.options = Object.assign({}, options);
     this._skip = false;
     this._watchers = [];
     this._destroyed = false;
-
-    // Query callback
-    if (typeof this.options.query === 'function') {
-      var queryCb = this.options.query.bind(this.vm);
-      this.options.query = queryCb();
-      this._watchers.push(this.vm.$watch(queryCb, function (query) {
-        _this.options.query = query;
-        _this.refresh();
-      }));
-    }
-    // Query callback
-    if (typeof this.options.document === 'function') {
-      var _queryCb = this.options.document.bind(this.vm);
-      this.options.document = _queryCb();
-      this._watchers.push(this.vm.$watch(_queryCb, function (document) {
-        _this.options.document = document;
-        _this.refresh();
-      }));
-    }
-
-    // Apollo context
-    if (typeof this.options.context === 'function') {
-      var cb = this.options.context.bind(this.vm);
-      this.options.context = cb();
-      this._watchers.push(this.vm.$watch(cb, function (context) {
-        _this.options.context = context;
-        _this.refresh();
-      }));
-    }
 
     if (this.vm.$isServer) {
       this.options.fetchPolicy = 'cache-first';
@@ -437,9 +408,10 @@ var SmartApollo = function () {
     key: 'autostart',
     value: function autostart() {
       if (typeof this.options.skip === 'function') {
-        this._watchers.push(this.vm.$watch(this.options.skip.bind(this.vm), this.skipChanged.bind(this), {
-          immediate: true
-        }));
+        this._skipWatcher = this.vm.$watch(this.options.skip.bind(this.vm), this.skipChanged.bind(this), {
+          immediate: true,
+          deep: this.options.deep
+        });
       } else if (!this.options.skip) {
         this.start();
       } else {
@@ -464,18 +436,56 @@ var SmartApollo = function () {
   }, {
     key: 'start',
     value: function start() {
-      var _this2 = this;
+      var _this = this;
 
       this.starting = true;
+
+      // Query callback
+      if (typeof this.initialOptions.query === 'function') {
+        var queryCb = this.initialOptions.query.bind(this.vm);
+        this.options.query = queryCb();
+        this._watchers.push(this.vm.$watch(queryCb, function (query) {
+          _this.options.query = query;
+          _this.refresh();
+        }, {
+          deep: this.options.deep
+        }));
+      }
+      // Query callback
+      if (typeof this.initialOptions.document === 'function') {
+        var _queryCb = this.initialOptions.document.bind(this.vm);
+        this.options.document = _queryCb();
+        this._watchers.push(this.vm.$watch(_queryCb, function (document) {
+          _this.options.document = document;
+          _this.refresh();
+        }, {
+          deep: this.options.deep
+        }));
+      }
+
+      // Apollo context
+      if (typeof this.initialOptions.context === 'function') {
+        var cb = this.initialOptions.context.bind(this.vm);
+        this.options.context = cb();
+        this._watchers.push(this.vm.$watch(cb, function (context) {
+          _this.options.context = context;
+          _this.refresh();
+        }, {
+          deep: this.options.deep
+        }));
+      }
+
+      // GraphQL Variables
       if (typeof this.options.variables === 'function') {
-        var cb = this.executeApollo.bind(this);
-        cb = this.options.throttle ? throttle$2(cb, this.options.throttle) : cb;
-        cb = this.options.debounce ? debounce$1(cb, this.options.debounce) : cb;
-        this.unwatchVariables = this.vm.$watch(function () {
-          return _this2.options.variables.call(_this2.vm);
-        }, cb, {
-          immediate: true
-        });
+        var _cb = this.executeApollo.bind(this);
+        _cb = this.options.throttle ? throttle$2(_cb, this.options.throttle) : _cb;
+        _cb = this.options.debounce ? debounce$1(_cb, this.options.debounce) : _cb;
+        this._watchers.push(this.vm.$watch(function () {
+          return _this.options.variables.call(_this.vm);
+        }, _cb, {
+          immediate: true,
+          deep: this.options.deep
+        }));
       } else {
         this.executeApollo(this.options.variables);
       }
@@ -483,9 +493,29 @@ var SmartApollo = function () {
   }, {
     key: 'stop',
     value: function stop() {
-      if (this.unwatchVariables) {
-        this.unwatchVariables();
-        this.unwatchVariables = null;
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = this._watchers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var unwatch = _step.value;
+
+          unwatch();
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
       }
 
       if (this.sub) {
@@ -511,44 +541,86 @@ var SmartApollo = function () {
       throw new Error('Not implemented');
     }
   }, {
-    key: 'errorHandler',
-    value: function errorHandler() {
-      var _options$error, _vm$$apollo$error, _vm$$apollo$provider$;
+    key: 'callHandlers',
+    value: function callHandlers(handlers) {
+      var catched = false;
 
-      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
+      for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+        args[_key - 1] = arguments[_key];
       }
 
-      this.options.error && (_options$error = this.options.error).call.apply(_options$error, [this.vm].concat(args));
-      this.vm.$apollo.error && (_vm$$apollo$error = this.vm.$apollo.error).call.apply(_vm$$apollo$error, [this.vm].concat(args));
-      this.vm.$apollo.provider.errorHandler && (_vm$$apollo$provider$ = this.vm.$apollo.provider.errorHandler).call.apply(_vm$$apollo$provider$, [this.vm].concat(args));
+      var _iteratorNormalCompletion2 = true;
+      var _didIteratorError2 = false;
+      var _iteratorError2 = undefined;
+
+      try {
+        for (var _iterator2 = handlers[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          var handler = _step2.value;
+
+          if (handler) {
+            catched = true;
+            var result = handler.apply(this.vm, args);
+            if (typeof result !== 'undefined' && !result) {
+              break;
+            }
+          }
+        }
+      } catch (err) {
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion2 && _iterator2.return) {
+            _iterator2.return();
+          }
+        } finally {
+          if (_didIteratorError2) {
+            throw _iteratorError2;
+          }
+        }
+      }
+
+      return catched;
+    }
+  }, {
+    key: 'errorHandler',
+    value: function errorHandler() {
+      for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        args[_key2] = arguments[_key2];
+      }
+
+      return this.callHandlers.apply(this, [[this.options.error, this.vm.$apollo.error, this.vm.$apollo.provider.errorHandler]].concat(args));
     }
   }, {
     key: 'catchError',
     value: function catchError(error) {
+      var catched = this.errorHandler(error);
+
+      if (catched) return;
+
       if (error.graphQLErrors && error.graphQLErrors.length !== 0) {
         console.error('GraphQL execution errors for ' + this.type + ' \'' + this.key + '\'');
-        var _iteratorNormalCompletion = true;
-        var _didIteratorError = false;
-        var _iteratorError = undefined;
+        var _iteratorNormalCompletion3 = true;
+        var _didIteratorError3 = false;
+        var _iteratorError3 = undefined;
 
         try {
-          for (var _iterator = error.graphQLErrors[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var e = _step.value;
+          for (var _iterator3 = error.graphQLErrors[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+            var e = _step3.value;
 
             console.error(e);
           }
         } catch (err) {
-          _didIteratorError = true;
-          _iteratorError = err;
+          _didIteratorError3 = true;
+          _iteratorError3 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion && _iterator.return) {
-              _iterator.return();
+            if (!_iteratorNormalCompletion3 && _iterator3.return) {
+              _iterator3.return();
             }
           } finally {
-            if (_didIteratorError) {
-              throw _iteratorError;
+            if (_didIteratorError3) {
+              throw _iteratorError3;
             }
           }
         }
@@ -564,8 +636,6 @@ var SmartApollo = function () {
           console.error(error);
         }
       }
-
-      this.errorHandler(error);
     }
   }, {
     key: 'destroy',
@@ -574,29 +644,8 @@ var SmartApollo = function () {
 
       this._destroyed = true;
       this.stop();
-      var _iteratorNormalCompletion2 = true;
-      var _didIteratorError2 = false;
-      var _iteratorError2 = undefined;
-
-      try {
-        for (var _iterator2 = this._watchers[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-          var unwatch = _step2.value;
-
-          unwatch();
-        }
-      } catch (err) {
-        _didIteratorError2 = true;
-        _iteratorError2 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion2 && _iterator2.return) {
-            _iterator2.return();
-          }
-        } finally {
-          if (_didIteratorError2) {
-            throw _iteratorError2;
-          }
-        }
+      if (this._skipWatcher) {
+        this._skipWatcher();
       }
     }
   }, {
@@ -647,23 +696,25 @@ var SmartQuery = function (_SmartApollo) {
     _this._loading = false;
 
 
-    _this.hasDataField = _this.vm.$data.hasOwnProperty(key);
-    if (_this.hasDataField) {
-      Object.defineProperty(_this.vm.$data.$apolloData.data, key, {
-        get: function get$$1() {
-          return _this.vm.$data[key];
-        },
-        enumerable: true,
-        configurable: true
-      });
-    } else {
-      Object.defineProperty(_this.vm.$data, key, {
-        get: function get$$1() {
-          return _this.vm.$data.$apolloData.data[key];
-        },
-        enumerable: true,
-        configurable: true
-      });
+    if (!options.manual) {
+      _this.hasDataField = _this.vm.$data.hasOwnProperty(key);
+      if (_this.hasDataField) {
+        Object.defineProperty(_this.vm.$data.$apolloData.data, key, {
+          get: function get$$1() {
+            return _this.vm.$data[key];
+          },
+          enumerable: true,
+          configurable: true
+        });
+      } else {
+        Object.defineProperty(_this.vm.$data, key, {
+          get: function get$$1() {
+            return _this.vm.$data.$apolloData.data[key];
+          },
+          enumerable: true,
+          configurable: true
+        });
+      }
     }
     return _this;
   }
@@ -700,10 +751,12 @@ var SmartQuery = function (_SmartApollo) {
         });
       }
 
-      var currentResult = this.maySetLoading();
+      if (this.options.fetchPolicy !== 'no-cache') {
+        var currentResult = this.maySetLoading();
 
-      if (!currentResult.loading) {
-        this.nextResult(currentResult);
+        if (!currentResult.loading) {
+          this.nextResult(currentResult);
+        }
       }
 
       get(SmartQuery.prototype.__proto__ || Object.getPrototypeOf(SmartQuery.prototype), 'executeApollo', this).call(this, variables);
@@ -767,15 +820,11 @@ var SmartQuery = function (_SmartApollo) {
   }, {
     key: 'watchLoading',
     value: function watchLoading() {
-      var _options$watchLoading, _vm$$apollo$watchLoad, _vm$$apollo$provider$;
-
       for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
       }
 
-      this.options.watchLoading && (_options$watchLoading = this.options.watchLoading).call.apply(_options$watchLoading, [this.vm].concat(args));
-      this.vm.$apollo.watchLoading && (_vm$$apollo$watchLoad = this.vm.$apollo.watchLoading).call.apply(_vm$$apollo$watchLoad, [this.vm].concat(args));
-      this.vm.$apollo.provider.watchLoading && (_vm$$apollo$provider$ = this.vm.$apollo.provider.watchLoading).call.apply(_vm$$apollo$provider$, [this.vm].concat(args));
+      return this.callHandlers.apply(this, [[this.options.watchLoading, this.vm.$apollo.watchLoading, this.vm.$apollo.provider.watchLoading]].concat(args));
     }
   }, {
     key: 'applyLoadingModifier',
@@ -886,12 +935,12 @@ var SmartQuery = function (_SmartApollo) {
   }, {
     key: 'loading',
     get: function get$$1() {
-      return this.vm.$data.$apolloData ? this.vm.$data.$apolloData.queries[this.key].loading : this._loading;
+      return this.vm.$data.$apolloData && this.vm.$data.$apolloData.queries[this.key] ? this.vm.$data.$apolloData.queries[this.key].loading : this._loading;
     },
     set: function set$$1(value) {
       if (this._loading !== value) {
         this._loading = value;
-        if (this.vm.$data.$apolloData) {
+        if (this.vm.$data.$apolloData && this.vm.$data.$apolloData.queries[this.key]) {
           this.vm.$data.$apolloData.queries[this.key].loading = value;
           this.vm.$data.$apolloData.loading += value ? 1 : -1;
         }
@@ -1102,13 +1151,14 @@ var DollarApollo = function () {
     }
   }, {
     key: 'defineReactiveSetter',
-    value: function defineReactiveSetter(key, func) {
+    value: function defineReactiveSetter(key, func, deep) {
       var _this4 = this;
 
       this._watchers.push(this.vm.$watch(func, function (value) {
         _this4[key] = value;
       }, {
-        immediate: true
+        immediate: true,
+        deep: deep
       }));
     }
   }, {
@@ -1438,27 +1488,27 @@ var CApolloQuery = {
 
     variables: {
       type: Object,
-      default: null
+      default: undefined
     },
 
     fetchPolicy: {
       type: String,
-      default: 'cache-first'
+      default: undefined
     },
 
     pollInterval: {
       type: Number,
-      default: 0
+      default: undefined
     },
 
     notifyOnNetworkStatusChange: {
       type: Boolean,
-      default: false
+      default: undefined
     },
 
     context: {
       type: Object,
-      default: null
+      default: undefined
     },
 
     skip: {
@@ -1468,6 +1518,11 @@ var CApolloQuery = {
 
     clientId: {
       type: String,
+      default: undefined
+    },
+
+    deep: {
+      type: Boolean,
       default: undefined
     },
 
@@ -1531,6 +1586,7 @@ var CApolloQuery = {
           return this.skip;
         },
 
+        deep: this.deep,
         manual: true,
         result: function result(_result) {
           var _result2 = _result,
@@ -1595,7 +1651,8 @@ var CApolloQuery = {
   render: function render(h) {
     var result = this.$scopedSlots.default({
       result: this.result,
-      query: this.$apollo.queries.query
+      query: this.$apollo.queries.query,
+      isLoading: this.$apolloData.loading
     });
     if (Array.isArray(result)) {
       result = result.concat(this.$slots.default);
@@ -1621,12 +1678,12 @@ var CApolloSubscribeToMore = {
 
     variables: {
       type: Object,
-      default: null
+      default: undefined
     },
 
     updateQuery: {
       type: Function,
-      default: null
+      default: undefined
     }
   },
 
@@ -1801,13 +1858,13 @@ var launch = function launch() {
       }
     }
 
-    defineReactiveSetter(this.$apollo, 'skipAll', apollo.$skipAll);
-    defineReactiveSetter(this.$apollo, 'skipAllQueries', apollo.$skipAllQueries);
-    defineReactiveSetter(this.$apollo, 'skipAllSubscriptions', apollo.$skipAllSubscriptions);
-    defineReactiveSetter(this.$apollo, 'client', apollo.$client);
-    defineReactiveSetter(this.$apollo, 'loadingKey', apollo.$loadingKey);
-    defineReactiveSetter(this.$apollo, 'error', apollo.$error);
-    defineReactiveSetter(this.$apollo, 'watchLoading', apollo.$watchLoading);
+    defineReactiveSetter(this.$apollo, 'skipAll', apollo.$skipAll, apollo.$deep);
+    defineReactiveSetter(this.$apollo, 'skipAllQueries', apollo.$skipAllQueries, apollo.$deep);
+    defineReactiveSetter(this.$apollo, 'skipAllSubscriptions', apollo.$skipAllSubscriptions, apollo.$deep);
+    defineReactiveSetter(this.$apollo, 'client', apollo.$client, apollo.$deep);
+    defineReactiveSetter(this.$apollo, 'loadingKey', apollo.$loadingKey, apollo.$deep);
+    defineReactiveSetter(this.$apollo, 'error', apollo.$error, apollo.$deep);
+    defineReactiveSetter(this.$apollo, 'watchLoading', apollo.$watchLoading, apollo.$deep);
 
     // Apollo Data
     Object.defineProperty(this, '$apolloData', {
@@ -1822,7 +1879,13 @@ var launch = function launch() {
 
     var _loop = function _loop(key) {
       if (key.charAt(0) !== '$') {
-        if (!hasProperty(_this, key) && !hasProperty(_this.$props, key) && !hasProperty(_this.$data, key)) {
+        var options = apollo[key];
+        // Default options from component
+        if (apollo.$query) {
+          options = Object.assign({}, apollo.$query, options);
+        }
+        // Property proxy
+        if (!options.manual && !hasProperty(_this, key) && !hasProperty(_this.$props, key) && !hasProperty(_this.$data, key)) {
           Object.defineProperty(_this, key, {
             get: function get$$1() {
               return _this.$data.$apolloData.data[key];
@@ -1831,7 +1894,7 @@ var launch = function launch() {
             configurable: true
           });
         }
-        _this.$apollo.addSmartQuery(key, apollo[key]);
+        _this.$apollo.addSmartQuery(key, options);
       }
     };
 
@@ -1947,7 +2010,7 @@ function install(Vue, options) {
 ApolloProvider.install = install;
 
 // eslint-disable-next-line no-undef
-ApolloProvider.version = "3.0.0-beta.10";
+ApolloProvider.version = "3.0.0-beta.11";
 
 // Apollo provider
 var ApolloProvider$1 = ApolloProvider;
