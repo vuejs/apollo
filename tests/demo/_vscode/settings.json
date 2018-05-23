@@ -1,0 +1,8 @@
+{
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "vue",
+    "graphql"
+  ]
+}

@@ -1,0 +1,21 @@
+scalar JSON
+
+
+
+
+
+type Query {
+  # Test query with a parameter
+  hello(name: String): String!
+
+}
+
+type Mutation {
+  myMutation: String!
+
+}
+
+type Subscription {
+  mySub: String!
+
+}
