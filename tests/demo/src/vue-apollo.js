@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import VueApollo from 'vue-apollo'
+import VueApollo from '../../../'
 import { createApolloClient, restartWebsockets } from 'vue-cli-plugin-apollo/graphql-client'
 
 // Install the vue plugin
