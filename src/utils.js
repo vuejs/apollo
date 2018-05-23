@@ -4,7 +4,7 @@ import oDebounce from 'throttle-debounce/debounce'
 export const Globals = {}
 
 function factory (action) {
-  return (cb, time) => action(time.cb)
+  return (cb, time) => action(time, cb)
 }
 
 export const throttle = factory(oThrottle)
