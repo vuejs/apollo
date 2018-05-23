@@ -79,10 +79,10 @@ const launch = function launch () {
   }
 }
 
-function defineReactiveSetter ($apollo, key, value) {
+function defineReactiveSetter ($apollo, key, value, deep) {
   if (typeof value !== 'undefined') {
     if (typeof value === 'function') {
-      $apollo.defineReactiveSetter(key, value)
+      $apollo.defineReactiveSetter(key, value, deep)
     } else {
       $apollo[key] = value
     }
