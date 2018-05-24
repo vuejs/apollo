@@ -996,13 +996,23 @@ var DollarApollo = function () {
     value: function addSmartQuery(key, options) {
       var _this3 = this;
 
-      options = reapply(options, this.vm);
+      var finalOptions = reapply(options, this.vm);
 
-      var smart = this.queries[key] = new SmartQuery(this.vm, key, options, false);
+      var apollo = this.vm.$options.apollo;
+      if (apollo && apollo.$query) {
+        // Also replaces 'undefined' values
+        for (var _key in apollo.$query) {
+          if (typeof finalOptions[_key] === 'undefined') {
+            finalOptions[_key] = apollo.$query[_key];
+          }
+        }
+      }
+
+      var smart = this.queries[key] = new SmartQuery(this.vm, key, finalOptions, false);
       smart.autostart();
 
       if (!this.vm.$isServer) {
-        var subs = options.subscribeToMore;
+        var subs = finalOptions.subscribeToMore;
         if (subs) {
           if (Array.isArray(subs)) {
             subs.forEach(function (sub, index) {
@@ -1075,8 +1085,8 @@ var DollarApollo = function () {
       for (var key in this.queries) {
         this.queries[key].destroy();
       }
-      for (var _key in this.subscriptions) {
-        this.subscriptions[_key].destroy();
+      for (var _key2 in this.subscriptions) {
+        this.subscriptions[_key2].destroy();
       }
       this._apolloSubscriptions.forEach(function (sub) {
         sub.unsubscribe();
@@ -1763,10 +1773,6 @@ var launch = function launch() {
     var _loop = function _loop(key) {
       if (key.charAt(0) !== '$') {
         var options = apollo[key];
-        // Default options from component
-        if (apollo.$query) {
-          options = Object.assign({}, apollo.$query, options);
-        }
         // Property proxy
         if (!options.manual && !hasProperty(_this, key) && !hasProperty(_this.$props, key) && !hasProperty(_this.$data, key)) {
           Object.defineProperty(_this, key, {
@@ -1893,7 +1899,7 @@ function install(Vue, options) {
 ApolloProvider.install = install;
 
 // eslint-disable-next-line no-undef
-ApolloProvider.version = "3.0.0-beta.12";
+ApolloProvider.version = "3.0.0-beta.13";
 
 // Apollo provider
 var ApolloProvider$1 = ApolloProvider;
