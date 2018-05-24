@@ -51,10 +51,6 @@ const launch = function launch () {
     for (let key in apollo) {
       if (key.charAt(0) !== '$') {
         let options = apollo[key]
-        // Default options from component
-        if (apollo.$query) {
-          options = Object.assign({}, apollo.$query, options)
-        }
         // Property proxy
         if (!options.manual && !hasProperty(this, key) && !hasProperty(this.$props, key) && !hasProperty(this.$data, key)) {
           Object.defineProperty(this, key, {

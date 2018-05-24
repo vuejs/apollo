@@ -85,13 +85,23 @@ export class DollarApollo {
   }
 
   addSmartQuery (key, options) {
-    options = reapply(options, this.vm)
+    let finalOptions = reapply(options, this.vm)
 
-    const smart = this.queries[key] = new SmartQuery(this.vm, key, options, false)
+    const apollo = this.vm.$options.apollo
+    if (apollo && apollo.$query) {
+      // Also replaces 'undefined' values
+      for (const key in apollo.$query) {
+        if (typeof finalOptions[key] === 'undefined') {
+          finalOptions[key] = apollo.$query[key]
+        }
+      }
+    }
+
+    const smart = this.queries[key] = new SmartQuery(this.vm, key, finalOptions, false)
     smart.autostart()
 
     if (!this.vm.$isServer) {
-      const subs = options.subscribeToMore
+      const subs = finalOptions.subscribeToMore
       if (subs) {
         if (Array.isArray(subs)) {
           subs.forEach((sub, index) => {
