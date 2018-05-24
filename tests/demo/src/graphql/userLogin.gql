@@ -1,0 +1,8 @@
+#import "./userFragment.gql"
+
+mutation userLogin ($email: String!, $password: String!) {
+  userLogin (email: $email, password: $password) {
+    ...user
+    email
+  }
+}

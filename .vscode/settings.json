@@ -4,5 +4,6 @@
     "javascriptreact",
     "vue",
     "graphql"
-  ]
+  ],
+  "eslint.enable": true
 }

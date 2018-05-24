@@ -1,0 +1,3 @@
+mutation userLogout {
+  userLogout
+}

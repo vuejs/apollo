@@ -23,7 +23,7 @@ const defaultOptions = {
   // You need to pass a `wsEndpoint` for this to work
   websocketsOnly: false,
   // Is being rendered on the server?
-  ssr: false
+  ssr: false,
   // Override default http link
   // link: myLink,
   // Override default cache
@@ -37,13 +37,18 @@ export function createProvider (options = {}) {
   // Create apollo client
   const { apolloClient, wsClient } = createApolloClient({
     ...defaultOptions,
-    ...options
+    ...options,
   })
   apolloClient.wsClient = wsClient
 
   // Create vue apollo provider
   const apolloProvider = new VueApollo({
-    defaultClient: apolloClient
+    defaultClient: apolloClient,
+    defaultOptions: {
+      $query: {
+        fetchPolicy: 'cache-and-network',
+      },
+    },
   })
 
   return apolloProvider

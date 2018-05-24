@@ -1,21 +1,63 @@
 scalar JSON
 
+type User {
+  id: ID!
+  nickname: String!
+  email: String
+}
 
+# Channel of messages
+type Channel {
+  id: ID!
+  name: String!
+  messages: [Message]
+}
 
+# User messages
+type Message {
+  id: ID!
+  content: String!
+  # Author of the message
+  user: User
+  dateAdded: JSON
+  dateUpdated: JSON
+}
 
+input MessageAdd {
+  channelId: ID!
+  content: String!
+}
+
+input MessageUpdate {
+  id: ID!
+  content: String!
+}
+
+type MessageChanged {
+  type: MessageChangedType!
+  message: Message!
+}
+
+enum MessageChangedType {
+  added
+  updated
+  removed
+}
 
 type Query {
-  # Test query with a parameter
-  hello(name: String): String!
-
+  userCurrent: User
+  channels: [Channel]
+  channel (id: ID!): Channel
 }
 
 type Mutation {
-  myMutation: String!
-
+  userLogin (email: String!, password: String!): User
+  userLogout: Boolean
+  messageAdd (input: MessageAdd!): Message!
+  messageUpdate (input: MessageUpdate!): Message!
+  messageRemove (id: ID!): Message!
 }
 
 type Subscription {
-  mySub: String!
-
+  messageChanged (channelId: ID!): MessageChanged!
 }

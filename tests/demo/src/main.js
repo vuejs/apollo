@@ -10,5 +10,5 @@ new Vue({
   router,
   store,
   provide: createProvider().provide(),
-  render: h => h(App)
+  render: h => h(App),
 }).$mount('#app')

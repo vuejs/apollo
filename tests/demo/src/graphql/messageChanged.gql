@@ -1,0 +1,10 @@
+#import "./messageFragment.gql"
+
+subscription messageChanged ($channelId: ID!) {
+  messageChanged (channelId: $channelId) {
+    type
+    message {
+      ...message
+    }
+  }
+}

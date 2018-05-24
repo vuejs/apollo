@@ -1,12 +1,21 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <ChannelList/>
+    <div class="content">
+      <router-view/>
     </div>
-    <router-view/>
   </div>
 </template>
+
+<script>
+import ChannelList from '@/components/ChannelList.vue'
+
+export default {
+  components: {
+    ChannelList,
+  },
+}
+</script>
 
 <style lang="stylus">
 #app

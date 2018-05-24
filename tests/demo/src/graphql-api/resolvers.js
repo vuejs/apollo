@@ -1,26 +1,26 @@
 const GraphQLJSON = require('graphql-type-json')
+const { withFilter } = require('graphql-subscriptions')
+// Subs
+const triggers = require('./triggers')
+// Connectors
+const channels = require('./connectors/channels')
 
 module.exports = {
   JSON: GraphQLJSON,
 
   Query: {
-    hello: (root, { name }) => `Hello ${name || 'World'}!`
-
+    channels: (root, args, context) => channels.getAll(context),
+    channel: (root, { id }, context) => channels.getOne(id, context),
   },
 
   Mutation: {
-    myMutation: (root, args, context) => {
-      const message = 'My mutation completed!'
-      context.pubsub.publish('hey', { mySub: message })
-      return message
-    }
 
   },
 
   Subscription: {
-    mySub: {
-      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator('hey')
-    }
-
-  }
+    messageChanged: withFilter(
+      (parent, args, { pubsub }) => pubsub.asyncIterator(triggers.MESSAGE_CHANGED),
+      (payload, vars) => payload.messageChanged.channelId === vars.channelId
+    ),
+  },
 }

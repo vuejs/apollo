@@ -16,7 +16,8 @@ module.exports = {
       {
         env: 'literal'
       }
-    ]
+    ],
+    'comma-dangle': ['error', 'always-multiline'],
   },
 
   parserOptions: {
