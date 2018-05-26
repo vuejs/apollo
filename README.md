@@ -1260,6 +1260,7 @@ Scoped slot props:
   - `result.times`: number of times the result was updated
 - `query`: Smart Query associated with the component
 - `isLoading`: Smart Query loading state
+- `gqlError`: first GraphQL error if any
 
 Events:
 
@@ -1340,6 +1341,7 @@ Scoped slot props:
 - `mutate(options = undefined)`: Function to call the mutation. You can override the mutation options (for example: `mutate({ variables: { foo: 'bar } })`)
 - `loading`: Boolean indicating that the request is in flight
 - `error`: Eventual error for the last mutation call
+- `gqlError`: first GraphQL error if any
 
 Events:
 
