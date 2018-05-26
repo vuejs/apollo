@@ -81,13 +81,9 @@ export default class SmartQuery extends SmartApollo {
 
       // Create observer
       this.observer = this.vm.$apollo.watchQuery(this.generateApolloOptions(variables))
-
-      // Create subscription
-      this.sub = this.observer.subscribe({
-        next: this.nextResult.bind(this),
-        error: this.catchError.bind(this),
-      })
     }
+
+    this.startQuerySubscription()
 
     if (this.options.fetchPolicy !== 'no-cache') {
       const currentResult = this.maySetLoading()
@@ -98,6 +94,16 @@ export default class SmartQuery extends SmartApollo {
     }
 
     super.executeApollo(variables)
+  }
+
+  startQuerySubscription () {
+    if (this.sub && !this.sub.closed) return
+
+    // Create subscription
+    this.sub = this.observer.subscribe({
+      next: this.nextResult.bind(this),
+      error: this.catchError.bind(this),
+    })
   }
 
   maySetLoading (force = false) {
@@ -127,7 +133,7 @@ export default class SmartQuery extends SmartApollo {
     } else if (!this.options.manual) {
       if (typeof this.options.update === 'function') {
         this.setData(this.options.update.call(this.vm, data))
-      } else if (data[this.key] === undefined) {
+      } else if (typeof data[this.key] === 'undefined' && Object.keys(data).length) {
         console.error(`Missing ${this.key} attribute on result`, data)
       } else {
         this.setData(data[this.key])
@@ -148,6 +154,17 @@ export default class SmartQuery extends SmartApollo {
   catchError (error) {
     super.catchError(error)
     this.loadingDone()
+    this.nextResult(this.observer.currentResult())
+    // The observable closes the sub if an error occurs
+    this.resubscribeToQuery()
+  }
+
+  resubscribeToQuery () {
+    const lastError = this.observer.getLastError()
+    const lastResult = this.observer.getLastResult()
+    this.observer.resetLastResults()
+    this.startQuerySubscription()
+    Object.assign(this.observer, { lastError, lastResult })
   }
 
   get loadingKey () {
