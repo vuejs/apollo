@@ -1,3 +1,5 @@
+import { addGqlError } from '../utils'
+
 export default {
   props: {
     mutation: {
@@ -39,24 +41,25 @@ export default {
   },
 
   methods: {
-    async mutate (options) {
+    mutate (options) {
       this.loading = true
       this.error = null
-      try {
-        const result = await this.$apollo.mutate({
-          mutation: this.mutation,
-          variables: this.variables,
-          optimisticResponse: this.optimisticResponse,
-          update: this.update,
-          refetchQueries: this.refetchQueries,
-          ...options,
-        })
+      this.$apollo.mutate({
+        mutation: this.mutation,
+        variables: this.variables,
+        optimisticResponse: this.optimisticResponse,
+        update: this.update,
+        refetchQueries: this.refetchQueries,
+        ...options,
+      }).then(result => {
         this.$emit('done', result)
-      } catch (e) {
+        this.loading = false
+      }).catch(e => {
+        addGqlError(e)
         this.error = e
         this.$emit('error', e)
-      }
-      this.loading = false
+        this.loading = false
+      })
     },
   },
 
@@ -65,6 +68,7 @@ export default {
       mutate: this.mutate,
       loading: this.loading,
       error: this.error,
+      gqlError: this.error && this.error.gqlError,
     })
     if (Array.isArray(result)) {
       result = result.concat(this.$slots.default)

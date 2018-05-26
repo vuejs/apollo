@@ -1,4 +1,4 @@
-import { throttle, debounce, omit } from './utils'
+import { throttle, debounce, omit, addGqlError } from './utils'
 
 export default class SmartApollo {
   type = null
@@ -134,8 +134,9 @@ export default class SmartApollo {
     this.starting = false
   }
 
-  nextResult () {
-    throw new Error('Not implemented')
+  nextResult (result) {
+    const { error } = result
+    if (error) addGqlError(error)
   }
 
   callHandlers (handlers, ...args) {
@@ -161,6 +162,8 @@ export default class SmartApollo {
   }
 
   catchError (error) {
+    addGqlError(error)
+
     const catched = this.errorHandler(error)
 
     if (catched) return

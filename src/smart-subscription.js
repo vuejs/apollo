@@ -53,6 +53,8 @@ export default class SmartSubscription extends SmartApollo {
   }
 
   nextResult (data) {
+    super.nextResult(data)
+
     if (typeof this.options.result === 'function') {
       this.options.result.call(this.vm, data)
     }

@@ -30,3 +30,9 @@ export function omit (obj, properties) {
       return c
     }, {})
 }
+
+export function addGqlError (error) {
+  if (error.graphQLErrors && error.graphQLErrors.length) {
+    error.gqlError = error.graphQLErrors[0]
+  }
+}

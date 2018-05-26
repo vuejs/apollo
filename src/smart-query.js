@@ -112,6 +112,8 @@ export default class SmartQuery extends SmartApollo {
   }
 
   nextResult (result) {
+    super.nextResult(result)
+
     const { data, loading } = result
 
     if (!loading) {
