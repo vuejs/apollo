@@ -13,7 +13,28 @@ function hasProperty (holder, key) {
   return typeof holder !== 'undefined' && holder.hasOwnProperty(key)
 }
 
-const launch = function launch () {
+function proxyData () {
+  let apollo = this.$options.apollo
+
+  if (apollo) {
+    // watchQuery
+    for (let key in apollo) {
+      if (key.charAt(0) !== '$') {
+        let options = apollo[key]
+        // Property proxy
+        if (!options.manual && !hasProperty(this.$options.props, key) && !hasProperty(this.$options.computed, key) && !hasProperty(this.$options.methods, key)) {
+          Object.defineProperty(this, key, {
+            get: () => this.$data.$apolloData.data[key],
+            enumerable: true,
+            configurable: true,
+          })
+        }
+      }
+    }
+  }
+}
+
+function launch () {
   const apolloProvider = this.$apolloProvider
 
   if (this._apolloLaunched || !apolloProvider) return
@@ -51,14 +72,6 @@ const launch = function launch () {
     for (let key in apollo) {
       if (key.charAt(0) !== '$') {
         let options = apollo[key]
-        // Property proxy
-        if (!options.manual && !hasProperty(this, key) && !hasProperty(this.$props, key) && !hasProperty(this.$data, key)) {
-          Object.defineProperty(this, key, {
-            get: () => this.$data.$apolloData.data[key],
-            enumerable: true,
-            configurable: true,
-          })
-        }
         this.$apollo.addSmartQuery(key, options)
       }
     }
@@ -150,6 +163,7 @@ export function install (Vue, options) {
       },
     } : {},
 
+    beforeCreate: proxyData,
     created: launch,
 
     destroyed: function () {
