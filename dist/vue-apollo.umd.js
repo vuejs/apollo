@@ -21,34 +21,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 
 
-var asyncToGenerator = function (fn) {
-  return function () {
-    var gen = fn.apply(this, arguments);
-    return new Promise(function (resolve, reject) {
-      function step(key, arg) {
-        try {
-          var info = gen[key](arg);
-          var value = info.value;
-        } catch (error) {
-          reject(error);
-          return;
-        }
 
-        if (info.done) {
-          resolve(value);
-        } else {
-          return Promise.resolve(value).then(function (value) {
-            step("next", value);
-          }, function (err) {
-            step("throw", err);
-          });
-        }
-      }
-
-      return step("next");
-    });
-  };
-};
 
 var classCallCheck = function (instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -269,6 +242,12 @@ function omit(obj, properties) {
   }, {});
 }
 
+function addGqlError(error) {
+  if (error.graphQLErrors && error.graphQLErrors.length) {
+    error.gqlError = error.graphQLErrors[0];
+  }
+}
+
 var SmartApollo = function () {
   function SmartApollo(vm, key, options) {
     var autostart = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
@@ -426,8 +405,10 @@ var SmartApollo = function () {
     }
   }, {
     key: 'nextResult',
-    value: function nextResult() {
-      throw new Error('Not implemented');
+    value: function nextResult(result) {
+      var error = result.error;
+
+      if (error) addGqlError(error);
     }
   }, {
     key: 'callHandlers',
@@ -483,6 +464,8 @@ var SmartApollo = function () {
   }, {
     key: 'catchError',
     value: function catchError(error) {
+      addGqlError(error);
+
       var catched = this.errorHandler(error);
 
       if (catched) return;
@@ -632,13 +615,9 @@ var SmartQuery = function (_SmartApollo) {
 
         // Create observer
         this.observer = this.vm.$apollo.watchQuery(this.generateApolloOptions(variables));
-
-        // Create subscription
-        this.sub = this.observer.subscribe({
-          next: this.nextResult.bind(this),
-          error: this.catchError.bind(this)
-        });
       }
+
+      this.startQuerySubscription();
 
       if (this.options.fetchPolicy !== 'no-cache') {
         var currentResult = this.maySetLoading();
@@ -649,6 +628,17 @@ var SmartQuery = function (_SmartApollo) {
       }
 
       get(SmartQuery.prototype.__proto__ || Object.getPrototypeOf(SmartQuery.prototype), 'executeApollo', this).call(this, variables);
+    }
+  }, {
+    key: 'startQuerySubscription',
+    value: function startQuerySubscription() {
+      if (this.sub && !this.sub.closed) return;
+
+      // Create subscription
+      this.sub = this.observer.subscribe({
+        next: this.nextResult.bind(this),
+        error: this.catchError.bind(this)
+      });
     }
   }, {
     key: 'maySetLoading',
@@ -667,6 +657,8 @@ var SmartQuery = function (_SmartApollo) {
   }, {
     key: 'nextResult',
     value: function nextResult(result) {
+      get(SmartQuery.prototype.__proto__ || Object.getPrototypeOf(SmartQuery.prototype), 'nextResult', this).call(this, result);
+
       var data = result.data,
           loading = result.loading;
 
@@ -682,7 +674,7 @@ var SmartQuery = function (_SmartApollo) {
       } else if (!this.options.manual) {
         if (typeof this.options.update === 'function') {
           this.setData(this.options.update.call(this.vm, data));
-        } else if (data[this.key] === undefined) {
+        } else if (typeof data[this.key] === 'undefined' && Object.keys(data).length) {
           console.error('Missing ' + this.key + ' attribute on result', data);
         } else {
           this.setData(data[this.key]);
@@ -705,6 +697,18 @@ var SmartQuery = function (_SmartApollo) {
     value: function catchError(error) {
       get(SmartQuery.prototype.__proto__ || Object.getPrototypeOf(SmartQuery.prototype), 'catchError', this).call(this, error);
       this.loadingDone();
+      this.nextResult(this.observer.currentResult());
+      // The observable closes the sub if an error occurs
+      this.resubscribeToQuery();
+    }
+  }, {
+    key: 'resubscribeToQuery',
+    value: function resubscribeToQuery() {
+      var lastError = this.observer.getLastError();
+      var lastResult = this.observer.getLastResult();
+      this.observer.resetLastResults();
+      this.startQuerySubscription();
+      Object.assign(this.observer, { lastError: lastError, lastResult: lastResult });
     }
   }, {
     key: 'watchLoading',
@@ -906,6 +910,8 @@ var SmartSubscription = function (_SmartApollo) {
   }, {
     key: 'nextResult',
     value: function nextResult(data) {
+      get(SmartSubscription.prototype.__proto__ || Object.getPrototypeOf(SmartSubscription.prototype), 'nextResult', this).call(this, data);
+
       if (typeof this.options.result === 'function') {
         this.options.result.call(this.vm, data);
       }
@@ -1526,7 +1532,6 @@ var CApolloQuery = {
         error: function error(_error) {
           this.result.loading = false;
           this.result.error = _error;
-          console.log(this.$apollo.queries.query.observer.currentResult());
           this.$emit('error', _error);
         }
       };
@@ -1551,7 +1556,8 @@ var CApolloQuery = {
     var result = this.$scopedSlots.default({
       result: this.result,
       query: this.$apollo.queries.query,
-      isLoading: this.$apolloData.loading
+      isLoading: this.$apolloData.loading,
+      gqlError: this.result && this.result.error && this.result.error.gqlError
     });
     if (Array.isArray(result)) {
       result = result.concat(this.$slots.default);
@@ -1670,48 +1676,23 @@ var CApolloMutation = {
     mutate: function mutate(options) {
       var _this = this;
 
-      return asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-        var result;
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _this.loading = true;
-                _this.error = null;
-                _context.prev = 2;
-                _context.next = 5;
-                return _this.$apollo.mutate(_extends({
-                  mutation: _this.mutation,
-                  variables: _this.variables,
-                  optimisticResponse: _this.optimisticResponse,
-                  update: _this.update,
-                  refetchQueries: _this.refetchQueries
-                }, options));
-
-              case 5:
-                result = _context.sent;
-
-                _this.$emit('done', result);
-                _context.next = 13;
-                break;
-
-              case 9:
-                _context.prev = 9;
-                _context.t0 = _context['catch'](2);
-
-                _this.error = _context.t0;
-                _this.$emit('error', _context.t0);
-
-              case 13:
-                _this.loading = false;
-
-              case 14:
-              case 'end':
-                return _context.stop();
-            }
-          }
-        }, _callee, _this, [[2, 9]]);
-      }))();
+      this.loading = true;
+      this.error = null;
+      this.$apollo.mutate(_extends({
+        mutation: this.mutation,
+        variables: this.variables,
+        optimisticResponse: this.optimisticResponse,
+        update: this.update,
+        refetchQueries: this.refetchQueries
+      }, options)).then(function (result) {
+        _this.$emit('done', result);
+        _this.loading = false;
+      }).catch(function (e) {
+        addGqlError(e);
+        _this.error = e;
+        _this.$emit('error', e);
+        _this.loading = false;
+      });
     }
   },
 
@@ -1719,7 +1700,8 @@ var CApolloMutation = {
     var result = this.$scopedSlots.default({
       mutate: this.mutate,
       loading: this.loading,
-      error: this.error
+      error: this.error,
+      gqlError: this.error && this.error.gqlError
     });
     if (Array.isArray(result)) {
       result = result.concat(this.$slots.default);
@@ -1736,8 +1718,37 @@ function hasProperty(holder, key) {
   return typeof holder !== 'undefined' && holder.hasOwnProperty(key);
 }
 
-var launch = function launch() {
+function proxyData() {
   var _this = this;
+
+  var apollo = this.$options.apollo;
+
+  if (apollo) {
+    var _loop = function _loop(key) {
+      if (key.charAt(0) !== '$') {
+        var options = apollo[key];
+        // Property proxy
+        if (!options.manual && !hasProperty(_this.$options.props, key) && !hasProperty(_this.$options.computed, key) && !hasProperty(_this.$options.methods, key)) {
+          Object.defineProperty(_this, key, {
+            get: function get$$1() {
+              return _this.$data.$apolloData.data[key];
+            },
+            enumerable: true,
+            configurable: true
+          });
+        }
+      }
+    };
+
+    // watchQuery
+    for (var key in apollo) {
+      _loop(key);
+    }
+  }
+}
+
+function launch() {
+  var _this2 = this;
 
   var apolloProvider = this.$apolloProvider;
 
@@ -1768,33 +1779,18 @@ var launch = function launch() {
     // Apollo Data
     Object.defineProperty(this, '$apolloData', {
       get: function get$$1() {
-        return _this.$data.$apolloData;
+        return _this2.$data.$apolloData;
       },
       enumerable: true,
       configurable: true
     });
 
     // watchQuery
-
-    var _loop = function _loop(key) {
+    for (var key in apollo) {
       if (key.charAt(0) !== '$') {
         var options = apollo[key];
-        // Property proxy
-        if (!options.manual && !hasProperty(_this, key) && !hasProperty(_this.$props, key) && !hasProperty(_this.$data, key)) {
-          Object.defineProperty(_this, key, {
-            get: function get$$1() {
-              return _this.$data.$apolloData.data[key];
-            },
-            enumerable: true,
-            configurable: true
-          });
-        }
-        _this.$apollo.addSmartQuery(key, options);
+        this.$apollo.addSmartQuery(key, options);
       }
-    };
-
-    for (var key in apollo) {
-      _loop(key);
     }
 
     if (apollo.subscribe) {
@@ -1802,12 +1798,12 @@ var launch = function launch() {
     }
 
     if (apollo.$subscribe) {
-      for (var key in apollo.$subscribe) {
-        this.$apollo.addSmartSubscription(key, apollo.$subscribe[key]);
+      for (var _key in apollo.$subscribe) {
+        this.$apollo.addSmartSubscription(_key, apollo.$subscribe[_key]);
       }
     }
   }
-};
+}
 
 function defineReactiveSetter($apollo, key, value, deep) {
   if (typeof value !== 'undefined') {
@@ -1881,6 +1877,7 @@ function install(Vue, options) {
     }
   } : {}, {
 
+    beforeCreate: proxyData,
     created: launch,
 
     destroyed: function destroyed() {
@@ -1905,7 +1902,7 @@ function install(Vue, options) {
 ApolloProvider.install = install;
 
 // eslint-disable-next-line no-undef
-ApolloProvider.version = "3.0.0-beta.13";
+ApolloProvider.version = "3.0.0-beta.14";
 
 // Apollo provider
 var ApolloProvider$1 = ApolloProvider;
