@@ -1747,78 +1747,6 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import VueApollo from 'vue-apollo'
 ```
 
-#### Plugin Setup
-
-Before:
-
-```js
-// Create the apollo client
-const apolloClient = new ApolloClient({
-  networkInterface: createBatchingNetworkInterface({
-    uri: 'http://localhost:3020/graphql',
-  }),
-  connectToDevTools: true,
-})
-
-// Install the vue plugin
-Vue.use(VueApollo)
-```
-
-After:
-
-```js
-const httpLink = new HttpLink({
-  // You should use an absolute URL here
-  uri: 'http://localhost:3020/graphql',
-})
-
-// Create the apollo client
-const apolloClient = new ApolloClient({
-  link: httpLink,
-  cache: new InMemoryCache(),
-  connectToDevTools: true,
-})
-
-// Install the vue plugin
-Vue.use(VueApollo)
-```
-
-### Mutations
-
-Query reducers have been removed. Use the `update` API to update the cache now.
-
-### Subscriptions
-
-#### Packages
-
-Before:
-
-```
-npm install --save subscriptions-transport-ws
-```
-
-After:
-
-```
-npm install --save apollo-link-ws apollo-utilities
-```
-
-#### Imports
-
-Before:
-
-```js
-import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws'
-```
-
-After:
-
-```js
-import { split } from 'apollo-link'
-import { WebSocketLink } from 'apollo-link-ws'
-import { getMainDefinition } from 'apollo-utilities'
-```
-
 #### Apollo Setup
 
 Before:
@@ -1846,9 +1774,6 @@ const apolloClient = new ApolloClient({
   networkInterface: networkInterfaceWithSubscriptions,
   connectToDevTools: true,
 })
-
-// Install the plugin like before
-Vue.use(VueApollo)
 ```
 
 After:
@@ -1886,9 +1811,95 @@ const apolloClient = new ApolloClient({
   cache: new InMemoryCache(),
   connectToDevTools: true,
 })
+```
 
-// Install the vue plugin like before
+#### Plugin Setup
+
+Before:
+
+```js
+// Create the apollo client
+const apolloClient = new ApolloClient({
+  networkInterface: createBatchingNetworkInterface({
+    uri: 'http://localhost:3020/graphql',
+  }),
+  connectToDevTools: true,
+})
+
+// Install the vue plugin
+Vue.use(VueApollo, {
+  apolloClient,
+})
+
+new Vue({
+  // ...
+})
+```
+
+After:
+
+```js
+const httpLink = new HttpLink({
+  // You should use an absolute URL here
+  uri: 'http://localhost:3020/graphql',
+})
+
+// Create the apollo client
+const apolloClient = new ApolloClient({
+  link: httpLink,
+  cache: new InMemoryCache(),
+  connectToDevTools: true,
+})
+
+// Install the vue plugin
 Vue.use(VueApollo)
+
+// Create a provider
+const apolloProvider = new VueApollo({
+  defaultClient: apolloClient,
+})
+
+// Use the provider
+new Vue({
+  provide: apolloProvider.provide(),
+  // ...
+})
+```
+
+### Mutations
+
+Query reducers have been removed. Use the `update` API to update the cache now.
+
+### Subscriptions
+
+#### Packages
+
+Before:
+
+```
+npm install --save subscriptions-transport-ws
+```
+
+After:
+
+```
+npm install --save apollo-link-ws apollo-utilities
+```
+
+#### Imports
+
+Before:
+
+```js
+import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws'
+```
+
+After:
+
+```js
+import { split } from 'apollo-link'
+import { WebSocketLink } from 'apollo-link-ws'
+import { getMainDefinition } from 'apollo-utilities'
 ```
 
 
