@@ -33,7 +33,7 @@ const defaultOptions = {
 }
 
 // Call this in the Vue app file
-export function createProvider (options = {}) {
+export function createProvider (options = {}, { router }) {
   // Create apollo client
   const { apolloClient, wsClient } = createApolloClient({
     ...defaultOptions,
@@ -49,20 +49,53 @@ export function createProvider (options = {}) {
         fetchPolicy: 'cache-and-network',
       },
     },
+    errorHandler (error) {
+      if (isUnauthorizedError(error)) {
+        // Redirect to login page
+        if (router.currentRoute.name !== 'login') {
+          router.replace({
+            name: 'login',
+            params: {
+              wantedRoute: router.currentRoute.fullPath,
+            },
+          })
+        }
+      } else {
+        console.log('%cError', 'background: red; color: white; padding: 2px 4px; border-radius: 3px; font-weight: bold;', error.message)
+      }
+    },
   })
 
   return apolloProvider
 }
 
 // Manually call this when user log in
-export function onLogin (apolloClient, token) {
-  localStorage.setItem(AUTH_TOKEN, token)
+export async function onLogin (apolloClient, token) {
+  localStorage.setItem(AUTH_TOKEN, JSON.stringify(token))
   if (apolloClient.wsClient) restartWebsockets(apolloClient.wsClient)
+  try {
+    await apolloClient.resetStore()
+  } catch (e) {
+    if (!isUnauthorizedError(e)) {
+      console.log('%cError on cache reset (login)', 'color: orange;', e.message)
+    }
+  }
 }
 
 // Manually call this when user log out
-export function onLogout (apolloClient) {
+export async function onLogout (apolloClient) {
   localStorage.removeItem(AUTH_TOKEN)
   if (apolloClient.wsClient) restartWebsockets(apolloClient.wsClient)
-  apolloClient.resetStore()
+  try {
+    await apolloClient.resetStore()
+  } catch (e) {
+    if (!isUnauthorizedError(e)) {
+      console.log('%cError on cache reset (logout)', 'color: orange;', e.message)
+    }
+  }
+}
+
+function isUnauthorizedError (error) {
+  const { graphQLErrors } = error
+  return (graphQLErrors && graphQLErrors.some(e => e.message === 'Unauthorized'))
 }

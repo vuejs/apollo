@@ -1,9 +1,28 @@
 scalar JSON
 
+directive @private on FIELD_DEFINITION
+
 type User {
   id: ID!
   nickname: String!
-  email: String
+  email: String!
+}
+
+input UserRegister {
+  email: String!
+  nickname: String!
+  password: String!
+}
+
+type UserToken {
+  id: ID!
+  userId: ID!
+  expiration: JSON
+}
+
+type UserLogin {
+  user: User
+  token: UserToken
 }
 
 # Channel of messages
@@ -45,19 +64,20 @@ enum MessageChangedType {
 }
 
 type Query {
-  userCurrent: User
-  channels: [Channel]
-  channel (id: ID!): Channel
+  userCurrent: User @private
+  channels: [Channel] @private
+  channel (id: ID!): Channel @private
 }
 
 type Mutation {
-  userLogin (email: String!, password: String!): User
-  userLogout: Boolean
-  messageAdd (input: MessageAdd!): Message!
-  messageUpdate (input: MessageUpdate!): Message!
-  messageRemove (id: ID!): Message!
+  userRegister (input: UserRegister!): Boolean
+  userLogin (email: String!, password: String!): UserLogin
+  userLogout: Boolean @private
+  messageAdd (input: MessageAdd!): Message! @private
+  messageUpdate (input: MessageUpdate!): Message! @private
+  messageRemove (id: ID!): Message! @private
 }
 
 type Subscription {
-  messageChanged (channelId: ID!): MessageChanged!
+  messageChanged (channelId: ID!): MessageChanged! @private
 }

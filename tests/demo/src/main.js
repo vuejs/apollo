@@ -9,6 +9,6 @@ Vue.config.productionTip = false
 new Vue({
   router,
   store,
-  provide: createProvider().provide(),
+  provide: createProvider({}, { router }).provide(),
   render: h => h(App),
 }).$mount('#app')

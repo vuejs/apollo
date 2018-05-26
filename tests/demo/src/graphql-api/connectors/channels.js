@@ -1,7 +1,7 @@
 const channels = [
-  { id: 'general', name: 'General' },
-  { id: 'random', name: 'Random' },
-  { id: 'help', name: 'Help' },
+  { id: 'general', name: 'General discussion' },
+  { id: 'random', name: 'Have fun chatting!' },
+  { id: 'help', name: 'Ask for or give help' },
 ]
 
 exports.getAll = (context) => {
