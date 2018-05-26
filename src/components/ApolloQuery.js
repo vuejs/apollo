@@ -146,7 +146,6 @@ export default {
         error (error) {
           this.result.loading = false
           this.result.error = error
-          console.log(this.$apollo.queries.query.observer.currentResult())
           this.$emit('error', error)
         },
       }
