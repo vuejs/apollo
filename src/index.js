@@ -10,7 +10,7 @@ const keywords = [
 ]
 
 function hasProperty (holder, key) {
-  return typeof holder !== 'undefined' && holder.hasOwnProperty(key)
+  return typeof holder !== 'undefined' && Object.prototype.hasOwnProperty.call(holder, key)
 }
 
 function proxyData () {
