@@ -119,7 +119,8 @@ export default {
         if (!result.data.userLogin) return
         const apolloClient = this.$apollo.provider.defaultClient
         // Update token and reset cache
-        await onLogin(apolloClient, result.data.userLogin.token)
+        const { id, userId, expiration } = result.data.userLogin.token
+        await onLogin(apolloClient, { id, userId, expiration })
         // Update cache
         apolloClient.writeQuery({
           query: USER_CURRENT,
@@ -171,10 +172,10 @@ export default {
   box-sizing border-box
 
 .form-input
-  margin-bottom 8px
+  margin-bottom 12px
 
 .actions
-  margin-top 8px
+  margin-top 12px
   text-align center
   font-size 12px
 </style>

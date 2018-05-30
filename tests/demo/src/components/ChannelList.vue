@@ -37,13 +37,13 @@ export default {
 @import '~@/style/imports'
 
 .channel-list
-  background desaturate(darken($color, 40%), 95%)
+  background desaturate(darken($color, 60%), 95%)
   color white
-  padding 8px
+  padding 12px
 
 .channel
   display block
-  padding 8px
+  padding 12px
   border-radius 4px
   &:hover
     background rgba($color, .3)

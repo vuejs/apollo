@@ -37,6 +37,9 @@ body
   grid-template-columns 300px 1fr
   grid-template-rows 1fr
 
+:focus
+  outline none
+
 a
   text-decoration none
   color $color

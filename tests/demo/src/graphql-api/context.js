@@ -4,9 +4,11 @@ const users = require('./connectors/users')
 // req => Query
 // connection => Subscription
 // eslint-disable-next-line no-unused-vars
-module.exports = (req, connection) => {
-  const bearer = req ? req.get('Authorization') : null
-  const token = bearer ? JSON.parse(bearer) : null
+module.exports = (req, wsConnection) => {
+  let rawToken
+  if (req) rawToken = req.get('Authorization')
+  if (wsConnection) rawToken = wsConnection.authorization
+  const token = rawToken ? JSON.parse(rawToken) : null
   let userId
 
   if (token && users.validateToken(token)) {

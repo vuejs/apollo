@@ -12,6 +12,7 @@
   >
     <input
       slot-scope="{ mutate, loading, error }"
+      ref="input"
       v-model="newMessage"
       :disabled="loading"
       class="form-input"
@@ -39,6 +40,7 @@ export default {
   methods: {
     onDone () {
       this.newMessage = ''
+      this.$refs.input.focus()
     },
   },
 }
@@ -48,7 +50,7 @@ export default {
 @import '~@/style/imports'
 
 .message-form
-  padding 8px
+  padding 12px
   width 100%
   box-sizing border-box
 

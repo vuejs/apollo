@@ -48,10 +48,10 @@ export default {
   display grid
   grid-template-columns auto 1fr auto
   grid-template-rows auto
-  grid-gap 8px
+  grid-gap 12px
   align-items center
   margin-bottom 20px
-  padding 8px 0 8px 8px
+  padding 12px 0 12px 12px
 
 .email
   font-size 12px

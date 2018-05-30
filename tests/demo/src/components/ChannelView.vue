@@ -5,19 +5,35 @@
       :variables="{
         id
       }"
+      @result="onResult"
     >
       <template slot-scope="{ result: { data, loading } }">
-        <div v-if="loading" class="loading">Loading...</div>
+        <div v-if="!data && loading" class="loading">Loading...</div>
 
         <div v-else-if="data">
+          <!-- Websockets -->
+          <ApolloSubscribeToMore
+            :document="require('../graphql/messageChanged.gql')"
+            :variables="{
+              channelId: id,
+            }"
+            :updateQuery="onMessageChanged"
+          />
+
           <div class="wrapper">
             <div class="header">
               <div class="id">#{{ data.channel.id }}</div>
               <div class="name">{{ data.channel.name }}</div>
             </div>
-            <div class="body">
 
+            <div ref="body" class="body">
+              <MessageItem
+                v-for="message in data.channel.messages"
+                :key="message.id"
+                :message="message"
+              />
             </div>
+
             <div class="footer">
               <MessageForm :channel-id="id" />
             </div>
@@ -29,12 +45,14 @@
 </template>
 
 <script>
+import MessageItem from './MessageItem.vue'
 import MessageForm from './MessageForm.vue'
 
 export default {
   name: 'ChannelView',
 
   components: {
+    MessageItem,
     MessageForm,
   },
 
@@ -42,6 +60,63 @@ export default {
     id: {
       type: String,
       required: true,
+    },
+  },
+
+  watch: {
+    id: {
+      handler () {
+        this.$_init = false
+      },
+      immediate: true,
+    },
+  },
+
+  methods: {
+    onMessageChanged (previousResult, { subscriptionData }) {
+      const { type, message } = subscriptionData.data.messageChanged
+
+      // No list change
+      if (type === 'updated') return previousResult
+
+      const messages = previousResult.channel.messages.slice()
+      // Add or remove item
+      if (type === 'added') {
+        messages.push(message)
+      } else if (type === 'removed') {
+        const index = messages.findIndex(m => m.id === message.id)
+        if (index !== -1) messages.splice(index, 1)
+      }
+
+      // New query result
+      return {
+        channel: {
+          ...previousResult.channel,
+          messages,
+        },
+      }
+    },
+
+    async scrollToBottom (force = false) {
+      let el = this.$refs.body
+
+      // No body element yet
+      if (!el) {
+        setTimeout(() => this.scrollToBottom(force), 100)
+        return
+      }
+      // User is scrolling up => no auto scroll
+      if (!force && el.scrollTop + el.clientHeight < el.scrollHeight - 100) return
+
+      // Scroll to bottom
+      await this.$nextTick()
+      el.scrollTop = el.scrollHeight
+    },
+
+    onResult () {
+      // The first time we load a channel, we force scroll to bottom
+      this.scrollToBottom(!this.$_init)
+      this.$_init = true
     },
   },
 }
@@ -57,7 +132,7 @@ export default {
   grid-template-rows auto 1fr auto
 
 .header
-  padding 8px
+  padding 12px
   border-bottom $border
 
 .id
@@ -66,6 +141,10 @@ export default {
 
 .name
   color #555
+
+.body
+  overflow-x hidden
+  overflow-y auto
 
 .footer
   border-top $border

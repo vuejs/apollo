@@ -12,9 +12,10 @@
   },
   "dependencies": {
     "graphql-type-json": "^0.2.1",
+    "marked": "^0.4.0",
     "shortid": "^2.2.8",
     "vue": "^2.5.16",
-    "vue-apollo": "^3.0.0-beta.10",
+    "vue-apollo": "^3.0.0-beta.16",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
   },
@@ -28,7 +29,7 @@
     "graphql-tag": "^2.5.0",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
-    "vue-cli-plugin-apollo": "file:../../../vue-cli-plugin-apollo",
+    "vue-cli-plugin-apollo": "^0.13.4",
     "vue-template-compiler": "^2.5.16"
   },
   "browserslist": [
