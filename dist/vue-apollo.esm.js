@@ -1116,11 +1116,19 @@ var DollarApollo = function () {
       var finalOptions = reapply(options, this.vm);
 
       var apollo = this.vm.$options.apollo;
+      var defaultOptions = this.provider.defaultOptions;
+      var $query = void 0;
       if (apollo && apollo.$query) {
+        $query = apollo.$query;
+      }
+      if ((!apollo || !apollo.$query) && defaultOptions && defaultOptions.$query) {
+        $query = defaultOptions.$query;
+      }
+      if ($query) {
         // Also replaces 'undefined' values
-        for (var _key in apollo.$query) {
+        for (var _key in $query) {
           if (typeof finalOptions[_key] === 'undefined') {
-            finalOptions[_key] = apollo.$query[_key];
+            finalOptions[_key] = $query[_key];
           }
         }
       }
@@ -2007,7 +2015,7 @@ function install(Vue, options) {
 ApolloProvider.install = install;
 
 // eslint-disable-next-line no-undef
-ApolloProvider.version = "3.0.0-beta.15";
+ApolloProvider.version = "3.0.0-beta.16";
 
 // Apollo provider
 var ApolloProvider$1 = ApolloProvider;
