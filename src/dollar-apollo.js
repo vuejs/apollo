@@ -88,11 +88,19 @@ export class DollarApollo {
     let finalOptions = reapply(options, this.vm)
 
     const apollo = this.vm.$options.apollo
+    const defaultOptions = this.provider.defaultOptions
+    let $query
     if (apollo && apollo.$query) {
+      $query = apollo.$query
+    }
+    if ((!apollo || !apollo.$query) && defaultOptions && defaultOptions.$query) {
+      $query = defaultOptions.$query
+    }
+    if ($query) {
       // Also replaces 'undefined' values
-      for (const key in apollo.$query) {
+      for (const key in $query) {
         if (typeof finalOptions[key] === 'undefined') {
-          finalOptions[key] = apollo.$query[key]
+          finalOptions[key] = $query[key]
         }
       }
     }
