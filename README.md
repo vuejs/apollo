@@ -4,7 +4,13 @@
 [![vue1](https://img.shields.io/badge/apollo-2.x-blue.svg)](https://www.apollographql.com/)
 [![vue1](https://img.shields.io/badge/vue-1.x-brightgreen.svg) ![vue2](https://img.shields.io/badge/vue-2.2+-brightgreen.svg)](https://vuejs.org/)
 
-![schema](https://cdn-images-1.medium.com/max/800/1*H9AANoofLqjS10Xd5TwRYw.png)
+<p align="center">
+  <img src="https://cdn-images-1.medium.com/max/800/1*H9AANoofLqjS10Xd5TwRYw.png">
+  <br>
+  <a href="https://www.patreon.com/akryum" target="_blank">
+    <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Become a Patreon">
+  </a>
+</p>
 
 **Warning! This README is related to Apollo 2.x support. For the old release (supporting only Apollo 1.x), see [here](https://github.com/Akryum/vue-apollo/tree/apollo-1).**
 
