@@ -71,8 +71,8 @@ export default {
         loading: false,
         networkStatus: 7,
         error: null,
-        times: 0,
       },
+      times: 0,
     }
   },
 
@@ -138,8 +138,9 @@ export default {
             loading,
             error,
             networkStatus,
-            times: ++this.$_times,
           }
+
+          this.times = ++this.$_times;
 
           this.$emit('result', this.result)
         },
@@ -169,6 +170,7 @@ export default {
   render (h) {
     let result = this.$scopedSlots.default({
       result: this.result,
+      times: this.times,
       query: this.$apollo.queries.query,
       isLoading: this.$apolloData.loading,
       gqlError: this.result && this.result.error && this.result.error.gqlError,
