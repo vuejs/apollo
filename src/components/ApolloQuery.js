@@ -167,17 +167,12 @@ export default {
   },
 
   render (h) {
-    let result = this.$scopedSlots.default({
+    const result = this.$scopedSlots.default({
       result: this.result,
       query: this.$apollo.queries.query,
       isLoading: this.$apolloData.loading,
       gqlError: this.result && this.result.error && this.result.error.gqlError,
     })
-    if (Array.isArray(result)) {
-      result = result.concat(this.$slots.default)
-    } else {
-      result = [result].concat(this.$slots.default)
-    }
     return h(this.tag, result)
   },
 }
