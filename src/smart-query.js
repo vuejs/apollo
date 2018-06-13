@@ -258,4 +258,13 @@ export default class SmartQuery extends SmartApollo {
       return this.observer.stopPolling(...args)
     }
   }
+
+  destroy () {
+    super.destroy()
+
+    if (this.loading) {
+      this.watchLoading(false, -1)
+    }
+    this.loading = false
+  }
 }
