@@ -822,7 +822,7 @@ var SmartQuery = function (_SmartApollo) {
         args[_key] = arguments[_key];
       }
 
-      return this.callHandlers.apply(this, [[this.options.watchLoading, this.vm.$apollo.watchLoading, this.vm.$apollo.provider.watchLoading]].concat(args));
+      return this.callHandlers.apply(this, [[this.options.watchLoading, this.vm.$apollo.watchLoading, this.vm.$apollo.provider.watchLoading]].concat(args, [this]));
     }
   }, {
     key: 'applyLoadingModifier',
@@ -924,6 +924,16 @@ var SmartQuery = function (_SmartApollo) {
 
         return (_observer4 = this.observer).stopPolling.apply(_observer4, arguments);
       }
+    }
+  }, {
+    key: 'destroy',
+    value: function destroy() {
+      get(SmartQuery.prototype.__proto__ || Object.getPrototypeOf(SmartQuery.prototype), 'destroy', this).call(this);
+
+      if (this.loading) {
+        this.watchLoading(false, -1);
+      }
+      this.loading = false;
     }
   }, {
     key: 'client',
@@ -2015,7 +2025,7 @@ function install(Vue, options) {
 ApolloProvider.install = install;
 
 // eslint-disable-next-line no-undef
-ApolloProvider.version = "3.0.0-beta.16";
+ApolloProvider.version = "3.0.0-beta.17";
 
 // Apollo provider
 var ApolloProvider$1 = ApolloProvider;
