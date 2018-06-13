@@ -176,7 +176,7 @@ export default class SmartQuery extends SmartApollo {
       this.options.watchLoading,
       this.vm.$apollo.watchLoading,
       this.vm.$apollo.provider.watchLoading,
-    ], ...args)
+    ], ...args, this)
   }
 
   applyLoadingModifier (value) {
