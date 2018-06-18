@@ -213,7 +213,7 @@ apollo: {
 You can then access the subscription with `this.$apollo.subscriptions.<name>`.
 
 :::tip
-Just like for queries, you can declare the subscription [with a function](#option-function), and you can declare the `query` option [with a reactive function](#reactive-query-definition).
+Just like for queries, you can declare the subscription [with a function](./queries.md#option-function), and you can declare the `query` option [with a reactive function](./queries.md#reactive-query-definition).
 :::
 
 ## Skipping the subscription
