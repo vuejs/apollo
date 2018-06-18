@@ -3395,9 +3395,9 @@ text-table@~0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
 
-throttle-debounce@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/throttle-debounce/-/throttle-debounce-1.0.1.tgz#dad0fe130f9daf3719fdea33dc36a8e6ba7f30b5"
+throttle-debounce@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/throttle-debounce/-/throttle-debounce-2.0.0.tgz#2d8d24bd8cf3cb0cc7bd1a2dbeb624b4081a1ed4"
 
 through@2, through@^2.3.6, through@~2.3, through@~2.3.1:
   version "2.3.8"
