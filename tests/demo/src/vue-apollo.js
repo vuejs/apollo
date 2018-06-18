@@ -30,6 +30,12 @@ const defaultOptions = {
   // cache: myCache,
   // Additional ApolloClient options
   // apollo: { ... }
+  getAuth: tokenName => {
+    // get the authentication token from local storage if it exists
+    const token = localStorage.getItem(tokenName)
+    // return the headers to the context so httpLink can read them
+    return token || ''
+  },
 }
 
 // Call this in the Vue app file

@@ -176,7 +176,7 @@ export default class SmartQuery extends SmartApollo {
       this.options.watchLoading,
       this.vm.$apollo.watchLoading,
       this.vm.$apollo.provider.watchLoading,
-    ], ...args)
+    ], ...args, this)
   }
 
   applyLoadingModifier (value) {
@@ -257,5 +257,14 @@ export default class SmartQuery extends SmartApollo {
     if (this.observer) {
       return this.observer.stopPolling(...args)
     }
+  }
+
+  destroy () {
+    super.destroy()
+
+    if (this.loading) {
+      this.watchLoading(false, -1)
+    }
+    this.loading = false
   }
 }
