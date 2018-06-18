@@ -1,5 +1,4 @@
-import oThrottle from 'throttle-debounce/throttle'
-import oDebounce from 'throttle-debounce/debounce'
+import * as TD from 'throttle-debounce'
 
 export const Globals = {}
 
@@ -7,9 +6,9 @@ function factory (action) {
   return (cb, time) => action(time, cb)
 }
 
-export const throttle = factory(oThrottle)
+export const throttle = factory(TD.throttle)
 
-export const debounce = factory(oDebounce)
+export const debounce = factory(TD.debounce)
 
 export function getMergedDefinition (def) {
   return Globals.Vue.util.mergeOptions({}, def)
