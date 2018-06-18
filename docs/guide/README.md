@@ -26,4 +26,4 @@ This library integrates [apollo](https://www.apollographql.com/) in your [Vue](h
 
 [<img src="https://conf.vuejs.org/img/logo-48.png" alt="icon" width="16" height="16"/> VueConf 2017 demo](https://github.com/Akryum/vueconf-2017-demo) &amp; [slides](http://slides.com/akryum/graphql#/)
 
-[<img src="https://assets-cdn.github.com/favicon.ico" alt="icon" width="16" height="16"/> Devfest Summit Example](https://github.com/Akryum/devfest-nantes-2017) (with lots of features like SSR, OAuth, Realtime updates, Apollo Optics...)
+[<img src="https://assets-cdn.github.com/favicon.ico" alt="icon" width="16" height="16"/> Devfest Summit Example](https://github.com/Akryum/devfest-nantes-2017) (with lots of features like SSR, OAuth, Realtime updates, Apollo Engine...)

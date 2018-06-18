@@ -96,7 +96,7 @@ To prefetch all the apollo queries you marked, use the `apolloProvider.prefetchA
 Here is an example with vue-router and a Vuex store:
 
 ```js
-return new Promise((resolve, reject) => {
+export default () => new Promise((resolve, reject) => {
   const { app, router, store, apolloProvider } = CreateApp({
     ssr: true,
   })
@@ -306,17 +306,19 @@ CreateApp({
 On the server:
 
 ```js
-import { CreateApp } from './app'
+import CreateApp from './app'
 
-const { app, router, store, apolloProvider } = CreateApp({
-  ssr: true,
-})
+export default () => new Promise((resolve, reject) => {
+  const { app, router, store, apolloProvider } = CreateApp({
+    ssr: true,
+  })
 
-// set router's location
-router.push(context.url)
+  // set router's location
+  router.push(context.url)
 
-// wait until router has resolved possible async hooks
-router.onReady(() => {
-  // Prefetch, render HTML (see above)
+  // wait until router has resolved possible async hooks
+  router.onReady(() => {
+    // Prefetch, render HTML (see above)
+  })
 })
 ```
