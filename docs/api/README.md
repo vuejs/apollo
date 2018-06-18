@@ -1,5 +1,7 @@
 # API Reference
 
-::: warning WIP
-PR welcome!
+Welcome to the API Reference!
+
+::: warning Work-in-Progress
+If something is missing, please open a Pull Request!
 :::

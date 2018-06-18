@@ -35,7 +35,8 @@ interface ExtendableVueApolloQueryOptions<V, R> extends _WatchQueryOptions {
   skip?: (this: ApolloVueThisType<V>) => boolean | boolean;
   manual?: boolean;
   subscribeToMore?: ApolloVueSubscribeToMoreOptions<V> | ApolloVueSubscribeToMoreOptions<V>[];
-  prefetch?: (context: any) => boolean | boolean;
+  prefetch?: (context: any) => any | boolean;
+  deep?: boolean;
 }
 export interface VueApolloQueryOptions<V, R> extends ExtendableVueApolloQueryOptions<V, R> { 
   query: ((this: ApolloVueThisType<V>) => DocumentNode) | DocumentNode;

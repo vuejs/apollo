@@ -1,10 +1,16 @@
 # Mutations
 
-Mutations are queries that change your data state on your apollo server. For more info, visit the [apollo doc](https://www.apollographql.com/docs/react/reference/index.html#ApolloClient\.mutate). There is a mutation-focused [example app](https://github.com/Akryum/vue-apollo-todos) you can look at.
+Mutations are queries that change your data state on your apollo server.
 
-**You shouldn't send the `__typename` fields in the variables, so it is not recommended to send an Apollo result object directly.**
+Use `this.$apollo.mutate()` to send a GraphQL mutation.
 
-```javascript
+For more info, visit the [apollo doc](https://www.apollographql.com/docs/react/reference/index.html#ApolloClient\.mutate). There is a mutation-focused [example app](https://github.com/Akryum/vue-apollo-todos) you can look at.
+
+::: warning
+You shouldn't send the `__typename` fields in the variables, so it is not recommended to send an Apollo result object directly.
+:::
+
+```js
 methods: {
   addTag() {
     // We save the user input in case of an error
@@ -59,9 +65,9 @@ methods: {
 },
 ```
 
-Server-side:
+## Server-side example
 
-```javascript
+```js
 export const schema = `
 type Tag {
   id: Int

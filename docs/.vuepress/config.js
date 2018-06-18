@@ -4,6 +4,7 @@ module.exports = {
     repo: 'Akryum/vue-apollo',
     docsDir: 'docs',
     editLinks: true,
+    lastUpdated: 'Last Updated',
     nav: [
       {
         text: 'Guide',
@@ -31,27 +32,63 @@ module.exports = {
       '/guide/': [
         '',
         'installation',
-        'create-provider',
-        'usage-in-components',
-        'queries',
-        'mutations',
-        'subscriptions',
-        'pagination',
-        'special-options',
-        'skip-all',
-        'multiple-clients',
-        'components',
-        'ssr',
-        'local-state'
+        {
+          title: 'Basic Usage',
+          collapsable: false,
+          children: [
+            'apollo/',
+            'apollo/queries',
+            'apollo/mutations',
+            'apollo/subscriptions',
+            'apollo/pagination',
+          ]
+        },
+        {
+          title: 'Components',
+          collapsable: false,
+          children: [
+            'components/',
+            'components/query',
+            'components/mutation',
+            'components/subscribe-to-more',
+          ]
+        },
+        {
+          title: 'Advanced topics',
+          collapsable: false,
+          children: [
+            'multiple-clients',
+            'ssr',
+            'local-state'
+          ]
+        }
       ],
       '/api/': [
-        'apollo-provider',
-        'apollo-query',
-        'apollo-subscribe-to-more',
-        'apollo-mutation',
-        'dollar-apollo',
-        'smart-query',
-        'smart-subscription',
+        {
+          title: 'Vue Apollo',
+          collapsable: false,
+          children: [
+            'apollo-provider',
+            'dollar-apollo',
+          ]
+        },
+        {
+          title: 'Smart Apollo',
+          collapsable: false,
+          children: [
+            'smart-query',
+            'smart-subscription',
+          ]
+        },
+        {
+          title: 'Apollo Components',
+          collapsable: false,
+          children: [
+            'apollo-query',
+            'apollo-subscribe-to-more',
+            'apollo-mutation',
+          ]
+        }
       ],
       '/migration/': [
         ''
@@ -59,5 +96,5 @@ module.exports = {
     }
   },
   title: 'Apollo and GraphQL for Vue.js',
-  description: '🚀 Apollo and GraphQL plugin for Vue.js framework'
+  description: '🚀 Integrate GraphQL in your Vue.js apps!'
 }

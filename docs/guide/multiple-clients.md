@@ -2,7 +2,7 @@
 
 You can specify multiple apollo clients if your app needs to connect to different GraphQL endpoints:
 
-```javascript
+```js
 const apolloProvider = new VueApollo({
   clients: {
     a: apolloClient,
@@ -14,7 +14,7 @@ const apolloProvider = new VueApollo({
 
 In the component `apollo` option, you can define the client for all the queries, subscriptions and mutations with `$client` (only for this component):
 
-```javascript
+```js
 export default {
   apollo: {
     $client: 'b',
@@ -24,7 +24,7 @@ export default {
 
 You can also specify the client in individual queries, subscriptions and mutations with the `client` property in the options:
 
-```javascript
+```js
 tags: {
   query: gql`...`,
   client: 'b',

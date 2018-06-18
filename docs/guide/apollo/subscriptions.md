@@ -1,5 +1,7 @@
 # Subscriptions
 
+## Setup
+
 *For the server implementation, you can take a look at [this simple example](https://github.com/Akryum/apollo-server-example).*
 
 To make enable the websocket-based subscription, a bit of additional setup is required:
@@ -8,7 +10,7 @@ To make enable the websocket-based subscription, a bit of additional setup is re
 npm install --save apollo-link-ws apollo-utilities
 ```
 
-```javascript
+```js
 import Vue from 'vue'
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
@@ -57,11 +59,11 @@ const apolloClient = new ApolloClient({
 Vue.use(VueApollo)
 ```
 
-## subscribeToMore
+## Subscribe To More
 
-If you need to update a query result from a subscription, the best way is using the `subscribeToMore` query method. Just add a `subscribeToMore` to your query:
+If you need to update a query result from a subscription, the best way is using the `subscribeToMore` query method. It will create [Smart Subscriptions](../../api/smart-subscription.md) that are linked to the query. Just add a `subscribeToMore` to your query:
 
-```javascript
+```js
 apollo: {
   tags: {
     query: TAGS_QUERY,
@@ -88,13 +90,15 @@ apollo: {
 }
 ```
 
-*Note that you can pass an array of subscriptions to `subscribeToMore` to subscribe to multiple subscriptions on this query.*
+::: tip
+Note that you can pass an array of subscriptions to `subscribeToMore` to subscribe to multiple subscriptions on this query.
+:::
 
 ### Alternate usage
 
 You can access the queries you defined in the `apollo` option with `this.$apollo.queries.<name>`, so it would look like this:
 
-```javascript
+```js
 this.$apollo.queries.tags.subscribeToMore({
   // GraphQL document
   document: gql`subscription name($param: String!) {
@@ -118,7 +122,7 @@ If the related query is stopped, the subscription will be automatically destroye
 
 Here is an example:
 
-```javascript
+```js
 // Subscription GraphQL document
 const TAG_ADDED = gql`subscription tags($type: String!) {
   tagAdded(type: $type) {
@@ -166,46 +170,16 @@ this.$watch(() => this.type, (type, oldType) => {
 })
 ```
 
-## subscribe
+## Simple subscription
 
 ::: danger
 If you want to update a query with the result of the subscription, use `subscribeToMore`.
 The methods below are suitable for a 'notify' use case
 :::
 
-Use the `$apollo.subscribe()` method to subscribe to a GraphQL subscription that will get killed automatically when the component is destroyed:
+You can declare [Smart Subscriptions](../../api/smart-subscription.md) in the `apollo` option with the `$subscribe` keyword:
 
-```javascript
-mounted() {
-  const subQuery = gql`subscription tags($type: String!) {
-    tagAdded(type: $type) {
-      id
-      label
-      type
-    }
-  }`
-
-  const observer = this.$apollo.subscribe({
-    query: subQuery,
-    variables: {
-      type: 'City',
-    },
-  })
-
-  observer.subscribe({
-    next(data) {
-      console.log(data)
-    },
-    error(error) {
-      console.error(error)
-    },
-  })
-},
-```
-
-You can declare subscriptions in the `apollo` option with the `$subscribe` keyword:
-
-```javascript
+```js
 apollo: {
   // Subscriptions
   $subscribe: {
@@ -238,13 +212,15 @@ apollo: {
 
 You can then access the subscription with `this.$apollo.subscriptions.<name>`.
 
-*Just like for queries, you can declare the subscription [with a function](#option-function), and you can declare the `query` option [with a reactive function](#reactive-query-definition).*
+:::tip
+Just like for queries, you can declare the subscription [with a function](#option-function), and you can declare the `query` option [with a reactive function](#reactive-query-definition).
+:::
 
 ## Skipping the subscription
 
 If the subscription is skipped, it will disable it and it will not be updated anymore. You can use the `skip` option:
 
-```javascript
+```js
 // Apollo-specific options
 apollo: {
   // Subscriptions
@@ -282,7 +258,7 @@ Here, `skip` will be called automatically when the `skipSubscription` component 
 
 You can also access the subscription directly and set the `skip` property:
 
-```javascript
+```js
 this.$apollo.subscriptions.tags.skip = true
 ```
 
@@ -290,7 +266,7 @@ this.$apollo.subscriptions.tags.skip = true
 
 You can manually add a smart subscription with the `$apollo.addSmartSubscription(key, options)` method:
 
-```javascript
+```js
 created () {
   this.$apollo.addSmartSubscription('tagAdded', {
     // Same options like '$subscribe' above
@@ -298,4 +274,38 @@ created () {
 }
 ```
 
-*Internally, this method is called for each entry of the `$subscribe` object in the component `apollo` option.*
+:::tip
+Internally, this method is called for each entry of the `$subscribe` object in the component `apollo` option.
+:::
+
+## Standard Apollo subscribe
+
+Use the `$apollo.subscribe()` method to subscribe to a GraphQL subscription that will get killed automatically when the component is destroyed. It will **NOT** create a Smart Subscription.
+
+```js
+mounted() {
+  const subQuery = gql`subscription tags($type: String!) {
+    tagAdded(type: $type) {
+      id
+      label
+      type
+    }
+  }`
+
+  const observer = this.$apollo.subscribe({
+    query: subQuery,
+    variables: {
+      type: 'City',
+    },
+  })
+
+  observer.subscribe({
+    next(data) {
+      console.log(data)
+    },
+    error(error) {
+      console.error(error)
+    },
+  })
+},
+```

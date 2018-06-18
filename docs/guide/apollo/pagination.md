@@ -2,9 +2,18 @@
 
 *[Here](https://github.com/Akryum/apollo-server-example/blob/master/schema.js#L21) is a simple example for the server.*
 
-Use the `fetchMore()` method on the query:
+Sometimes
+ your dataset is so large that you want to load it chunk by chunk.
 
-```javascript
+Use the `fetchMore()` method on a Smart Query to load more data.
+
+::: warning
+Don't forget to include the `__typename` to the new result.
+:::
+
+Example:
+
+```vue
 <template>
   <div id="app">
     <h2>Pagination</h2>
@@ -83,5 +92,3 @@ export default {
 }
 </script>
 ```
-
-**Don't forget to include the `__typename` to the new result.**

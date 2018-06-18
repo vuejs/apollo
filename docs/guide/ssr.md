@@ -15,7 +15,7 @@ You don't have access to the component instance when doing prefetching on the se
 
 Example:
 
-```javascript
+```js
 export default {
   apollo: {
     allPosts: {
@@ -34,7 +34,7 @@ export default {
 
 Example 2:
 
-```javascript
+```js
 export default {
   apollo: {
     post: {
@@ -62,7 +62,7 @@ export default {
 
 You can also tell vue-apollo that some components not used in a `router-view` (and thus, not in vue-router `matchedComponents`) need to be prefetched, with the `willPrefetch` method:
 
-```javascript
+```js
 import { willPrefetch } from 'vue-apollo'
 
 export default willPrefetch({
@@ -95,7 +95,7 @@ To prefetch all the apollo queries you marked, use the `apolloProvider.prefetchA
 
 Here is an example with vue-router and a Vuex store:
 
-```javascript
+```js
 return new Promise((resolve, reject) => {
   const { app, router, store, apolloProvider } = CreateApp({
     ssr: true,
@@ -149,7 +149,7 @@ return new Promise((resolve, reject) => {
 
 The `options` argument defaults to:
 
-```javascript
+```js
 {
   // Include components outside of the routes
   // that are registered with `willPrefetch`
@@ -161,7 +161,7 @@ Use the `apolloProvider.exportStates` method to get the JavaScript code you need
 
 It takes an `options` argument which defaults to:
 
-```javascript
+```js
 {
   // Global variable name
   globalName: '__APOLLO_STATE__',
@@ -176,7 +176,7 @@ You can also use the `apolloProvider.getStates` method to get the JS object inst
 
 It takes an `options` argument which defaults to:
 
-```javascript
+```js
 {
   // Prefix for the keys of each apollo client state
   exportNamespace: '',
@@ -189,7 +189,7 @@ It is recommended to create the apollo clients inside a function with an `ssr` a
 
 Here is an example:
 
-```javascript
+```js
 // src/api/apollo.js
 
 import Vue from 'vue'
@@ -240,7 +240,7 @@ export function createApolloClient (ssr = false) {
 
 Example for common `CreateApp` method:
 
-```javascript
+```js
 import Vue from 'vue'
 
 import VueRouter from 'vue-router'
@@ -295,7 +295,7 @@ export default createApp
 
 On the client:
 
-```javascript
+```js
 import CreateApp from './app'
 
 CreateApp({
@@ -305,7 +305,7 @@ CreateApp({
 
 On the server:
 
-```javascript
+```js
 import { CreateApp } from './app'
 
 const { app, router, store, apolloProvider } = CreateApp({
