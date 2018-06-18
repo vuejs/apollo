@@ -21,19 +21,25 @@ interface ApolloVueSubscribeToMoreOptions<V> {
   onError?: (error: Error) => void;
 }
 
+export type WatchLoading<V> = (isLoading: boolean, countModifier: number) => void
+export type ErrorHandler<V> = (this: ApolloVueThisType<V>, error: any) => void
+
 type _WatchQueryOptions = Omit<WatchQueryOptions, 'query'>; // exclude query prop because it causes type incorrectly error
-export interface VueApolloQueryOptions<V, R> extends _WatchQueryOptions { 
-  query: ((this: ApolloVueThisType<V>) => DocumentNode) | DocumentNode;
-  variables?: VariableFn<V>;
+
+interface ExtendableVueApolloQueryOptions<V, R> extends _WatchQueryOptions {
   update?: (this: ApolloVueThisType<V>, data: R) => any;
   result?: (this: ApolloVueThisType<V>, data: R, loader: any, netWorkStatus: NetworkStatus) => void;
-  error?: (this: ApolloVueThisType<V>, error: any) => void;
+  error?: ErrorHandler<V>;
   loadingKey?: string;
-  watchLoading?: (isLoading: boolean, countModifier: number) => void;
+  watchLoading?: WatchLoading<V>;
   skip?: (this: ApolloVueThisType<V>) => boolean | boolean;
   manual?: boolean;
   subscribeToMore?: ApolloVueSubscribeToMoreOptions<V> | ApolloVueSubscribeToMoreOptions<V>[];
   prefetch?: (context: any) => boolean | boolean;
+}
+export interface VueApolloQueryOptions<V, R> extends ExtendableVueApolloQueryOptions<V, R> { 
+  query: ((this: ApolloVueThisType<V>) => DocumentNode) | DocumentNode;
+  variables?: VariableFn<V>;
 }
 
 export interface VueApolloMutationOptions<V, R> extends MutationOptions<R> {
@@ -51,16 +57,19 @@ export interface VueApolloSubscriptionOptions<V, R> extends SubscriptionOptions 
 type QueryComponentProperty<V> = ((this: ApolloVueThisType<V>) => VueApolloQueryOptions<V, any>) | VueApolloQueryOptions<V, any>
 type SubscribeComponentProperty<V> = VueApolloSubscriptionOptions<V, any> | { [key: string]: VueApolloSubscriptionOptions<V, any> }
 
-export type VueApolloOptions = {
+export type VueApolloOptions<V> = {
   $skip?: boolean,
   $skipAllQueries?: boolean,
   $skipAllSubscriptions?: boolean,
+  $deep?: boolean,
   $client?: string,
   $loadingKey?: string,
-  $error?: Function
+  $watchLoading?: WatchLoading<V>,
+  $error?: ErrorHandler<V>,
+  $query?: ExtendableVueApolloQueryOptions<V, any>
 }
 
-export interface VueApolloComponentOption<V> extends VueApolloOptions {
-  [key: string]: QueryComponentProperty<V> | SubscribeComponentProperty<V> | string | boolean | Function | undefined;
+export interface VueApolloComponentOption<V> extends VueApolloOptions<V> {
+  [key: string]: QueryComponentProperty<V> | SubscribeComponentProperty<V> | ExtendableVueApolloQueryOptions<V, any> | string | boolean | Function | undefined;
   $subscribe?: SubscribeComponentProperty<V>;
 }

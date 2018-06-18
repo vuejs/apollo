@@ -5,12 +5,26 @@ import { SubscriptionOptions, ObservableQuery } from 'apollo-client'
 import { DataProxy } from 'apollo-cache';
 import { subscribe } from 'graphql/subscription/subscribe';
 import { ApolloProvider, VueApolloComponent } from './apollo-provider'
-import { VueApolloQueryOptions, VueApolloMutationOptions, VueApolloSubscriptionOptions, ApolloVueThisType, VueApolloOptions } from './options'
+import {
+  VueApolloQueryOptions,
+  VueApolloMutationOptions,
+  VueApolloSubscriptionOptions,
+  ApolloVueThisType,
+  VueApolloOptions,
+  WatchLoading,
+  ErrorHandler
+} from './options'
 
 export class VueApollo extends ApolloProvider implements PluginObject<{}>{
   [key: string]: any;
   install: PluginFunction<{}>;
-  constructor (options: { defaultClient: ApolloClient<{}>, defaultOptions?: VueApolloOptions, clients?: { [key: string]: ApolloClient<{}> } });
+  constructor (options: {
+    defaultClient: ApolloClient<{}>,
+    defaultOptions?: VueApolloOptions<{}>,
+    clients?: { [key: string]: ApolloClient<{}> },
+    watchLoading?: WatchLoading<{}>,
+    errorHandler?: ErrorHandler<{}>
+  });
   static install(pVue: typeof Vue, options?:{} | undefined): void;
 }
 

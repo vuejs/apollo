@@ -9,8 +9,19 @@ import App from './App'
 
 const httpLink = new HttpLink({ uri: 'https://dummy.test.com' })
 const cache: any = 'dummy cache';
-const apolloClient = new ApolloClient({ link: httpLink, cache, connectToDevTools: true })
-const apolloProvider = new VueApollo({ defaultClient: apolloClient })
+const apolloClient = new ApolloClient({
+  link: httpLink,
+  cache,
+  connectToDevTools: true
+})
+const apolloProvider = new VueApollo({
+  defaultClient: apolloClient,
+  defaultOptions: {
+    $query: {
+      fetchPolicy: 'cache-and-network'
+    }
+  }
+})
 
 Vue.use(VueApollo)
 

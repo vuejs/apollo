@@ -27,7 +27,10 @@ export default Vue.extend({
   },
   apollo: {
     $client: 'a',
-    $loadingKey: 'loading',
+    $query: {
+      loadingKey: 'loading',
+      fetchPolicy: 'cache-first'
+    },
     tags() {
       return {
         query: gql`query tagList ($type: String!) {
