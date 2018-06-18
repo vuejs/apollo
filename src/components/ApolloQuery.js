@@ -140,7 +140,7 @@ export default {
             networkStatus,
           }
 
-          this.times = ++this.$_times;
+          this.times = ++this.$_times
 
           this.$emit('result', this.result)
         },
