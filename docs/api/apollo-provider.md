@@ -1,12 +1,6 @@
-# API Reference
+# ApolloProvider
 
-::: warning WIP
-PR welcome!
-:::
-
-## ApolloProvider
-
-### Constructor
+## Constructor
 
 ```javascript
 const apolloProvider = new VueApollo({
@@ -49,9 +43,9 @@ new Vue({
 })
 ```
 
-### Methods
+## Methods
 
-#### prefetchAll
+### prefetchAll
 
 (SSR) Prefetch all queued component definitions and returns a promise resolved when all corresponding apollo data is ready.
 
@@ -71,7 +65,7 @@ await apolloProvider.prefetchAll (context, componentDefs, options)
 }
 ```
 
-#### getStates
+### getStates
 
 (SSR) Returns the apollo stores states as JavaScript objects.
 
@@ -88,7 +82,7 @@ const states = apolloProvider.getStates(options)
 }
 ```
 
-#### exportStates
+### exportStates
 
 (SSR) Returns the apollo stores states as JavaScript code inside a String. This code can be directly injected to the page HTML inside a `<script>` tag.
 
@@ -108,15 +102,3 @@ const js = apolloProvider.exportStates(options)
   exportNamespace: '',
 }
 ```
-
-## Dollar Apollo
-
-This is the apollo manager added to any component that uses apollo. It can be accessed inside a component with `this.$apollo`.
-
-## Smart Query
-
-Each query declared in the `apollo` definition (that is, which doesn't start with a `$` char) in a component results in the creation of a smart query object.
-
-## Smart Subscription
-
-Each subscription declared in the `apollo.$subscribe` option in a component results in the creation of a smart subscription object.

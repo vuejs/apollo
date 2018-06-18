@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.png
 actionText: Get Started →
-actionLink: /docs/
+actionLink: /guide/
 footer: LICENCE ISC - Created by Guillaume CHAU (@Akryum)
 ---
 

@@ -1,4 +1,4 @@
-# Migrating from vue-apollo 2.x and apollo 1.x
+# From vue-apollo 2 and Apollo 1
 
 The main changes are related to the apollo client setup. Your components code shouldn't be affected. Apollo now uses a more flexible [apollo-link](https://github.com/apollographql/apollo-link) system that allows compositing multiple links together to add more features (like batching, offline support and more).
 
