@@ -1,5 +1,11 @@
 module.exports = {
+  title: 'Apollo and GraphQL for Vue.js',
+  description: '🚀 Integrate GraphQL in your Vue.js apps!',
   base: '/vue-apollo/',
+  serviceWorker: true,
+  head: [
+    ['link', { rel: 'icon', href: '/favicon.png' }],
+  ],
   themeConfig: {
     repo: 'Akryum/vue-apollo',
     docsDir: 'docs',
@@ -94,7 +100,5 @@ module.exports = {
         ''
       ]
     }
-  },
-  title: 'Apollo and GraphQL for Vue.js',
-  description: '🚀 Integrate GraphQL in your Vue.js apps!'
+  }
 }
