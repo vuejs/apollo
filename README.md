@@ -10,9 +10,9 @@
   <a href="https://www.patreon.com/akryum" target="_blank">
     <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Become a Patreon">
   </a>
+  <br>
+  <a href="https://akryum.github.io/vue-apollo/">Documentation</a>
 </p>
-
-[Documentation](https://akryum.github.io/vue-apollo)
 
 ---
 
