@@ -1,15 +1,15 @@
 ---
 home: true
 heroImage: /logo.png
-actionText: Get Started →
+actionText: 由此起步 →
 actionLink: /guide/
 features:
-- title: Automatic updates
-  details: Don't think about updating the UI or refetching the queries!
-- title: In-template components
-  details: Use Apollo in a truly declarative way with the Apollo components
-- title: SSR-ready
-  details: Run your queries on the server before rendering the page HTML
+- title: 自动更新
+  details: 无需考虑更新 UI 或重新发送查询的问题！
+- title: 模板内组件
+  details: 通过真正声明 Apollo 组件的方式使用 Apollo
+- title: 支持 SSR
+  details: 在渲染 HTML 页面之前在服务端运行你的查询
 footer: LICENCE ISC - Created by Guillaume CHAU (@Akryum)
 ---
 
