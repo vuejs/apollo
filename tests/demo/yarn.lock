@@ -8022,9 +8022,9 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
-vue-cli-plugin-apollo@^0.14.2:
-  version "0.14.2"
-  resolved "https://registry.yarnpkg.com/vue-cli-plugin-apollo/-/vue-cli-plugin-apollo-0.14.2.tgz#99f453bede05b97b483ad728b93ab5d843658d9f"
+vue-cli-plugin-apollo@^0.14.3:
+  version "0.14.3"
+  resolved "https://registry.yarnpkg.com/vue-cli-plugin-apollo/-/vue-cli-plugin-apollo-0.14.3.tgz#bae3038a0c4ad8de3b66c9b3074b89a0cab58664"
   dependencies:
     apollo-cache-inmemory "^1.2.5"
     apollo-client "^2.3.5"
