@@ -2,8 +2,7 @@
   "eslint.validate": [
     "javascript",
     "javascriptreact",
-    "vue",
-    "graphql"
+    "vue"
   ],
   "eslint.enable": true
 }

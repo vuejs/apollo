@@ -14,7 +14,8 @@ module.exports = {
     'graphql/template-strings': [
       'error',
       {
-        env: 'literal'
+        env: 'literal',
+        projectName: 'app',
       }
     ],
     'comma-dangle': ['error', 'always-multiline'],
