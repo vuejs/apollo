@@ -1,49 +1,47 @@
-# Mutations
+# 变更
 
-Mutations are queries that change your data state on your apollo server.
+变更是在你的 apollo 服务端更改你的数据状态的查询。
 
-Use `this.$apollo.mutate()` to send a GraphQL mutation.
+使用 `this.$apollo.mutate()` 来发送一个 GraphQL 变更。
 
-For more info, visit the [apollo doc](https://www.apollographql.com/docs/react/reference/index.html#ApolloClient\.mutate). There is a mutation-focused [example app](https://github.com/Akryum/vue-apollo-todos) you can look at.
+想要了解更多信息，请访问 [apollo 文档](https://www.apollographql.com/docs/react/reference/index.html#ApolloClient\.mutate)。有一个以变更为重点的 [示例应用](https://github.com/Akryum/vue-apollo-todos)，你可以看看。
 
 ::: warning
-You shouldn't send the `__typename` fields in the variables, so it is not recommended to send an Apollo result object directly.
+你不应当在变量中发送 `__typename` 字段，因此不建议直接发送 Apollo 结果对象。
 :::
 
 ```js
 methods: {
   addTag() {
-    // We save the user input in case of an error
+    // 保存用户输入以防止错误
     const newTag = this.newTag
-    // We clear it early to give the UI a snappy feel
+    // 将其清除以尽早更新用户页面
     this.newTag = ''
-    // Call to the graphql mutation
+    // 调用 graphql 变更
     this.$apollo.mutate({
-      // Query
+      // 查询语句
       mutation: gql`mutation ($label: String!) {
         addTag(label: $label) {
           id
           label
         }
       }`,
-      // Parameters
+      // 参数
       variables: {
         label: newTag,
       },
-      // Update the cache with the result
-      // The query will be updated with the optimistic response
-      // and then with the real result of the mutation
+      // 用结果更新缓存
+      // 查询将先通过乐观响应、然后再通过真正的变更结果更新
       update: (store, { data: { newTag } }) => {
-        // Read the data from our cache for this query.
+        // 从缓存中读取这个查询的数据
         const data = store.readQuery({ query: TAGS_QUERY })
-        // Add our tag from the mutation to the end
+        // 将突变中的标签添加到最后
         data.tags.push(newTag)
-        // Write our data back to the cache.
+        // 将数据写回缓存
         store.writeQuery({ query: TAGS_QUERY, data })
       },
-      // Optimistic UI
-      // Will be treated as a 'fake' result as soon as the request is made
-      // so that the UI can react quickly and the user be happy
+      // 乐观的用户界面
+      // 将在请求产生时作为“假”结果，使用户界面能够快速更新
       optimisticResponse: {
         __typename: 'Mutation',
         addTag: {
@@ -53,19 +51,19 @@ methods: {
         },
       },
     }).then((data) => {
-      // Result
+      // 结果
       console.log(data)
     }).catch((error) => {
-      // Error
+      // 错误
       console.error(error)
-      // We restore the initial user input
+      // 恢复初始用户输入
       this.newTag = newTag
     })
   },
 },
 ```
 
-## Server-side example
+## 服务端示例
 
 ```js
 export const schema = `
@@ -88,10 +86,10 @@ schema {
 }
 `
 
-// Fake word generator
+// 假数据生成器
 import faker from 'faker'
 
-// Let's generate some tags
+// 生成一些标签
 var id = 0
 var tags = []
 for (let i = 0; i < 42; i++) {

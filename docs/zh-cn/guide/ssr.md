@@ -1,19 +1,19 @@
-# Server-Side Rendering
+# 服务端渲染
 
-## Prefetch components
+## 预取组件
 
-On the queries you want to prefetch on the server, add the `prefetch` option. It can either be:
- - a variables object,
- - a function that gets the context object (which can contain the URL for example) and return a variables object,
- - `true` (query's `variables` is reused).
+在要在服务端预取的查询上，添加 `prefetch` 选项。它可以是：
+ - 一个变量对象；
+ - 一个获取上下文对象（例如可以包含 URL）并返回一个变量对象的函数；
+ - `true`（复用查询的 `variables`）。
 
-If you are returning a variables object in the `prefetch` option, make sure it matches the result of the `variables` option. If they do not match, the query's data property will not be populated while rendering the template server-side.
+如果你在 `prefetch` 选项中返回一个变量对象，请确保它与 `variables` 选项的结果相匹配。如果它们不匹配，则在服务端渲染模板时，查询的数据属性将不会被填充。
 
 ::: danger
-You don't have access to the component instance when doing prefetching on the server. Don't use `this` in `prefetch`!
+在服务端进行预取时，你无法访问组件实例。不要在 `prefetch` 中使用 `this`！
 :::
 
-Example:
+示例：
 
 ```js
 export default {
@@ -32,7 +32,7 @@ export default {
 }
 ```
 
-Example 2:
+示例 2：
 
 ```js
 export default {
@@ -60,7 +60,7 @@ export default {
 }
 ```
 
-You can also tell vue-apollo that some components not used in a `router-view` (and thus, not in vue-router `matchedComponents`) need to be prefetched, with the `willPrefetch` method:
+你还可以通过使用 `willPrefetch` 方法，来告诉 vue-apollo 某些未在 `router-view` 中被使用的组件（因此不在 vue-router 的 `matchedComponents` 中）需要预取一些组件：
 
 ```js
 import { willPrefetch } from 'vue-apollo'
@@ -75,25 +75,25 @@ export default willPrefetch({
           description
         }
       }`,
-      prefetch: true, // Don't forget this
+      prefetch: true, // 别忘了这个
     }
   }
 })
 ```
 
-The second parameter is optional: it's a callback that gets the context and should return a boolean indicating if the component should be prefetched:
+第二个参数是可选的：它是一个获取上下文的回调函数，并且应该返回一个布尔值，指示是否应该预取组件：
 
 ```js
 willPrefetch({
-  // Component definition...
+  // 组件定义...
 }, context => context.url === '/foo')
 ```
 
-## On the server
+## 在服务端
 
-To prefetch all the apollo queries you marked, use the `apolloProvider.prefetchAll` method. The first argument is the context object passed to the `prefetch` hooks (see above). It is recommended to pass the vue-router `currentRoute` object. The second argument is the array of component definition to include (e.g. from `router.getMatchedComponents` method). The third argument is an optional `options` object. It returns a promise resolved when all the apollo queries are loaded.
+使用 `apolloProvider.prefetchAll` 方法来预取你已标记的所有 apollo 查询。第一个参数是传递给 `prefetch` 钩子的上下文对象（参见上文），建议传入 vue-router 的 `currentRoute` 对象。第二个参数是要包含的组件定义数组（例如来自 `router.getMatchedComponents` 方法）。第三个参数是一个可选的 `options` 对象。当所有的 apollo 查询都被加载时，它返回已解决的 promise。
 
-Here is an example with vue-router and a Vuex store:
+以下是一个使用了 vue-router 和 Vuex store 的示例：
 
 ```js
 export default () => new Promise((resolve, reject) => {
@@ -101,36 +101,35 @@ export default () => new Promise((resolve, reject) => {
     ssr: true,
   })
 
-  // set router's location
+  // 设置 router 的位置
   router.push(context.url)
 
-  // wait until router has resolved possible async hooks
+  // 等待 router 解析完可能的异步钩子
   router.onReady(() => {
     const matchedComponents = router.getMatchedComponents()
 
-    // no matched routes
+    // 匹配不到的路由
     if (!matchedComponents.length) {
       reject({ code: 404 })
     }
 
     let js = ''
 
-    // Call preFetch hooks on components matched by the route.
-    // A preFetch hook dispatches a store action and returns a Promise,
-    // which is resolved when the action is complete and store state has been
-    // updated.
+    // 调用匹配到路由的组件的预取钩子
+    // 每个 preFetch 钩子分配到一个 store action 并返回一个 Promise
+    // 当 action 操作完成且 store 状态已更新时解析这个 Promise
     Promise.all([
-      // Vuex Store prefetch
+      // Vuex Store 预取
       ...matchedComponents.map(component => {
         return component.preFetch && component.preFetch(store)
       }),
-      // Apollo prefetch
+      // Apollo 预取
       apolloProvider.prefetchAll({
         route: router.currentRoute,
       }, matchedComponents),
     ]).then(() => {
-      // Inject the Vuex state and the Apollo cache on the page.
-      // This will prevent unnecessary queries.
+      // 将 Vuex 状态和 Apollo 缓存注入到页面
+      // 这将防止不必要的查询
 
       // Vuex
       js += `window.__INITIAL_STATE__=${JSON.stringify(store.state)};`
@@ -147,47 +146,46 @@ export default () => new Promise((resolve, reject) => {
 })
 ```
 
-The `options` argument defaults to:
+`options` 参数的默认值是：
 
 ```js
 {
-  // Include components outside of the routes
-  // that are registered with `willPrefetch`
+  // 包含使用 `willPrefetch` 注册的路由之外的组件
   includeGlobal: true,
 }
 ```
 
-Use the `apolloProvider.exportStates` method to get the JavaScript code you need to inject into the generated page to pass the apollo cache data to the client.
+使用 `apolloProvider.exportStates` 方法来获取你需要注入到生成出来页面的 JavaScript 代码，这些代码用于将 apollo 缓存数据传递给客户端。
 
-It takes an `options` argument which defaults to:
+它需要一个 `options` 参数，默认为：
 
 ```js
 {
-  // Global variable name
+  // 全局变量名
   globalName: '__APOLLO_STATE__',
-  // Global object on which the variable is set
+  // 变量设置到的全局对象
   attachTo: 'window',
-  // Prefix for the keys of each apollo client state
+  // 每个 apollo 客户端状态的 key 的前缀
   exportNamespace: '',
 }
 ```
 
-You can also use the `apolloProvider.getStates` method to get the JS object instead of the script string.
+你也可以使用 `apolloProvider.getStates` 方法来获取 JS 对象而不是脚本字符串。
 
-It takes an `options` argument which defaults to:
+它需要一个 `options` 参数，默认为：
 
 ```js
 {
-  // Prefix for the keys of each apollo client state
+  // 每个 apollo 客户端状态的 key 的前缀
   exportNamespace: '',
 }
 ```
 
-### Creating the Apollo Clients
+### 创建 Apollo Client
 
-It is recommended to create the apollo clients inside a function with an `ssr` argument, which is `true` on the server and `false` on the client.
+建议在一个带有 `ssr` 参数的函数内部创建 apollo client，参数在服务端为 `true`，在客户端为 `false`。
 
-Here is an example:
+这里是一个示例：
 
 ```js
 // src/api/apollo.js
@@ -198,25 +196,24 @@ import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import VueApollo from 'vue-apollo'
 
-// Install the vue plugin
+// 安装 vue 插件
 Vue.use(VueApollo)
 
-// Create the apollo client
+// 创建 apollo client
 export function createApolloClient (ssr = false) {
   const httpLink = new HttpLink({
-    // You should use an absolute URL here
+    // 你需要在这里使用绝对路径
     uri: ENDPOINT + '/graphql',
   })
 
   const cache = new InMemoryCache()
 
-  // If on the client, recover the injected state
+  // 如果在客户端则恢复注入状态
   if (!ssr) {
-    // If on the client, recover the injected state
     if (typeof window !== 'undefined') {
       const state = window.__APOLLO_STATE__
       if (state) {
-        // If you have multiple clients, use `state.<client_id>`
+        // 如果你有多个客户端，使用 `state.<client_id>`
         cache.restore(state.defaultClient)
       }
     }
@@ -226,10 +223,10 @@ export function createApolloClient (ssr = false) {
     link: httpLink,
     cache,
     ...(ssr ? {
-      // Set this on the server to optimize queries when SSR
+      // 在服务端设置此选项以优化 SSR 时的查询
       ssrMode: true,
     } : {
-      // This will temporary disable query force-fetching
+      // 这将暂时禁用查询强制获取
       ssrForceFetchDelay: 100,
     }),
   })
@@ -238,7 +235,7 @@ export function createApolloClient (ssr = false) {
 }
 ```
 
-Example for common `CreateApp` method:
+常见的 `CreateApp` 方法示例：
 
 ```js
 import Vue from 'vue'
@@ -266,8 +263,8 @@ function createApp (context) {
 
   const store = new Vuex.Store(storeOptions)
 
-  // sync the router with the vuex store.
-  // this registers `store.state.route`
+  // 同步路由到 vuex store
+  // 将注册 `store.state.route`
   sync(store, router)
 
   // Apollo
@@ -293,7 +290,7 @@ function createApp (context) {
 export default createApp
 ```
 
-On the client:
+在客户端：
 
 ```js
 import CreateApp from './app'
@@ -303,7 +300,7 @@ CreateApp({
 })
 ```
 
-On the server:
+在服务端：
 
 ```js
 import CreateApp from './app'
@@ -313,12 +310,12 @@ export default () => new Promise((resolve, reject) => {
     ssr: true,
   })
 
-  // set router's location
+  // 设置 router 的位置
   router.push(context.url)
 
-  // wait until router has resolved possible async hooks
+  // 等待 router 解析完可能的异步钩子
   router.onReady(() => {
-    // Prefetch, render HTML (see above)
+    // 预取，渲染 HTML（参见上文）
   })
 })
 ```

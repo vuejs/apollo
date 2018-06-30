@@ -1,38 +1,38 @@
-# Queries
+# 查询
 
-In the `apollo` object, add an attribute for each property you want to feed with the result of an Apollo query. Each one of them will become a Smart Query.
+为每个你需要通过 Apollo 查询提供数据的属性，在 `apollo` 对象中添加一个特性。每一个特性都将创建一个智能查询。
 
-## Simple query
+## 简单查询
 
-Use `gql` to write your GraphQL queries:
+使用 `gql` 编写你的 GraphQL 查询：
 
 ```js
 import gql from 'graphql-tag'
 ```
 
-Put the [gql](https://github.com/apollographql/graphql-tag) query directly as the value:
+直接将 [gql](https://github.com/apollographql/graphql-tag) 查询作为值：
 
 ```js
 apollo: {
-  // Simple query that will update the 'hello' vue property
+  // 简单的查询，将更新 'hello' 这个 vue 属性
   hello: gql`{hello}`,
 },
 ```
 
-You can then access the query with `this.$apollo.queries.<name>`.
+接下来你可以通过 `this.$apollo.queries.<name>` 访问这个查询。
 
-You can initialize the property in your vue component's `data` hook:
+你可以在 vue 组件的 `data` 钩子中初始化属性：
 
 ```js
 data () {
   return {
-    // Initialize your apollo data
+    // 初始化你的 apollo 数据
     hello: '',
   },
 },
 ```
 
-Server-side, add the corresponding schema and resolver:
+在服务端添加相应的 schema 和解析器：
 
 ```js
 export const schema = `
@@ -54,9 +54,9 @@ export const resolvers = {
 }
 ```
 
-For more info, visit the [apollo doc](https://www.apollographql.com/docs/apollo-server/).
+更多信息请访问 [apollo 文档](https://www.apollographql.com/docs/apollo-server/)。
 
-You can then use your property as usual in your vue component:
+接下来你可以在 vue 组件中正常使用属性：
 
 ```vue
 <template>
@@ -69,20 +69,20 @@ You can then use your property as usual in your vue component:
 </template>
 ```
 
-## Query with parameters
+## 带参数的查询
 
-You can add variables (read parameters) to your `gql` query by declaring `query` and `variables` in an object:
+你可以通过在对象中声明 `query` 和 `variables` 将变量（读取参数）添加到 `gql` 查询中：
 
 ```js
-// Apollo-specific options
+// Apollo 具体选项
 apollo: {
-  // Query with parameters
+  // 带参数的查询
   ping: {
-    // gql query
+    // gql 查询
     query: gql`query PingMessage($message: String!) {
       ping(message: $message)
     }`,
-    // Static parameters
+    // 静态参数
     variables: {
       message: 'Meow',
     },
@@ -90,18 +90,18 @@ apollo: {
 },
 ```
 
-You can use the apollo `watchQuery` options in the object, like:
+你可以在这个对象中使用 apollo 的 `watchQuery` 中的选项，比如：
  - `fetchPolicy`
  - `pollInterval`
  - ...
 
-See the [apollo doc](https://www.apollographql.com/docs/react/api/apollo-client.html#ApolloClient.watchQuery) for more details.
+更多细节请查看 [apollo 文档](https://www.apollographql.com/docs/react/api/apollo-client.html#ApolloClient.watchQuery)。
 
-For example, you could add the `fetchPolicy` apollo option like this:
+例如，你可以像这样添加 `fetchPolicy` apollo 选项：
 
 ```js
 apollo: {
-  // Query with parameters
+  // 带参数的查询
   ping: {
     query: gql`query PingMessage($message: String!) {
       ping(message: $message)
@@ -109,24 +109,24 @@ apollo: {
     variables: {
       message: 'Meow'
     },
-    // Additional options here
+    // 在这里加入其他选项
     fetchPolicy: 'cache-and-network',
   },
 },
 ```
 
-Again, you can initialize your property in your vue component:
+同样的，你可以在 vue 组件中初始化属性：
 
 ```js
 data () {
   return {
-    // Initialize your apollo data
+    // 初始化你的 apollo 数据
     ping: '',
   }
 },
 ```
 
-Server-side, add the corresponding schema and resolver:
+在服务端添加相应的 schema 和解析器：
 
 ```js
 export const schema = `
@@ -148,7 +148,7 @@ export const resolvers = {
 }
 ```
 
-And then use it in your vue component:
+然后在你的 vue 组件中使用它：
 
 ```vue
 <template>
@@ -161,37 +161,37 @@ And then use it in your vue component:
 </template>
 ```
 
-## Loading state
+## 加载状态
 
-You can display a loading state thanks to the `$apollo.loading` prop:
+你可以通过 `$apollo.loading` 属性显示加载状态：
 
 ```vue
 <div v-if="$apollo.loading">Loading...</div>
 ```
 
-Or for this specific `ping` query:
+或者针对这个特定的 `ping` 查询：
 
 ```vue
 <div v-if="$apollo.queries.ping.loading">Loading...</div>
 ```
 
-## Option function
+## 用函数作为选项
 
-You can use a function which will be called once when the component is created and it must return the option object:
+你可以使用将在创建组件时被调用一次的函数，并且它必须返回选项对象：
 
 ```js
-// Apollo-specific options
+// Apollo 具体选项
 apollo: {
-  // Query with parameters
+  // 带参数的查询
   ping () {
-    // This will called one when the component is created
-    // It must return the option object
+    // 它将在创建组件时被调用一次
+    // 必须返回选项对象
     return {
-      // gql query
+      // gql 查询
       query: gql`query PingMessage($message: String!) {
         ping(message: $message)
       }`,
-      // Static parameters
+      // 静态参数
       variables: {
         message: 'Meow',
       },
@@ -201,18 +201,18 @@ apollo: {
 ```
 
 ::: tip
-This also works for [subscriptions](./subscriptions.md).
+同样适用于 [订阅](./subscriptions.md)。
 :::
 
-## Reactive query definition
+## 响应式查询定义
 
-You can use a function for the `query` option. This will update the graphql query definition automatically:
+你可以使用函数定义 `query` 选项。这将自动更新 graphql 查询的定义：
 
 ```js
-// The featured tag can be either a random tag or the last added tag
+// 特定标签可以是随机标签或最后添加的标签
 featuredTag: {
   query () {
-    // Here you can access the component instance with 'this'
+    // 这里你可以用'this' 访问组件实例
     if (this.showTag === 'random') {
       return gql`{
         randomTag {
@@ -231,30 +231,30 @@ featuredTag: {
       }`
     }
   },
-  // We need this to assign the value of the 'featuredTag' component property
+  // 为 'featuredTag' 这个组件属性赋值
   update: data => data.randomTag || data.lastTag,
 },
 ```
 
 ::: tip
-This also works for [subscriptions](./subscriptions.md).
+同样适用于 [订阅](./subscriptions.md)。
 :::
 
-## Reactive parameters
+## 响应式参数
 
-Use a function instead to make the parameters reactive with vue properties:
+使用函数使 vue 属性能够响应式的提供给参数：
 
 ```js
-// Apollo-specific options
+// Apollo 具体选项
 apollo: {
-  // Query with parameters
+  // 带参数的查询
   ping: {
     query: gql`query PingMessage($message: String!) {
       ping(message: $message)
     }`,
-    // Reactive parameters
+    // 响应式参数
     variables() {
-      // Use vue reactive properties here
+      // 在这里使用 vue 响应式属性
       return {
           message: this.pingInput,
       }
@@ -263,7 +263,7 @@ apollo: {
 },
 ```
 
-This will re-fetch the query each time a parameter changes, for example:
+在每次参数更改时，将重新发送查询，例如：
 
 ```vue
 <template>
@@ -277,28 +277,28 @@ This will re-fetch the query each time a parameter changes, for example:
 </template>
 ```
 
-## Skipping the query
+## 跳过查询
 
-If the query is skipped, it will disable it and the result will not be updated anymore. You can use the `skip` option:
+如果查询被跳过，它将被禁用且结果将不再被更新。您可以使用 `skip` 选项：
 
 ```js
-// Apollo-specific options
+// Apollo 具体选项
 apollo: {
   tags: {
-    // GraphQL Query
+    // GraphQL 查询
     query: gql`query tagList ($type: String!) {
       tags(type: $type) {
         id
         label
       }
     }`,
-    // Reactive variables
+    // 响应式变量
     variables() {
       return {
         type: this.type,
       }
     },
-    // Disable the query
+    // 禁用这个查询
     skip() {
       return this.skipQuery
     },
@@ -306,22 +306,22 @@ apollo: {
 },
 ```
 
-Here, `skip` will be called automatically when the `skipQuery` component property changes.
+在这里，当 `skipQuery` 组件属性改变时，`skip` 将被自动调用。
 
-You can also access the query directly and set the `skip` property:
+你也可以直接访问查询并设置 `skip` 属性：
 
 ```js
 this.$apollo.queries.tags.skip = true
 ```
 
-## Reactive Query Example
+## 响应式查询示例
 
-Here is a reactive query example using polling:
+这里是一个使用轮询的响应式查询示例：
 
 ```js
-// Apollo-specific options
+// Apollo 具体选项
 apollo: {
-  // 'tags' data property on vue instance
+  // vue 实例上的 'tags' 数据属性
   tags: {
     query: gql`query tagList {
       tags {
@@ -329,12 +329,12 @@ apollo: {
         label
       }
     }`,
-    pollInterval: 300, // ms
+    pollInterval: 300, // 毫秒
   },
 },
 ```
 
-Here is how the server-side looks like:
+这里是服务端的定义：
 
 ```js
 export const schema = `
@@ -352,10 +352,10 @@ schema {
 }
 `
 
-// Fake word generator
+// 假数据生成器
 import casual from 'casual'
 
-// Let's generate some tags
+// 生成一些标签
 var id = 0
 var tags = []
 for (let i = 0; i < 42; i++) {
@@ -380,22 +380,22 @@ export const resolvers = {
 }
 ```
 
-## Manually adding a smart Query
+## 手动添加智能查询
 
-You can manually add a smart query with the `$apollo.addSmartQuery(key, options)` method:
+你可以使用 `$apollo.addSmartQuery(key, options)` 方法手动添加智能查询：
 
 ```js
 created () {
   this.$apollo.addSmartQuery('comments', {
-    // Same options like above
+    // 选项同上文
   })
 }
 ```
 
 ::: tip
-Internally, this method is called for each query entry in the component `apollo` option.
+组件 `apollo` 选项中的每个查询入口都在内部调用此方法。
 :::
 
-## Advanced options
+## 高级选项
 
-There are even more options specific to vue-apollo, see the [API Reference](../../api/smart-query.md).
+还有更多专用于 vue-apollo 的选项，请查看 [API 参考](../../api/smart-query.md)。

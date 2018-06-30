@@ -1,6 +1,6 @@
-# Local state
+# 本地状态
 
-If you need to manage local data, you can do so with [apollo-link-state](https://github.com/apollographql/apollo-link-state) and the `@client` directive:
+如果你需要管理本地数据，你可以使用 [apollo-link-state](https://github.com/apollographql/apollo-link-state) 和 `@client` 指令来实现：
 
 ```js
 export default {
@@ -14,7 +14,7 @@ export default {
     `
   },
   mounted() {
-    // mutate the hello message
+    // 变更 hello 消息
     this.$apollo
       .mutate({
         mutation: gql`
@@ -30,6 +30,6 @@ export default {
 }
 ```
 
-[Example project](https://codesandbox.io/s/zqqj82396p) (thx @chriswingler)
+[示例项目](https://codesandbox.io/s/zqqj82396p) (感谢 @chriswingler)
 
 ---

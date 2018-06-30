@@ -1,51 +1,51 @@
-# Apollo in Vue components
+# 在 Vue 组件中使用 Apollo
 
-To declare apollo queries in your Vue component, add an `apollo` object :
+要在您的 Vue 组件中声明 apollo 查询，只需添加一个 `apollo` 对象：
 
 ```js
 new Vue({
     apollo: {
-        // Apollo specific options
+        // Apollo 的具体选项
     },
 })
 ```
 
-You can access the [apollo-client](https://www.apollographql.com/docs/react/) instances with `this.$apollo.provider.defaultClient` or `this.$apollo.provider.clients.<key>` (for [Multiple clients](../multiple-clients.md)) in all your vue components.
+在你的每个 vue 组件中，你都可以通过 `this.$apollo.provider.defaultClient` 或 `this.$apollo.provider.clients.<key>`（用于 [多客户端](../multiple-clients.md)）来访问 [apollo-client](https://www.apollographql.com/docs/react/) 实例。
 
-## Queries
+## 查询（Queries）
 
-In the `apollo` object, add an attribute for each property you want to feed with the result of an Apollo query.
+为每个你需要通过 Apollo 查询提供数据的属性，在 `apollo` 对象中添加一个特性。
 
 ```js
 import gql from 'graphql-tag'
 
 export default {
   apollo: {
-    // Simple query that will update the 'hello' vue property
+    // 简单的查询，将更新 'hello' 这个 vue 属性
     hello: gql`{hello}`,
   },
 }
 ```
 
-More details in the [Queries section](./queries.md).
+更多细节请查看 [查询](./queries.md) 一章。
 
-## Mutations
+## 变更（Mutations）
 
-Use `this.$apollo.mutate` to send mutations:
+使用 `this.$apollo.mutate` 发送变更语句：
 
 ```js
 methods: {
   async addTag() {
-    // Call to the graphql mutation
+    // 调用 graphql 变更
     const result = await this.$apollo.mutate({
-      // Query
+      // 查询语句
       mutation: gql`mutation ($label: String!) {
         addTag(label: $label) {
           id
           label
         }
       }`,
-      // Parameters
+      // 参数
       variables: {
         label: this.newTag,
       },
@@ -54,20 +54,20 @@ methods: {
 }
 ```
 
-More details in the [Mutations section](./mutations.md).
+更多细节请查看 [变更](./mutations.md) 一章。
 
-## Special options
+## 特殊选项
 
-The special options begin with `$` in the `apollo` object.
+`apollo` 对象中的特殊选项以 `$` 开头表示。
 
-- `$skip` to disable all queries and subscriptions (see below)
-- `$skipAllQueries` to disable all queries (see below)
-- `$skipAllSubscriptions` to disable all subscriptions (see below)
-- `$deep` to watch with `deep: true` on the properties above when a function is provided
-- `$error` to catch errors in a default handler (see `error` advanced options for smart queries)
-- `$query` to apply default options to all the queries in the component
+- `$skip` 用于禁用所有查询和订阅（后文详述）
+- `$skipAllQueries` 用于禁用所有查询（后文详述）
+- `$skipAllSubscriptions` 用于禁用所有订阅（后文详述）
+- `$deep` 用于当为以上的属性提供函数时，通过 `deep: true` 进行监听
+- `$error` 用于捕获默认处理函数中的错误（详见智能查询的 `error` 高级选项）
+- `$query` 用于将默认选项应用于组件中的所有查询
 
-Example:
+示例：
 
 ```vue
 <script>
@@ -88,13 +88,13 @@ export default {
 </script>
 ```
 
-You can define in the apollo provider a default set of options to apply to the `apollo` definitions. For example:
+你可以在 apollo provider 中为 `apollo` 定义一套默认选项。例如：
 
 ```js
 const apolloProvider = new VueApollo({
   defaultClient: apolloClient,
   defaultOptions: {
-    // apollo options applied to all queries in components
+    // apollo 选项将应用于组件中的所有查询
     $query: {
       loadingKey: 'loading',
       fetchPolicy: 'cache-and-network',
@@ -103,9 +103,9 @@ const apolloProvider = new VueApollo({
 })
 ```
 
-## Skip all
+## 全部跳过
 
-You can disable all the queries for the component with `skipAllQueries`, all the subscriptions with `skipAllSubscriptions` and both with `skipAll`:
+你可以使用 `skipAllQueries` 禁用组件的所有查询，使用 `skipAllSubscriptions` 禁用所有订阅，或是使用 `skipAll` 将两者全部禁用：
 
 ```js
 this.$apollo.skipAllQueries = true
@@ -113,7 +113,7 @@ this.$apollo.skipAllSubscriptions = true
 this.$apollo.skipAll = true
 ```
 
-You can also declare these properties in the `apollo` option of the component. They can be booleans:
+你也可以在组件的 `apollo` 选项中声明这些属性。它们可以是布尔值：
 
 ```js
 apollo: {
@@ -121,7 +121,7 @@ apollo: {
 }
 ```
 
-Or reactive functions:
+或是响应式函数：
 
 ```js
 apollo: {

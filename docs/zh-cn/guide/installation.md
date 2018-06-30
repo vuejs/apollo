@@ -1,16 +1,16 @@
-# Installation
+# 安装
 
 :::tip
-If you are using vue-cli 3.x, you can [use this vue-cli plugin](https://github.com/Akryum/vue-cli-plugin-apollo): it will install everything you need for you in a few minutes so you can start coding right away!
+如果您正在使用 vue-cli 3.x，您可以 [使用这个 vue-cli 插件](https://github.com/Akryum/vue-cli-plugin-apollo)：它会在几分钟内安装您需要的所有内容，这样您可以立刻开始写代码！
 :::
 
-Try and install these packages before server side set (of packages), add apollo to meteor.js before then, too.
+尝试在服务器端配置之前安装这些包，并且将 apollo 添加到 meteor.js 中。
 
 ```
 npm install --save vue-apollo graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
 ```
 
-Or:
+或：
 
 ```
 yarn add vue-apollo graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
@@ -18,7 +18,7 @@ yarn add vue-apollo graphql apollo-client apollo-link apollo-link-http apollo-ca
 
 ## Apollo client
 
-In your app, create an `ApolloClient` instance and install the `VueApollo` plugin:
+在您的应用中创建一个 `ApolloClient` 实例并安装 `VueApollo` 插件：
 
 ```js
 import Vue from 'vue'
@@ -28,24 +28,24 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import VueApollo from 'vue-apollo'
 
 const httpLink = new HttpLink({
-  // You should use an absolute URL here
+  // 你需要在这里使用绝对路径
   uri: 'http://localhost:3020/graphql',
 })
 
-// Create the apollo client
+// 创建 apollo client
 const apolloClient = new ApolloClient({
   link: httpLink,
   cache: new InMemoryCache(),
   connectToDevTools: true,
 })
 
-// Install the vue plugin
+// 安装 vue 插件
 Vue.use(VueApollo)
 ```
 
 ## Apollo provider
 
-The provider holds the apollo client instances that can then be used by all the child components. Inject it into your components with `provide`:
+Provider 保存了可以在接下来被所有子组件使用的 apollo client 实例。通过 `provide` 属性将它注入您的组件：
 
 ```js
 const apolloProvider = new VueApollo({

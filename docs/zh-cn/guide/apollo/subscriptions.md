@@ -1,10 +1,10 @@
-# Subscriptions
+# 订阅
 
-## Setup
+## 设置
 
-*For the server implementation, you can take a look at [this simple example](https://github.com/Akryum/apollo-server-example).*
+*关于服务端实现，你可以看看 [这个简单的示例](https://github.com/Akryum/apollo-server-example)。*
 
-To make enable the websocket-based subscription, a bit of additional setup is required:
+要启用基于 websocket 的订阅，需要做一些额外的设置：
 
 ```
 npm install --save apollo-link-ws apollo-utilities
@@ -15,7 +15,7 @@ import Vue from 'vue'
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-// New Imports
+// 新的引入文件
 import { split } from 'apollo-link'
 import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
@@ -23,11 +23,11 @@ import { getMainDefinition } from 'apollo-utilities'
 import VueApollo from 'vue-apollo'
 
 const httpLink = new HttpLink({
-  // You should use an absolute URL here
+  // 你需要在这里使用绝对路径
   uri: 'http://localhost:3020/graphql',
 })
 
-// Create the subscription websocket link
+// 创建订阅的 websocket 连接
 const wsLink = new WebSocketLink({
   uri: 'ws://localhost:3000/subscriptions',
   options: {
@@ -35,10 +35,10 @@ const wsLink = new WebSocketLink({
   },
 })
 
-// using the ability to split links, you can send data to each link
-// depending on what kind of operation is being sent
+// 使用分割连接的功能
+// 你可以根据发送的操作类型将数据发送到不同的连接
 const link = split(
-  // split based on operation type
+  // 根据操作类型分割
   ({ query }) => {
     const { kind, operation } = getMainDefinition(query)
     return kind === 'OperationDefinition' &&
@@ -48,20 +48,20 @@ const link = split(
   httpLink
 )
 
-// Create the apollo client
+// 创建 apollo client
 const apolloClient = new ApolloClient({
   link,
   cache: new InMemoryCache(),
   connectToDevTools: true,
 })
 
-// Install the vue plugin like before
+// 像之前一样安装 vue 插件
 Vue.use(VueApollo)
 ```
 
-## Subscribe To More
+## 订阅更多
 
-If you need to update a query result from a subscription, the best way is using the `subscribeToMore` query method. It will create [Smart Subscriptions](../../api/smart-subscription.md) that are linked to the query. Just add a `subscribeToMore` to your query:
+如果你需要更新一个来自订阅的查询结果，最好的方式是使用 `subscribeToMore` 查询方法。它将创建链接到查询的 [智能订阅](../../api/smart-subscription.md)。你只需要将 `subscribeToMore` 添加到查询中：
 
 ```js
 apollo: {
@@ -74,16 +74,16 @@ apollo: {
           label
         }
       }`,
-      // Variables passed to the subscription. Since we're using a function,
-      // they are reactive
+      // 传递给订阅的变量
+      // 由于我们使用了函数，因此它们是响应式的
       variables () {
         return {
           param: this.param,
         }
       },
-      // Mutate the previous result
+      // 变更之前的结果
       updateQuery: (previousResult, { subscriptionData }) => {
-        // Here, return the new result from the previous with the new data
+        // 在这里用之前的结果和新数据组合成新的结果
       },
     }
   }
@@ -91,39 +91,39 @@ apollo: {
 ```
 
 ::: tip
-Note that you can pass an array of subscriptions to `subscribeToMore` to subscribe to multiple subscriptions on this query.
+注意，你可以将一组订阅传递给 `subscribeToMore` 以将此查询关联到多个订阅。
 :::
 
 ### Alternate usage
 
-You can access the queries you defined in the `apollo` option with `this.$apollo.queries.<name>`, so it would look like this:
+你可以使用 `this.$apollo.queries.<name>` 访问你在 `apollo` 选项中定义的查询，所以它看起来像这样：
 
 ```js
 this.$apollo.queries.tags.subscribeToMore({
-  // GraphQL document
+  // GraphQL 文档
   document: gql`subscription name($param: String!) {
     itemAdded(param: $param) {
       id
       label
     }
   }`,
-  // Variables passed to the subscription
+  // 传递给订阅的变量
   variables: {
     param: '42',
   },
-  // Mutate the previous result
+  // 变更之前的结果
   updateQuery: (previousResult, { subscriptionData }) => {
-    // Here, return the new result from the previous with the new data
+    // 在这里用之前的结果和新数据组合成新的结果
   },
 })
 ```
 
-If the related query is stopped, the subscription will be automatically destroyed.
+如果相关查询停止，订阅将自动销毁。
 
-Here is an example:
+这里是一个示例：
 
 ```js
-// Subscription GraphQL document
+// 订阅的 GraphQL 文档
 const TAG_ADDED = gql`subscription tags($type: String!) {
   tagAdded(type: $type) {
     id
@@ -132,25 +132,25 @@ const TAG_ADDED = gql`subscription tags($type: String!) {
   }
 }`
 
-// SubscribeToMore tags
-// We have different types of tags
-// with one subscription 'channel' for each type
+// SubscribeToMore 标签
+// 我们有不同类型的标签
+// 每种类型都有一个订阅 '频道'
 this.$watch(() => this.type, (type, oldType) => {
   if (type !== oldType || !this.tagsSub) {
-    // We need to unsubscribe before re-subscribing
+    // 我们需要在重新订阅之前取消订阅
     if (this.tagsSub) {
       this.tagsSub.unsubscribe()
     }
-    // Subscribe on the query
+    // 在查询上订阅
     this.tagsSub = this.$apollo.queries.tags.subscribeToMore({
       document: TAG_ADDED,
       variables: {
         type,
       },
-      // Mutate the previous result
+      // 变更之前的结果
       updateQuery: (previousResult, { subscriptionData }) => {
-        // If we added the tag already don't do anything
-        // This can be caused by the `updateQuery` of our addTag mutation
+        // 如果我们在没有做操作的情况下已经添加了标签
+        // 这可能是由 addTag 变更上的 `updateQuery` 导致
         if (previousResult.tags.find(tag => tag.id === subscriptionData.data.tagAdded.id)) {
           return previousResult
         }
@@ -158,7 +158,7 @@ this.$watch(() => this.type, (type, oldType) => {
         return {
           tags: [
             ...previousResult.tags,
-            // Add the new tag
+            // 添加新的标签
             subscriptionData.data.tagAdded,
           ],
         }
@@ -170,20 +170,20 @@ this.$watch(() => this.type, (type, oldType) => {
 })
 ```
 
-## Simple subscription
+## 简单订阅
 
 ::: danger
-If you want to update a query with the result of the subscription, use `subscribeToMore`.
-The methods below are suitable for a 'notify' use case
+如果要使用订阅的结果更新查询，请使用 `subscribeToMore`。
+以下的方法适用于 'notify' 用例
 :::
 
-You can declare [Smart Subscriptions](../../api/smart-subscription.md) in the `apollo` option with the `$subscribe` keyword:
+你可以在 `apollo` 选项中使用 `$subscribe` 关键字来声明 [智能订阅](../../api/smart-subscription.md)：
 
 ```js
 apollo: {
-  // Subscriptions
+  // 订阅
   $subscribe: {
-    // When a tag is added
+    // 当添加一个标签时
     tagAdded: {
       query: gql`subscription tags($type: String!) {
         tagAdded(type: $type) {
@@ -192,16 +192,15 @@ apollo: {
           type
         }
       }`,
-      // Reactive variables
+      // 响应式变量
       variables() {
-        // This works just like regular queries
-        // and will re-subscribe with the right variables
-        // each time the values change
+        // 像常规查询一样运作
+        // 在每次改变值时都会使用正确的变量重新订阅
         return {
           type: this.type,
         }
       },
-      // Result hook
+      // 结果钩子
       result(data) {
         console.log(data)
       },
@@ -210,22 +209,22 @@ apollo: {
 },
 ```
 
-You can then access the subscription with `this.$apollo.subscriptions.<name>`.
+你可以使用 `this.$apollo.subscriptions.<name>` 访问这个订阅。
 
 :::tip
-Just like for queries, you can declare the subscription [with a function](./queries.md#option-function), and you can declare the `query` option [with a reactive function](./queries.md#reactive-query-definition).
+和查询一样，你可以 [使用函数](./queries.md#option-function) 声明订阅，并且可以 [使用响应式函数](./queries.md#reactive-query-definition) 声明 `query` 选项。
 :::
 
-## Skipping the subscription
+## 跳过订阅
 
-If the subscription is skipped, it will disable it and it will not be updated anymore. You can use the `skip` option:
+如果订阅被跳过，它将被禁用且不再被更新。您可以使用 `skip` 选项：
 
 ```js
-// Apollo-specific options
+// Apollo 具体选项
 apollo: {
-  // Subscriptions
+  // 订阅
   $subscribe: {
-    // When a tag is added
+    // 当添加一个标签时
     tags: {
       query: gql`subscription tags($type: String!) {
         tagAdded(type: $type) {
@@ -234,18 +233,18 @@ apollo: {
           type
         }
       }`,
-      // Reactive variables
+      // 响应式变量
       variables() {
         return {
           type: this.type,
         }
       },
-      // Result hook
+      // 结果钩子
       result(data) {
-        // Let's update the local data
+        // 更新本地数据
         this.tags.push(data.tagAdded)
       },
-      // Skip the subscription
+      // 跳过这个订阅
       skip() {
         return this.skipSubscription
       }
@@ -254,33 +253,33 @@ apollo: {
 },
 ```
 
-Here, `skip` will be called automatically when the `skipSubscription` component property changes.
+在这里，当 `skipSubscription` 组件属性改变时，`skip` 将被自动调用。
 
-You can also access the subscription directly and set the `skip` property:
+你也可以直接访问订阅并设置 `skip` 属性：
 
 ```js
 this.$apollo.subscriptions.tags.skip = true
 ```
 
-## Manually adding a smart Subscription
+## 手动添加智能订阅
 
-You can manually add a smart subscription with the `$apollo.addSmartSubscription(key, options)` method:
+你可以使用 `$apollo.addSmartSubscription(key, options)` 方法手动添加智能订阅：
 
 ```js
 created () {
   this.$apollo.addSmartSubscription('tagAdded', {
-    // Same options like '$subscribe' above
+    // 选项同 '$subscribe'
   })
 }
 ```
 
 :::tip
-Internally, this method is called for each entry of the `$subscribe` object in the component `apollo` option.
+组件 `apollo` 选项中的每个 `$subscribe` 对象入口都在内部调用此方法。
 :::
 
-## Standard Apollo subscribe
+## 标准 Apollo 订阅
 
-Use the `$apollo.subscribe()` method to subscribe to a GraphQL subscription that will get killed automatically when the component is destroyed. It will **NOT** create a Smart Subscription.
+使用 `$apollo.subscribe()` 方法来创建一个 GraphQL 订阅，当组件被销毁时将自动终止。它**不会**创建智能订阅。
 
 ```js
 mounted() {

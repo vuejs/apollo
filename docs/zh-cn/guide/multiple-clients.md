@@ -1,6 +1,6 @@
-# Multiple clients
+# 多客户端
 
-You can specify multiple apollo clients if your app needs to connect to different GraphQL endpoints:
+如果你的应用需要连接到不同的 GraphQL 入口端点，你可以指定多个 apollo 客户端：
 
 ```js
 const apolloProvider = new VueApollo({
@@ -12,7 +12,7 @@ const apolloProvider = new VueApollo({
 })
 ```
 
-In the component `apollo` option, you can define the client for all the queries, subscriptions and mutations with `$client` (only for this component):
+在组件的 `apollo` 选项中，你可以使用 `$client` 为所有的查询、订阅和变更定义要使用的客户端（仅限在此组件内）：
 
 ```js
 export default {
@@ -22,7 +22,7 @@ export default {
 }
 ```
 
-You can also specify the client in individual queries, subscriptions and mutations with the `client` property in the options:
+你也可以在单个查询，订阅和变更的选项中使用 `client` 属性来指定客户端：
 
 ```js
 tags: {
