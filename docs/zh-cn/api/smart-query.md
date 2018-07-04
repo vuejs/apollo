@@ -1,84 +1,79 @@
-# Smart Query
+# 智能查询
 
-Each query declared in the `apollo` definition (that is, which doesn't start with a `$` char) in a component results in the creation of a smart query object.
+在组件的 `apollo` 定义中声明的每个查询（不以 `$` 字符开头）都会创建一个智能查询对象。
 
-## Options
+## 选项
 
-- `query`: GraphQL document (can be a file or a `gql` string).
-- `variables`: Object or reactive function that returns an object. Each key will be mapped with a `'$'` in the GraphQL document, for example `foo` will become `$foo`.
-- `throttle`: throttle variables updates (in ms).
-- `debounce`: debounce variables updates (in ms).
-- `update(data) {return ...}` to customize the value that is set in the vue property, for example if the field names don't match.
-- `result(ApolloQueryResult)` is a hook called when a result is received (see documentation for [ApolloQueryResult](https://github.com/apollographql/apollo-client/blob/master/packages/apollo-client/src/core/types.ts)).
-- `error(error)` is a hook called when there are errors. `error` is an Apollo error object with either a `graphQLErrors` property or a `networkError` property.
-- `loadingKey` will update the component data property you pass as the value. You should initialize this property to `0` in the component `data()` hook. When the query is loading, this property will be incremented by 1; when it is no longer loading, it will be decremented by 1. That way, the property can represent a counter of currently loading queries.
-- `watchLoading(isLoading, countModifier)` is a hook called when the loading state of the query changes. The `countModifier` parameter is either equal to `1` when the query is loading, or `-1` when the query is no longer loading.
-- `manual` is a boolean to disable the automatic property update. If you use it, you then need to specify a `result` callback (see example below).
-- `deep` is a boolean to use `deep: true` on Vue watchers.
-- `subscribeToMore`: an object or an array of object which are [subscribeToMore options](../guide/apollo/subscriptions.md#subscribetomore).
-- `prefetch` is either a boolean or a function to determine if the query should be prefetched. See [Server-Side Rendering](../guide/ssr.md).
+- `query`：GraphQL 文档（可以是一个文件或一个 `gql` 字符串）。
+- `variables`：对象或返回对象的响应式函数。每个键将用 `'$'` 映射到 GraphQL 文档中，例如 `foo` 将变为 `$foo`。
+- `throttle`：变量更新节流时间（毫秒）。
+- `debounce`：变量更新防抖时间（毫秒）。
+- `update(data) {return ...}` 用来自定义设置到 vue 属性中的值，例如当字段名称不匹配时。
+- `result(ApolloQueryResult)` 是收到结果时调用的钩子（更多参见 [ApolloQueryResult](https://github.com/apollographql/apollo-client/blob/master/packages/apollo-client/src/core/types.ts) 的文档）。
+- `error(error)` 是有错误时调用的钩子。`error` 是一个具有 `graphQLErrors` 属性或 `networkError` 属性的 Apollo 错误对象。
+- `loadingKey` 将更新你传递的值所对应的组件数据属性。你应该在组件的 `data()` 钩子中将此属性初始化为 `0` 。当查询正在加载时，此属性将增加 1；当不再加载时，它将减去 1。这样，该属性可以表示当前正在加载中的查询的计数器。
+- `watchLoading(isLoading, countModifier)` 是一个在查询的加载状态发生变化时调用的钩子。`countModifier` 参数当查询正在加载时等于 `1`，不再加载时为 `-1`。
+- `manual` 是一个禁用自动属性更新的布尔值。如果使用它，你需要指定一个 `result` 回调函数（参见下面的示例）。
+- `deep` 是一个在 Vue 侦听器上使用 `deep: true` 的布尔值。
+- `subscribeToMore`：一个或一组 [subscribeToMore 选项](../guide/apollo/subscriptions.md#subscribetomore) 对象。
+- `prefetch` 是一个布尔值或函数来确定是否应该预取查询。详见 [服务端渲染](../guide/ssr.md)。
 
-Example:
+示例：
 
 ```js
-// Apollo-specific options
+// Apollo 具体选项
 apollo: {
-  // Advanced query with parameters
-  // The 'variables' method is watched by vue
+  // 带参数的高级查询
+  // vue 会侦听 'variables' 方法
   pingMessage: {
     query: gql`query PingMessage($message: String!) {
       ping(message: $message)
     }`,
-    // Reactive parameters
+    // 响应式参数
     variables() {
-      // Use vue reactive properties here
+      // 在这里使用 vue 的响应式属性
       return {
           message: this.pingInput,
       }
     },
-    // Variables: deep object watch
+    // 变量：深度对象侦听
     deep: false,
-    // We use a custom update callback because
-    // the field names don't match
-    // By default, the 'pingMessage' attribute
-    // would be used on the 'data' result object
-    // Here we know the result is in the 'ping' attribute
-    // considering the way the apollo server works
+    // 我们使用自定义更新回调，因为字段名称不匹配
+    // 默认情况下，将使用 'data' 结果对象上的 'pingMessage' 属性
+    // 考虑到 apollo 服务端的工作方式，我们知道结果是在 'ping' 属性中
     update(data) {
       console.log(data)
-      // The returned value will update
-      // the vue property 'pingMessage'
+      // 返回的值将更新 vue 属性 'pingMessage'
       return data.ping
     },
-    // Optional result hook
+    // 可选结果钩子
     result({ data, loading, networkStatus }) {
       console.log("We got some result!")
     },
-    // Error handling
+    // 错误处理
     error(error) {
       console.error('We\'ve got an error!', error)
     },
-    // Loading state
-    // loadingKey is the name of the data property
-    // that will be incremented when the query is loading
-    // and decremented when it no longer is.
+    // 加载状态
+    // loadingKey 是数据属性的名称
+    // 在查询正在加载时将递增，不再加载时递减
     loadingKey: 'loadingQueriesCount',
-    // watchLoading will be called whenever the loading state changes
+    // 当加载状态发生变化时会调用 watchLoading
     watchLoading(isLoading, countModifier) {
-      // isLoading is a boolean
-      // countModifier is either 1 or -1
+      // isLoading 是一个布尔值
+      // countModifier 为 1 或 -1
     },
   },
 },
 ```
 
-If you use `ES2015`, you can also write the `update` like this:
+如果你使用 `ES2015`，`update` 也可以这样写：
 
 ```js
 update: data => data.ping
 ```
 
-Manual mode example:
+手动模式示例：
 
 ```js
 {
@@ -92,11 +87,11 @@ Manual mode example:
 }
 ```
 
-## Properties
+## 属性
 
 ### Skip
 
-You can pause or unpause with `skip`:
+你可以使用 `skip` 来暂停或停止暂停：
 
 ```js
 this.$apollo.queries.users.skip = true
@@ -104,17 +99,17 @@ this.$apollo.queries.users.skip = true
 
 ### loading
 
-Whether the query is loading:
+查询是否正在加载中：
 
 ```js
 this.$apollo.queries.users.loading
 ```
 
-## Methods
+## 方法
 
 ### refresh
 
-Stops and restarts the query:
+停止并重新启动查询：
 
 ```js
 this.$apollo.queries.users.restart()
@@ -122,7 +117,7 @@ this.$apollo.queries.users.restart()
 
 ### start
 
-Starts the query:
+开始查询：
 
 ```js
 this.$apollo.queries.users.start()
@@ -130,7 +125,7 @@ this.$apollo.queries.users.start()
 
 ### stop
 
-Stops the query:
+停止查询：
 
 ```js
 this.$apollo.queries.users.stop()
@@ -138,18 +133,18 @@ this.$apollo.queries.users.stop()
 
 ### fetchMore
 
-Load more data for pagination:
+为分页加载更多数据：
 
 ```js
 this.page++
 
 this.$apollo.queries.tagsPage.fetchMore({
-  // New variables
+  // 新的变量
   variables: {
     page: this.page,
     pageSize,
   },
-  // Transform the previous result with new data
+  // 用新数据转换之前的结果
   updateQuery: (previousResult, { fetchMoreResult }) => {
     const newTags = fetchMoreResult.tagsPage.tags
     const hasMore = fetchMoreResult.tagsPage.hasMore
@@ -159,7 +154,7 @@ this.$apollo.queries.tagsPage.fetchMore({
     return {
       tagsPage: {
         __typename: previousResult.tagsPage.__typename,
-        // Merging the tag list
+        // 合并标签列表
         tags: [...previousResult.tagsPage.tags, ...newTags],
         hasMore,
       },
@@ -170,23 +165,23 @@ this.$apollo.queries.tagsPage.fetchMore({
 
 ### subscribeToMore
 
-Subscribe to more data using GraphQL subscriptions:
+使用 GraphQL 订阅来订阅更多数据：
 
 ```js
-// We need to unsubscribe before re-subscribing
+// 我们需要在重新订阅之前取消订阅
 if (this.tagsSub) {
   this.tagsSub.unsubscribe()
 }
-// Subscribe on the query
+// 在查询上订阅
 this.tagsSub = this.$apollo.queries.tags.subscribeToMore({
   document: TAG_ADDED,
   variables: {
     type,
   },
-  // Mutate the previous result
+  // 变更之前的结果
   updateQuery: (previousResult, { subscriptionData }) => {
-    // If we added the tag already don't do anything
-    // This can be caused by the `updateQuery` of our addTag mutation
+    // 如果我们在没有做操作的情况下已经添加了标签
+    // 这可能是由 addTag 变更上的 `updateQuery` 导致
     if (previousResult.tags.find(tag => tag.id === subscriptionData.data.tagAdded.id)) {
       return previousResult
     }
@@ -194,7 +189,7 @@ this.tagsSub = this.$apollo.queries.tags.subscribeToMore({
     return {
       tags: [
         ...previousResult.tags,
-        // Add the new tag
+        // 添加新的标签
         subscriptionData.data.tagAdded,
       ],
     }
@@ -204,11 +199,11 @@ this.tagsSub = this.$apollo.queries.tags.subscribeToMore({
 
 ### refetch
 
-Fetch the query again, optionally with new variables:
+重新获取查询，可选择使用新变量：
 
 ```js
 this.$apollo.queries.users.refetch()
-// With new variables
+// 使用新变量
 this.$apollo.queries.users.refetch({
   friendsOf: 'id-user'
 })
@@ -216,7 +211,7 @@ this.$apollo.queries.users.refetch({
 
 ### setVariables
 
-Update the variables on the query and refetch it if they have changed. To force a refetch, use `refetch`.
+更新查询中的变量，如果发生了改变则重新获取查询。要强制重新获取，请使用 `refetch`。
 
 ```js
 this.$apollo.queries.users.setVariables({
@@ -226,7 +221,7 @@ this.$apollo.queries.users.setVariables({
 
 ### setOptions
 
-Update the Apollo [watchQuery](https://www.apollographql.com/docs/react/api/apollo-client.html#ApolloClient.watchQuery) options and refetch:
+更新 Apollo [watchQuery](https://www.apollographql.com/docs/react/api/apollo-client.html#ApolloClient.watchQuery) 选项并重新获取：
 
 ```js
 this.$apollo.queries.users.setOptions({
@@ -236,7 +231,7 @@ this.$apollo.queries.users.setOptions({
 
 ### startPolling
 
-Start an auto update using polling (which means refetching every `x` ms):
+使用轮询启动自动更新（这意味着每隔 `x` ms 进行重新获取）：
 
 ```js
 this.$apollo.queries.users.startPolling(2000) // ms
@@ -244,7 +239,7 @@ this.$apollo.queries.users.startPolling(2000) // ms
 
 ### stopPolling
 
-Stop the polling:
+停止轮询：
 
 ```js
 this.$apollo.queries.users.stopPolling()

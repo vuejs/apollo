@@ -1,30 +1,30 @@
-# Smart Subscription
+# 智能订阅
 
-Each subscription declared in the `apollo.$subscribe` option in a component results in the creation of a smart subscription object.
+每个在组件中的 `apollo.$subscribe` 选项中声明的订阅都会创建一个智能订阅对象。
 
-## Options
+## 选项
 
-- `query`: GraphQL document (can be a file or a `gql` string).
-- `variables`: Object or reactive function that returns an object. Each key will be mapped with a `'$'` in the GraphQL document, for example `foo` will become `$foo`.
-- `throttle`: throttle variables updates (in ms).
-- `debounce`: debounce variables updates (in ms).
-- `result(data)` is a hook called when a result is received
+- `query`：GraphQL 文档（可以是一个文件或一个 `gql` 字符串）。
+- `variables`：对象或返回对象的响应式函数。每个键将用 `'$'` 映射到 GraphQL 文档中，例如 `foo` 将变为 `$foo`。
+- `throttle`：变量更新节流时间（毫秒）。
+- `debounce`：变量更新防抖时间（毫秒）。
+- `result(data)` 是收到结果时调用的钩子。
 
-## Properties
+## 属性
 
 ### Skip
 
-You can pause or unpause with `skip`:
+你可以使用 `skip` 来暂停或停止暂停：
 
 ```js
 this.$apollo.subscriptions.users.skip = true
 ```
 
-## Methods
+## 方法
 
 ### refresh
 
-Stops and restarts the query:
+停止并重新启动查询：
 
 ```js
 this.$apollo.subscriptions.users.restart()
@@ -32,7 +32,7 @@ this.$apollo.subscriptions.users.restart()
 
 ### start
 
-Starts the query:
+开始查询：
 
 ```js
 this.$apollo.subscriptions.users.start()
@@ -40,7 +40,7 @@ this.$apollo.subscriptions.users.start()
 
 ### stop
 
-Stops the query:
+停止查询：
 
 ```js
 this.$apollo.subscriptions.users.stop()

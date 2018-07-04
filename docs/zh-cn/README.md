@@ -5,7 +5,7 @@ actionText: 由此起步 →
 actionLink: /guide/
 features:
 - title: 自动更新
-  details: 无需考虑更新 UI 或重新发送查询的问题！
+  details: 无需考虑更新 UI 或重新获取查询的问题！
 - title: 模板内组件
   details: 通过真正声明 Apollo 组件的方式使用 Apollo
 - title: 支持 SSR

@@ -1,7 +1,7 @@
-# ApolloSubscribeToMore component
+# ApolloSubscribeToMore 组件
 
 ## Props
 
-- `document`: GraphQL document that contains the subscription.
-- `variables`: Object which will automatically update the subscription variables.
-- `updateQuery`: Function in which on can update the query result if needed.
+- `document`：包含订阅的 GraphQL 文档。
+- `variables`：将自动更新订阅变量的对象。
+- `updateQuery`：可以根据需要更新查询结果的函数。

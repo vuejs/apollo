@@ -1,34 +1,34 @@
 # ApolloProvider
 
-## Constructor
+## 构造函数
 
 ```js
 const apolloProvider = new VueApollo({
-  // Multiple clients support
-  // Use the 'client' option inside queries
-  // or '$client' on the apollo definition
+  // 支持多客户端
+  // 在查询中使用 'client' 选项
+  // 或在 apollo 定义中使用 '$client'
   clients: {
     a: apolloClientA,
     b: apolloClientB,
   },
-  // Default client
+  // 默认客户端
   defaultClient: apolloClient,
-  // Default 'apollo' definition
+  // 'apollo' 对象的默认定义
   defaultOptions: {
-    // See 'apollo' definition
-    // For example: default query options
+    // 详见 'apollo' 的定义
+    // 例如：默认查询选项
     $query: {
       loadingKey: 'loading',
       fetchPolicy: 'cache-and-network',
     },
   },
-  // Watch loading state for all queries
-  // See the 'watchLoading' advanced option
+  // 查看所有查询的加载状态
+  // 详见 'watchLoading' 高级选项
   watchLoading (state, mod) {
     loading += mod
     console.log('Global loading', loading, mod)
   },
-  // Global error handler for all smart queries and subscriptions
+  // 所有智能查询和订阅的全局错误处理函数
   errorHandler (error) {
     console.log('Global error handler')
     console.error(error)
@@ -36,7 +36,7 @@ const apolloProvider = new VueApollo({
 })
 ```
 
-Use the apollo provider into your Vue app:
+在你的 Vue 应用程序中使用 apollo provider：
 
 ```js
 new Vue({
@@ -46,11 +46,11 @@ new Vue({
 })
 ```
 
-## Methods
+## 方法
 
 ### provide
 
-Use this to inject the provider into an app:
+使用此方法将 provider 注入应用程序：
 
 ```js
 new Vue({
@@ -62,44 +62,43 @@ new Vue({
 
 ### prefetchAll
 
-(SSR) Prefetch all queued component definitions and returns a promise resolved when all corresponding apollo data is ready.
+（SSR）预取所有队列中的组件定义，并在所有对应的 apollo 数据准备就绪时返回已解决的 promise。
 
 ```js
 await apolloProvider.prefetchAll (context, componentDefs, options)
 ```
 
-`context` is passed as the argument to the `prefetch` options inside the smart queries. It may contain the route and the store.
+`context` 作为参数传递给智能查询中的 `prefetch` 选项。它可能包含路由和 store。
 
-`options` defaults to:
+`options` 的默认值是：
 
 ```js
 {
-  // Include components outside of the routes
-  // that are registered with `willPrefetch`
+  // 包含使用 `willPrefetch` 注册的路由之外的组件
   includeGlobal: true,
 }
 ```
 
 ### getStates
 
-(SSR) Returns the apollo stores states as JavaScript objects.
+（SSR）将 apollo store 状态作为 JavaScript 对象返回。
 
 ```js
 const states = apolloProvider.getStates(options)
 ```
 
-`options` defaults to:
+`options` 的默认值是：
 
 ```js
 {
-  // Prefix for the keys of each apollo client state
+  // 每个 apollo 客户端状态的 key 的前缀
   exportNamespace: '',
 }
 ```
 
 ### exportStates
 
-(SSR) Returns the apollo stores states as JavaScript code inside a String. This code can be directly injected to the page HTML inside a `<script>` tag.
+（SSR）将 apollo store 状态作为字符串内的 JavaScript 代码返回。该代码可以直接注入到页面 HTML 的 `<script>` 标签中。
 
 ```js
 const js = apolloProvider.exportStates(options)
@@ -109,20 +108,20 @@ const js = apolloProvider.exportStates(options)
 
 ```js
 {
-  // Global variable name
+  // 全局变量名
   globalName: '__APOLLO_STATE__',
-  // Global object on which the variable is set
+  // 变量设置到的全局对象
   attachTo: 'window',
-  // Prefix for the keys of each apollo client state
+  // 每个 apollo 客户端状态的 key 的前缀
   exportNamespace: '',
 }
 ```
 
-## Other methods
+## 其他方法
 
 ### willPrefetch
 
-Tells vue-apollo that some components not used in a `router-view` (and thus, not in vue-router `matchedComponents`) need to be prefetched, with the `willPrefetch` method:
+使用 `willPrefetch` 方法，来告诉 vue-apollo 需要预取一些未在 `router-view` 中被使用的组件因此不在 vue-router 的 `matchedComponents` 中）：
 
 ```js
 import { willPrefetch } from 'vue-apollo'
@@ -137,7 +136,7 @@ export default willPrefetch({
           description
         }
       }`,
-      prefetch: true, // Don't forget this
+      prefetch: true, // 别忘了这个
     }
   }
 })

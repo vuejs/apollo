@@ -60,7 +60,7 @@ export default {
 }
 ```
 
-你还可以通过使用 `willPrefetch` 方法，来告诉 vue-apollo 某些未在 `router-view` 中被使用的组件（因此不在 vue-router 的 `matchedComponents` 中）需要预取一些组件：
+你还可以通过使用 `willPrefetch` 方法，来告诉 vue-apollo 需要预取一些未在 `router-view` 中被使用的组件（因此不在 vue-router 的 `matchedComponents` 中）：
 
 ```js
 import { willPrefetch } from 'vue-apollo'
@@ -183,7 +183,7 @@ export default () => new Promise((resolve, reject) => {
 
 ### 创建 Apollo Client
 
-建议在一个带有 `ssr` 参数的函数内部创建 apollo client，参数在服务端为 `true`，在客户端为 `false`。
+建议在一个带有 `ssr` 参数的函数内部创建 apollo 客户端，参数在服务端为 `true`，在客户端为 `false`。
 
 这里是一个示例：
 
@@ -199,7 +199,7 @@ import VueApollo from 'vue-apollo'
 // 安装 vue 插件
 Vue.use(VueApollo)
 
-// 创建 apollo client
+// 创建 apollo 客户端
 export function createApolloClient (ssr = false) {
   const httpLink = new HttpLink({
     // 你需要在这里使用绝对路径

@@ -12,7 +12,7 @@
 
 ## 什么是 Apollo?
 
-[Apollo](https://www.apollographql.com/) 是通过社区力量帮助您在应用中使用 GraphQL 的一套工具。它的 [客户端](https://www.apollographql.com/client) 和 [服务端](https://www.apollographql.com/server) 都非常有名。Apollo 由 [Meteor 开发团队](https://www.meteor.io/) 开发和支持。
+[Apollo](https://www.apollographql.com/) 是通过社区力量帮助你在应用中使用 GraphQL 的一套工具。它的 [客户端](https://www.apollographql.com/client) 和 [服务端](https://www.apollographql.com/server) 都非常有名。Apollo 由 [Meteor 开发团队](https://www.meteor.io/) 开发和支持。
 
 ## 链接
 

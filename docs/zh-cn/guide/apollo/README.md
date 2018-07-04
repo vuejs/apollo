@@ -1,6 +1,6 @@
 # 在 Vue 组件中使用 Apollo
 
-要在您的 Vue 组件中声明 apollo 查询，只需添加一个 `apollo` 对象：
+要在你的 Vue 组件中声明 apollo 查询，只需添加一个 `apollo` 对象：
 
 ```js
 new Vue({

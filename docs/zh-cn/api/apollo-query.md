@@ -1,31 +1,31 @@
-# ApolloQuery component
+# ApolloQuery 组件
 
 ## Props
 
-- `query`: GraphQL query (transformed by `graphql-tag`)
-- `variables`: Object of GraphQL variables
-- `fetchPolicy`: See [apollo fetchPolicy](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-fetchPolicy)
-- `pollInterval`: See [apollo pollInterval](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-pollInterval)
-- `notifyOnNetworkStatusChange`: See [apollo notifyOnNetworkStatusChange](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-notifyOnNetworkStatusChange)
-- `context`: See [apollo context](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-context)
-- `skip`: Boolean disabling query fetching
-- `clientId`: Used to resolve the Apollo Client used (defined in ApolloProvider)
-- `deep`: Boolean to use deep Vue watchers
-- `tag`: String HTML tag name (default: `div`)
+- `query`：GraphQL 查询（由 `graphql-tag` 转换）
+- `variables`：GraphQL 变量对象
+- `fetchPolicy`：详见 [apollo fetchPolicy](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-fetchPolicy)
+- `pollInterval`：详见 [apollo pollInterval](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-pollInterval)
+- `notifyOnNetworkStatusChange`：详见 [apollo notifyOnNetworkStatusChange](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-notifyOnNetworkStatusChange)
+- `context`：详见 [apollo context](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-context)
+- `skip`：布尔值，禁用查询获取
+- `clientId`：用于解析使用的 Apollo 客户端（在 ApolloProvider 中定义）
+- `deep`：布尔值，使用深度 Vue 侦听器
+- `tag`：字符串，HTML 标签名（默认值：`div`）
 
-## Scoped slot
+## 作用域插槽
 
-- `result`: Apollo Query result
-  - `result.data`: Data returned by the query
-  - `result.loading`: Boolean indicating that a request is in flight
-  - `result.error`: Eventual error for the current result
-  - `result.networkStatus`: See [apollo networkStatus](https://www.apollographql.com/docs/react/basics/queries.html#graphql-query-data-networkStatus)
-- `query`: Smart Query associated with the component
-- `isLoading`: Smart Query loading state
-- `gqlError`: first GraphQL error if any
-- `times`: number of times the result was updated
+- `result`：Apollo 查询结果
+  - `result.data`：查询返回的数据
+  - `result.loading`：布尔值，表明请求正在进行中
+  - `result.error`：当前结果的最终错误
+  - `result.networkStatus`：详见 [apollo networkStatus](https://www.apollographql.com/docs/react/basics/queries.html#graphql-query-data-networkStatus)
+- `query`：与组件关联的智能查询
+- `isLoading`：智能查询加载状态
+- `gqlError`：第一个 GraphQL 错误（如果有）
+- `times`：结果被更新的次数
 
-## Events
+## 事件
 
 - `result(resultObject)`
 - `error(errorObject)`

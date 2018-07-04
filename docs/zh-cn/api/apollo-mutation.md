@@ -1,22 +1,22 @@
-# ApolloMutation component
+# ApolloMutation 组件
 
 ## Props
 
-- `mutation`: GraphQL query (transformed by `graphql-tag`)
-- `variables`: Object of GraphQL variables
-- `optimisticResponse`: See [optimistic UI](https://www.apollographql.com/docs/react/features/optimistic-ui.html)
-- `update`: See [updating cache after mutation](https://www.apollographql.com/docs/react/api/react-apollo.html#graphql-mutation-options-update)
-- `refetchQueries`: See [refetching queries after mutation](https://www.apollographql.com/docs/react/api/react-apollo.html#graphql-mutation-options-refetchQueries)
-- `tag`: String HTML tag name (default: `div`)
+- `mutation`：GraphQL 查询（由 `graphql-tag` 转换）
+- `variables`：GraphQL 变量对象
+- `optimisticResponse`：详见 [乐观 UI](https://www.apollographql.com/docs/react/features/optimistic-ui.html)
+- `update`：详见 [变更后更新缓存](https://www.apollographql.com/docs/react/api/react-apollo.html#graphql-mutation-options-update)
+- `refetchQueries`：详见 [变更后重新获取查询](https://www.apollographql.com/docs/react/api/react-apollo.html#graphql-mutation-options-refetchQueries)
+- `tag`：字符串，HTML 标签名（默认值：`div`）
 
-## Scoped slot props
+## 作用域插槽 props
 
-- `mutate(options = undefined)`: Function to call the mutation. You can override the mutation options (for example: `mutate({ variables: { foo: 'bar } })`)
-- `loading`: Boolean indicating that the request is in flight
-- `error`: Eventual error for the last mutation call
-- `gqlError`: first GraphQL error if any
+- `mutate(options = undefined)`：调用变更的函数。你可以重载变更选项（例如：`mutate({ variables: { foo: 'bar } })`）
+- `loading`：布尔值，表明请求正在进行中
+- `error`：最后一次变更调用的最终错误
+- `gqlError`：第一个 GraphQL 错误（如果有）
 
-## Events
+## 事件
 
 - `done(resultObject)`
 - `error(errorObject)`

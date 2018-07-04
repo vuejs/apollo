@@ -48,7 +48,7 @@ const link = split(
   httpLink
 )
 
-// 创建 apollo client
+// 创建 apollo 客户端
 const apolloClient = new ApolloClient({
   link,
   cache: new InMemoryCache(),
@@ -217,7 +217,7 @@ apollo: {
 
 ## 跳过订阅
 
-如果订阅被跳过，它将被禁用且不再被更新。您可以使用 `skip` 选项：
+如果订阅被跳过，它将被禁用且不再被更新。你可以使用 `skip` 选项：
 
 ```js
 // Apollo 具体选项
