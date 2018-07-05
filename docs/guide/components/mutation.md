@@ -1,4 +1,4 @@
-## ApolloMutation
+# ApolloMutation
 
 You can use the `ApolloMutation` (or `apollo-mutation`) component to call Apollo mutations directly in your template.
 
