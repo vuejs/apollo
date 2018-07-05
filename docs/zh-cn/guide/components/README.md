@@ -1,19 +1,19 @@
-# What are Apollo components?
+# 什么是 Apollo 组件？
 
-Those are components just like any others. They take a GraphQL document in their prop and use the [scoped slot feature](https://vuejs.org/v2/guide/components-slots.html#Scoped-Slots) to pass down the results.
+这些组件就像其他组件一样。它们在 prop 中使用 GraphQL 文档，并使用 [作用域插槽功能](https://vuejs.org/v2/guide/components-slots.html#Scoped-Slots) 来传递结果。
 
-The benefit is that you can use those components in the template directly instead of using the `apollo` option of your component. In some cases you don't even need to add a script part at all in your `.vue`! This is all even more declarative.
+这样做的好处是你可以直接在模板中使用这些组件，而不是使用组件的 `apollo` 选项。在某些情况下，你甚至不需要在 `.vue` 中添加脚本部分！这种代码会更加声明式。
 
-Here is a quick example:
+这是一个简单的例子：
 
 ```vue
 <template>
   <div class="users-list">
-    <!-- Apollo Query -->
+    <!-- Apollo 查询 -->
     <ApolloQuery :query="require('@/graphql/users.gql')">
-      <!-- The result will automatically updated -->
+      <!-- 结果将自动更新 -->
       <template slot-scope="{ result: { data, loading } }">
-        <!-- Some content -->
+        <!-- 一些内容 -->
         <div v-if="loading">Loading...</div>
         <ul v-else>
           <li v-for="user of data.users" class="user">
@@ -25,7 +25,7 @@ Here is a quick example:
   </div>
 </template>
 
-<!-- No need for script -->
+<!-- 不需要脚本 -->
 
 <style scoped>
 .user {

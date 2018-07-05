@@ -1,8 +1,8 @@
 ## ApolloMutation
 
-You can use the `ApolloMutation` (or `apollo-mutation`) component to call Apollo mutations directly in your template.
+你可以使用 `ApolloMutation`（或 `apollo-mutation`）组件直接在模板中调用 Apollo 变更。
 
-Here is an example:
+这是一个简单的例子：
 
 ```vue
 <ApolloMutation
@@ -20,4 +20,4 @@ Here is an example:
 </ApolloMutation>
 ```
 
-See [API Reference](../../api/apollo-mutation.md).
+更多参见 [API 参考](../../api/apollo-mutation.md).

@@ -1,8 +1,8 @@
 # ApolloQuery
 
-You can use the `ApolloQuery` (or `apollo-query`) component to make watched Apollo queries directly in your template.
+你可以使用 `ApolloQuery`（或 `apollo-query`）组件直接在模板中侦听 Apollo 查询。
 
-Here is an example:
+这是一个简单的例子：
 
 ```vue
 <ApolloQuery
@@ -25,4 +25,4 @@ Here is an example:
 </ApolloQuery>
 ```
 
-See [API Reference](../../api/apollo-query.md).
+更多参见 [API 参考](../../api/apollo-query.md).

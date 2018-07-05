@@ -1,12 +1,12 @@
 # ApolloSubscribeToMore
 
-You can subscribe to more data with the `ApolloSubscribeToMore` (or `apollo-subscribe-to-more`) component. You can put as many of those as you want inside a `<ApolloQuery>` component.
+你可以使用 `ApolloSubscribeToMore`（或 `apollo-subscribe-to-more`）组件订阅更多数据。你可以在一个 `<ApolloQuery>` 组件中放置任意数量的订阅组件。
 
 ::: tip
-If the update is related to an existing object (for example, changing the value of a field), `updateQuery` is not required as Apollo client will be able to update the cache automatically.
+如果更新关联到现有对象（例如更改某个字段的值），则不需要 `updateQuery`，因为 Apollo 客户端能够自动更新缓存。
 :::
 
-Here is an example:
+这是一个简单的例子：
 
 ```vue
 <template>
@@ -31,11 +31,11 @@ export default {
 
   methods: {
     onMessageAdded (previousResult, { subscriptionData }) {
-      // The previous result is immutable
+      // 之前的结果是不可变的
       const newResult = {
         messages: [...previousResult.messages],
       }
-      // Add the question to the list
+      // 添加问题到列表中
       newResult.messages.push(subscriptionData.data.messageAdded)
       return newResult
     },
@@ -44,27 +44,27 @@ export default {
 </script>
 ```
 
-See [API Reference](../../api/apollo-subscribe-to-more.md).
+更多参见 [API 参考](../../api/apollo-subscribe-to-more.md).
 
-## Examples of `updateQuery`
+## `updateQuery` 的示例
 
-Add a new item to the cache:
+将新项添加到缓存中：
 
 ```js
 methods: {
   onMessageAdded (previousResult, { subscriptionData }) {
-    // The previous result is immutable
+    // 之前的结果是不可变的
     const newResult = {
       messages: [...previousResult.messages],
     }
-    // Add the question to the list
+    // 添加问题到列表中
     newResult.messages.push(subscriptionData.data.messageAdded)
     return newResult
   }
 }
 ```
 
-Remove an item to the cache:
+从缓存中删除一项：
 
 ```js
 methods: {
@@ -76,11 +76,11 @@ methods: {
 
     if (index === -1) return previousResult
 
-    // The previous result is immutable
+    // 之前的结果是不可变的
     const newResult = {
       messages: [...previousResult.messages],
     }
-    // Remove the question from the list
+    // 从列表中移除问题
     newResult.messages.splice(index, 1)
     return newResult
   }
