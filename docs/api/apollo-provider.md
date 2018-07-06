@@ -23,10 +23,10 @@ const apolloProvider = new VueApollo({
     },
   },
   // Watch loading state for all queries
-  // See the 'watchLoading' advanced option
-  watchLoading (state, mod) {
-    loading += mod
-    console.log('Global loading', loading, mod)
+  // See 'Smart Query > options > watchLoading' for detail
+  watchLoading (isLoading, countModifier) {
+    loading += countModifier
+    console.log('Global loading', loading, countModifier)
   },
   // Global error handler for all smart queries and subscriptions
   errorHandler (error) {
