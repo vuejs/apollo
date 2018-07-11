@@ -62,7 +62,7 @@ new Vue({
 
 ### prefetchAll
 
-（SSR）预取所有队列中的组件定义，并在所有对应的 apollo 数据准备就绪时返回已解决的 promise。
+（SSR）预取所有队列中的组件定义，并在所有对应的 apollo 数据准备就绪时返回已解决的(resolved) promise。
 
 ```js
 await apolloProvider.prefetchAll (context, componentDefs, options)

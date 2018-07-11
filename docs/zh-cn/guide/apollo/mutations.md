@@ -40,7 +40,7 @@ methods: {
         // 将数据写回缓存
         store.writeQuery({ query: TAGS_QUERY, data })
       },
-      // 乐观的用户界面
+      // 乐观 UI
       // 将在请求产生时作为“假”结果，使用户界面能够快速更新
       optimisticResponse: {
         __typename: 'Mutation',

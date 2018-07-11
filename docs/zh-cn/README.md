@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.png
 actionText: 由此起步 →
-actionLink: /guide/
+actionLink: /zh-cn/guide/
 features:
 - title: 自动更新
   details: 无需考虑更新 UI 或重新获取查询的问题！

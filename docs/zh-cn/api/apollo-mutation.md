@@ -11,7 +11,7 @@
 
 ## 作用域插槽 props
 
-- `mutate(options = undefined)`：调用变更的函数。你可以重载变更选项（例如：`mutate({ variables: { foo: 'bar } })`）
+- `mutate(options = undefined)`：调用变更的函数。你可以重载变更的选项（例如：`mutate({ variables: { foo: 'bar } })`）
 - `loading`：布尔值，表明请求正在进行中
 - `error`：最后一次变更调用的最终错误
 - `gqlError`：第一个 GraphQL 错误（如果有）

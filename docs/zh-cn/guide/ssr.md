@@ -91,7 +91,7 @@ willPrefetch({
 
 ## 在服务端
 
-使用 `apolloProvider.prefetchAll` 方法来预取你已标记的所有 apollo 查询。第一个参数是传递给 `prefetch` 钩子的上下文对象（参见上文），建议传入 vue-router 的 `currentRoute` 对象。第二个参数是要包含的组件定义数组（例如来自 `router.getMatchedComponents` 方法）。第三个参数是一个可选的 `options` 对象。当所有的 apollo 查询都被加载时，它返回已解决的 promise。
+使用 `apolloProvider.prefetchAll` 方法来预取你已标记的所有 apollo 查询。第一个参数是传递给 `prefetch` 钩子的上下文对象（参见上文），建议传入 vue-router 的 `currentRoute` 对象。第二个参数是要包含的组件定义数组（例如来自 `router.getMatchedComponents` 方法）。第三个参数是一个可选的 `options` 对象。当所有的 apollo 查询都被加载时，它返回已解决的(resolved) promise。
 
 以下是一个使用了 vue-router 和 Vuex store 的示例：
 
