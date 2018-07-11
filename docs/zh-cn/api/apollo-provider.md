@@ -23,10 +23,10 @@ const apolloProvider = new VueApollo({
     },
   },
   // 查看所有查询的加载状态
-  // 详见 'watchLoading' 高级选项
-  watchLoading (state, mod) {
-    loading += mod
-    console.log('Global loading', loading, mod)
+  // 详见 '智能查询 > 选项 > watchLoading'
+  watchLoading (isLoading, countModifier) {
+    loading += countModifier
+    console.log('Global loading', loading, countModifier)
   },
   // 所有智能查询和订阅的全局错误处理函数
   errorHandler (error) {
