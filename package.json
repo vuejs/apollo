@@ -45,7 +45,7 @@
     "apollo-cache-inmemory": "^1.1.1",
     "apollo-client": "^2.0.3",
     "apollo-link": "^1.0.3",
-    "apollo-link-http": "^1.2.0",
+    "apollo-link-http": "https://github.com/chaim1986/apollo-link",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.1",
     "babel-plugin-external-helpers": "^6.22.0",
