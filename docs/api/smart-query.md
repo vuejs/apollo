@@ -117,7 +117,7 @@ this.$apollo.queries.users.loading
 Stops and restarts the query:
 
 ```js
-this.$apollo.queries.users.restart()
+this.$apollo.queries.users.refresh()
 ```
 
 ### start
