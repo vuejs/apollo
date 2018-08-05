@@ -1560,6 +1560,16 @@ var CApolloQuery = {
       default: false
     },
 
+    debounce: {
+      type: Number,
+      default: 0
+    },
+
+    throttle: {
+      type: Number,
+      default: 0
+    },
+
     clientId: {
       type: String,
       default: undefined
@@ -1622,6 +1632,8 @@ var CApolloQuery = {
 
         fetchPolicy: this.fetchPolicy,
         pollInterval: this.pollInterval,
+        debounce: this.debounce,
+        throttle: this.throttle,
         notifyOnNetworkStatusChange: this.notifyOnNetworkStatusChange,
         context: function context() {
           return this.context;
