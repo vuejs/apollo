@@ -1980,10 +1980,8 @@ function install(Vue, options) {
     return Object.assign(map, merge(toData, fromData));
   };
 
-  console.log('## CUSTOM VUE APOLLO');
-
   // Lazy creation
-  if (!Object.hasOwnProperty(Vue.prototype, '$apollo')) {
+  if (!Vue.prototype.hasOwnProperty('$apollo')) {
     Object.defineProperty(Vue.prototype, '$apollo', {
       get: function get$$1() {
         if (!this._apollo) {
