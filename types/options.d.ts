@@ -21,7 +21,7 @@ interface ApolloVueSubscribeToMoreOptions<V> {
   onError?: (error: Error) => void;
 }
 
-export type WatchLoading<V> = (isLoading: boolean, countModifier: number) => void
+export type WatchLoading<V> = (this: ApolloVueThisType<V>, isLoading: boolean, countModifier: number) => void
 export type ErrorHandler<V> = (this: ApolloVueThisType<V>, error: any) => void
 
 type _WatchQueryOptions = Omit<WatchQueryOptions, 'query'>; // exclude query prop because it causes type incorrectly error
@@ -38,7 +38,7 @@ interface ExtendableVueApolloQueryOptions<V, R> extends _WatchQueryOptions {
   prefetch?: (context: any) => any | boolean;
   deep?: boolean;
 }
-export interface VueApolloQueryOptions<V, R> extends ExtendableVueApolloQueryOptions<V, R> { 
+export interface VueApolloQueryOptions<V, R> extends ExtendableVueApolloQueryOptions<V, R> {
   query: ((this: ApolloVueThisType<V>) => DocumentNode) | DocumentNode;
   variables?: VariableFn<V>;
 }
