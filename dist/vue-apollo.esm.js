@@ -1975,14 +1975,16 @@ function install(Vue, options) {
   };
 
   // Lazy creation
-  Object.defineProperty(Vue.prototype, '$apollo', {
-    get: function get$$1() {
-      if (!this._apollo) {
-        this._apollo = new DollarApollo(this);
+  if (!Vue.prototype.hasOwnProperty('$apollo')) {
+    Object.defineProperty(Vue.prototype, '$apollo', {
+      get: function get$$1() {
+        if (!this._apollo) {
+          this._apollo = new DollarApollo(this);
+        }
+        return this._apollo;
       }
-      return this._apollo;
-    }
-  });
+    });
+  }
 
   var vueVersion = Vue.version.substr(0, Vue.version.indexOf('.'));
 

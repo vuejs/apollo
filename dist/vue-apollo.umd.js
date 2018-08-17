@@ -1980,15 +1980,19 @@ function install(Vue, options) {
     return Object.assign(map, merge(toData, fromData));
   };
 
+  console.log('## CUSTOM VUE APOLLO');
+
   // Lazy creation
-  Object.defineProperty(Vue.prototype, '$apollo', {
-    get: function get$$1() {
-      if (!this._apollo) {
-        this._apollo = new DollarApollo(this);
+  if (!Object.hasOwnProperty(Vue.prototype, '$apollo')) {
+    Object.defineProperty(Vue.prototype, '$apollo', {
+      get: function get$$1() {
+        if (!this._apollo) {
+          this._apollo = new DollarApollo(this);
+        }
+        return this._apollo;
       }
-      return this._apollo;
-    }
-  });
+    });
+  }
 
   var vueVersion = Vue.version.substr(0, Vue.version.indexOf('.'));
 
