@@ -1,0 +1,41 @@
+sudo: false
+dist: trusty
+language: node_js
+
+node_js:
+  - 8
+
+cache:
+  directories:
+    - ./node_modules
+
+before_script:
+  - npm install -g npm
+  - npm ci
+
+stages:
+  - build
+  - test
+  - docs
+
+jobs:
+  - stage: build
+    name: Build for Browser target
+    script: npm build:browser
+
+  - name: Build for ES target
+    script: npm build:es
+
+  - name: Build for UMD target
+    script: npm build:umd
+
+  - stage: test
+    name: Lint
+    script: npm test:eslint
+
+  - name: Types
+    script: npm test:types
+
+  - stage: docs
+    name: Documentation
+    script: npm docs:build
