@@ -180,6 +180,6 @@ export default {
     } else {
       result = [result].concat(this.$slots.default)
     }
-    return h(this.tag, result)
+    return this.tag ? h(this.tag, result) : result
   },
 }
