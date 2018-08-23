@@ -1,13 +1,16 @@
 import Vue, { PluginObject, PluginFunction } from 'vue';
 import { ApolloClient, ObservableQuery } from 'apollo-client';
+import { Observable } from 'apollo-client/util/Observable';
 import { ApolloProvider, VueApolloComponent } from './apollo-provider'
 import {
   VueApolloQueryOptions,
+  VueApolloMutationOptions,
   VueApolloSubscriptionOptions,
   VueApolloOptions,
   WatchLoading,
-  ErrorHandler
-} from './options'
+  ErrorHandler,
+} from './options';
+import { GraphQLError } from 'graphql';
 
 export class VueApollo extends ApolloProvider implements PluginObject<{}>{
   [key: string]: any;
@@ -22,14 +25,14 @@ export class VueApollo extends ApolloProvider implements PluginObject<{}>{
   static install(pVue: typeof Vue, options?:{} | undefined): void;
 }
 
-interface SmartApollo<V, R=any> {
+interface SmartApollo<V> {
   skip: boolean;
   refresh(): void;
   start(): void;
   stop(): void;
 }
 
-export interface SmartQuery<V, R=any> extends SmartApollo<V, R> {
+export interface SmartQuery<V> extends SmartApollo<V> {
   loading: boolean;
   fetchMore: ObservableQuery<any>['fetchMore'];
   subscribeToMore: ObservableQuery<any>['subscribeToMore'];
@@ -40,13 +43,18 @@ export interface SmartQuery<V, R=any> extends SmartApollo<V, R> {
   stopPolling: ObservableQuery<any>['stopPolling'];
 }
 
-export interface SmartSubscription<V, R=any> extends SmartApollo<V, R> {
+export interface SmartSubscription<V> extends SmartApollo<V> {
 }
+
+export declare type QueryResult<T> = {
+  data: T;
+  errors?: GraphQLError[];
+};
 
 export interface DollarApollo<V> {
   vm: V;
-  queries: Record<string, SmartQuery<V, any>>;
-  subscriptions: Record<string, SmartSubscription<V, any>>;
+  queries: Record<string, SmartQuery<V>>;
+  subscriptions: Record<string, SmartSubscription<V>>;
   client: ApolloClient<{}>;
   readonly provider: ApolloProvider;
   readonly loading: boolean;
@@ -56,12 +64,12 @@ export interface DollarApollo<V> {
   /* writeonly */ skipAllSubscriptions: boolean;
   /* writeonly */ skipAll: boolean;
 
-  query: ApolloClient<{}>['query'];
-  mutate: ApolloClient<{}>['mutate'];
-  subscribe: ApolloClient<{}>['subscribe'];
+  query<R=any>(options: VueApolloQueryOptions<V, R>): Promise<QueryResult<R>>;
+  mutate<R=any>(options: VueApolloMutationOptions<V, R>): Promise<QueryResult<R>>;
+  subscribe<R=any>(options: VueApolloSubscriptionOptions<V, R>): Observable<R>;
 
-  addSmartQuery<R=any>(key: string, options: VueApolloQueryOptions<V, R>): SmartQuery<V, R>;
-  addSmartSubscription<R=any>(key: string, options: VueApolloSubscriptionOptions<V, R>): SmartSubscription<V, R>;
+  addSmartQuery<R=any>(key: string, options: VueApolloQueryOptions<V, R>): SmartQuery<V>;
+  addSmartSubscription<R=any>(key: string, options: VueApolloSubscriptionOptions<V, R>): SmartSubscription<V>;
 }
 
 export function willPrefetch (component: VueApolloComponent, contextCallback?: boolean): VueApolloComponent
