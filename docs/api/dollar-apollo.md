@@ -16,6 +16,7 @@ This is the Apollo manager added to any component that uses Apollo. It can be ac
 
 ## Methods
 
+- `query`: execute a query (see [Queries](../guide/apollo/queries.md)).
 - `mutate`: execute a mutation (see [Mutations](../guide/apollo/mutations.md)).
 - `subscribe`: standard Apollo subscribe method (see [Subscriptions](../guide/apollo/subscriptions.md)).
 - `addSmartQuery`: manually add a Smart Query (not recommended).
