@@ -147,6 +147,6 @@ addMockFunctionsToSchema({
   preserveResolvers: true,
 });
 ```
+You can test mutations in the same way
 
-You can test mutations in the same way.
 ---
