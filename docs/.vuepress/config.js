@@ -3,9 +3,7 @@ module.exports = {
   description: '🚀 Integrate GraphQL in your Vue.js apps!',
   base: '/vue-apollo/',
   serviceWorker: true,
-  head: [
-    ['link', { rel: 'icon', href: '/favicon.png' }],
-  ],
+  head: [['link', { rel: 'icon', href: '/favicon.png' }]],
   themeConfig: {
     repo: 'Akryum/vue-apollo',
     docsDir: 'docs',
@@ -14,24 +12,24 @@ module.exports = {
     nav: [
       {
         text: 'Guide',
-        link: '/guide/'
+        link: '/guide/',
       },
       {
         text: 'API Reference',
-        link: '/api/'
+        link: '/api/',
       },
       {
         text: 'Migration',
-        link: '/migration/'
+        link: '/migration/',
       },
       {
         text: 'CLI plugin',
-        link: 'https://github.com/Akryum/vue-cli-plugin-apollo'
+        link: 'https://github.com/Akryum/vue-cli-plugin-apollo',
       },
       {
         text: 'Patreon',
-        link: 'https://www.patreon.com/akryum'
-      }
+        link: 'https://www.patreon.com/akryum',
+      },
     ],
     sidebarDepth: 3,
     sidebar: {
@@ -47,7 +45,7 @@ module.exports = {
             'apollo/mutations',
             'apollo/subscriptions',
             'apollo/pagination',
-          ]
+          ],
         },
         {
           title: 'Components',
@@ -57,7 +55,7 @@ module.exports = {
             'components/query',
             'components/mutation',
             'components/subscribe-to-more',
-          ]
+          ],
         },
         {
           title: 'Advanced topics',
@@ -65,26 +63,20 @@ module.exports = {
           children: [
             'multiple-clients',
             'ssr',
-            'local-state'
-          ]
-        }
+            'local-state',
+            'testing'],
+        },
       ],
       '/api/': [
         {
           title: 'Vue Apollo',
           collapsable: false,
-          children: [
-            'apollo-provider',
-            'dollar-apollo',
-          ]
+          children: ['apollo-provider', 'dollar-apollo'],
         },
         {
           title: 'Smart Apollo',
           collapsable: false,
-          children: [
-            'smart-query',
-            'smart-subscription',
-          ]
+          children: ['smart-query', 'smart-subscription'],
         },
         {
           title: 'Apollo Components',
@@ -93,12 +85,10 @@ module.exports = {
             'apollo-query',
             'apollo-subscribe-to-more',
             'apollo-mutation',
-          ]
-        }
+          ],
+        },
       ],
-      '/migration/': [
-        ''
-      ]
-    }
-  }
-}
+      '/migration/': [''],
+    },
+  },
+};
