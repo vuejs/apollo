@@ -7,8 +7,8 @@
 - `optimisticResponse`: See [optimistic UI](https://www.apollographql.com/docs/react/features/optimistic-ui.html)
 - `update`: See [updating cache after mutation](https://www.apollographql.com/docs/react/api/react-apollo.html#graphql-mutation-options-update)
 - `refetchQueries`: See [refetching queries after mutation](https://www.apollographql.com/docs/react/api/react-apollo.html#graphql-mutation-options-refetchQueries)
-- `tag`: String HTML tag name (default: `div`)
 - `clientId`: Used to resolve the Apollo Client used (defined in ApolloProvider)
+- `tag`: String HTML tag name (default: `div`); if `undefined`, the component will be renderless (the content won't be wrapped in a tag)
 
 ## Scoped slot props
 
