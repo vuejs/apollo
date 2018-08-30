@@ -3,7 +3,9 @@ module.exports = {
   description: '🚀 Integrate GraphQL in your Vue.js apps!',
   base: '/vue-apollo/',
   serviceWorker: true,
-  head: [['link', { rel: 'icon', href: '/favicon.png' }]],
+  head: [
+    ['link', { rel: 'icon', href: '/favicon.png' }],
+  ],
   themeConfig: {
     repo: 'Akryum/vue-apollo',
     docsDir: 'docs',
@@ -99,4 +101,4 @@ module.exports = {
       '/migration/': [''],
     },
   },
-};
+}
