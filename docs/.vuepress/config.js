@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'Apollo and GraphQL for Vue.js',
+  title: 'Vue Apollo',
   description: '🚀 Integrate GraphQL in your Vue.js apps!',
   base: '/vue-apollo/',
   serviceWorker: true,
