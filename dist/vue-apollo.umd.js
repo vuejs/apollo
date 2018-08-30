@@ -4,6 +4,10 @@
 	(factory((global['vue-apollo'] = {})));
 }(this, (function (exports) { 'use strict';
 
+function createCommonjsModule(fn, module) {
+	return module = { exports: {} }, fn(module, module.exports), module.exports;
+}
+
 /* eslint-disable no-undefined,no-param-reassign,no-shadow */
 
 /**
@@ -127,6 +131,14 @@ function throttle ( delay, noTrailing, callback, debounceMode ) {
 function debounce ( delay, atBegin, callback ) {
 	return callback === undefined ? throttle(delay, atBegin, false) : throttle(delay, callback, atBegin !== false);
 }
+
+
+
+
+var index_esm = Object.freeze({
+	throttle: throttle,
+	debounce: debounce
+});
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
@@ -324,50 +336,63 @@ var toConsumableArray = function (arr) {
   }
 };
 
-var Globals = {};
+var utils = createCommonjsModule(function (module, exports) {
+  var Globals = exports.Globals = {};
 
-function factory(action) {
-  return function (cb, time) {
-    return action(time, cb);
+  function factory(action) {
+    return function (cb, time) {
+      return action(time, cb);
+    };
+  }
+
+  exports.throttle = factory(index_esm.throttle);
+
+  exports.debounce = factory(index_esm.debounce);
+
+  exports.getMergedDefinition = function (def) {
+    return Globals.Vue.util.mergeOptions({}, def);
   };
-}
 
-var throttle$1 = factory(throttle);
+  exports.reapply = function (options, context) {
+    while (typeof options === 'function') {
+      options = options.call(context);
+    }
+    return options;
+  };
 
-var debounce$1 = factory(debounce);
+  exports.omit = function (obj, properties) {
+    return Object.entries(obj).filter(function (_ref) {
+      var _ref2 = slicedToArray(_ref, 1),
+          key = _ref2[0];
 
-function getMergedDefinition(def) {
-  return Globals.Vue.util.mergeOptions({}, def);
-}
+      return !properties.includes(key);
+    }).reduce(function (c, _ref3) {
+      var _ref4 = slicedToArray(_ref3, 2),
+          key = _ref4[0],
+          val = _ref4[1];
 
-function reapply(options, context) {
-  while (typeof options === 'function') {
-    options = options.call(context);
-  }
-  return options;
-}
+      c[key] = val;
+      return c;
+    }, {});
+  };
 
-function omit(obj, properties) {
-  return Object.entries(obj).filter(function (_ref) {
-    var _ref2 = slicedToArray(_ref, 1),
-        key = _ref2[0];
+  exports.addGqlError = function (error) {
+    if (error.graphQLErrors && error.graphQLErrors.length) {
+      error.gqlError = error.graphQLErrors[0];
+    }
+  };
 
-    return !properties.includes(key);
-  }).reduce(function (c, _ref3) {
-    var _ref4 = slicedToArray(_ref3, 2),
-        key = _ref4[0],
-        val = _ref4[1];
+  exports.noop = function () {};
+});
 
-    c[key] = val;
-    return c;
-  }, {});
-}
-
-function addGqlError(error) {
-  if (error.graphQLErrors && error.graphQLErrors.length) {
-    error.gqlError = error.graphQLErrors[0];
-  }
-}
+var utils_1 = utils.Globals;
+var utils_2 = utils.throttle;
+var utils_3 = utils.debounce;
+var utils_4 = utils.getMergedDefinition;
+var utils_5 = utils.reapply;
+var utils_6 = utils.omit;
+var utils_7 = utils.addGqlError;
+var utils_8 = utils.noop;
 
 var SmartApollo = function () {
   function SmartApollo(vm, key, options) {
@@ -467,8 +492,8 @@ var SmartApollo = function () {
       // GraphQL Variables
       if (typeof this.options.variables === 'function') {
         var _cb = this.executeApollo.bind(this);
-        _cb = this.options.throttle ? throttle$1(_cb, this.options.throttle) : _cb;
-        _cb = this.options.debounce ? debounce$1(_cb, this.options.debounce) : _cb;
+        _cb = this.options.throttle ? utils_2(_cb, this.options.throttle) : _cb;
+        _cb = this.options.debounce ? utils_3(_cb, this.options.debounce) : _cb;
         this._watchers.push(this.vm.$watch(function () {
           return _this.options.variables.call(_this.vm);
         }, _cb, {
@@ -515,7 +540,7 @@ var SmartApollo = function () {
   }, {
     key: 'generateApolloOptions',
     value: function generateApolloOptions(variables) {
-      var apolloOptions = omit(this.options, this.vueApolloSpecialKeys);
+      var apolloOptions = utils_6(this.options, this.vueApolloSpecialKeys);
       apolloOptions.variables = variables;
       return apolloOptions;
     }
@@ -529,7 +554,7 @@ var SmartApollo = function () {
     value: function nextResult(result) {
       var error = result.error;
 
-      if (error) addGqlError(error);
+      if (error) utils_7(error);
     }
   }, {
     key: 'callHandlers',
@@ -585,7 +610,7 @@ var SmartApollo = function () {
   }, {
     key: 'catchError',
     value: function catchError(error) {
-      addGqlError(error);
+      utils_7(error);
 
       var catched = this.errorHandler(error);
 
@@ -1139,7 +1164,7 @@ var DollarApollo = function () {
     value: function addSmartQuery(key, options) {
       var _this3 = this;
 
-      var finalOptions = reapply(options, this.vm);
+      var finalOptions = utils_5(options, this.vm);
 
       var apollo = this.vm.$options.apollo;
       var defaultOptions = this.provider.defaultOptions;
@@ -1160,7 +1185,9 @@ var DollarApollo = function () {
       }
 
       var smart = this.queries[key] = new SmartQuery(this.vm, key, finalOptions, false);
-      smart.autostart();
+      if (!this.vm.$isServer || finalOptions.prefetch !== false) {
+        smart.autostart();
+      }
 
       if (!this.vm.$isServer) {
         var subs = finalOptions.subscribeToMore;
@@ -1185,7 +1212,7 @@ var DollarApollo = function () {
     key: 'addSmartSubscription',
     value: function addSmartSubscription(key, options) {
       if (!this.vm.$isServer) {
-        options = reapply(options, this.vm);
+        options = utils_5(options, this.vm);
 
         var smart = this.subscriptions[key] = new SmartSubscription(this.vm, key, options, false);
         smart.autostart();
@@ -1305,209 +1332,12 @@ var ApolloProvider = function () {
     value: function provide() {
       var key = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '$apolloProvider';
 
+      console.warn('<ApolloProvider>.provide() is deprecated. Use the \'apolloProvider\' option instead with the provider object directly.');
       return defineProperty({}, key, this);
-    }
-  }, {
-    key: 'addQueryToPrefetch',
-    value: function addQueryToPrefetch(queryOptions, client) {
-      this.prefetchQueries.push({
-        queryOptions: queryOptions,
-        client: client
-      });
-    }
-  }, {
-    key: 'prefetchComponent',
-    value: function prefetchComponent(component, context) {
-      component = getMergedDefinition(component);
-      var apolloOptions = component.apollo;
-
-      if (!apolloOptions) {
-        return;
-      }
-
-      var componentClient = apolloOptions.$client;
-      for (var key in apolloOptions) {
-        var options = apolloOptions[key];
-        if (key.charAt(0) !== '$' && (!options.query || (typeof options.ssr === 'undefined' || options.ssr) && typeof options.prefetch !== 'undefined' && options.prefetch)) {
-          this.addQueryToPrefetch(options, options.client || componentClient);
-        }
-      }
-    }
-  }, {
-    key: 'prefetchComponents',
-    value: function prefetchComponents(definitions) {
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = definitions[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var def = _step.value;
-
-          this.prefetchComponent(def);
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
-      }
-    }
-  }, {
-    key: 'prefetchAll',
-    value: function prefetchAll(context, components, options) {
-      var _this = this;
-
-      // Optional components argument
-      if (!options && components && !Array.isArray(components)) {
-        options = components;
-        components = undefined;
-      }
-
-      var finalOptions = Object.assign({}, {
-        includeGlobal: true
-      }, options);
-
-      if (components) {
-        this.prefetchComponents(components);
-      }
-
-      if (finalOptions.includeGlobal) {
-        this.prefetchComponents(globalPrefetchs.filter(function (_ref2) {
-          var component = _ref2.component,
-              contextCallback = _ref2.contextCallback;
-
-          var result = true;
-          if (typeof contextCallback === 'function') {
-            result = !!contextCallback(context);
-          }
-          return result;
-        }).map(function (_ref3) {
-          var component = _ref3.component;
-          return component;
-        }), context);
-      }
-
-      return Promise.all(this.prefetchQueries.map(function (o) {
-        return _this.prefetchQuery(o.queryOptions, context, o.client);
-      }));
-    }
-  }, {
-    key: 'prefetchQuery',
-    value: function prefetchQuery(queryOptions, context, client) {
-      var variables = void 0;
-
-      // Client
-      if (!client) {
-        client = this.defaultClient;
-      } else if (typeof client === 'string') {
-        client = this.clients[client];
-        if (!client) {
-          throw new Error('[vue-apollo] Missing client \'' + client + '\' in \'apolloProvider\'');
-        }
-      }
-
-      // Simple query
-      if (!queryOptions.query) {
-        queryOptions = {
-          query: queryOptions
-        };
-      } else {
-        var prefetch = queryOptions.prefetch;
-        var prefetchType = typeof prefetch === 'undefined' ? 'undefined' : _typeof(prefetch);
-
-        // Resolve variables
-        if (prefetchType !== 'undefined') {
-          var result = void 0;
-          if (prefetchType === 'function') {
-            result = prefetch(context);
-          } else {
-            result = prefetch;
-          }
-
-          if (!result) {
-            return Promise.resolve();
-          } else if (prefetchType === 'boolean') {
-            var optVariables = queryOptions.variables;
-            if (typeof optVariables !== 'undefined') {
-              // Reuse `variables` option with `prefetch: true`
-              if (typeof optVariables === 'function') {
-                variables = optVariables.call(context);
-              } else {
-                variables = optVariables;
-              }
-            } else {
-              variables = undefined;
-            }
-          } else {
-            variables = result;
-          }
-        }
-      }
-
-      // Query
-      if (typeof queryOptions.query === 'function') {
-        queryOptions.query = queryOptions.query(context);
-      }
-      return new Promise(function (resolve, reject) {
-        var options = omit(queryOptions, [].concat(toConsumableArray(VUE_APOLLO_QUERY_KEYWORDS), ['fetchPolicy']));
-        options.variables = variables;
-        options.fetchPolicy = 'network-only';
-        client.query(options).then(resolve, reject);
-      });
-    }
-  }, {
-    key: 'getStates',
-    value: function getStates(options) {
-      var finalOptions = Object.assign({}, {
-        exportNamespace: ''
-      }, options);
-      var states = {};
-      for (var key in this.clients) {
-        var client = this.clients[key];
-        var state = client.cache.extract();
-        states['' + finalOptions.exportNamespace + key] = state;
-      }
-      return states;
-    }
-  }, {
-    key: 'exportStates',
-    value: function exportStates(options) {
-      var finalOptions = Object.assign({}, {
-        globalName: '__APOLLO_STATE__',
-        attachTo: 'window'
-      }, options);
-      var states = this.getStates(finalOptions);
-      var js = finalOptions.attachTo + '.' + finalOptions.globalName + ' = ' + JSON.stringify(states) + ';';
-      return js;
     }
   }]);
   return ApolloProvider;
 }();
-
-var globalPrefetchs = [];
-
-function willPrefetch(component) {
-  var contextCallback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-
-  globalPrefetchs.push({ component: component, contextCallback: contextCallback });
-  return component;
-}
-
-// Global access for libraries
-if (typeof window !== 'undefined') {
-  window.vueApolloWillPrefetch = willPrefetch;
-} else if (typeof global !== 'undefined') {
-  global.vueApolloWillPrefetch = willPrefetch;
-}
 
 function isDataFilled(data) {
   return Object.keys(data).length > 0;
@@ -1558,6 +1388,16 @@ var CApolloQuery = {
     skip: {
       type: Boolean,
       default: false
+    },
+
+    debounce: {
+      type: Number,
+      default: 0
+    },
+
+    throttle: {
+      type: Number,
+      default: 0
     },
 
     clientId: {
@@ -1622,6 +1462,8 @@ var CApolloQuery = {
 
         fetchPolicy: this.fetchPolicy,
         pollInterval: this.pollInterval,
+        debounce: this.debounce,
+        throttle: this.throttle,
         notifyOnNetworkStatusChange: this.notifyOnNetworkStatusChange,
         context: function context() {
           return this.context;
@@ -1705,7 +1547,7 @@ var CApolloQuery = {
     } else {
       result = [result].concat(this.$slots.default);
     }
-    return h(this.tag, result);
+    return this.tag ? h(this.tag, result) : result;
   }
 };
 
@@ -1799,6 +1641,11 @@ var CApolloMutation = {
       default: undefined
     },
 
+    clientId: {
+      type: String,
+      default: undefined
+    },
+
     tag: {
       type: String,
       default: 'div'
@@ -1821,6 +1668,7 @@ var CApolloMutation = {
       this.error = null;
       this.$apollo.mutate(_extends({
         mutation: this.mutation,
+        client: this.clientId,
         variables: this.variables,
         optimisticResponse: this.optimisticResponse,
         update: this.update,
@@ -1829,7 +1677,7 @@ var CApolloMutation = {
         _this.$emit('done', result);
         _this.loading = false;
       }).catch(function (e) {
-        addGqlError(e);
+        utils_7(e);
         _this.error = e;
         _this.$emit('error', e);
         _this.loading = false;
@@ -1849,14 +1697,30 @@ var CApolloMutation = {
     } else {
       result = [result].concat(this.$slots.default);
     }
-    return h(this.tag, result);
+    return this.tag ? h(this.tag, result) : result;
   }
 };
 
-var keywords = ['$subscribe'];
-
 function hasProperty(holder, key) {
   return typeof holder !== 'undefined' && Object.prototype.hasOwnProperty.call(holder, key);
+}
+
+function initDollarApollo() {
+  var options = this.$options;
+  // ApolloProvider injection
+  var optionValue = options.apolloProvider;
+  if (optionValue) {
+    this.$apolloProvider = typeof optionValue === 'function' ? optionValue() : optionValue;
+  } else if (options.parent && options.parent.$apolloProvider) {
+    this.$apolloProvider = options.parent.$apolloProvider;
+  } else if (options.provide) {
+    // TODO remove
+    // Temporary retro-compatibility
+    var provided = typeof options.provide === 'function' ? options.provide.call(this) : options.provide;
+    if (provided.$apolloProvider) {
+      this.$apolloProvider = provided.$apolloProvider;
+    }
+  }
 }
 
 function proxyData() {
@@ -1935,7 +1799,7 @@ function launch() {
     }
 
     if (apollo.subscribe) {
-      Globals.Vue.util.warn('vue-apollo -> `subscribe` option is deprecated. Use the `$subscribe` option instead.');
+      utils_1.Vue.util.warn('vue-apollo -> `subscribe` option is deprecated. Use the `$subscribe` option instead.');
     }
 
     if (apollo.$subscribe) {
@@ -1956,11 +1820,44 @@ function defineReactiveSetter($apollo, key, value, deep) {
   }
 }
 
+function installMixin(Vue, vueVersion) {
+  Vue.mixin(_extends({}, vueVersion === '1' ? {
+    init: initDollarApollo
+  } : {}, vueVersion === '2' ? {
+    data: function data() {
+      return {
+        '$apolloData': {
+          queries: {},
+          loading: 0,
+          data: {}
+        }
+      };
+    },
+    beforeCreate: function beforeCreate() {
+      initDollarApollo.call(this);
+      proxyData.call(this);
+    }
+  } : {}, {
+
+    created: launch,
+
+    destroyed: function destroyed() {
+      if (this.$_apollo) {
+        this.$_apollo.destroy();
+        this.$_apollo = null;
+      }
+    }
+  }));
+}
+
+var keywords = ['$subscribe'];
+
 function install(Vue, options) {
   if (install.installed) return;
   install.installed = true;
 
-  Globals.Vue = Vue;
+  utils_1.Vue = Vue;
+  var vueVersion = Vue.version.substr(0, Vue.version.indexOf('.'));
 
   // Options merging
   var merge = Vue.config.optionMergeStrategies.methods;
@@ -1968,8 +1865,8 @@ function install(Vue, options) {
     if (!toVal) return fromVal;
     if (!fromVal) return toVal;
 
-    var toData = Object.assign({}, omit(toVal, keywords), toVal.data);
-    var fromData = Object.assign({}, omit(fromVal, keywords), fromVal.data);
+    var toData = Object.assign({}, utils_6(toVal, keywords), toVal.data);
+    var fromData = Object.assign({}, utils_6(fromVal, keywords), fromVal.data);
 
     var map = {};
     for (var i = 0; i < keywords.length; i++) {
@@ -1982,53 +1879,15 @@ function install(Vue, options) {
 
   // Lazy creation
   Object.defineProperty(Vue.prototype, '$apollo', {
-    get: function get$$1() {
-      if (!this._apollo) {
-        this._apollo = new DollarApollo(this);
+    get: function get() {
+      if (!this.$_apollo) {
+        this.$_apollo = new DollarApollo(this);
       }
-      return this._apollo;
+      return this.$_apollo;
     }
   });
 
-  var vueVersion = Vue.version.substr(0, Vue.version.indexOf('.'));
-
-  Vue.mixin(_extends({}, vueVersion === '1' ? {
-    init: function init() {
-      var apolloProvider = void 0;
-      if (this.$options.apolloProvider) {
-        apolloProvider = this._apolloProvider = this.$options.apolloProvider;
-      } else {
-        apolloProvider = this.$root._apolloProvider;
-      }
-      this.$apolloProvider = apolloProvider;
-    }
-  } : {}, vueVersion === '2' ? {
-    inject: {
-      $apolloProvider: { default: null }
-    },
-
-    data: function data() {
-      return {
-        '$apolloData': {
-          queries: {},
-          loading: 0,
-          data: {}
-        }
-      };
-    }
-  } : {}, {
-
-    beforeCreate: proxyData,
-    created: launch,
-
-    destroyed: function destroyed() {
-      if (this._apollo) {
-        this._apollo.destroy();
-        this._apollo = null;
-      }
-    }
-
-  }));
+  installMixin(Vue, vueVersion);
 
   if (vueVersion === '2') {
     Vue.component('apollo-query', CApolloQuery);
@@ -2043,10 +1902,11 @@ function install(Vue, options) {
 ApolloProvider.install = install;
 
 // eslint-disable-next-line no-undef
-ApolloProvider.version = "3.0.0-beta.19";
+ApolloProvider.version = "3.0.0-beta.20";
 
 // Apollo provider
 var ApolloProvider$1 = ApolloProvider;
+
 // Components
 var ApolloQuery = CApolloQuery;
 var ApolloSubscribeToMore = CApolloSubscribeToMore;
@@ -2069,7 +1929,6 @@ exports.ApolloQuery = ApolloQuery;
 exports.ApolloSubscribeToMore = ApolloSubscribeToMore;
 exports.ApolloMutation = ApolloMutation;
 exports.default = ApolloProvider;
-exports.willPrefetch = willPrefetch;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
