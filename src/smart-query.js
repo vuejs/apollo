@@ -1,5 +1,5 @@
 import SmartApollo from './smart-apollo'
-import { VUE_APOLLO_QUERY_KEYWORDS } from './consts'
+import { VUE_APOLLO_QUERY_KEYWORDS } from '../lib/consts'
 
 export default class SmartQuery extends SmartApollo {
   type = 'query'

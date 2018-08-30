@@ -1,4 +1,4 @@
-import { addGqlError } from '../utils'
+import { addGqlError } from '../../lib/utils'
 
 export default {
   props: {

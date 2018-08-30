@@ -5,12 +5,12 @@
 On the queries you want to prefetch on the server, add the `prefetch` option. It can either be:
  - a variables object,
  - a function that gets the context object (which can contain the URL for example) and return a variables object,
- - `true` (query's `variables` is reused).
+ - `false` to disable prefetching for this query.
 
 If you are returning a variables object in the `prefetch` option, make sure it matches the result of the `variables` option. If they do not match, the query's data property will not be populated while rendering the template server-side.
 
 ::: danger
-You don't have access to the component instance when doing prefetching on the server. Don't use `this` in `prefetch`!
+You don't have access to the component instance when doing prefetching on the server.
 :::
 
 Example:
@@ -19,6 +19,7 @@ Example:
 export default {
   apollo: {
     allPosts: {
+      // This will be prefetched
       query: gql`query AllPosts {
         allPosts {
           id
@@ -26,7 +27,6 @@ export default {
           description
         }
       }`,
-      prefetch: true,
     }
   }
 }
@@ -60,12 +60,12 @@ export default {
 }
 ```
 
-You can also tell vue-apollo that some components not used in a `router-view` (and thus, not in vue-router `matchedComponents`) need to be prefetched, with the `willPrefetch` method:
+### Skip prefetching
+
+Example that doesn't prefetch the query:
 
 ```js
-import { willPrefetch } from 'vue-apollo'
-
-export default willPrefetch({
+export default {
   apollo: {
     allPosts: {
       query: gql`query AllPosts {
@@ -75,27 +75,60 @@ export default willPrefetch({
           description
         }
       }`,
-      prefetch: true, // Don't forget this
+      // Don't prefetch
+      prefetch: false,
     }
   }
-})
+}
 ```
 
-The second parameter is optional: it's a callback that gets the context and should return a boolean indicating if the component should be prefetched:
+If you want to skip prefetching all the queries for a specific component, use the `$prefetch` option:
 
 ```js
-willPrefetch({
-  // Component definition...
-}, context => context.url === '/foo')
+export default {
+  apollo: {
+    // Don't prefetch any query
+    $prefetch: false,
+    allPosts: {
+      query: gql`query AllPosts {
+        allPosts {
+          id
+          imageUrl
+          description
+        }
+      }`,
+    }
+  }
+}
+```
+
+You can also put a `no-prefetch` attribute on any component so it will be ignored while walking the tree to gather the Apollo queries:
+
+```vue
+<ApolloQuery no-prefetch>
 ```
 
 ## On the server
 
-To prefetch all the apollo queries you marked, use the `apolloProvider.prefetchAll` method. The first argument is the context object passed to the `prefetch` hooks (see above). It is recommended to pass the vue-router `currentRoute` object. The second argument is the array of component definition to include (e.g. from `router.getMatchedComponents` method). The third argument is an optional `options` object. It returns a promise resolved when all the apollo queries are loaded.
+In the server entry, you need to install `ApolloSSR` plugin into Vue:
+
+```js
+import Vue from 'vue'
+import ApolloSSR from 'vue-apollo/ssr'
+
+Vue.use(ApolloSSR)
+```
+
+To prefetch all the apollo queries you marked, use the `ApolloSSR.prefetchAll` method. The first argument is the `apolloProvider`. The second argument is the array of component definition to include (e.g. from `router.getMatchedComponents` method). The third argument is the context object passed to the `prefetch` hooks (see above). It is recommended to pass the vue-router `currentRoute` object. It returns a promise resolved when all the apollo queries are loaded.
 
 Here is an example with vue-router and a Vuex store:
 
 ```js
+import Vue from 'vue'
+import ApolloSSR from 'vue-apollo/ssr'
+
+Vue.use(ApolloSSR)
+
 export default () => new Promise((resolve, reject) => {
   const { app, router, store, apolloProvider } = CreateApp({
     ssr: true,
@@ -119,16 +152,16 @@ export default () => new Promise((resolve, reject) => {
     // A preFetch hook dispatches a store action and returns a Promise,
     // which is resolved when the action is complete and store state has been
     // updated.
-    Promise.all([
-      // Vuex Store prefetch
-      ...matchedComponents.map(component => {
-        return component.preFetch && component.preFetch(store)
-      }),
-      // Apollo prefetch
-      apolloProvider.prefetchAll({
-        route: router.currentRoute,
-      }, matchedComponents),
-    ]).then(() => {
+
+    // Vuex Store prefetch
+    Promise.all(matchedComponents.map(component => {
+      return component.preFetch && component.preFetch(store)
+    })
+    // Apollo prefetch
+    .then(() => ApolloSSR.prefetchAll(apolloProvider, matchedComponents, {
+      route: router.currentRoute,
+    })
+    .then(() => {
       // Inject the Vuex state and the Apollo cache on the page.
       // This will prevent unnecessary queries.
 
@@ -136,7 +169,7 @@ export default () => new Promise((resolve, reject) => {
       js += `window.__INITIAL_STATE__=${JSON.stringify(store.state)};`
 
       // Apollo
-      js += apolloProvider.exportStates()
+      js += ApolloSSR.exportStates(apolloProvider)
 
       resolve({
         app,
@@ -147,17 +180,7 @@ export default () => new Promise((resolve, reject) => {
 })
 ```
 
-The `options` argument defaults to:
-
-```js
-{
-  // Include components outside of the routes
-  // that are registered with `willPrefetch`
-  includeGlobal: true,
-}
-```
-
-Use the `apolloProvider.exportStates` method to get the JavaScript code you need to inject into the generated page to pass the apollo cache data to the client.
+Use the `ApolloSSR.exportStates(apolloProvider, options)` method to get the JavaScript code you need to inject into the generated page to pass the apollo cache data to the client.
 
 It takes an `options` argument which defaults to:
 
@@ -172,7 +195,7 @@ It takes an `options` argument which defaults to:
 }
 ```
 
-You can also use the `apolloProvider.getStates` method to get the JS object instead of the script string.
+You can also use the `ApolloSSR.getStates(apolloProvider, options)` method to get the JS object instead of the script string.
 
 It takes an `options` argument which defaults to:
 
@@ -242,13 +265,8 @@ Example for common `CreateApp` method:
 
 ```js
 import Vue from 'vue'
-
 import VueRouter from 'vue-router'
-Vue.use(VueRouter)
-
 import Vuex from 'vuex'
-Vue.use(Vuex)
-
 import { sync } from 'vuex-router-sync'
 
 import VueApollo from 'vue-apollo'
@@ -257,6 +275,9 @@ import { createApolloClient } from './api/apollo'
 import App from './ui/App.vue'
 import routes from './routes'
 import storeOptions from './store'
+
+Vue.use(VueRouter)
+Vue.use(Vuex)
 
 function createApp (context) {
   const router = new VueRouter({
@@ -281,7 +302,7 @@ function createApp (context) {
       el: '#app',
       router,
       store,
-      provide: apolloProvider.provide(),
+      apolloProvider,
       ...App,
     }),
     router,

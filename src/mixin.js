@@ -1,4 +1,4 @@
-import { Globals } from './utils'
+import { Globals } from '../lib/utils'
 
 function hasProperty (holder, key) {
   return typeof holder !== 'undefined' && Object.prototype.hasOwnProperty.call(holder, key)

@@ -6,7 +6,7 @@ import CApolloSubscribeToMore from './components/ApolloSubscribeToMore'
 import CApolloMutation from './components/ApolloMutation'
 
 import { installMixin } from './mixin'
-import { Globals, omit } from './utils'
+import { Globals, omit } from '../lib/utils'
 
 const keywords = [
   '$subscribe',
@@ -66,7 +66,6 @@ plugin.version = VERSION
 
 // Apollo provider
 export const ApolloProvider = plugin
-export { willPrefetch } from './apollo-provider'
 
 // Components
 export const ApolloQuery = CApolloQuery

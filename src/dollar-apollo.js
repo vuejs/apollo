@@ -1,6 +1,6 @@
 import SmartQuery from './smart-query'
 import SmartSubscription from './smart-subscription'
-import { reapply } from './utils'
+import { reapply } from '../lib/utils'
 
 export class DollarApollo {
   constructor (vm) {

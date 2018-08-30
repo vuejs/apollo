@@ -76,6 +76,7 @@ module.exports = {
           children: [
             'apollo-provider',
             'dollar-apollo',
+            'ssr',
           ]
         },
         {
