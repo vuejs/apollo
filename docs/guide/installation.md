@@ -4,7 +4,45 @@
 If you are using vue-cli 3.x, you can [use this vue-cli plugin](https://github.com/Akryum/vue-cli-plugin-apollo): it will install everything you need for you in a few minutes so you can start coding right away!
 :::
 
-Try and install these packages before server side set (of packages), add apollo to meteor.js before then, too.
+## Apollo Boost
+
+Apollo Boost is a zero-config way to start using Apollo Client. It includes some sensible defaults, such as our recommended `InMemoryCache` and `HttpLink`, which come configured for you with our recommended settings and it's perfect for starting to develop fast:
+
+Install: 
+
+```
+npm install --save vue-apollo graphql apollo-boost
+```
+
+Or:
+
+```
+yarn add vue-apollo graphql apollo-boost
+```
+
+### Apollo client
+
+In your app, create an `ApolloClient` instance and install the `VueApollo` plugin:
+
+```js
+import Vue from 'vue'
+import ApolloClient from "apollo-boost"
+import VueApollo from "vue-apollo"
+
+const apolloProvider = new VueApollo({
+  defaultClient: new ApolloClient({
+    uri: "https://api.graphcms.com/simple/v1/awesomeTalksClone"
+  })
+})
+
+Vue.use(VueApollo)
+```
+
+
+
+## Manual
+
+If you want some more fine grain control try and install these packages before server side set (of packages), add apollo to meteor.js before then, too.
 
 ```
 npm install --save vue-apollo graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
@@ -16,7 +54,7 @@ Or:
 yarn add vue-apollo graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
 ```
 
-## Apollo client
+### Apollo client
 
 In your app, create an `ApolloClient` instance and install the `VueApollo` plugin:
 
@@ -39,6 +77,10 @@ const apolloClient = new ApolloClient({
   connectToDevTools: true,
 })
 
+const apolloProvider = new VueApollo({
+  defaultClient: apolloClient,
+})
+
 // Install the vue plugin
 Vue.use(VueApollo)
 ```
@@ -48,10 +90,6 @@ Vue.use(VueApollo)
 The provider holds the Apollo client instances that can then be used by all the child components. Inject it into your components with `provide`:
 
 ```js
-const apolloProvider = new VueApollo({
-  defaultClient: apolloClient,
-})
-
 new Vue({
   el: '#app',
   apolloProvider,
