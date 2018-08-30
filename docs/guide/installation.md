@@ -1,8 +1,18 @@
 # Installation
 
-:::tip
-If you are using vue-cli 3.x, you can [use this vue-cli plugin](https://github.com/Akryum/vue-cli-plugin-apollo): it will install everything you need for you in a few minutes so you can start coding right away!
-:::
+## Vue CLI Plugin
+
+I made a plugin for [vue-cli](http://cli.vuejs.org) so you can add Apollo (with an optional GraphQL server!) in literary two minutes! ✨🚀
+
+In your vue-cli 3 project:
+
+```bash
+vue add apollo
+```
+
+Then you can skip to next section: [Basic Usage](./apollo/).
+
+[More info](https://github.com/Akryum/vue-cli-plugin-apollo)
 
 ## Apollo Boost
 

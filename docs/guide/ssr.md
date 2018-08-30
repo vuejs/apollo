@@ -1,5 +1,17 @@
 # Server-Side Rendering
 
+## Vue CLI Plugin
+
+I made a plugin for [vue-cli](http://cli.vuejs.org) so you can transform your vue-apollo app into an isomorphic SSR app in literary two minutes! ✨🚀
+
+In your vue-cli 3 project:
+
+```bash
+vue add @akryum/ssr
+```
+
+[More info](https://github.com/Akryum/vue-cli-plugin-ssr)
+
 ## Prefetch components
 
 On the queries you want to prefetch on the server, add the `prefetch` option. It can either be:
