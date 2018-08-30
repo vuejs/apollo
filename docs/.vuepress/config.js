@@ -14,24 +14,24 @@ module.exports = {
     nav: [
       {
         text: 'Guide',
-        link: '/guide/'
+        link: '/guide/',
       },
       {
         text: 'API Reference',
-        link: '/api/'
+        link: '/api/',
       },
       {
         text: 'Migration',
-        link: '/migration/'
+        link: '/migration/',
       },
       {
         text: 'CLI plugin',
-        link: 'https://github.com/Akryum/vue-cli-plugin-apollo'
+        link: 'https://github.com/Akryum/vue-cli-plugin-apollo',
       },
       {
         text: 'Patreon',
-        link: 'https://www.patreon.com/akryum'
-      }
+        link: 'https://www.patreon.com/akryum',
+      },
     ],
     sidebarDepth: 3,
     sidebar: {
@@ -47,7 +47,7 @@ module.exports = {
             'apollo/mutations',
             'apollo/subscriptions',
             'apollo/pagination',
-          ]
+          ],
         },
         {
           title: 'Components',
@@ -57,7 +57,7 @@ module.exports = {
             'components/query',
             'components/mutation',
             'components/subscribe-to-more',
-          ]
+          ],
         },
         {
           title: 'Advanced topics',
@@ -65,9 +65,10 @@ module.exports = {
           children: [
             'multiple-clients',
             'ssr',
-            'local-state'
-          ]
-        }
+            'local-state',
+            'testing',
+          ],
+        },
       ],
       '/api/': [
         {
@@ -77,7 +78,7 @@ module.exports = {
             'apollo-provider',
             'dollar-apollo',
             'ssr',
-          ]
+          ],
         },
         {
           title: 'Smart Apollo',
@@ -85,7 +86,7 @@ module.exports = {
           children: [
             'smart-query',
             'smart-subscription',
-          ]
+          ],
         },
         {
           title: 'Apollo Components',
@@ -94,12 +95,10 @@ module.exports = {
             'apollo-query',
             'apollo-subscribe-to-more',
             'apollo-mutation',
-          ]
-        }
+          ],
+        },
       ],
-      '/migration/': [
-        ''
-      ]
-    }
-  }
+      '/migration/': [''],
+    },
+  },
 }
