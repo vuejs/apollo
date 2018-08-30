@@ -6,6 +6,22 @@ This README is related to Apollo 2.x support. For the old release (supporting on
 
 This library integrates [apollo](https://www.apollographql.com/) in your [Vue](http://vuejs.org) components with declarative queries. Compatible with Vue 1.0+ and 2.0+. [Live demo](https://jsfiddle.net/Akryum/oyejk2qL/)
 
+## Sponsors
+
+<p style="text-align: center; font-size: 24px; color: #9999A5;">
+&lt;Your logo here&gt;
+</p>
+
+## Become a sponsor
+
+Is your company using vue-apollo or vue-cli-plugin-apollo to build awesome apps? Join the other patrons and become a sponsor to add your logo on this documentation! Supporting me on Patreon allows me to work less for a job and to work more on Free Open Source Software such as vue-apollo! Thank you!
+
+<p style="text-align: center;">
+  <a href="https://www.patreon.com/akryum" target="_blank">
+    <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Become a Patreon">
+  </a>
+</p>
+
 ## What is GraphQL?
 
 [GraphQL](https://graphql.org/) is a specification that aims at easing the communication between frontends and backends. It mainly consists of a Schema Language for the server and a Query Language for the client.
