@@ -27,6 +27,11 @@ export default {
       default: undefined,
     },
 
+    clientId: {
+      type: String,
+      default: undefined,
+    },
+
     tag: {
       type: String,
       default: 'div',
@@ -46,6 +51,7 @@ export default {
       this.error = null
       this.$apollo.mutate({
         mutation: this.mutation,
+        client: this.clientId,
         variables: this.variables,
         optimisticResponse: this.optimisticResponse,
         update: this.update,

@@ -8,6 +8,7 @@
 - `update`: See [updating cache after mutation](https://www.apollographql.com/docs/react/api/react-apollo.html#graphql-mutation-options-update)
 - `refetchQueries`: See [refetching queries after mutation](https://www.apollographql.com/docs/react/api/react-apollo.html#graphql-mutation-options-refetchQueries)
 - `tag`: String HTML tag name (default: `div`)
+- `clientId`: Used to resolve the Apollo Client used (defined in ApolloProvider)
 
 ## Scoped slot props
 
