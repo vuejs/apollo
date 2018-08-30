@@ -64,19 +64,27 @@ module.exports = {
             'multiple-clients',
             'ssr',
             'local-state',
-            'testing'],
+            'testing',
+          ],
         },
       ],
       '/api/': [
         {
           title: 'Vue Apollo',
           collapsable: false,
-          children: ['apollo-provider', 'dollar-apollo'],
+          children: [
+            'apollo-provider',
+            'dollar-apollo',
+            'ssr',
+          ],
         },
         {
           title: 'Smart Apollo',
           collapsable: false,
-          children: ['smart-query', 'smart-subscription'],
+          children: [
+            'smart-query',
+            'smart-subscription',
+          ],
         },
         {
           title: 'Apollo Components',

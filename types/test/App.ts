@@ -158,7 +158,7 @@ export default Vue.extend({
           pageSize,
         },
         // Mutate the previous result
-        updateQuery: (previousResult: any, result: { fetchMoreResult: any }) => {
+        updateQuery: (previousResult: any, result: { fetchMoreResult?: any }) => {
           const { fetchMoreResult } = result;
           const newTags = fetchMoreResult.tagsPage.tags;
           const hasMore = fetchMoreResult.tagsPage.hasMore;

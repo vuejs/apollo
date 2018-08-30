@@ -184,7 +184,7 @@ You can use a function which will be called once when the component is created a
 apollo: {
   // Query with parameters
   ping () {
-    // This will called one when the component is created
+    // This is called once when the component is created
     // It must return the option object
     return {
       // gql query

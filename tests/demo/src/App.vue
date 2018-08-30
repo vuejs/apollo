@@ -10,9 +10,15 @@
 <script>
 import ChannelList from './components/ChannelList.vue'
 
+import CHANNELS from './graphql/channels.gql'
+
 export default {
   components: {
     ChannelList,
+  },
+
+  apollo: {
+    channels: CHANNELS,
   },
 }
 </script>
