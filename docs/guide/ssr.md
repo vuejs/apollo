@@ -126,6 +126,7 @@ Here is an example with vue-router and a Vuex store:
 ```js
 import Vue from 'vue'
 import ApolloSSR from 'vue-apollo/ssr'
+import App from './App.vue'
 
 Vue.use(ApolloSSR)
 
@@ -155,10 +156,15 @@ export default () => new Promise((resolve, reject) => {
 
     // Vuex Store prefetch
     Promise.all(matchedComponents.map(component => {
-      return component.preFetch && component.preFetch(store)
+      return component.asyncData && component.asyncData({
+        store,
+        route: router.currentRoute,
+      })
     })
     // Apollo prefetch
-    .then(() => ApolloSSR.prefetchAll(apolloProvider, matchedComponents, {
+    // This will prefetch all the Apollo queries in the whole app
+    .then(() => ApolloSSR.prefetchAll(apolloProvider, [App, ...matchedComponents], {
+      store,
       route: router.currentRoute,
     })
     .then(() => {
