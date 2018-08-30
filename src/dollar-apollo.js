@@ -106,7 +106,7 @@ export class DollarApollo {
     }
 
     const smart = this.queries[key] = new SmartQuery(this.vm, key, finalOptions, false)
-    if (!this.vm.$isServer || finalOptions.prefetch) {
+    if (!this.vm.$isServer || finalOptions.prefetch !== false) {
       smart.autostart()
     }
 
