@@ -42,9 +42,9 @@
     "throttle-debounce": "^2.0.0"
   },
   "devDependencies": {
-    "@types/graphql": "^0.12.3",
-    "apollo-cache-inmemory": "^1.1.1",
-    "apollo-client": "^2.0.3",
+    "@types/graphql": "^0.13.4",
+    "apollo-cache-inmemory": "^1.2.9",
+    "apollo-client": "^2.4.1",
     "apollo-link": "^1.0.3",
     "apollo-link-http": "^1.2.0",
     "babel-core": "^6.26.0",
@@ -60,7 +60,7 @@
     "eslint-plugin-standard": "^3.0.1",
     "graphql": "^0.12.3",
     "graphql-tag": "^2.5.0",
-    "nodemon": "^1.14.12",
+    "nodemon": "^1.18.4",
     "rimraf": "^2.6.1",
     "rollup": "^0.55.3",
     "rollup-plugin-babel": "^3.0.2",
@@ -71,6 +71,6 @@
     "typescript": "^2.9.2",
     "uglify-es": "^3.1.6",
     "vue": "^2.5.16",
-    "vuepress": "^0.10.0"
+    "vuepress": "^0.14.2"
   }
 }
