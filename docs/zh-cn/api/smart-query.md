@@ -112,7 +112,7 @@ this.$apollo.queries.users.loading
 停止并重新启动查询：
 
 ```js
-this.$apollo.queries.users.restart()
+this.$apollo.queries.users.refresh()
 ```
 
 ### start

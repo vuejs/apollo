@@ -1,16 +1,28 @@
 # 服务端渲染
 
+## Vue CLI 插件
+
+我为 [vue-cli](http://cli.vuejs.org) 制作了一个插件，因此仅用两分钟你就可以将你的 vue-apollo 应用转换为同构 SSR 应用！✨🚀
+
+在你的 vue-cli 3 项目中：
+
+```bash
+vue add @akryum/ssr
+```
+
+[更多信息](https://github.com/Akryum/vue-cli-plugin-ssr)
+
 ## 预取组件
 
 在要在服务端预取的查询上，添加 `prefetch` 选项。它可以是：
  - 一个变量对象；
  - 一个获取上下文对象（例如可以包含 URL）并返回一个变量对象的函数；
- - `true`（复用查询的 `variables`）。
+ - `false` 禁用此查询的预取。
 
 如果你在 `prefetch` 选项中返回一个变量对象，请确保它与 `variables` 选项的结果相匹配。如果它们不匹配，则在服务端渲染模板时，查询的数据属性将不会被填充。
 
 ::: danger
-在服务端进行预取时，你无法访问组件实例。不要在 `prefetch` 中使用 `this`！
+在服务端进行预取时，你无法访问组件实例。
 :::
 
 示例：
@@ -19,6 +31,7 @@
 export default {
   apollo: {
     allPosts: {
+      // 此查询将被预取
       query: gql`query AllPosts {
         allPosts {
           id
@@ -60,13 +73,35 @@ export default {
 }
 ```
 
-你还可以通过使用 `willPrefetch` 方法，来告诉 vue-apollo 需要预取一些未在 `router-view` 中被使用的组件（因此不在 vue-router 的 `matchedComponents` 中）：
+### 跳过预取
+
+不预取查询的示例：
 
 ```js
-import { willPrefetch } from 'vue-apollo'
-
-export default willPrefetch({
+export default {
   apollo: {
+    allPosts: {
+      query: gql`query AllPosts {
+        allPosts {}
+          id
+          imageUrl
+          description
+        }
+      }`,
+      // 不要预取
+      prefetch: false,
+    }
+  }
+}
+```
+
+如果要跳过特定组件的所有查询的预取，使用 `$prefetch` 选项：
+
+```js
+export default {
+  apollo: {
+    // 不要预取任何查询
+    $prefetch: false,
     allPosts: {
       query: gql`query AllPosts {
         allPosts {
@@ -75,27 +110,39 @@ export default willPrefetch({
           description
         }
       }`,
-      prefetch: true, // 别忘了这个
     }
   }
-})
+}
 ```
 
-第二个参数是可选的：它是一个获取上下文的回调函数，并且应该返回一个布尔值，指示是否应该预取组件：
+你也可以在任何组件上放置一个 `no-prefetch` 属性，以便在遍历树收集 Apollo 查询时忽略它：
 
-```js
-willPrefetch({
-  // 组件定义...
-}, context => context.url === '/foo')
+```vue
+<ApolloQuery no-prefetch>
 ```
 
 ## 在服务端
 
-使用 `apolloProvider.prefetchAll` 方法来预取你已标记的所有 apollo 查询。第一个参数是传递给 `prefetch` 钩子的上下文对象（参见上文），建议传入 vue-router 的 `currentRoute` 对象。第二个参数是要包含的组件定义数组（例如来自 `router.getMatchedComponents` 方法）。第三个参数是一个可选的 `options` 对象。当所有的 apollo 查询都被加载时，它返回已解决的(resolved) promise。
+在服务端入口中，你需要在 Vue 中安装 `ApolloSSR` 插件：
+
+```js
+import Vue from 'vue'
+import ApolloSSR from 'vue-apollo/ssr'
+
+Vue.use(ApolloSSR)
+```
+
+使用 `ApolloSSR.prefetchAll` 方法来预取你已标记的所有 apollo 查询。第一个参数是 `apolloProvider`。第二个参数是要包含的组件定义数组（例如来自 `router.getMatchedComponents` 方法）。第三个参数是传递给 `prefetch` 钩子的上下文对象（参见上文），建议传入 vue-router 的 `currentRoute` 对象。当所有的 apollo 查询都被加载时，它返回已解决的(resolved) promise。
 
 以下是一个使用了 vue-router 和 Vuex store 的示例：
 
 ```js
+import Vue from 'vue'
+import ApolloSSR from 'vue-apollo/ssr'
+import App from './App.vue'
+
+Vue.use(ApolloSSR)
+
 export default () => new Promise((resolve, reject) => {
   const { app, router, store, apolloProvider } = CreateApp({
     ssr: true,
@@ -118,16 +165,21 @@ export default () => new Promise((resolve, reject) => {
     // 调用匹配到路由的组件的预取钩子
     // 每个 preFetch 钩子分配到一个 store action 并返回一个 Promise
     // 当 action 操作完成且 store 状态已更新时解析这个 Promise
-    Promise.all([
-      // Vuex Store 预取
-      ...matchedComponents.map(component => {
-        return component.preFetch && component.preFetch(store)
-      }),
-      // Apollo 预取
-      apolloProvider.prefetchAll({
+
+    // Vuex Store 预取
+    Promise.all(matchedComponents.map(component => {
+      return component.asyncData && component.asyncData({
+        store,
         route: router.currentRoute,
-      }, matchedComponents),
-    ]).then(() => {
+      })
+    })
+    // Apollo 预取
+    // 这里将预取整个应用中的所有 Apollo 查询
+    .then(() => ApolloSSR.prefetchAll(apolloProvider, [App, ...matchedComponents], {
+      store,
+      route: router.currentRoute,
+    })
+    .then(() => {
       // 将 Vuex 状态和 Apollo 缓存注入到页面
       // 这将防止不必要的查询
 
@@ -135,7 +187,7 @@ export default () => new Promise((resolve, reject) => {
       js += `window.__INITIAL_STATE__=${JSON.stringify(store.state)};`
 
       // Apollo
-      js += apolloProvider.exportStates()
+      js += ApolloSSR.exportStates(apolloProvider)
 
       resolve({
         app,
@@ -146,16 +198,7 @@ export default () => new Promise((resolve, reject) => {
 })
 ```
 
-`options` 参数的默认值是：
-
-```js
-{
-  // 包含使用 `willPrefetch` 注册的路由之外的组件
-  includeGlobal: true,
-}
-```
-
-使用 `apolloProvider.exportStates` 方法来获取你需要注入到生成出来页面的 JavaScript 代码，这些代码用于将 apollo 缓存数据传递给客户端。
+使用 `ApolloSSR.exportStates(apolloProvider, options)` 方法来获取你需要注入到生成出来页面的 JavaScript 代码，这些代码用于将 apollo 缓存数据传递给客户端。
 
 它需要一个 `options` 参数，默认为：
 
@@ -170,7 +213,7 @@ export default () => new Promise((resolve, reject) => {
 }
 ```
 
-你也可以使用 `apolloProvider.getStates` 方法来获取 JS 对象而不是脚本字符串。
+你也可以使用 `ApolloSSR.getStates(apolloProvider, options)` 方法来获取 JS 对象而不是脚本字符串。
 
 它需要一个 `options` 参数，默认为：
 
@@ -239,13 +282,8 @@ export function createApolloClient (ssr = false) {
 
 ```js
 import Vue from 'vue'
-
 import VueRouter from 'vue-router'
-Vue.use(VueRouter)
-
 import Vuex from 'vuex'
-Vue.use(Vuex)
-
 import { sync } from 'vuex-router-sync'
 
 import VueApollo from 'vue-apollo'
@@ -254,6 +292,9 @@ import { createApolloClient } from './api/apollo'
 import App from './ui/App.vue'
 import routes from './routes'
 import storeOptions from './store'
+
+Vue.use(VueRouter)
+Vue.use(Vuex)
 
 function createApp (context) {
   const router = new VueRouter({
@@ -278,7 +319,7 @@ function createApp (context) {
       el: '#app',
       router,
       store,
-      provide: apolloProvider.provide(),
+      apolloProvider,
       ...App,
     }),
     router,

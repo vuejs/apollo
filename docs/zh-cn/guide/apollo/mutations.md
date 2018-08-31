@@ -35,7 +35,7 @@ methods: {
       update: (store, { data: { newTag } }) => {
         // 从缓存中读取这个查询的数据
         const data = store.readQuery({ query: TAGS_QUERY })
-        // 将突变中的标签添加到最后
+        // 将变更中的标签添加到最后
         data.tags.push(newTag)
         // 将数据写回缓存
         store.writeQuery({ query: TAGS_QUERY, data })

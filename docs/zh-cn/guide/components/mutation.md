@@ -1,4 +1,4 @@
-## ApolloMutation
+# ApolloMutation
 
 你可以使用 `ApolloMutation`（或 `apollo-mutation`）组件直接在模板中调用 Apollo 变更。
 

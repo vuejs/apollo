@@ -6,6 +6,22 @@
 
 这个库通过声明式查询将 [apollo](https://www.apollographql.com/) 集成到你的 [Vue](http://vuejs.org) 组件中。兼容 Vue 1.0+ 和 2.0+。[在线演示](https://jsfiddle.net/Akryum/oyejk2qL/)
 
+## 赞助商
+
+<p style="text-align: center; font-size: 24px; color: #9999A5;">
+&lt;在这里加入你的 logo&gt;
+</p>
+
+## Become a sponsor
+
+你的公司是否使用了 vue-apollo 或 vue-cli-plugin-apollo 来构建出色的应用程序？加入资助者并成为赞助商，在此文档中添加你的 logo！在 Patreon 上支持我，将节省我用于谋生的工作时间，从而能够在如 vue-apollo 一样的免费开源软件上工作更多！谢谢！
+
+<p style="text-align: center;">
+  <a href="https://www.patreon.com/akryum" target="_blank">
+    <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Become a Patreon">
+  </a>
+</p>
+
 ## 什么是 GraphQL？
 
 [GraphQL](https://graphql.org/) 是一个旨在简化前端和后端之间通信的规范。它主要由服务端的 schema 语言和客户端的查询语言组成。

@@ -8,12 +8,12 @@ module.exports = {
     '/': {
       lang: 'en-US',
       title: 'Vue Apollo',
-      description: '🚀 Integrate GraphQL in your Vue.js apps!'
+      description: '🚀 Integrate GraphQL in your Vue.js apps!',
     },
     '/zh-cn/': {
       lang: 'zh-CN',
       title: 'Vue Apollo',
-      description: '🚀 在你的 Vue.js 应用中集成 GraphQL！'
+      description: '🚀 在你的 Vue.js 应用中集成 GraphQL！',
     }
   },
   themeConfig: {
@@ -113,7 +113,7 @@ module.exports = {
             },
           ],
           '/migration/': [''],
-        }
+        },
       },
       '/zh-cn/': {
         selectText: '选择语言',
@@ -208,8 +208,8 @@ module.exports = {
             },
           ],
           '/zh-cn/migration/': [''],
-        }
-      }
-    }
-  }
+        },
+      },
+    },
+  },
 }
