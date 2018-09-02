@@ -1,8 +1,4 @@
 exports.VM_HELPERS = [
-  '_ssrAttr',
-  '_ssrNode',
-  '_ssrEscape',
-  '_ssrList',
   '_o',
   '_n',
   '_s',
@@ -17,6 +13,17 @@ exports.VM_HELPERS = [
   '_v',
   '_e',
   '_g',
+]
+
+exports.SSR_HELPERS = [
+  '_ssrNode',
+  '_ssrEscape',
+  '_ssrList',
+  '_ssrStyle',
+  '_ssrClass',
+  '_ssrAttr',
+  '_ssrAttrs',
+  '_ssrDOMProps',
 ]
 
 exports.COMPONENT_BLACKLIST = [

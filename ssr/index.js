@@ -1,7 +1,11 @@
 const chalk = require('chalk')
 const { VUE_APOLLO_QUERY_KEYWORDS } = require('../lib/consts')
-const { VM_HELPERS, COMPONENT_BLACKLIST } = require('./consts')
+const { VM_HELPERS, SSR_HELPERS, COMPONENT_BLACKLIST } = require('./consts')
 const { Globals, getMergedDefinition, omit, noop } = require('../lib/utils')
+
+function emptyString () {
+  return ''
+}
 
 exports.install = function (Vue) {
   Globals.Vue = Vue
@@ -76,7 +80,7 @@ function prefetchComponent (component, vm, queries) {
       key.charAt(0) !== '$' && (
         !options.query || (
           (typeof options.ssr === 'undefined' || options.ssr) &&
-          (typeof options.prefetch !== 'undefined' && options.prefetch)
+          options.prefetch !== false
         )
       )
     ) {
@@ -115,6 +119,7 @@ function createFakeInstance (options, data, parent, children, context) {
 
   // Render and other helpers
   VM_HELPERS.forEach(helper => vm[helper] = noop)
+  SSR_HELPERS.forEach(helper => vm[helper] = emptyString)
 
   // Scoped slots
   if (data.scopedSlots) {
