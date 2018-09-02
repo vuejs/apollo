@@ -9,6 +9,8 @@ Use the `fetchMore()` method on a Smart Query to load more data.
 
 ::: warning
 Don't forget to include the `__typename` to the new result.
+
+Don't change the returned initial variables when using `variables()`, or data of list would be lost.
 :::
 
 Example:
