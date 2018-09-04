@@ -14,7 +14,7 @@ new Vue({
 
 ## 查询（Queries）
 
-为每个你需要通过 Apollo 查询提供数据的属性，在 `apollo` 对象中添加一个特性。
+为每个你需要通过 Apollo 的查询结果提供数据的 Vue 属性，在 `apollo` 对象中添加一个对应属性。
 
 ```js
 import gql from 'graphql-tag'
@@ -94,7 +94,7 @@ export default {
 const apolloProvider = new VueApollo({
   defaultClient: apolloClient,
   defaultOptions: {
-    // apollo 选项将应用于组件中的所有查询
+    // 将应用于组件中的所有查询的 apollo 选项
     $query: {
       loadingKey: 'loading',
       fetchPolicy: 'cache-and-network',

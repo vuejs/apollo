@@ -16,7 +16,7 @@ vue add apollo
 
 ## Apollo Boost
 
-Apollo Boost 是一种零配置开始使用 Apollo Client 的方式。它包含一些合理的默认值，例如我们推荐的 `InMemoryCache` 和 `HttpLink`，它非常适合用于快速启动开发：
+Apollo Boost 是一种零配置开始使用 Apollo Client 的方式。它包含一些实用的默认值，例如我们推荐的 `InMemoryCache` 和 `HttpLink`，它非常适合用于快速启动开发：
 
 安装：
 
