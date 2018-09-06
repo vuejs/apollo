@@ -23,7 +23,7 @@ test('displayed heroes correctly with query data', () => {
     expect(wrapper.element).toMatchSnapshot();
 });
 ```
-对于简单的变更测试，你需要检查组件中是否调用了 `$apollo` 的方法 `mutate`。接下来的示例在 `addHero` 方法中调用了变更：
+对于简单的变更测试，你需要检查组件中是否调用了 `$apollo` 的 `mutate` 方法。接下来的示例在 `addHero` 方法中调用了变更：
 
 ```js
 test('called Apollo mutation in addHero() method', () => {
@@ -116,7 +116,7 @@ graphql(schema, query).then(result => {
   expect(wrapper.element).toMatchSnapshot();
 });
 ```
-在这个用例中，所有字符串字段将等于 `Hello World` 且所有数值都将为负数。如果你想要获得更多实际的响应，则应当为某些查询指定解析器：
+在这个用例中，所有字符串字段将等于 `Hello World` 且所有数值都将为负数。如果你想要获得更贴近现实的响应，则应当为某些查询指定解析器：
 
 ```js
 const resolvers = {
