@@ -100,36 +100,37 @@ function prefetchComponent (component, vm, queries) {
 }
 
 function createFakeInstance (options, data, parent, children, context) {
-  const vm = Object.assign({}, data.attrs, data.props, {
-    $parent: parent,
-    $children: children,
-    $attrs: data.attrs,
-    $props: data.props,
-    $slots: {},
-    $scopedSlots: {},
-    $set: Globals.Vue.set,
-    $delete: Globals.Vue.delete,
-    $route: context.route,
-    $store: context.store,
-    $apollo: {
-      queries: {},
-      loading: false,
-    },
-    $apolloData: {
-      loading: false,
-    },
-    _self: {},
-    _staticTrees: [],
-    _u: resolveScopedSlots,
-  })
+  const vm = Object.assign(
+    {},
+    data.attrs,
+    data.props,
+    {
+      $parent: parent,
+      $children: children,
+      $attrs: data.attrs,
+      $props: data.props,
+      $slots: {},
+      $scopedSlots: {},
+      $set: Globals.Vue.set,
+      $delete: Globals.Vue.delete,
+      $route: context.route,
+      $store: context.store,
+      $apollo: {
+        queries: {},
+        loading: false,
+      },
+      $apolloData: {
+        loading: false,
+      },
+      _self: {},
+      _staticTrees: [],
+      _u: resolveScopedSlots,
+    }
+  )
 
   // Render and other helpers
-  for (let i = 0, len = VM_HELPERS.length; i < len; i++) {
-    vm[VM_HELPERS[i]] = noop
-  }
-  for (let i = 0, len = SSR_HELPERS.length; i < len; i++) {
-    vm[SSR_HELPERS[i]] = emptyString
-  }
+  VM_HELPERS.forEach(helper => vm[helper] = noop)
+  SSR_HELPERS.forEach(helper => vm[helper] = emptyString)
 
   // Scoped slots
   if (data.scopedSlots) {
@@ -153,7 +154,10 @@ function createFakeInstance (options, data, parent, children, context) {
   }
 
   // Methods
-  Object.assign(vm, options.methods)
+  const methods = options.methods
+  for (const key in methods) {
+    vm[key] = methods[key].bind(vm)
+  }
 
   // Computed
   const computed = options.computed
@@ -164,7 +168,7 @@ function createFakeInstance (options, data, parent, children, context) {
   // Data
   const localData = options.data
   if (typeof localData === 'function') {
-    vm._data = localData.call(vm)
+    vm._data = localData.call(vm, vm)
   } else if (typeof localData === 'object') {
     vm._data = localData
   } else {
@@ -197,7 +201,7 @@ function findRouteMatch (component, route) {
 function resolveComponent (name, options) {
   return new Promise((resolve) => {
     if (options.components) {
-      const component = resolveAsset(options, 'components', name)
+      const component = resolveAsset(options.components, name)
       if (component !== undefined) {
         resolve(component)
       }
