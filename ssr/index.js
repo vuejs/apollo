@@ -1,6 +1,7 @@
 const chalk = require('chalk')
 const { VUE_APOLLO_QUERY_KEYWORDS } = require('../lib/consts')
 const { VM_HELPERS, SSR_HELPERS, COMPONENT_BLACKLIST } = require('./consts')
+const { resolveAsset, defineComputed } = require('./utils')
 const { Globals, getMergedDefinition, omit, noop } = require('../lib/utils')
 
 function emptyString () {
@@ -21,7 +22,7 @@ exports.prefetchAll = function (apolloProvider, components, context) {
 exports.getQueriesFromTree = function (components, context) {
   const queries = []
   return Promise.all(
-    components.map(component => walkTree(component, {}, {}, [], context, queries, components))
+    components.map(component => walkTree(component, {}, undefined, [], context, queries, components))
   ).then(() => queries)
 }
 
@@ -29,6 +30,7 @@ function walkTree (component, data, parent, children, context, queries, componen
   component = getMergedDefinition(component)
   return new Promise((resolve, reject) => {
     const queue = []
+    data = data || {}
     const vm = createFakeInstance(component, data, parent, children, context)
     vm.$createElement = (el, data, children) => {
       if (typeof data === 'string' || Array.isArray(data)) {
@@ -37,7 +39,11 @@ function walkTree (component, data, parent, children, context, queries, componen
       }
 
       // No Prefetch flag
-      if (data && data.attrs && data.attrs['no-prefetch']) return
+      if (data && data.attrs &&
+          data.attrs['no-prefetch'] !== undefined &&
+          data.attrs['no-prefetch'] !== false) {
+        return
+      }
 
       queue.push(resolveComponent(el, component).then(resolvedComponent => {
         let child
@@ -94,28 +100,33 @@ function prefetchComponent (component, vm, queries) {
 }
 
 function createFakeInstance (options, data, parent, children, context) {
-  const vm = {
-    ...data.attrs,
-    ...data.props,
-    $parent: parent,
-    $children: children,
-    $slots: {},
-    $scopedSlots: {},
-    $set: Globals.Vue.set,
-    $delete: Globals.Vue.delete,
-    $route: context.route,
-    $store: context.store,
-    $apollo: {
-      queries: {},
-      loading: false,
-    },
-    $apolloData: {
-      loading: false,
-    },
-    _self: {},
-    _staticTrees: [],
-    _u: resolveScopedSlots,
-  }
+  const vm = Object.assign(
+    {},
+    data.attrs,
+    data.props,
+    {
+      $parent: parent,
+      $children: children,
+      $attrs: data.attrs,
+      $props: data.props,
+      $slots: {},
+      $scopedSlots: {},
+      $set: Globals.Vue.set,
+      $delete: Globals.Vue.delete,
+      $route: context.route,
+      $store: context.store,
+      $apollo: {
+        queries: {},
+        loading: false,
+      },
+      $apolloData: {
+        loading: false,
+      },
+      _self: {},
+      _staticTrees: [],
+      _u: resolveScopedSlots,
+    }
+  )
 
   // Render and other helpers
   VM_HELPERS.forEach(helper => vm[helper] = noop)
@@ -142,13 +153,29 @@ function createFakeInstance (options, data, parent, children, context) {
     }
   }
 
+  // Methods
+  const methods = options.methods
+  for (const key in methods) {
+    vm[key] = methods[key].bind(vm)
+  }
+
+  // Computed
+  const computed = options.computed
+  for (const key in computed) {
+    defineComputed(vm, key, computed[key])
+  }
+
   // Data
   const localData = options.data
   if (typeof localData === 'function') {
-    Object.assign(vm, localData(vm))
+    vm._data = localData.call(vm, vm)
   } else if (typeof localData === 'object') {
-    Object.assign(vm, localData)
+    vm._data = localData
+  } else {
+    vm._data = {}
   }
+  vm.$data = vm._data
+  Object.assign(vm, vm._data)
 
   // Prefetch state
   const prefetch = options.prefetch
@@ -174,8 +201,9 @@ function findRouteMatch (component, route) {
 function resolveComponent (name, options) {
   return new Promise((resolve) => {
     if (options.components) {
-      if (options.components[name]) {
-        return resolve(options.components[name])
+      const component = resolveAsset(options.components, name)
+      if (component !== undefined) {
+        resolve(component)
       }
     }
     return resolve(Globals.Vue.options.components[name])
@@ -242,12 +270,12 @@ function prefetchQuery (apolloProvider, query, context) {
       if (prefetchType !== 'undefined') {
         if (prefetchType === 'function') {
           prefetchResult = prefetch.call(vm, context)
+        } else if (prefetchType === 'boolean') {
+          if (prefetchResult === false) {
+            return Promise.resolve()
+          }
         } else {
           prefetchResult = prefetch
-        }
-
-        if (prefetchType === 'boolean' && prefetchResult === false) {
-          return Promise.resolve()
         }
       }
 
