@@ -6,6 +6,7 @@ import { HttpLink } from 'apollo-link-http'
 
 import VueApollo from '../index'
 import App from './App'
+import Decorator from './Decorator'
 
 const httpLink = new HttpLink({ uri: 'https://dummy.test.com' })
 const cache: any = 'dummy cache';
@@ -26,4 +27,10 @@ const apolloProvider = new VueApollo({
 Vue.use(VueApollo)
 
 /* eslint no-new: 0 */
-new Vue({ el: '#app', provide: apolloProvider.provide(), render: h => h(App) })
+new Vue({
+  el: '#app',
+  provide: apolloProvider.provide(),
+  render: h => h(App, [
+    h(Decorator)
+  ])
+})
