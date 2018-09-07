@@ -1541,7 +1541,7 @@ var CApolloQuery = {
     } else {
       result = [result].concat(this.$slots.default);
     }
-    return this.tag ? h(this.tag, result) : result;
+    return this.tag ? h(this.tag, result) : result[0];
   }
 };
 
@@ -1691,7 +1691,7 @@ var CApolloMutation = {
     } else {
       result = [result].concat(this.$slots.default);
     }
-    return this.tag ? h(this.tag, result) : result;
+    return this.tag ? h(this.tag, result) : result[0];
   }
 };
 
@@ -1896,7 +1896,7 @@ function install(Vue, options) {
 ApolloProvider.install = install;
 
 // eslint-disable-next-line no-undef
-ApolloProvider.version = "3.0.0-beta.21";
+ApolloProvider.version = "3.0.0-beta.22";
 
 // Apollo provider
 var ApolloProvider$1 = ApolloProvider;
