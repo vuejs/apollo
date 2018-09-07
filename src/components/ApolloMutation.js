@@ -81,6 +81,6 @@ export default {
     } else {
       result = [result].concat(this.$slots.default)
     }
-    return this.tag ? h(this.tag, result) : result
+    return this.tag ? h(this.tag, result) : result[0]
   },
 }
