@@ -105,6 +105,7 @@ function createFakeInstance (options, data, parent, children, context) {
     data.attrs,
     data.props,
     {
+      $prefetch: true,
       $parent: parent,
       $children: children,
       $attrs: data.attrs,
