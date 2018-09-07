@@ -8,7 +8,4 @@ export type VueApolloComponent<V extends Vue = Vue> = VueApolloComponentOption<V
 
 export class ApolloProvider {
   provide: (key?: string) => this
-  prefetchAll: (context: any, components: VueApolloComponent[], options?: { includeGlobal?: boolean }) => Promise<ApolloQueryResult<any>[]>
-  getStates(options?: { exportNamespace?: string }): { [key: string]: any }
-  exportStates(oprions?: { globalName?: string, attachTo?: string, exportNamespace?: string}): string
 }
