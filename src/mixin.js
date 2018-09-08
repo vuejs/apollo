@@ -30,6 +30,7 @@ function proxyData () {
   let apollo = this.$options.apollo
 
   if (apollo) {
+    this.$_apolloInitData = {}
     // watchQuery
     for (let key in apollo) {
       if (key.charAt(0) !== '$') {
@@ -38,6 +39,8 @@ function proxyData () {
         if (!options.manual && !hasProperty(this.$options.props, key) && !hasProperty(this.$options.computed, key) && !hasProperty(this.$options.methods, key)) {
           Object.defineProperty(this, key, {
             get: () => this.$data.$apolloData.data[key],
+            // For component class constructor
+            set: value => this.$_apolloInitData[key] = value,
             enumerable: true,
             configurable: true,
           })
@@ -80,6 +83,11 @@ function launch () {
       enumerable: true,
       configurable: true,
     })
+
+    // Init data
+    for (let key in this.$_apolloInitData) {
+      this.$set(this.$data.$apolloData.data, key, this.$_apolloInitData[key])
+    }
 
     // watchQuery
     for (let key in apollo) {
