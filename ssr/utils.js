@@ -54,6 +54,7 @@ exports.createFakeInstance = function (options, data, parent, children, context)
     data.props,
     {
       $prefetch: true,
+      $options: options,
       $parent: parent,
       $children: children,
       $attrs: data.attrs,
