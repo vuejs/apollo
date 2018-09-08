@@ -1729,6 +1729,9 @@ function proxyData() {
   var apollo = this.$options.apollo;
 
   if (apollo) {
+    this.$_apolloInitData = {};
+    // watchQuery
+
     var _loop = function _loop(key) {
       if (key.charAt(0) !== '$') {
         var options = apollo[key];
@@ -1738,6 +1741,10 @@ function proxyData() {
             get: function get$$1() {
               return _this.$data.$apolloData.data[key];
             },
+            // For component class constructor
+            set: function set$$1(value) {
+              return _this.$_apolloInitData[key] = value;
+            },
             enumerable: true,
             configurable: true
           });
@@ -1745,7 +1752,6 @@ function proxyData() {
       }
     };
 
-    // watchQuery
     for (var key in apollo) {
       _loop(key);
     }
@@ -1790,11 +1796,16 @@ function launch() {
       configurable: true
     });
 
+    // Init data
+    for (var key in this.$_apolloInitData) {
+      this.$set(this.$data.$apolloData.data, key, this.$_apolloInitData[key]);
+    }
+
     // watchQuery
-    for (var key in apollo) {
-      if (key.charAt(0) !== '$') {
-        var options = apollo[key];
-        this.$apollo.addSmartQuery(key, options);
+    for (var _key in apollo) {
+      if (_key.charAt(0) !== '$') {
+        var options = apollo[_key];
+        this.$apollo.addSmartQuery(_key, options);
       }
     }
 
@@ -1803,8 +1814,8 @@ function launch() {
     }
 
     if (apollo.$subscribe) {
-      for (var _key in apollo.$subscribe) {
-        this.$apollo.addSmartSubscription(_key, apollo.$subscribe[_key]);
+      for (var _key2 in apollo.$subscribe) {
+        this.$apollo.addSmartSubscription(_key2, apollo.$subscribe[_key2]);
       }
     }
   }
@@ -1902,7 +1913,7 @@ function install(Vue, options) {
 ApolloProvider.install = install;
 
 // eslint-disable-next-line no-undef
-ApolloProvider.version = "3.0.0-beta.23";
+ApolloProvider.version = "3.0.0-beta.24";
 
 // Apollo provider
 var ApolloProvider$1 = ApolloProvider;
