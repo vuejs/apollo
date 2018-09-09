@@ -27,10 +27,10 @@ function initDollarApollo () {
 }
 
 function proxyData () {
-  let apollo = this.$options.apollo
+  this.$_apolloInitData = {}
 
+  let apollo = this.$options.apollo
   if (apollo) {
-    this.$_apolloInitData = {}
     // watchQuery
     for (let key in apollo) {
       if (key.charAt(0) !== '$') {
@@ -84,11 +84,6 @@ function launch () {
       configurable: true,
     })
 
-    // Init data
-    for (let key in this.$_apolloInitData) {
-      this.$set(this.$data.$apolloData.data, key, this.$_apolloInitData[key])
-    }
-
     // watchQuery
     for (let key in apollo) {
       if (key.charAt(0) !== '$') {
@@ -131,7 +126,7 @@ export function installMixin (Vue, vueVersion) {
           '$apolloData': {
             queries: {},
             loading: 0,
-            data: {},
+            data: this.$_apolloInitData,
           },
         }
       },
