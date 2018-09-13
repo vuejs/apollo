@@ -33,11 +33,11 @@ methods: {
       // Update the cache with the result
       // The query will be updated with the optimistic response
       // and then with the real result of the mutation
-      update: (store, { data: { newTag } }) => {
+      update: (store, { data: { addTag } }) => {
         // Read the data from our cache for this query.
         const data = store.readQuery({ query: TAGS_QUERY })
         // Add our tag from the mutation to the end
-        data.tags.push(newTag)
+        data.tags.push(addTag)
         // Write our data back to the cache.
         store.writeQuery({ query: TAGS_QUERY, data })
       },
