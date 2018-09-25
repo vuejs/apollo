@@ -102,7 +102,7 @@ The provider holds the Apollo client instances that can then be used by all the 
 ```js
 new Vue({
   el: '#app',
-  apolloProvider,
+  provide: apolloProvider.provide(),
   render: h => h(App),
 })
 ```
