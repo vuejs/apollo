@@ -6,6 +6,17 @@ This README is related to Apollo 2.x support. For the old release (supporting on
 
 This library integrates [apollo](https://www.apollographql.com/) in your [Vue](http://vuejs.org) components with declarative queries. Compatible with Vue 1.0+ and 2.0+. [Live demo](https://jsfiddle.net/Akryum/oyejk2qL/)
 
+<iframe
+  src="//slides.com/akryum/vue-apollo-graphql/embed?style=light"
+  width="100%"
+  height="500"
+  scrolling="no"
+  frameborder="0"
+  webkitallowfullscreen
+  mozallowfullscreen
+  allowfullscreen
+/>
+
 ## Sponsors
 
 ### Silver
