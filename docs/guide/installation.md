@@ -97,7 +97,7 @@ Vue.use(VueApollo)
 
 ## Apollo provider
 
-The provider holds the Apollo client instances that can then be used by all the child components. Inject it into your components with `provide`:
+The provider holds the Apollo client instances that can then be used by all the child components. Inject it into your components with the `apolloProvider` option:
 
 ```js
 new Vue({
