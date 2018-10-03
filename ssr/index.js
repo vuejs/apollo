@@ -3,12 +3,29 @@ const { VUE_APOLLO_QUERY_KEYWORDS } = require('../lib/consts')
 const { createFakeInstance, resolveComponent } = require('./utils')
 const { Globals, getMergedDefinition, omit } = require('../lib/utils')
 
-exports.install = function (Vue) {
-  Globals.Vue = Vue
+const config = exports.config = {
+  globalPrefetchs: [],
+  fakeInstanceMocks: [],
+  fetchPolicy: 'network-only',
+  suppressRenderErrors: false,
 }
 
-exports.prefetchAll = function (apolloProvider, components, context) {
-  return exports.getQueriesFromTree(components, context)
+exports.install = function (Vue, options = {}) {
+  Globals.Vue = Vue
+  Object.assign(config, options)
+}
+
+exports.globalPrefetch = function (handler) {
+  config.globalPrefetchs.push(handler)
+}
+
+exports.mockInstance = function (plugin) {
+  config.fakeInstanceMocks.push(plugin)
+}
+
+exports.prefetchAll = function (apolloProvider, components = [], context = {}) {
+  const globalPrefetchs = config.globalPrefetchs.map(handler => handler(context)).filter(Boolean)
+  return exports.getQueriesFromTree(components.concat(globalPrefetchs), context)
     .then(queries => Promise.all(queries.map(
       query => prefetchQuery(apolloProvider, query, context)
     )))
@@ -27,6 +44,13 @@ function walkTree (component, data, parent, children, context, queries, componen
     const queue = []
     data = data || {}
     const vm = createFakeInstance(component, data, parent, children, context)
+
+    // Mocks
+    for (const mock of config.fakeInstanceMocks) {
+      mock.apply(mock)
+    }
+
+    // Render h function
     vm.$createElement = (el, data, children) => {
       if (typeof data === 'string' || Array.isArray(data)) {
         children = data
@@ -58,8 +82,10 @@ function walkTree (component, data, parent, children, context, queries, componen
     try {
       component.render.call(vm, vm.$createElement)
     } catch (e) {
-      console.log(chalk.red(`Error while rendering ${component.name || component.__file}`))
-      console.log(e.stack)
+      if (!config.suppressRenderErrors) {
+        console.log(chalk.red(`Error while rendering ${component.name || component.__file}`))
+        console.log(e.stack)
+      }
     }
 
     Promise.all(queue).then(queue => queue.filter(child => !!child).map(
@@ -163,15 +189,22 @@ function prefetchQuery (apolloProvider, query, context) {
       queryOptions.query = queryOptions.query.call(vm)
     }
 
-    const options = omit(queryOptions, [
-      ...VUE_APOLLO_QUERY_KEYWORDS,
-      'fetchPolicy',
-    ])
+    // Default query options from apollo provider
+    if (apolloProvider.defaultOptions && apolloProvider.defaultOptions.$query) {
+      queryOptions = Object.assign({}, apolloProvider.defaultOptions.$query, queryOptions)
+    }
+
+    // Remove vue-apollo specific options
+    const options = omit(queryOptions, VUE_APOLLO_QUERY_KEYWORDS)
     options.variables = variables
-    options.fetchPolicy = 'network-only'
+    // Override fetchPolicy
+    if (config.fetchPolicy != null) {
+      options.fetchPolicy = config.fetchPolicy
+    }
 
     return client.query(options)
   } catch (e) {
+    console.log(chalk.red(`[ERROR] While prefetching query`), query, chalk.grey(`Error stack trace:`))
     console.log(e.stack)
   }
 }
