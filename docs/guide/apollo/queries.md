@@ -396,6 +396,23 @@ created () {
 Internally, this method is called for each query entry in the component `apollo` option.
 :::
 
+## Manually executing a query
+
+You can use `this.$apollo.query()` to manually send a GraphQL query at any time in any method, and handle the result yourself: 
+
+```js
+methods: {
+  async myMethod () {
+    const { data } = await this.$apollo.query({
+      query: myQuery,
+      variables: myVariables
+    })
+    // Do what you want with data
+  }
+}
+```
+
+
 ## Advanced options
 
 There are even more options specific to vue-apollo, see the [API Reference](../../api/smart-query.md).
