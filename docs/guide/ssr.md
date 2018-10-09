@@ -172,13 +172,13 @@ export default () => new Promise((resolve, reject) => {
         store,
         route: router.currentRoute,
       })
-    })
+    }))
     // Apollo prefetch
     // This will prefetch all the Apollo queries in the whole app
     .then(() => ApolloSSR.prefetchAll(apolloProvider, [App, ...matchedComponents], {
       store,
       route: router.currentRoute,
-    })
+    }))
     .then(() => {
       // Inject the Vuex state and the Apollo cache on the page.
       // This will prevent unnecessary queries.
