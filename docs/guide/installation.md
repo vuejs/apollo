@@ -2,7 +2,7 @@
 
 ## Vue CLI Plugin
 
-I made a plugin for [vue-cli](http://cli.vuejs.org) so you can add Apollo (with an optional GraphQL server!) in literary two minutes! ✨🚀
+I made a plugin for [vue-cli](http://cli.vuejs.org) so you can add Apollo (with an optional GraphQL server!) in literally two minutes! ✨🚀
 
 In your vue-cli 3 project:
 
