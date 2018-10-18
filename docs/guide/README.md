@@ -8,8 +8,12 @@ This library integrates [apollo](https://www.apollographql.com/) in your [Vue](h
 
 ## Sponsors
 
-<p style="text-align: center; font-size: 24px; color: #9999A5;">
-&lt;Your logo here&gt;
+### Silver
+
+<p style="text-align: center;">
+  <a href="https://vueschool.io/" target="_blank">
+    <img src="https://vueschool.io/img/logo/vueschool_logo_multicolor.svg" alt="VueSchool logo" class="silver-sponsor">
+  </a>
 </p>
 
 ## Become a sponsor
