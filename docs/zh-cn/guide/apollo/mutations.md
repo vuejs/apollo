@@ -32,11 +32,11 @@ methods: {
       },
       // 用结果更新缓存
       // 查询将先通过乐观响应、然后再通过真正的变更结果更新
-      update: (store, { data: { newTag } }) => {
+      update: (store, { data: { addTag } }) => {
         // 从缓存中读取这个查询的数据
         const data = store.readQuery({ query: TAGS_QUERY })
         // 将变更中的标签添加到最后
-        data.tags.push(newTag)
+        data.tags.push(addTag)
         // 将数据写回缓存
         store.writeQuery({ query: TAGS_QUERY, data })
       },

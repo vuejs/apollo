@@ -97,7 +97,7 @@ Vue.use(VueApollo)
 
 ## Apollo provider
 
-Provider 保存了可以在接下来被所有子组件使用的 Apollo 客户端实例。通过 `provide` 属性将它注入你的组件：
+Provider 保存了可以在接下来被所有子组件使用的 Apollo 客户端实例。通过 `apolloProvider` 选项将它注入你的组件：
 
 ```js
 new Vue({

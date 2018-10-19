@@ -18,3 +18,13 @@ footer: LICENCE ISC - Created by Guillaume CHAU (@Akryum)
     <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Become a Patreon">
   </a>
 </p>
+
+## 赞助商
+
+### 银牌赞助商
+
+<p style="text-align: center;">
+  <a href="https://vueschool.io/" target="_blank">
+    <img src="https://vueschool.io/img/logo/vueschool_logo_multicolor.svg" alt="VueSchool logo" class="silver-sponsor">
+  </a>
+</p>
