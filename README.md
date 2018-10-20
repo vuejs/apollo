@@ -19,6 +19,7 @@
 
 <br>
 
+<p align="center">
 ---
 
 LICENCE ISC - Created by Guillaume CHAU (@Akryum)
