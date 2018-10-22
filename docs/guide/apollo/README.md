@@ -103,6 +103,10 @@ const apolloProvider = new VueApollo({
 })
 ```
 
+Only `$query` option is supported. [Other options](https://www.apollographql.com/docs/react/api/apollo-client.html#DefaultOptions) are not supported for now.
+
+
+
 ## Skip all
 
 You can disable all the queries for the component with `skipAllQueries`, all the subscriptions with `skipAllSubscriptions` and both with `skipAll`:
