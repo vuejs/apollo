@@ -103,7 +103,7 @@ const apolloProvider = new VueApollo({
 })
 ```
 
-These default options are not related to [Apollos `defaultOptions`](https://www.apollographql.com/docs/react/api/apollo-client.html#DefaultOptions).
+These defaultOptions should not be confused with [Apollos `defaultOptions`](https://www.apollographql.com/docs/react/api/apollo-client.html#DefaultOptions).
 
 
 
