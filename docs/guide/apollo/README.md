@@ -103,7 +103,7 @@ const apolloProvider = new VueApollo({
 })
 ```
 
-Only `$query` option is supported. [Other options](https://www.apollographql.com/docs/react/api/apollo-client.html#DefaultOptions) are not supported for now.
+These default options are not related to [Apollos `defaultOptions`](https://www.apollographql.com/docs/react/api/apollo-client.html#DefaultOptions).
 
 
 
