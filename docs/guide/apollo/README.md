@@ -103,6 +103,10 @@ const apolloProvider = new VueApollo({
 })
 ```
 
+These defaultOptions should not be confused with [Apollos `defaultOptions`](https://www.apollographql.com/docs/react/api/apollo-client.html#DefaultOptions) which can be applied to the `ApolloClient`.
+
+
+
 ## Skip all
 
 You can disable all the queries for the component with `skipAllQueries`, all the subscriptions with `skipAllSubscriptions` and both with `skipAll`:
