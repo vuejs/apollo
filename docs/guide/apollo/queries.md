@@ -1,5 +1,13 @@
 # Queries
 
+In GraphQL, a query is a request made to the API to retrieve data. It is represented with a *GraphQL document* like this:
+
+```graphql
+query myHelloQueryName {
+  hello
+}
+```
+
 In the `apollo` object, add an attribute for each property you want to feed with the result of an Apollo query. Each one of them will become a Smart Query.
 
 ## Simple query

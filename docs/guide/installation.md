@@ -14,7 +14,13 @@ Then you can skip to next section: [Basic Usage](./apollo/).
 
 [More info](https://github.com/Akryum/vue-cli-plugin-apollo)
 
-## Apollo Boost
+## Manual installation
+
+### 1. Apollo Client
+
+You can either use [Apollo Boost](#apollo-boost) or [Apollo Client directly](#apollo-client-full-configuration) (more configuration work).
+
+#### Apollo Boost
 
 Apollo Boost is a zero-config way to start using Apollo Client. It includes some sensible defaults, such as our recommended `InMemoryCache` and `HttpLink`, which come configured for you with our recommended settings and it's perfect for starting to develop fast:
 
@@ -29,8 +35,6 @@ Or:
 ```
 yarn add vue-apollo graphql apollo-boost
 ```
-
-### Apollo client
 
 In your app, create an `ApolloClient` instance and install the `VueApollo` plugin:
 
@@ -48,9 +52,7 @@ const apolloProvider = new VueApollo({
 Vue.use(VueApollo)
 ```
 
-
-
-## Manual
+#### Apollo client full configuration
 
 If you want some more fine grain control try and install these packages before server side set (of packages), add apollo to meteor.js before then, too.
 
@@ -63,8 +65,6 @@ Or:
 ```
 yarn add vue-apollo graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
 ```
-
-### Apollo client
 
 In your app, create an `ApolloClient` instance and install the `VueApollo` plugin:
 
@@ -95,9 +95,9 @@ const apolloProvider = new VueApollo({
 Vue.use(VueApollo)
 ```
 
-## Apollo provider
+### 2. Apollo provider
 
-The provider holds the Apollo client instances that can then be used by all the child components. Inject it into your components with the `apolloProvider` option:
+The provider holds the Apollo client instances that can then be used by all the child components. Add it to your app with the `apolloProvider` option:
 
 ```js
 new Vue({

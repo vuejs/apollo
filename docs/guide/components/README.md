@@ -4,7 +4,7 @@ Those are components just like any others. They take a GraphQL document in their
 
 The benefit is that you can use those components in the template directly instead of using the `apollo` option of your component. In some cases you don't even need to add a script part at all in your `.vue`! This is all even more declarative.
 
-Here is a quick example:
+Here is a quick example of an `ApolloQuery` in a template:
 
 ```vue
 <template>

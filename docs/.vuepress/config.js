@@ -53,7 +53,7 @@ module.exports = {
             '',
             'installation',
             {
-              title: 'Basic Usage',
+              title: 'Basic usage',
               collapsable: false,
               children: [
                 'apollo/',
@@ -61,6 +61,7 @@ module.exports = {
                 'apollo/mutations',
                 'apollo/subscriptions',
                 'apollo/pagination',
+                'apollo/special-options',
               ],
             },
             {
