@@ -55,13 +55,6 @@ function walkTree (component, data, parent, children, context, queries, componen
 
     prefetchComponent(component, vm, queries)
 
-    try {
-      component.render.call(vm, vm.$createElement)
-    } catch (e) {
-      console.log(chalk.red(`Error while rendering ${component.name || component.__file}`))
-      console.log(e.stack)
-    }
-
     Promise.all(queue).then(queue => queue.filter(child => !!child).map(
       child => walkTree(child.component, child.data, vm, child.children, context, queries, components)
     )).then(() => resolve())
