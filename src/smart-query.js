@@ -70,18 +70,12 @@ export default class SmartQuery extends SmartApollo {
   }
 
   executeApollo (variables) {
-    if (this.observer) {
-      // Update variables
-      // Don't use setVariables directly or it will ignore cache
-      this.observer.setOptions(this.generateApolloOptions(variables))
-    } else {
-      if (this.sub) {
-        this.sub.unsubscribe()
-      }
-
-      // Create observer
-      this.observer = this.vm.$apollo.watchQuery(this.generateApolloOptions(variables))
+    if (this.sub) {
+      this.sub.unsubscribe()
     }
+
+    // Create observer
+    this.observer = this.vm.$apollo.watchQuery(this.generateApolloOptions(variables))
 
     this.startQuerySubscription()
 
