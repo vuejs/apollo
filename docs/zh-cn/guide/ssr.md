@@ -172,13 +172,13 @@ export default () => new Promise((resolve, reject) => {
         store,
         route: router.currentRoute,
       })
-    })
+    }))
     // Apollo 预取
     // 这里将预取整个应用中的所有 Apollo 查询
     .then(() => ApolloSSR.prefetchAll(apolloProvider, [App, ...matchedComponents], {
       store,
       route: router.currentRoute,
-    })
+    }))
     .then(() => {
       // 将 Vuex 状态和 Apollo 缓存注入到页面
       // 这将防止不必要的查询

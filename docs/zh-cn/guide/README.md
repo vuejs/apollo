@@ -8,8 +8,12 @@
 
 ## 赞助商
 
-<p style="text-align: center; font-size: 24px; color: #9999A5;">
-&lt;在这里加入你的 logo&gt;
+### 银牌赞助商
+
+<p style="text-align: center;">
+  <a href="https://vueschool.io/" target="_blank">
+    <img src="https://vueschool.io/img/logo/vueschool_logo_multicolor.svg" alt="VueSchool logo" class="silver-sponsor">
+  </a>
 </p>
 
 ## Become a sponsor
