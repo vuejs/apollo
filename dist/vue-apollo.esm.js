@@ -1918,7 +1918,7 @@ function install(Vue, options) {
 }
 ApolloProvider.install = install; // eslint-disable-next-line no-undef
 
-ApolloProvider.version = "3.0.0-beta.25"; // Apollo provider
+ApolloProvider.version = "3.0.0-beta.26"; // Apollo provider
 
 var ApolloProvider$1 = ApolloProvider; // Components
 
