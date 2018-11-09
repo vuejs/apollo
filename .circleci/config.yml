@@ -3,6 +3,13 @@
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
 version: 2
+
+workflow_filters: &filters
+  filters:
+    branches:
+      ignore:
+      - gh-pages
+
 jobs:
   build:
     docker:
