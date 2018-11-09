@@ -1,49 +1,3 @@
-<template>
-  <div class="channel-view">
-    <ApolloQuery
-      :query="require('../graphql/channel.gql')"
-      :variables="{
-        id
-      }"
-      @result="onResult"
-    >
-      <template slot-scope="{ result: { data, loading } }">
-        <div v-if="!data && loading" class="loading">Loading...</div>
-
-        <div v-else-if="data">
-          <!-- Websockets -->
-          <ApolloSubscribeToMore
-            :document="require('../graphql/messageChanged.gql')"
-            :variables="{
-              channelId: id,
-            }"
-            :updateQuery="onMessageChanged"
-          />
-
-          <div class="wrapper">
-            <div class="header">
-              <div class="id">#{{ data.channel.id }}</div>
-              <div class="name">{{ data.channel.name }}</div>
-            </div>
-
-            <div ref="body" class="body">
-              <MessageItem
-                v-for="message in data.channel.messages"
-                :key="message.id"
-                :message="message"
-              />
-            </div>
-
-            <div class="footer">
-              <MessageForm :channel-id="id" />
-            </div>
-          </div>
-        </div>
-      </template>
-    </ApolloQuery>
-  </div>
-</template>
-
 <script>
 import MessageItem from './MessageItem.vue'
 import MessageForm from './MessageForm.vue'
@@ -113,7 +67,7 @@ export default {
       el.scrollTop = el.scrollHeight
     },
 
-    onResult () {
+    onResult (result) {
       // The first time we load a channel, we force scroll to bottom
       this.scrollToBottom(!this.$_init)
       this.$_init = true
@@ -121,6 +75,52 @@ export default {
   },
 }
 </script>
+
+<template>
+  <div class="channel-view">
+    <ApolloQuery
+      :query="require('../graphql/channel.gql')"
+      :variables="{
+        id
+      }"
+      @result="onResult"
+    >
+      <template slot-scope="{ result: { data, loading } }">
+        <div v-if="!data && loading" class="loading">Loading...</div>
+
+        <div v-else-if="data">
+          <!-- Websockets -->
+          <ApolloSubscribeToMore
+            :document="require('../graphql/messageChanged.gql')"
+            :variables="{
+              channelId: id,
+            }"
+            :updateQuery="onMessageChanged"
+          />
+
+          <div class="wrapper">
+            <div class="header">
+              <div class="id">#{{ data.channel.id }}</div>
+              <div class="name">{{ data.channel.name }}</div>
+            </div>
+
+            <div ref="body" class="body">
+              <MessageItem
+                v-for="message in data.channel.messages"
+                :key="message.id"
+                :message="message"
+              />
+            </div>
+
+            <div class="footer">
+              <MessageForm :channel-id="id" />
+            </div>
+          </div>
+        </div>
+      </template>
+    </ApolloQuery>
+  </div>
+</template>
 
 <style lang="stylus" scoped>
 @import '~@/style/imports'

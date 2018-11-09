@@ -1,27 +1,3 @@
-<template>
-  <ApolloMutation
-    :mutation="require('../graphql/messageAdd.gql')"
-    :variables="{
-      input: {
-        channelId,
-        content: newMessage,
-      },
-    }"
-    class="message-form"
-    @done="onDone"
-  >
-    <input
-      slot-scope="{ mutate, loading, error }"
-      ref="input"
-      v-model="newMessage"
-      :disabled="loading"
-      class="form-input"
-      placeholder="Type a message"
-      @keyup.enter="newMessage && mutate()"
-    >
-  </ApolloMutation>
-</template>
-
 <script>
 export default {
   props: {
@@ -45,6 +21,30 @@ export default {
   },
 }
 </script>
+
+<template>
+  <ApolloMutation
+    :mutation="require('../graphql/messageAdd.gql')"
+    :variables="{
+      input: {
+        channelId,
+        content: newMessage,
+      },
+    }"
+    class="message-form"
+    @done="onDone"
+  >
+    <input
+      slot-scope="{ mutate, loading, error }"
+      ref="input"
+      v-model="newMessage"
+      :disabled="loading"
+      class="form-input"
+      placeholder="Type a message"
+      @keyup.enter="newMessage && mutate()"
+    >
+  </ApolloMutation>
+</template>
 
 <style lang="stylus" scoped>
 @import '~@/style/imports'

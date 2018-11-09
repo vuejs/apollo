@@ -31,6 +31,7 @@ module.exports = {
     messageAdd: (root, { input }, context) => messages.add(input, context),
     messageUpdate: (root, { input }, context) => messages.update(input, context),
     messageRemove: (root, { id }, context) => messages.remove(id, context),
+    mockMessageSend: (root, args, context) => messages.mockMessageSend(context),
   },
 
   Subscription: {

@@ -76,6 +76,7 @@ type Mutation {
   messageAdd (input: MessageAdd!): Message! @private
   messageUpdate (input: MessageUpdate!): Message! @private
   messageRemove (id: ID!): Message! @private
+  mockMessageSend: Boolean
 }
 
 type Subscription {
