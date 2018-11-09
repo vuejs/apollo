@@ -6,8 +6,10 @@ version: 2
 jobs:
   build:
     docker:
-      # specify the version you desire here
-      - image: circleci/node:8.12
+      - image: cypress/base:8
+        environment:
+          ## this enables colors in the output
+          TERM: xterm
       
     working_directory: ~/repo
 
@@ -31,5 +33,10 @@ jobs:
         
       # run tests!
       - run: yarn test
+
+      - store_artifacts:
+          path: packages/@vue/cli-ui/tests/e2e/videos
+      - store_artifacts:
+          path: packages/@vue/cli-ui/tests/e2e/screenshots
 
 
