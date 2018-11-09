@@ -35,8 +35,8 @@ jobs:
       - run: yarn test
 
       - store_artifacts:
-          path: packages/@vue/cli-ui/tests/e2e/videos
+          path: tests/demo/tests/e2e/videos
       - store_artifacts:
-          path: packages/@vue/cli-ui/tests/e2e/screenshots
+          path: tests/demo/tests/e2e/screenshots
 
 
