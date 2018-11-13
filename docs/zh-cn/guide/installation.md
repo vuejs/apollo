@@ -1,6 +1,6 @@
 # 安装
 
-## Vue CLI Plugin
+## Vue CLI 插件
 
 我为 [vue-cli](http://cli.vuejs.org) 制作了一个插件，因此仅用两分钟你就可以添加 Apollo（附带一个可选的 GraphQL 服务器）！✨🚀
 
@@ -14,7 +14,13 @@ vue add apollo
 
 [更多信息](https://github.com/Akryum/vue-cli-plugin-apollo)
 
-## Apollo Boost
+## 手动安装
+
+### 1. Apollo Client
+
+你可以使用 [Apollo Boost](#apollo-boost) 或 [直接使用 Apollo Client](#apollo-client-full-configuration)（需要更多配置工作）。
+
+#### Apollo Boost
 
 Apollo Boost 是一种零配置开始使用 Apollo Client 的方式。它包含一些实用的默认值，例如我们推荐的 `InMemoryCache` 和 `HttpLink`，它非常适合用于快速启动开发：
 
@@ -29,8 +35,6 @@ npm install --save vue-apollo graphql apollo-boost
 ```
 yarn add vue-apollo graphql apollo-boost
 ```
-
-### Apollo client
 
 在你的应用中创建一个 `ApolloClient` 实例并安装 `VueApollo` 插件：
 
@@ -48,9 +52,7 @@ const apolloProvider = new VueApollo({
 Vue.use(VueApollo)
 ```
 
-
-
-## 手动操作
+#### Apollo 客户端完整配置
 
 如果你想要更细的粒度控制，尝试在服务器端配置之前安装这些包，并且将 apollo 添加到 meteor.js 中。
 
@@ -63,8 +65,6 @@ npm install --save vue-apollo graphql apollo-client apollo-link apollo-link-http
 ```
 yarn add vue-apollo graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
 ```
-
-### Apollo 客户端
 
 在你的应用中创建一个 `ApolloClient` 实例并安装 `VueApollo` 插件：
 
@@ -95,9 +95,9 @@ const apolloProvider = new VueApollo({
 Vue.use(VueApollo)
 ```
 
-## Apollo provider
+### 2. Apollo provider
 
-Provider 保存了可以在接下来被所有子组件使用的 Apollo 客户端实例。通过 `apolloProvider` 选项将它注入你的组件：
+Provider 保存了可以在接下来被所有子组件使用的 Apollo 客户端实例。使用 `apolloProvider` 选项将它添加到你的应用程序：
 
 ```js
 new Vue({

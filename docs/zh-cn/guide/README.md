@@ -6,6 +6,17 @@
 
 这个库通过声明式查询将 [apollo](https://www.apollographql.com/) 集成到你的 [Vue](http://vuejs.org) 组件中。兼容 Vue 1.0+ 和 2.0+。[在线演示](https://jsfiddle.net/Akryum/oyejk2qL/)
 
+<iframe
+  src="//slides.com/akryum/vue-apollo-graphql/embed?style=light"
+  width="100%"
+  height="500"
+  scrolling="no"
+  frameborder="0"
+  webkitallowfullscreen
+  mozallowfullscreen
+  allowfullscreen
+/>
+
 ## 赞助商
 
 ### 银牌赞助商

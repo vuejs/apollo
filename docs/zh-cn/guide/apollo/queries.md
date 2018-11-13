@@ -1,5 +1,13 @@
 # 查询
 
+在 GraphQL 中，查询是发送给 API 以检索数据的请求。像这样使用 *GraphQL 文档* 来表示：
+
+```graphql
+query myHelloQueryName {
+  hello
+}
+```
+
 为每个你需要通过 Apollo 的查询结果提供数据的 Vue 属性，在 `apollo` 对象中添加一个对应属性。每一个属性都将创建一个智能查询。
 
 ## 简单查询

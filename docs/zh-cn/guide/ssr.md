@@ -141,7 +141,11 @@ import Vue from 'vue'
 import ApolloSSR from 'vue-apollo/ssr'
 import App from './App.vue'
 
-Vue.use(ApolloSSR)
+Vue.use(ApolloSSR, {
+  // SSR 配置
+  fetchPolicy: 'network-only',
+  suppressRenderErrors: false,
+})
 
 export default () => new Promise((resolve, reject) => {
   const { app, router, store, apolloProvider } = CreateApp({
@@ -360,3 +364,5 @@ export default () => new Promise((resolve, reject) => {
   })
 })
 ```
+
+请查看 [SSR API](../api/ssr.md) 了解更多详情和其他功能。
