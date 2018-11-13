@@ -28,3 +28,7 @@ footer: LICENCE ISC - Created by Guillaume CHAU (@Akryum)
     <img src="https://vueschool.io/img/logo/vueschool_logo_multicolor.svg" alt="VueSchool logo" class="silver-sponsor">
   </a>
 </p>
+
+::: tip 当前版本
+中文文档现在同步至 v3.0.0-beta.26
+:::
