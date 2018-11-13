@@ -85,7 +85,7 @@ const js = ApolloSSR.exportStates(apolloProvider, options)
 
 ### globalPrefetch
 
-Allow you to register a component to be prefetched explicitely.
+Allow you to register a component to be prefetched explicitly.
 
 Simple example:
 
