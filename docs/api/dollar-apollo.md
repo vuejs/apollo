@@ -7,7 +7,6 @@ This is the Apollo manager added to any component that uses Apollo. It can be ac
 - `vm`: related component
 - `queries`: array of the component's Smart Queries.
 - `subscriptions`: array of the component's Smart Subscriptions.
-- `client`: current Apollo client for the component.
 - `provider`: injected [Apollo Provider](./apollo-provider.md).
 - `loading`: whether at least one query is loading.
 - `skipAllQueries`: (setter) boolean to pause or unpause all Smart Queries.

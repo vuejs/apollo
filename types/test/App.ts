@@ -193,5 +193,8 @@ export default Vue.extend({
         console.log('this.$apollo.subscribe', data);
       },
     });
+
+    // enable to specify client when execute request
+    this.$apollo.query({ query: gql`query mockQuery { id }`, client: 'test' })
   }, 
 });
