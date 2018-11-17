@@ -15,13 +15,7 @@ import { GraphQLError } from 'graphql';
 export class VueApollo extends ApolloProvider implements PluginObject<{}>{
   [key: string]: any;
   install: PluginFunction<{}>;
-  constructor (options: {
-    defaultClient: ApolloClient<{}>,
-    defaultOptions?: VueApolloOptions<{}>,
-    clients?: { [key: string]: ApolloClient<{}> },
-    watchLoading?: WatchLoading<{}>,
-    errorHandler?: ErrorHandler<{}>
-  });
+
   static install(pVue: typeof Vue, options?:{} | undefined): void;
 }
 

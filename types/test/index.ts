@@ -25,7 +25,6 @@ const apolloProvider = new VueApollo({
 })
 
 Vue.use(VueApollo)
-
 /* eslint no-new: 0 */
 new Vue({
   el: '#app',
@@ -34,3 +33,7 @@ new Vue({
     h(Decorator)
   ])
 })
+
+// test to able to call below methods
+console.log(apolloProvider.defaultClient.query)
+console.log(apolloProvider.clients['key'].query)
