@@ -49,7 +49,6 @@ export interface DollarApollo<V> {
   vm: V;
   queries: Record<string, SmartQuery<V>>;
   subscriptions: Record<string, SmartSubscription<V>>;
-  client: ApolloClient<{}>;
   readonly provider: ApolloProvider;
   readonly loading: boolean;
 
