@@ -1,6 +1,10 @@
 # Usage in Vue components
 
-To declare apollo queries in your Vue component, add an `apollo` object :
+After installing `vue-apollo` in your app, all your components can now use Apollo through the `apollo` special option.
+
+## `apollo` options
+
+To declare apollo queries in your Vue component, add the `apollo` object in the component options:
 
 ```js
 new Vue({
@@ -26,7 +30,7 @@ export default {
 </script>
 ```
 
-## $apollo
+## `$apollo`
 
 All the components under the one which has the `apolloProvider` option have an `$apollo` helper available. This is the glue between your component and Apollo and it does all the heavy lifting for you (including automatic updates and teardowns).
 
