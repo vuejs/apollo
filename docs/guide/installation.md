@@ -22,9 +22,9 @@ You can either use [Apollo Boost](#apollo-boost) or [Apollo Client directly](#ap
 
 #### Apollo Boost
 
-Apollo Boost is a zero-config way to start using Apollo Client. It includes some sensible defaults, such as our recommended `InMemoryCache` and `HttpLink`, which come configured for you with our recommended settings and it's perfect for starting to develop fast:
+Apollo Boost is a zero-config way to start using Apollo Client. It includes some sensible defaults, such as our recommended `InMemoryCache` and `HttpLink`, which come configured for you with our recommended settings and it's perfect for starting to develop fast.
 
-Install: 
+Install it alongside `vue-apollo` and `graphql`: 
 
 ```
 npm install --save vue-apollo graphql apollo-boost
@@ -36,25 +36,20 @@ Or:
 yarn add vue-apollo graphql apollo-boost
 ```
 
-In your app, create an `ApolloClient` instance and install the `VueApollo` plugin:
+In your app, create an `ApolloClient` instance:
 
 ```js
-import Vue from 'vue'
 import ApolloClient from "apollo-boost"
-import VueApollo from "vue-apollo"
 
-const apolloProvider = new VueApollo({
-  defaultClient: new ApolloClient({
-    uri: "https://api.graphcms.com/simple/v1/awesomeTalksClone"
-  })
+const apolloProvider = new ApolloClient({
+  // You should use an absolute URL here
+  uri: "https://api.graphcms.com/simple/v1/awesomeTalksClone"
 })
-
-Vue.use(VueApollo)
 ```
 
 #### Apollo client full configuration
 
-If you want some more fine grain control try and install these packages before server side set (of packages), add apollo to meteor.js before then, too.
+If you want some more fine grained control install these packages instead of apollo-boost:
 
 ```
 npm install --save vue-apollo graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
@@ -66,43 +61,57 @@ Or:
 yarn add vue-apollo graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
 ```
 
-In your app, create an `ApolloClient` instance and install the `VueApollo` plugin:
+In your app, create an `ApolloClient` instance:
 
 ```js
-import Vue from 'vue'
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-import VueApollo from 'vue-apollo'
 
+// HTTP connexion to the API
 const httpLink = new HttpLink({
   // You should use an absolute URL here
   uri: 'http://localhost:3020/graphql',
 })
 
+// Cache implementation
+const cache = new InMemoryCache()
+
 // Create the apollo client
 const apolloClient = new ApolloClient({
   link: httpLink,
-  cache: new InMemoryCache(),
-  connectToDevTools: true,
+  cache,
 })
+```
 
-const apolloProvider = new VueApollo({
-  defaultClient: apolloClient,
-})
+### 2. Install the plugin into Vue
 
-// Install the vue plugin
+```js
+import Vue from 'vue'
+import VueApollo from "vue-apollo"
+
 Vue.use(VueApollo)
 ```
 
-### 2. Apollo provider
+### 3. Apollo provider
 
-The provider holds the Apollo client instances that can then be used by all the child components. Add it to your app with the `apolloProvider` option:
+The provider holds the Apollo client instances that can then be used by all the child components.
+
+```js
+const apolloProvider = new VueApollo({
+  defaultClient: apolloClient,
+})
+```
+
+Add it to your app with the `apolloProvider` option:
 
 ```js
 new Vue({
   el: '#app',
+  // inject apolloProvider here like vue-router or vuex
   apolloProvider,
   render: h => h(App),
 })
 ```
+
+You are now ready to use Apollo in your components!
