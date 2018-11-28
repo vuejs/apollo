@@ -1,21 +1,33 @@
 const shortid = require('shortid')
 
-const users = []
+const users = [
+  {
+    id: '__bot',
+    email: 'bot@bot.com',
+    password: 'bot',
+    nickname: 'The Bot',
+    tokens: []
+  }
+]
 
 exports.register = (input, context) => {
   if (users.find(u => u.email === input.email)) {
     throw new Error('Email already used')
   }
 
-  users.push({
-    id: shortid(),
-    email: input.email,
-    password: input.password,
-    nickname: input.nickname,
-    tokens: [],
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      users.push({
+        id: shortid(),
+        email: input.email,
+        password: input.password,
+        nickname: input.nickname,
+        tokens: [],
+      })
+    
+      resolve(true)
+    }, 100)
   })
-
-  return true
 }
 
 exports.login = ({ email, password }, context) => {

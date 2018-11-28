@@ -48,6 +48,16 @@ export default {
       default: false,
     },
 
+    debounce: {
+      type: Number,
+      default: 0,
+    },
+
+    throttle: {
+      type: Number,
+      default: 0,
+    },
+
     clientId: {
       type: String,
       default: undefined,
@@ -107,6 +117,8 @@ export default {
         variables () { return this.variables },
         fetchPolicy: this.fetchPolicy,
         pollInterval: this.pollInterval,
+        debounce: this.debounce,
+        throttle: this.throttle,
         notifyOnNetworkStatusChange: this.notifyOnNetworkStatusChange,
         context () { return this.context },
         skip () { return this.skip },
@@ -180,6 +192,6 @@ export default {
     } else {
       result = [result].concat(this.$slots.default)
     }
-    return h(this.tag, result)
+    return this.tag ? h(this.tag, result) : result[0]
   },
 }

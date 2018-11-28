@@ -1,10 +1,3 @@
-<template>
-  <div class="message-item">
-    <div class="user">{{ message.user.nickname }}</div>
-    <div class="content" v-html="html"/>
-  </div>
-</template>
-
 <script>
 import marked from 'marked'
 
@@ -31,6 +24,13 @@ export default {
   },
 }
 </script>
+
+<template>
+  <div class="message-item">
+    <div class="user">{{ message.user.nickname }}</div>
+    <div class="content" v-html="html"/>
+  </div>
+</template>
 
 <style lang="stylus" scoped>
 @import '~@/style/imports'

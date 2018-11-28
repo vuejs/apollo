@@ -2,12 +2,12 @@ module.exports = {
   root: true,
 
   env: {
-    node: true
+    node: true,
   },
 
   'extends': [
     'plugin:vue/essential',
-    '@vue/standard'
+    '@vue/standard',
   ],
 
   rules: {
@@ -16,16 +16,16 @@ module.exports = {
       {
         env: 'literal',
         projectName: 'app',
-      }
+      },
     ],
     'comma-dangle': ['error', 'always-multiline'],
   },
 
   parserOptions: {
-    parser: 'babel-eslint'
+    parser: 'babel-eslint',
   },
 
   plugins: [
-    'graphql'
-  ]
+    'graphql',
+  ],
 }

@@ -1,21 +1,3 @@
-<template>
-  <div class="user-current">
-    <template v-if="userCurrent">
-      <i class="material-icons user-icon">account_circle</i>
-      <div class="info">
-        <div class="nickname">{{ userCurrent.nickname }}</div>
-        <div class="email">{{ userCurrent.email }}</div>
-      </div>
-      <button
-        class="icon-button"
-        @click="logout()"
-      >
-        <i class="material-icons">power_settings_new</i>
-      </button>
-    </template>
-  </div>
-</template>
-
 <script>
 import UserCurrent from '../mixins/UserCurrent'
 import { onLogout } from '../vue-apollo'
@@ -39,6 +21,25 @@ export default {
   },
 }
 </script>
+
+<template>
+  <div class="user-current">
+    <template v-if="userCurrent">
+      <i class="material-icons user-icon">account_circle</i>
+      <div class="info">
+        <div class="nickname">{{ userCurrent.nickname }}</div>
+        <div class="email">{{ userCurrent.email }}</div>
+      </div>
+      <button
+        class="icon-button"
+        data-id="logout"
+        @click="logout()"
+      >
+        <i class="material-icons">power_settings_new</i>
+      </button>
+    </template>
+  </div>
+</template>
 
 <style lang="stylus" scoped>
 @import '~@/style/imports'

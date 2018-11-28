@@ -1,3 +1,19 @@
+<script>
+import ChannelList from './components/ChannelList.vue'
+
+import CHANNELS from './graphql/channels.gql'
+
+export default {
+  components: {
+    ChannelList,
+  },
+
+  apollo: {
+    channels: CHANNELS,
+  },
+}
+</script>
+
 <template>
   <div id="app">
     <ChannelList/>
@@ -6,16 +22,6 @@
     </div>
   </div>
 </template>
-
-<script>
-import ChannelList from './components/ChannelList.vue'
-
-export default {
-  components: {
-    ChannelList,
-  },
-}
-</script>
 
 <style lang="stylus">
 @import '~@/style/imports'

@@ -1,4 +1,4 @@
-import { throttle, debounce, omit, addGqlError } from './utils'
+import { throttle, debounce, omit, addGqlError } from '../lib/utils'
 
 export default class SmartApollo {
   type = null

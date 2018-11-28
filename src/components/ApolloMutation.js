@@ -1,4 +1,4 @@
-import { addGqlError } from '../utils'
+import { addGqlError } from '../../lib/utils'
 
 export default {
   props: {
@@ -27,6 +27,11 @@ export default {
       default: undefined,
     },
 
+    clientId: {
+      type: String,
+      default: undefined,
+    },
+
     tag: {
       type: String,
       default: 'div',
@@ -46,6 +51,7 @@ export default {
       this.error = null
       this.$apollo.mutate({
         mutation: this.mutation,
+        client: this.clientId,
         variables: this.variables,
         optimisticResponse: this.optimisticResponse,
         update: this.update,
@@ -75,6 +81,6 @@ export default {
     } else {
       result = [result].concat(this.$slots.default)
     }
-    return h(this.tag, result)
+    return this.tag ? h(this.tag, result) : result[0]
   },
 }

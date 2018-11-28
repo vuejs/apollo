@@ -4,7 +4,7 @@
 
 *For the server implementation, you can take a look at [this simple example](https://github.com/Akryum/apollo-server-example).*
 
-To make enable the websocket-based subscription, a bit of additional setup is required:
+To enable the websocket-based subscription, a bit of additional setup is required:
 
 ```
 npm install --save apollo-link-ws apollo-utilities

@@ -1,5 +1,13 @@
 # Queries
 
+In GraphQL, a query is a request made to the API to retrieve data. It is represented with a *GraphQL document* like this:
+
+```graphql
+query myHelloQueryName {
+  hello
+}
+```
+
 In the `apollo` object, add an attribute for each property you want to feed with the result of an Apollo query. Each one of them will become a Smart Query.
 
 ## Simple query
@@ -184,7 +192,7 @@ You can use a function which will be called once when the component is created a
 apollo: {
   // Query with parameters
   ping () {
-    // This will called one when the component is created
+    // This is called once when the component is created
     // It must return the option object
     return {
       // gql query

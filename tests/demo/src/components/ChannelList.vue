@@ -1,3 +1,17 @@
+<script>
+import UserCurrent from './UserCurrent.vue'
+import MockSendMessage from './MockSendMessage.vue'
+
+export default {
+  name: 'ChannelList',
+
+  components: {
+    UserCurrent,
+    MockSendMessage,
+  },
+}
+</script>
+
 <template>
   <div class="channel-list">
     <UserCurrent />
@@ -18,20 +32,10 @@
         </div>
       </template>
     </ApolloQuery>
+
+    <MockSendMessage/>
   </div>
 </template>
-
-<script>
-import UserCurrent from './UserCurrent.vue'
-
-export default {
-  name: 'ChannelList',
-
-  components: {
-    UserCurrent,
-  },
-}
-</script>
 
 <style lang="stylus" scoped>
 @import '~@/style/imports'
