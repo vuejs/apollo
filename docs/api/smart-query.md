@@ -8,6 +8,7 @@ Each query declared in the `apollo` definition (that is, which doesn't start wit
 - `variables`: Object or reactive function that returns an object. Each key will be mapped with a `'$'` in the GraphQL document, for example `foo` will become `$foo`.
 - `throttle`: throttle variables updates (in ms).
 - `debounce`: debounce variables updates (in ms).
+- `pollInterval`: auto update using polling (which means refetching every `x` ms)
 - `update(data) {return ...}` to customize the value that is set in the vue property, for example if the field names don't match.
 - `result(ApolloQueryResult)` is a hook called when a result is received (see documentation for [ApolloQueryResult](https://github.com/apollographql/apollo-client/blob/master/packages/apollo-client/src/core/types.ts)).
 - `error(error)` is a hook called when there are errors. `error` is an Apollo error object with either a `graphQLErrors` property or a `networkError` property.
