@@ -70,9 +70,16 @@ export default class SmartQuery extends SmartApollo {
   }
 
   executeApollo (variables) {
+    const variablesJson = JSON.stringify(variables)
+
     if (this.sub) {
+      if (variablesJson === this.previousVariablesJson) {
+        return
+      }
       this.sub.unsubscribe()
     }
+
+    this.previousVariablesJson = variablesJson
 
     // Create observer
     this.observer = this.vm.$apollo.watchQuery(this.generateApolloOptions(variables))
