@@ -8,6 +8,7 @@
 - `variables`：对象或返回对象的响应式函数。每个键将用 `'$'` 映射到 GraphQL 文档中，例如 `foo` 将变为 `$foo`。
 - `throttle`：变量更新节流时间（毫秒）。
 - `debounce`：变量更新防抖时间（毫秒）。
+- `pollInterval`：使用轮询自动更新的时间（表示每隔 `x` 毫秒重新获取一次）。
 - `update(data) {return ...}` 用来自定义设置到 vue 属性中的值，例如当字段名称不匹配时。
 - `result(ApolloQueryResult)` 是收到结果时调用的钩子（更多参见 [ApolloQueryResult](https://github.com/apollographql/apollo-client/blob/master/packages/apollo-client/src/core/types.ts) 的文档）。
 - `error(error)` 是有错误时调用的钩子。`error` 是一个具有 `graphQLErrors` 属性或 `networkError` 属性的 Apollo 错误对象。
@@ -38,7 +39,7 @@ apollo: {
     },
     // 变量：深度对象侦听
     deep: false,
-    // 我们使用自定义更新回调，因为字段名称不匹配
+    // 我们使用自定义的 update 回调函数，因为字段名称不匹配
     // 默认情况下，将使用 'data' 结果对象上的 'pingMessage' 属性
     // 考虑到 apollo 服务端的工作方式，我们知道结果是在 'ping' 属性中
     update(data) {

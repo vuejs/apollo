@@ -1,6 +1,10 @@
 # 在 Vue 组件中的用法
 
-要在你的 Vue 组件中声明 apollo 查询，只需添加一个 `apollo` 对象：
+在你的应用程序中安装了 `vue-apollo` 之后，所有组件都可以通过 `apollo` 这一特殊选项来使用 Apollo。
+
+## `apollo` 选项
+
+要在你的 Vue 组件中声明 apollo 查询，在组件的选项中添加 `apollo` 对象：
 
 ```js
 new Vue({
@@ -26,7 +30,7 @@ export default {
 </script>
 ```
 
-## $apollo
+## `$apollo`
 
 在一个有着 `apolloProvider` 选项的组件之下的所有组件都可以使用一个 `$apollo` 辅助函数。这是你的组件和 Apollo 之间的胶水层，它可以为你完成所有繁重的工作（包括自动更新和销毁）。
 

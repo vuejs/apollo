@@ -4,18 +4,9 @@
 本文档关联的版本仅支持 Apollo 2.x。查看支持 Apollo 1.x 的旧版本，请点击 [这里](https://github.com/Akryum/vue-apollo/tree/apollo-1).
 :::
 
-这个库通过声明式查询将 [apollo](https://www.apollographql.com/) 集成到你的 [Vue](http://vuejs.org) 组件中。兼容 Vue 1.0+ 和 2.0+。[在线演示](https://jsfiddle.net/Akryum/oyejk2qL/)
+这个库通过声明式查询将 [apollo](https://www.apollographql.com/) 集成到你的 [Vue](http://vuejs.org) 组件中。兼容 Vue 1.0+ 和 2.0+。
 
-<iframe
-  src="//slides.com/akryum/vue-apollo-graphql/embed?style=light"
-  width="100%"
-  height="500"
-  scrolling="no"
-  frameborder="0"
-  webkitallowfullscreen
-  mozallowfullscreen
-  allowfullscreen
-/>
+[➡️ 安装](./installation.md)
 
 ## 赞助商
 
@@ -37,6 +28,21 @@
   </a>
 </p>
 
+## 幻灯片
+
+如果你从未听说过 GraphQL 或 Apollo，在这里先睹为快：
+
+<iframe
+  src="//slides.com/akryum/vue-apollo-graphql/embed?style=light"
+  width="100%"
+  height="500"
+  scrolling="no"
+  frameborder="0"
+  webkitallowfullscreen
+  mozallowfullscreen
+  allowfullscreen
+/>
+
 ## 什么是 GraphQL？
 
 [GraphQL](https://graphql.org/) 是一个旨在简化前端和后端之间通信的规范。它主要由服务端的 schema 语言和客户端的查询语言组成。
@@ -46,6 +52,8 @@
 [Apollo](https://www.apollographql.com/) 是通过社区力量帮助你在应用中使用 GraphQL 的一套工具。它的 [客户端](https://www.apollographql.com/client) 和 [服务端](https://www.apollographql.com/server) 都非常有名。Apollo 由 [Meteor 开发团队](https://www.meteor.io/) 开发和支持。
 
 ## 链接
+
+[⚡ 在线演示](https://jsfiddle.net/Akryum/oyejk2qL/)
 
 [<img src="https://assets-cdn.github.com/favicon.ico" alt="icon" width="16" height="16"/> Vue-cli 插件](https://github.com/Akryum/vue-cli-plugin-apollo)
 
