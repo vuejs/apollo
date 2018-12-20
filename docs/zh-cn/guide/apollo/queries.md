@@ -171,7 +171,7 @@ export const resolvers = {
 
 ## 加载状态
 
-你可以通过 `$apollo.loading` 属性显示加载状态：
+你可以通过 `$apollo.loading` 属性显示加载状态：
 
 ```vue
 <div v-if="$apollo.loading">Loading...</div>
