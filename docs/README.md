@@ -10,7 +10,7 @@ features:
   details: Use Apollo in a truly declarative way with the Apollo components
 - title: SSR-ready
   details: Run your queries on the server before rendering the page HTML
-footer: LICENCE ISC - Created by Guillaume CHAU (@Akryum)
+footer: LICENCE MIT - Created by Guillaume CHAU (@Akryum)
 ---
 
 <p style="text-align: center;">
