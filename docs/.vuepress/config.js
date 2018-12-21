@@ -1,5 +1,5 @@
 module.exports = {
-  base: '/vue-apollo/',
+  base: '/',
   serviceWorker: true,
   head: [
     ['link', { rel: 'icon', href: '/favicon.png' }],

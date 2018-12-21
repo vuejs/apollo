@@ -16,7 +16,7 @@
 
 <br>
 
-<h3 align="center"><a href="https://akryum.github.io/vue-apollo/">Documentation</a></h3>
+<h3 align="center"><a href="https://vue-apollo.netlify.com/">Documentation</a></h3>
 
 <br>
 
