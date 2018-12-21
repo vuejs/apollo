@@ -39,11 +39,11 @@ yarn add vue-apollo graphql apollo-boost
 In your app, create an `ApolloClient` instance:
 
 ```js
-import ApolloClient from "apollo-boost"
+import ApolloClient from 'apollo-boost'
 
 const apolloClient = new ApolloClient({
   // You should use an absolute URL here
-  uri: "https://api.graphcms.com/simple/v1/awesomeTalksClone"
+  uri: 'https://api.graphcms.com/simple/v1/awesomeTalksClone'
 })
 ```
 
@@ -88,7 +88,7 @@ const apolloClient = new ApolloClient({
 
 ```js
 import Vue from 'vue'
-import VueApollo from "vue-apollo"
+import VueApollo from 'vue-apollo'
 
 Vue.use(VueApollo)
 ```
