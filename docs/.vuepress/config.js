@@ -20,6 +20,9 @@ module.exports = {
     repo: 'Akryum/vue-apollo',
     docsDir: 'docs',
     editLinks: true,
+    serviceWorker: {
+      updatePopup: true,
+    },
     locales: {
       '/': {
         selectText: 'Languages',
