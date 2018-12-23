@@ -18,6 +18,14 @@ This library integrates [apollo](https://www.apollographql.com/) in your [Vue](h
   </a>
 </p>
 
+### Bronze
+
+<p align="center">
+  <a href="https://vuetifyjs.com" target="_blank" title="Vuetify">
+    <img src="https://cdn.vuetifyjs.com/images/logos/v-alt.svg" width="48" height="48">
+  </a>
+</p>
+
 ## Become a sponsor
 
 Is your company using vue-apollo or vue-cli-plugin-apollo to build awesome apps? Join the other patrons and become a sponsor to add your logo on this documentation! Supporting me on Patreon allows me to work less for a job and to work more on Free Open Source Software such as vue-apollo! Thank you!
