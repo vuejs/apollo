@@ -46,7 +46,7 @@ export default {
     tagsPage: {
       // GraphQL Query
       query: gql`query tagsPage ($page: Int!, $pageSize: Int!) {
-        tagsPage(page: $page, size: $pageSize) {
+        tagsPage (page: $page, size: $pageSize) {
           tags {
             id
             label
@@ -63,8 +63,8 @@ export default {
     },
   },
   methods: {
-    showMore() {
-      this.page ++
+    showMore () {
+      this.page++
       // Fetch more data and transform the original result
       this.$apollo.queries.tagsPage.fetchMore({
         // New variables

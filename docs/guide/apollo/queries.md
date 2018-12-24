@@ -55,8 +55,8 @@ schema {
 
 export const resolvers = {
   Query: {
-    hello(root, args, context) {
-      return "Hello world!"
+    hello (root, args, context) {
+      return 'Hello world!'
     },
   },
 }
@@ -149,7 +149,7 @@ schema {
 
 export const resolvers = {
   Query: {
-    ping(root, { message }, context) {
+    ping (root, { message }, context) {
       return `Answering ${message}`
     },
   },
@@ -261,7 +261,7 @@ apollo: {
       ping(message: $message)
     }`,
     // Reactive parameters
-    variables() {
+    variables () {
       // Use vue reactive properties here
       return {
           message: this.pingInput,
@@ -301,13 +301,13 @@ apollo: {
       }
     }`,
     // Reactive variables
-    variables() {
+    variables () {
       return {
         type: this.type,
       }
     },
     // Disable the query
-    skip() {
+    skip () {
       return this.skipQuery
     },
   },
@@ -370,7 +370,7 @@ for (let i = 0; i < 42; i++) {
   addTag(casual.word)
 }
 
-function addTag(label) {
+function addTag (label) {
   let t = {
     id: id++,
     label,
