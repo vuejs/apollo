@@ -55,8 +55,8 @@ schema {
 
 export const resolvers = {
   Query: {
-    hello(root, args, context) {
-      return "Hello world!"
+    hello (root, args, context) {
+      return 'Hello world!'
     },
   },
 }
@@ -149,7 +149,7 @@ schema {
 
 export const resolvers = {
   Query: {
-    ping(root, { message }, context) {
+    ping (root, { message }, context) {
       return `Answering ${message}`
     },
   },
@@ -261,7 +261,7 @@ apollo: {
       ping(message: $message)
     }`,
     // 响应式参数
-    variables() {
+    variables () {
       // 在这里使用 vue 响应式属性
       return {
           message: this.pingInput,
@@ -301,13 +301,13 @@ apollo: {
       }
     }`,
     // 响应式变量
-    variables() {
+    variables () {
       return {
         type: this.type,
       }
     },
     // 禁用这个查询
-    skip() {
+    skip () {
       return this.skipQuery
     },
   },
@@ -370,7 +370,7 @@ for (let i = 0; i < 42; i++) {
   addTag(casual.word)
 }
 
-function addTag(label) {
+function addTag (label) {
   let t = {
     id: id++,
     label,
@@ -381,7 +381,7 @@ function addTag(label) {
 
 export const resolvers = {
   Query: {
-    tags(root, args, context) {
+    tags (root, args, context) {
       return tags
     },
   },

@@ -31,10 +31,10 @@ apollo: {
       ping(message: $message)
     }`,
     // 响应式参数
-    variables() {
+    variables () {
       // 在这里使用 vue 的响应式属性
       return {
-          message: this.pingInput,
+        message: this.pingInput,
       }
     },
     // 变量：深度对象侦听
@@ -42,17 +42,17 @@ apollo: {
     // 我们使用自定义的 update 回调函数，因为字段名称不匹配
     // 默认情况下，将使用 'data' 结果对象上的 'pingMessage' 属性
     // 考虑到 apollo 服务端的工作方式，我们知道结果是在 'ping' 属性中
-    update(data) {
+    update (data) {
       console.log(data)
       // 返回的值将更新 vue 属性 'pingMessage'
       return data.ping
     },
     // 可选结果钩子
-    result({ data, loading, networkStatus }) {
-      console.log("We got some result!")
+    result ({ data, loading, networkStatus }) {
+      console.log('We got some result!')
     },
     // 错误处理
-    error(error) {
+    error (error) {
       console.error('We\'ve got an error!', error)
     },
     // 加载状态
@@ -60,7 +60,7 @@ apollo: {
     // 在查询正在加载时将递增，不再加载时递减
     loadingKey: 'loadingQueriesCount',
     // 当加载状态发生变化时会调用 watchLoading
-    watchLoading(isLoading, countModifier) {
+    watchLoading (isLoading, countModifier) {
       // isLoading 是一个布尔值
       // countModifier 为 1 或 -1
     },

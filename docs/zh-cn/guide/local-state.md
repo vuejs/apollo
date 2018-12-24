@@ -13,7 +13,7 @@ export default {
       }
     `
   },
-  mounted() {
+  mounted () {
     // 变更 hello 消息
     this.$apollo
       .mutate({

@@ -96,7 +96,7 @@ for (let i = 0; i < 42; i++) {
   addTag(faker.random.word())
 }
 
-function addTag(label) {
+function addTag (label) {
   let t = {
     id: id++,
     label,
@@ -107,12 +107,12 @@ function addTag(label) {
 
 export const resolvers = {
   Query: {
-    tags(root, args, context) {
+    tags (root, args, context) {
       return tags
     },
   },
   Mutation: {
-    addTag(root, { label }, context) {
+    addTag (root, { label }, context) {
       console.log(`adding tag '${label}'`)
       return addTag(label)
     },

@@ -45,7 +45,7 @@ export default {
     tagsPage: {
       // GraphQL 查询
       query: gql`query tagsPage ($page: Int!, $pageSize: Int!) {
-        tagsPage(page: $page, size: $pageSize) {
+        tagsPage (page: $page, size: $pageSize) {
           tags {
             id
             label
@@ -62,8 +62,8 @@ export default {
     },
   },
   methods: {
-    showMore() {
-      this.page ++
+    showMore () {
+      this.page++
       // 获取更多数据并转换原始结果
       this.$apollo.queries.tagsPage.fetchMore({
         // 新的变量
