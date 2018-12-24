@@ -69,7 +69,7 @@
 
 [<img src="https://assets-cdn.github.com/favicon.ico" alt="icon" width="16" height="16"/> Apollo graphql server 示例](https://github.com/Akryum/apollo-server-example)
 
-[<img src="http://graphql.cn/favicon.ico" alt="icon" width="16" height="16"/> GraphQL 中文文档](http://graphql.cn/)
+[<img src="https://graphql.org/favicon.ico" alt="icon" width="16" height="16"/> GraphQL 中文文档](http://graphql.cn/)
 
 [<img src="https://www.howtographql.com/static/howtographql.d1a2e5b4.svg" alt="icon" width="16" height="16"/> How to GraphQL](https://www.howtographql.com/vue-apollo/0-introduction/)
 
