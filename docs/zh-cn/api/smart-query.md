@@ -1,6 +1,6 @@
 # 智能查询
 
-在组件的 `apollo` 定义中声明的每个查询（不以 `$` 字符开头）都会创建一个智能查询对象。
+在组件的 `apollo` 定义中声明的每个查询（不以 `$` 字符开头）都会创建一个智能查询对象。
 
 ## 选项
 
@@ -8,6 +8,7 @@
 - `variables`：对象或返回对象的响应式函数。每个键将用 `'$'` 映射到 GraphQL 文档中，例如 `foo` 将变为 `$foo`。
 - `throttle`：变量更新节流时间（毫秒）。
 - `debounce`：变量更新防抖时间（毫秒）。
+- `pollInterval`：使用轮询自动更新的时间（表示每隔 `x` 毫秒重新获取一次）。
 - `update(data) {return ...}` 用来自定义设置到 vue 属性中的值，例如当字段名称不匹配时。
 - `result(ApolloQueryResult)` 是收到结果时调用的钩子（更多参见 [ApolloQueryResult](https://github.com/apollographql/apollo-client/blob/master/packages/apollo-client/src/core/types.ts) 的文档）。
 - `error(error)` 是有错误时调用的钩子。`error` 是一个具有 `graphQLErrors` 属性或 `networkError` 属性的 Apollo 错误对象。
@@ -30,28 +31,28 @@ apollo: {
       ping(message: $message)
     }`,
     // 响应式参数
-    variables() {
+    variables () {
       // 在这里使用 vue 的响应式属性
       return {
-          message: this.pingInput,
+        message: this.pingInput,
       }
     },
     // 变量：深度对象侦听
     deep: false,
-    // 我们使用自定义更新回调，因为字段名称不匹配
+    // 我们使用自定义的 update 回调函数，因为字段名称不匹配
     // 默认情况下，将使用 'data' 结果对象上的 'pingMessage' 属性
     // 考虑到 apollo 服务端的工作方式，我们知道结果是在 'ping' 属性中
-    update(data) {
+    update (data) {
       console.log(data)
       // 返回的值将更新 vue 属性 'pingMessage'
       return data.ping
     },
     // 可选结果钩子
-    result({ data, loading, networkStatus }) {
-      console.log("We got some result!")
+    result ({ data, loading, networkStatus }) {
+      console.log('We got some result!')
     },
     // 错误处理
-    error(error) {
+    error (error) {
       console.error('We\'ve got an error!', error)
     },
     // 加载状态
@@ -59,7 +60,7 @@ apollo: {
     // 在查询正在加载时将递增，不再加载时递减
     loadingKey: 'loadingQueriesCount',
     // 当加载状态发生变化时会调用 watchLoading
-    watchLoading(isLoading, countModifier) {
+    watchLoading (isLoading, countModifier) {
       // isLoading 是一个布尔值
       // countModifier 为 1 或 -1
     },

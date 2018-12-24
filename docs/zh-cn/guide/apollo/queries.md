@@ -1,5 +1,13 @@
 # 查询
 
+在 GraphQL 中，查询是发送给 API 以检索数据的请求。像这样使用 *GraphQL 文档* 来表示：
+
+```graphql
+query myHelloQueryName {
+  hello
+}
+```
+
 为每个你需要通过 Apollo 的查询结果提供数据的 Vue 属性，在 `apollo` 对象中添加一个对应属性。每一个属性都将创建一个智能查询。
 
 ## 简单查询
@@ -47,8 +55,8 @@ schema {
 
 export const resolvers = {
   Query: {
-    hello(root, args, context) {
-      return "Hello world!"
+    hello (root, args, context) {
+      return 'Hello world!'
     },
   },
 }
@@ -141,7 +149,7 @@ schema {
 
 export const resolvers = {
   Query: {
-    ping(root, { message }, context) {
+    ping (root, { message }, context) {
       return `Answering ${message}`
     },
   },
@@ -163,7 +171,7 @@ export const resolvers = {
 
 ## 加载状态
 
-你可以通过 `$apollo.loading` 属性显示加载状态：
+你可以通过 `$apollo.loading` 属性显示加载状态：
 
 ```vue
 <div v-if="$apollo.loading">Loading...</div>
@@ -253,7 +261,7 @@ apollo: {
       ping(message: $message)
     }`,
     // 响应式参数
-    variables() {
+    variables () {
       // 在这里使用 vue 响应式属性
       return {
           message: this.pingInput,
@@ -293,13 +301,13 @@ apollo: {
       }
     }`,
     // 响应式变量
-    variables() {
+    variables () {
       return {
         type: this.type,
       }
     },
     // 禁用这个查询
-    skip() {
+    skip () {
       return this.skipQuery
     },
   },
@@ -362,7 +370,7 @@ for (let i = 0; i < 42; i++) {
   addTag(casual.word)
 }
 
-function addTag(label) {
+function addTag (label) {
   let t = {
     id: id++,
     label,
@@ -373,7 +381,7 @@ function addTag(label) {
 
 export const resolvers = {
   Query: {
-    tags(root, args, context) {
+    tags (root, args, context) {
       return tags
     },
   },

@@ -10,7 +10,7 @@ features:
   details: 通过 Apollo 组件声明式地使用 Apollo
 - title: 支持 SSR
   details: 在渲染 HTML 页面之前在服务端运行你的查询
-footer: LICENCE ISC - Created by Guillaume CHAU (@Akryum)
+footer: LICENCE MIT - Created by Guillaume CHAU (@Akryum)
 ---
 
 <p style="text-align: center;">
@@ -28,3 +28,15 @@ footer: LICENCE ISC - Created by Guillaume CHAU (@Akryum)
     <img src="https://vueschool.io/img/logo/vueschool_logo_multicolor.svg" alt="VueSchool logo" class="silver-sponsor">
   </a>
 </p>
+
+### 铜牌赞助商
+
+<p align="center">
+  <a href="https://vuetifyjs.com" target="_blank" title="Vuetify">
+    <img src="https://cdn.vuetifyjs.com/images/logos/v-alt.svg" width="48" height="48">
+  </a>
+</p>
+
+::: tip 当前版本
+中文文档现在同步至 v3.0.0-beta.26
+:::

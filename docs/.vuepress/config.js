@@ -160,6 +160,7 @@ module.exports = {
                 'apollo/mutations',
                 'apollo/subscriptions',
                 'apollo/pagination',
+                'apollo/special-options',
               ],
             },
             {

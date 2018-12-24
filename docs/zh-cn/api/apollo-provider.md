@@ -15,7 +15,7 @@ const apolloProvider = new VueApollo({
   defaultClient: apolloClient,
   // 'apollo' 对象的默认定义
   defaultOptions: {
-    // 详见 'apollo' 的定义
+    // 详见 'apollo' 的定义
     // 例如：默认查询选项
     $query: {
       loadingKey: 'loading',
