@@ -36,5 +36,6 @@ This is an increasly popular way of managing client-side state. Some projects ev
 
 - [Example project](https://codesandbox.io/s/zqqj82396p) (by @chriswingler)
 - [Todo App](https://codesandbox.io/s/x2jr96r8pp) (by @NikkitaFTW)
+- [Todo App - Expanded](https://codesandbox.io/s/k3621oko23) (by @ScottMolinari fork of @NikkitaFTW's)
 
 ---
