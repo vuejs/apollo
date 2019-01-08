@@ -30,7 +30,7 @@ export default {
 }
 ```
 
-This is an increasly popular way of managing client-side state. Some projects even use it as a replacement of Vuex (or other Flux-inspired solutions).
+This is an increasingly popular way of managing client-side state. Some projects even use it as a replacement of Vuex (or other Flux-inspired solutions).
 
 ## Examples
 
