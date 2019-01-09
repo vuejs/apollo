@@ -144,7 +144,7 @@ export default class SmartQuery extends SmartApollo {
     }
 
     if (hasResultCallback) {
-      this.options.result.call(this.vm, result)
+      this.options.result.call(this.vm, result, this.key)
     }
   }
 
