@@ -41,6 +41,7 @@ interface ExtendableVueApolloQueryOptions<V, R> extends _WatchQueryOptions {
 export interface VueApolloQueryOptions<V, R> extends ExtendableVueApolloQueryOptions<V, R> {
   query: ((this: ApolloVueThisType<V>) => DocumentNode) | DocumentNode;
   variables?: VariableFn<V>;
+  client?: String
 }
 
 export interface VueApolloMutationOptions<V, R> extends MutationOptions<R> {
