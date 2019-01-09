@@ -10,7 +10,7 @@ Each query declared in the `apollo` definition (that is, which doesn't start wit
 - `debounce`: debounce variables updates (in ms).
 - `pollInterval`: auto update using polling (which means refetching every `x` ms).
 - `update(data) {return ...}` to customize the value that is set in the vue property, for example if the field names don't match.
-- `result(ApolloQueryResult)` is a hook called when a result is received (see documentation for [ApolloQueryResult](https://github.com/apollographql/apollo-client/blob/master/packages/apollo-client/src/core/types.ts)).
+- `result(ApolloQueryResult, key)` is a hook called when a result is received (see documentation for [ApolloQueryResult](https://github.com/apollographql/apollo-client/blob/master/packages/apollo-client/src/core/types.ts)). `key` is the query key in the `apollo` option.
 - `error(error)` is a hook called when there are errors. `error` is an Apollo error object with either a `graphQLErrors` property or a `networkError` property.
 - `loadingKey` will update the component data property you pass as the value. You should initialize this property to `0` in the component `data()` hook. When the query is loading, this property will be incremented by 1; when it is no longer loading, it will be decremented by 1. That way, the property can represent a counter of currently loading queries.
 - `watchLoading(isLoading, countModifier)` is a hook called when the loading state of the query changes. The `countModifier` parameter is either equal to `1` when the query is loading, or `-1` when the query is no longer loading.
