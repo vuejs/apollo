@@ -776,10 +776,17 @@
     }, {
       key: "executeApollo",
       value: function executeApollo(variables) {
-        if (this.sub) {
-          this.sub.unsubscribe();
-        } // Create observer
+        var variablesJson = JSON.stringify(variables);
 
+        if (this.sub) {
+          if (variablesJson === this.previousVariablesJson) {
+            return;
+          }
+
+          this.sub.unsubscribe();
+        }
+
+        this.previousVariablesJson = variablesJson; // Create observer
 
         this.observer = this.vm.$apollo.watchQuery(this.generateApolloOptions(variables));
         this.startQuerySubscription();
@@ -847,7 +854,7 @@
         }
 
         if (hasResultCallback) {
-          this.options.result.call(this.vm, result);
+          this.options.result.call(this.vm, result, this.key);
         }
       }
     }, {
@@ -1111,7 +1118,7 @@
         _get(_getPrototypeOf(SmartSubscription.prototype), "nextResult", this).call(this, data);
 
         if (typeof this.options.result === 'function') {
-          this.options.result.call(this.vm, data);
+          this.options.result.call(this.vm, data, this.key);
         }
       }
     }]);
@@ -1924,7 +1931,7 @@
   }
   ApolloProvider.install = install; // eslint-disable-next-line no-undef
 
-  ApolloProvider.version = "3.0.0-beta.26"; // Apollo provider
+  ApolloProvider.version = "3.0.0-beta.27"; // Apollo provider
 
   var ApolloProvider$1 = ApolloProvider; // Components
 
