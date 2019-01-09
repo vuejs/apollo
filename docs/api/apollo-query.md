@@ -11,7 +11,7 @@
 - `skip`: Boolean disabling query fetching
 - `clientId`: Used to resolve the Apollo Client used (defined in ApolloProvider)
 - `deep`: Boolean to use deep Vue watchers
-- `tag`: String HTML tag name (default: `div`); if `undefined`, the component will be renderless (the content won't be wrapped in a tag)
+- `tag`: String HTML tag name (default: `div`); if falsy (for example `null` or `undefined`), the component will be renderless (the content won't be wrapped in a tag). In this case, only the first child will be rendered.
 - `debounce`: Number of milliseconds for debouncing refetches (for example when the variables are changed)
 - `throttle`: Number of milliseconds for throttling refetches (for example when the variables are changed)
 
