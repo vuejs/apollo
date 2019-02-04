@@ -1,7 +1,15 @@
 const shortid = require('shortid')
 const triggers = require('../triggers')
 
-const messages = []
+const messages = [
+  {
+    id: '__bot:1',
+    userId: '__bot',
+    channelId: 'general',
+    content: 'Welcome to the chat!',
+    dateAdded: Date.now()
+  }
+]
 
 function publishChange ({ type, message }, context) {
   context.pubsub.publish(triggers.MESSAGE_CHANGED, {
@@ -13,7 +21,11 @@ function publishChange ({ type, message }, context) {
 }
 
 exports.getAll = (channelId, context) => {
-  return messages.filter(m => m.channelId === channelId)
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(messages.filter(m => m.channelId === channelId))
+    }, 100)
+  })
 }
 
 exports.getOne = (id, context) => {
@@ -21,19 +33,23 @@ exports.getOne = (id, context) => {
 }
 
 exports.add = ({ channelId, content }, context) => {
-  const message = {
-    id: shortid(),
-    userId: context.userId,
-    channelId: channelId,
-    content: content,
-    dateAdded: Date.now(),
-  }
-  messages.push(message)
-  publishChange({
-    type: 'added',
-    message,
-  }, context)
-  return message
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const message = {
+        id: shortid(),
+        userId: context.userId,
+        channelId: channelId,
+        content: content,
+        dateAdded: Date.now(),
+      }
+      messages.push(message)
+      publishChange({
+        type: 'added',
+        message,
+      }, context)
+      resolve(message)
+    }, 100)
+  })
 }
 
 exports.update = ({ id, content }, context) => {
@@ -60,4 +76,22 @@ exports.remove = (id, context) => {
     message,
   })
   return message
+}
+
+let mockCount = 1
+
+exports.mockMessageSend = (context) => {
+  const message = {
+    id: shortid(),
+    userId: '__bot',
+    channelId: 'general',
+    content: `How are you doing? ${mockCount++}`,
+    dateAdded: Date.now(),
+  }
+  messages.push(message)
+  publishChange({
+    type: 'added',
+    message,
+  }, context)
+  return true
 }

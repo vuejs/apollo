@@ -141,7 +141,11 @@ import Vue from 'vue'
 import ApolloSSR from 'vue-apollo/ssr'
 import App from './App.vue'
 
-Vue.use(ApolloSSR)
+Vue.use(ApolloSSR, {
+  // SSR 配置
+  fetchPolicy: 'network-only',
+  suppressRenderErrors: false,
+})
 
 export default () => new Promise((resolve, reject) => {
   const { app, router, store, apolloProvider } = CreateApp({
@@ -172,13 +176,13 @@ export default () => new Promise((resolve, reject) => {
         store,
         route: router.currentRoute,
       })
-    })
+    }))
     // Apollo 预取
     // 这里将预取整个应用中的所有 Apollo 查询
     .then(() => ApolloSSR.prefetchAll(apolloProvider, [App, ...matchedComponents], {
       store,
       route: router.currentRoute,
-    })
+    }))
     .then(() => {
       // 将 Vuex 状态和 Apollo 缓存注入到页面
       // 这将防止不必要的查询
@@ -360,3 +364,5 @@ export default () => new Promise((resolve, reject) => {
   })
 })
 ```
+
+请查看 [SSR API](../api/ssr.md) 了解更多详情和其他功能。

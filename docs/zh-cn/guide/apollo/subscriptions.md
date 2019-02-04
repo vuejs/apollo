@@ -193,7 +193,7 @@ apollo: {
         }
       }`,
       // 响应式变量
-      variables() {
+      variables () {
         // 像常规查询一样运作
         // 在每次改变值时都会使用正确的变量重新订阅
         return {
@@ -201,7 +201,7 @@ apollo: {
         }
       },
       // 结果钩子
-      result(data) {
+      result (data) {
         console.log(data)
       },
     },
@@ -234,18 +234,18 @@ apollo: {
         }
       }`,
       // 响应式变量
-      variables() {
+      variables () {
         return {
           type: this.type,
         }
       },
       // 结果钩子
-      result(data) {
+      result (data) {
         // 更新本地数据
         this.tags.push(data.tagAdded)
       },
       // 跳过这个订阅
-      skip() {
+      skip () {
         return this.skipSubscription
       }
     },
@@ -282,7 +282,7 @@ created () {
 使用 `$apollo.subscribe()` 方法来创建一个 GraphQL 订阅，当组件被销毁时将自动终止。它**不会**创建智能订阅。
 
 ```js
-mounted() {
+mounted () {
   const subQuery = gql`subscription tags($type: String!) {
     tagAdded(type: $type) {
       id
@@ -299,10 +299,10 @@ mounted() {
   })
 
   observer.subscribe({
-    next(data) {
+    next (data) {
       console.log(data)
     },
-    error(error) {
+    error (error) {
       console.error(error)
     },
   })

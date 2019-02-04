@@ -8,8 +8,9 @@ Each query declared in the `apollo` definition (that is, which doesn't start wit
 - `variables`: Object or reactive function that returns an object. Each key will be mapped with a `'$'` in the GraphQL document, for example `foo` will become `$foo`.
 - `throttle`: throttle variables updates (in ms).
 - `debounce`: debounce variables updates (in ms).
+- `pollInterval`: auto update using polling (which means refetching every `x` ms).
 - `update(data) {return ...}` to customize the value that is set in the vue property, for example if the field names don't match.
-- `result(ApolloQueryResult)` is a hook called when a result is received (see documentation for [ApolloQueryResult](https://github.com/apollographql/apollo-client/blob/master/packages/apollo-client/src/core/types.ts)).
+- `result(ApolloQueryResult, key)` is a hook called when a result is received (see documentation for [ApolloQueryResult](https://github.com/apollographql/apollo-client/blob/master/packages/apollo-client/src/core/types.ts)). `key` is the query key in the `apollo` option.
 - `error(error)` is a hook called when there are errors. `error` is an Apollo error object with either a `graphQLErrors` property or a `networkError` property.
 - `loadingKey` will update the component data property you pass as the value. You should initialize this property to `0` in the component `data()` hook. When the query is loading, this property will be incremented by 1; when it is no longer loading, it will be decremented by 1. That way, the property can represent a counter of currently loading queries.
 - `watchLoading(isLoading, countModifier)` is a hook called when the loading state of the query changes. The `countModifier` parameter is either equal to `1` when the query is loading, or `-1` when the query is no longer loading.
@@ -30,10 +31,10 @@ apollo: {
       ping(message: $message)
     }`,
     // Reactive parameters
-    variables() {
+    variables () {
       // Use vue reactive properties here
       return {
-          message: this.pingInput,
+        message: this.pingInput,
       }
     },
     // Variables: deep object watch
@@ -44,18 +45,18 @@ apollo: {
     // would be used on the 'data' result object
     // Here we know the result is in the 'ping' attribute
     // considering the way the apollo server works
-    update(data) {
+    update (data) {
       console.log(data)
       // The returned value will update
       // the vue property 'pingMessage'
       return data.ping
     },
     // Optional result hook
-    result({ data, loading, networkStatus }) {
-      console.log("We got some result!")
+    result ({ data, loading, networkStatus }) {
+      console.log('We got some result!')
     },
     // Error handling
-    error(error) {
+    error (error) {
       console.error('We\'ve got an error!', error)
     },
     // Loading state
@@ -64,7 +65,7 @@ apollo: {
     // and decremented when it no longer is.
     loadingKey: 'loadingQueriesCount',
     // watchLoading will be called whenever the loading state changes
-    watchLoading(isLoading, countModifier) {
+    watchLoading (isLoading, countModifier) {
       // isLoading is a boolean
       // countModifier is either 1 or -1
     },

@@ -193,7 +193,7 @@ apollo: {
         }
       }`,
       // Reactive variables
-      variables() {
+      variables () {
         // This works just like regular queries
         // and will re-subscribe with the right variables
         // each time the values change
@@ -202,7 +202,7 @@ apollo: {
         }
       },
       // Result hook
-      result(data) {
+      result (data) {
         console.log(data)
       },
     },
@@ -235,18 +235,18 @@ apollo: {
         }
       }`,
       // Reactive variables
-      variables() {
+      variables () {
         return {
           type: this.type,
         }
       },
       // Result hook
-      result(data) {
+      result (data) {
         // Let's update the local data
         this.tags.push(data.tagAdded)
       },
       // Skip the subscription
-      skip() {
+      skip () {
         return this.skipSubscription
       }
     },
@@ -283,7 +283,7 @@ Internally, this method is called for each entry of the `$subscribe` object in t
 Use the `$apollo.subscribe()` method to subscribe to a GraphQL subscription that will get killed automatically when the component is destroyed. It will **NOT** create a Smart Subscription.
 
 ```js
-mounted() {
+mounted () {
   const subQuery = gql`subscription tags($type: String!) {
     tagAdded(type: $type) {
       id
@@ -300,10 +300,10 @@ mounted() {
   })
 
   observer.subscribe({
-    next(data) {
+    next (data) {
       console.log(data)
     },
-    error(error) {
+    error (error) {
       console.error(error)
     },
   })

@@ -1,12 +1,3 @@
-<template>
-  <div id="app">
-    <ChannelList/>
-    <div class="content">
-      <router-view/>
-    </div>
-  </div>
-</template>
-
 <script>
 import ChannelList from './components/ChannelList.vue'
 
@@ -22,6 +13,15 @@ export default {
   },
 }
 </script>
+
+<template>
+  <div id="app">
+    <ChannelList/>
+    <div class="content">
+      <router-view/>
+    </div>
+  </div>
+</template>
 
 <style lang="stylus">
 @import '~@/style/imports'

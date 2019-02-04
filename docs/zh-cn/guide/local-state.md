@@ -13,7 +13,7 @@ export default {
       }
     `
   },
-  mounted() {
+  mounted () {
     // 变更 hello 消息
     this.$apollo
       .mutate({
@@ -30,8 +30,11 @@ export default {
 }
 ```
 
-[示例项目](https://codesandbox.io/s/zqqj82396p) (感谢 @chriswingler)
+用这种方法来管理客户端状态正变得流行起来。有些项目甚至将其用作 Vuex（或其他灵感来源于 Flux 的解决方案）的替代品。
 
-[Todo App](https://codesandbox.io/s/x2jr96r8pp) (感谢 @NikkitaFTW)
+## 示例
+
+- [示例项目](https://codesandbox.io/s/zqqj82396p) (by @chriswingler)
+- [Todo App](https://codesandbox.io/s/x2jr96r8pp) (by @NikkitaFTW)
 
 ---

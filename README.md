@@ -3,6 +3,7 @@
 [![npm](https://img.shields.io/npm/v/vue-apollo.svg) ![npm](https://img.shields.io/npm/dm/vue-apollo.svg)](https://www.npmjs.com/package/vue-apollo)
 [![vue1](https://img.shields.io/badge/apollo-2.x-blue.svg)](https://www.apollographql.com/)
 [![vue1](https://img.shields.io/badge/vue-1.x-brightgreen.svg) ![vue2](https://img.shields.io/badge/vue-2.2+-brightgreen.svg)](https://vuejs.org/)
+[![CircleCI branch](https://img.shields.io/circleci/project/github/Akryum/vue-apollo/master.svg)](https://circleci.com/gh/Akryum/vue-apollo/tree/master)
 
 <p align="center">
   <img src="https://cdn-images-1.medium.com/max/800/1*H9AANoofLqjS10Xd5TwRYw.png">
@@ -15,7 +16,7 @@
 
 <br>
 
-<h3 align="center"><a href="https://akryum.github.io/vue-apollo/">Documentation</a></h3>
+<h3 align="center"><a href="https://vue-apollo.netlify.com/">Documentation</a></h3>
 
 <br>
 
@@ -29,6 +30,10 @@
   </a>
 </p>
 
----
+### Bronze
 
-LICENCE ISC - Created by Guillaume CHAU (@Akryum)
+<p align="center">
+  <a href="https://vuetifyjs.com" target="_blank">
+    <img src="https://cdn.discordapp.com/attachments/537832759985700914/537832771691872267/Horizontal_Logo_-_Dark.png" width="100">
+  </a>
+</p>

@@ -1,5 +1,13 @@
 # Queries
 
+In GraphQL, a query is a request made to the API to retrieve data. It is represented with a *GraphQL document* like this:
+
+```graphql
+query myHelloQueryName {
+  hello
+}
+```
+
 In the `apollo` object, add an attribute for each property you want to feed with the result of an Apollo query. Each one of them will become a Smart Query.
 
 ## Simple query
@@ -47,8 +55,8 @@ schema {
 
 export const resolvers = {
   Query: {
-    hello(root, args, context) {
-      return "Hello world!"
+    hello (root, args, context) {
+      return 'Hello world!'
     },
   },
 }
@@ -141,7 +149,7 @@ schema {
 
 export const resolvers = {
   Query: {
-    ping(root, { message }, context) {
+    ping (root, { message }, context) {
       return `Answering ${message}`
     },
   },
@@ -253,7 +261,7 @@ apollo: {
       ping(message: $message)
     }`,
     // Reactive parameters
-    variables() {
+    variables () {
       // Use vue reactive properties here
       return {
           message: this.pingInput,
@@ -293,13 +301,13 @@ apollo: {
       }
     }`,
     // Reactive variables
-    variables() {
+    variables () {
       return {
         type: this.type,
       }
     },
     // Disable the query
-    skip() {
+    skip () {
       return this.skipQuery
     },
   },
@@ -362,7 +370,7 @@ for (let i = 0; i < 42; i++) {
   addTag(casual.word)
 }
 
-function addTag(label) {
+function addTag (label) {
   let t = {
     id: id++,
     label,

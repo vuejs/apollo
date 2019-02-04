@@ -10,7 +10,7 @@ features:
   details: Use Apollo in a truly declarative way with the Apollo components
 - title: SSR-ready
   details: Run your queries on the server before rendering the page HTML
-footer: LICENCE ISC - Created by Guillaume CHAU (@Akryum)
+footer: LICENCE MIT - Created by Guillaume CHAU (@Akryum)
 ---
 
 <p style="text-align: center;">
@@ -26,5 +26,13 @@ footer: LICENCE ISC - Created by Guillaume CHAU (@Akryum)
 <p style="text-align: center;">
   <a href="https://vueschool.io/" target="_blank">
     <img src="https://vueschool.io/img/logo/vueschool_logo_multicolor.svg" alt="VueSchool logo" class="silver-sponsor">
+  </a>
+</p>
+
+### Bronze
+
+<p align="center">
+  <a href="https://vuetifyjs.com" target="_blank">
+    <img src="https://cdn.discordapp.com/attachments/537832759985700914/537832771691872267/Horizontal_Logo_-_Dark.png" alt="Vuetify logo" class="bronze-sponsor">
   </a>
 </p>

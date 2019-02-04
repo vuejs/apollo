@@ -1,86 +1,3 @@
-<template>
-  <div class="user-login">
-    <div class="logo">
-      <i class="material-icons icon">chat</i>
-    </div>
-    <div class="app-name">
-      Apollo<b>Chat</b>
-    </div>
-    <ApolloMutation
-      :mutation="showRegister
-        ? require('../graphql/userRegister.gql')
-        : require('../graphql/userLogin.gql')"
-      :variables="showRegister
-        ? {
-          input: {
-            email,
-            password,
-            nickname,
-          },
-        }
-        : {
-          email,
-          password,
-        }"
-      class="wrapper"
-      @done="onDone"
-    >
-      <form
-        slot-scope="{ mutate, loading, gqlError: error }"
-        :key="showRegister"
-        class="form"
-        @submit.prevent="mutate()"
-      >
-        <input
-          v-model="email"
-          class="form-input"
-          type="email"
-          name="email"
-          placeholder="Email"
-          required
-        >
-        <input
-          v-model="password"
-          class="form-input"
-          type="password"
-          name="passworkd"
-          placeholder="Password"
-          required
-        >
-        <input
-          v-if="showRegister"
-          v-model="nickname"
-          class="form-input"
-          name="nickname"
-          placeholder="Nickname"
-          required
-        >
-        <div v-if="error" class="error">{{ error.message }}</div>
-        <template v-if="!showRegister">
-          <button
-            type="submit"
-            :disabled="loading"
-            class="button"
-          >Login</button>
-          <div class="actions">
-            <a @click="showRegister = true">Create an account</a>
-          </div>
-        </template>
-        <template v-else>
-          <button
-            type="submit"
-            :disabled="loading"
-            class="button"
-          >Create new account</button>
-          <div class="actions">
-            <a @click="showRegister = false">Go back</a>
-          </div>
-        </template>
-      </form>
-    </ApolloMutation>
-  </div>
-</template>
-
 <script>
 import UserCurrent from '../mixins/UserCurrent'
 import USER_CURRENT from '../graphql/userCurrent.gql'
@@ -137,6 +54,94 @@ export default {
   },
 }
 </script>
+
+<template>
+  <div class="user-login">
+    <div class="logo">
+      <i class="material-icons icon">chat</i>
+    </div>
+    <div class="app-name">
+      Apollo<b>Chat</b>
+    </div>
+    <ApolloMutation
+      :mutation="showRegister
+        ? require('../graphql/userRegister.gql')
+        : require('../graphql/userLogin.gql')"
+      :variables="showRegister
+        ? {
+          input: {
+            email,
+            password,
+            nickname,
+          },
+        }
+        : {
+          email,
+          password,
+        }"
+      class="wrapper"
+      @done="onDone"
+    >
+      <form
+        slot-scope="{ mutate, loading, gqlError: error }"
+        :key="showRegister"
+        class="form"
+        @submit.prevent="mutate()"
+      >
+        <input
+          v-model="email"
+          class="form-input"
+          type="email"
+          name="email"
+          placeholder="Email"
+          required
+        >
+        <input
+          v-model="password"
+          class="form-input"
+          type="password"
+          name="password"
+          placeholder="Password"
+          required
+        >
+        <input
+          v-if="showRegister"
+          v-model="nickname"
+          class="form-input"
+          name="nickname"
+          placeholder="Nickname"
+          required
+        >
+        <div v-if="error" class="error">{{ error.message }}</div>
+        <template v-if="!showRegister">
+          <button
+            type="submit"
+            :disabled="loading"
+            class="button"
+            data-id="login"
+          >Login</button>
+          <div class="actions">
+            <a
+              data-id="create-account"
+              @click="showRegister = true"
+            >Create an account</a>
+          </div>
+        </template>
+        <template v-else>
+          <button
+            type="submit"
+            :disabled="loading"
+            class="button"
+            data-id="submit-new-account"
+          >Create new account</button>
+          <div class="actions">
+            <a @click="showRegister = false">Go back</a>
+          </div>
+        </template>
+      </form>
+    </ApolloMutation>
+  </div>
+</template>
 
 <style lang="stylus" scoped>
 @import '~@/style/imports'

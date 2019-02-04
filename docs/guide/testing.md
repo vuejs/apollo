@@ -8,26 +8,26 @@ For simple query testing you can just set the components data and check how comp
 
 ```js
 test('displayed heroes correctly with query data', () => {
-    const wrapper = shallowMount(App, { localVue });
-    wrapper.setData({
-      allHeroes: [
-        {
-          id: 'some-id',
-          name: 'Evan You',
-          image: 'https://pbs.twimg.com/profile_images/888432310504370176/mhoGA4uj_400x400.jpg',
-          twitter: 'youyuxi',
-          github: 'yyx990803',
-        },
-      ],
-    });
-    expect(wrapper.element).toMatchSnapshot();
-});
+  const wrapper = shallowMount(App, { localVue })
+  wrapper.setData({
+    allHeroes: [
+      {
+        id: 'some-id',
+        name: 'Evan You',
+        image: 'https://pbs.twimg.com/profile_images/888432310504370176/mhoGA4uj_400x400.jpg',
+        twitter: 'youyuxi',
+        github: 'yyx990803',
+      },
+    ],
+  })
+  expect(wrapper.element).toMatchSnapshot()
+})
 ```
 For simple mutation test you need to check if `$apollo` method `mutate` is called in your component. In the next example mutation was called in the `addHero` method:
 
 ```js
 test('called Apollo mutation in addHero() method', () => {
-  const mutate = jest.fn();
+  const mutate = jest.fn()
   const wrapper = mount(App, {
     localVue,
     mocks: {
@@ -35,10 +35,10 @@ test('called Apollo mutation in addHero() method', () => {
         mutate,
       },
     },
-  });
-  wrapper.vm.addHero();
-  expect(mutate).toBeCalled();
-});
+  })
+  wrapper.vm.addHero()
+  expect(mutate).toBeCalled()
+})
 ```
 
 ## Tests with mocked GraqhQL schema
@@ -73,25 +73,25 @@ const sourceSchema = `
     addHero(hero: HeroInput!): VueHero!
     deleteHero(name: String!): Boolean
   } 
-`;
+`
 ```
 Next step is to create an executable schema with `graphql-tools` method:
 
 ```js
-import { makeExecutableSchema } from 'graphql-tools';
+import { makeExecutableSchema } from 'graphql-tools'
 ...
 const schema = makeExecutableSchema({
   typeDefs: sourceSchema,
-});
+})
 ```
 After this you need to add mock functions to schema:
 
 ```js
-import { addMockFunctionsToSchema } from 'graphql-tools';
+import { addMockFunctionsToSchema } from 'graphql-tools'
 ...
 addMockFunctionsToSchema({
   schema,
-});
+})
 ```
 Specify the GraphQL query string:
 
@@ -106,15 +106,15 @@ const query = `
       image
     }
   }
-`;
+`
 ```
 Call GraphQL query in the test case, save response to component data and then check if rendered component matches a snapshot:
 
 ```js
 graphql(schema, query).then(result => {
-  wrapper.setData(result.data);
-  expect(wrapper.element).toMatchSnapshot();
-});
+  wrapper.setData(result.data)
+  expect(wrapper.element).toMatchSnapshot()
+})
 ```
 In this case all string fields will be equal to `Hello World` and all number values will be negative. If you want to have more real-life response, you should specify resolvers for certain queries:
 
@@ -132,7 +132,7 @@ const resolvers = {
       },
     ],
   },
-};
+}
 ```
 Then you need to add resolvers to executable schema and set `preserveResolvers` property to true when adding mock functions:
 
@@ -140,13 +140,13 @@ Then you need to add resolvers to executable schema and set `preserveResolvers` 
 const schema = makeExecutableSchema({
   typeDefs: sourceSchema,
   resolvers,
-});
+})
 
 addMockFunctionsToSchema({
   schema,
   preserveResolvers: true,
-});
+})
 ```
-You can test mutations in the same way
+You can test mutations in the same way.
 
 ---

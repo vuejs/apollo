@@ -83,18 +83,19 @@ export default class SmartQuery extends SmartApollo {
   }
 
   executeApollo (variables) {
-    if (this.observer) {
-      // Update variables
-      // Don't use setVariables directly or it will ignore cache
-      this.observer.setOptions(this.generateApolloOptions(variables))
-    } else {
-      if (this.sub) {
-        this.sub.unsubscribe()
-      }
+    const variablesJson = JSON.stringify(variables)
 
-      // Create observer
-      this.observer = this.vm.$apollo.watchQuery(this.generateApolloOptions(variables))
+    if (this.sub) {
+      if (variablesJson === this.previousVariablesJson) {
+        return
+      }
+      this.sub.unsubscribe()
     }
+
+    this.previousVariablesJson = variablesJson
+
+    // Create observer
+    this.observer = this.vm.$apollo.watchQuery(this.generateApolloOptions(variables))
 
     this.startQuerySubscription()
 
@@ -160,7 +161,7 @@ export default class SmartQuery extends SmartApollo {
     }
 
     if (hasResultCallback) {
-      this.options.result.call(this.vm, result)
+      this.options.result.call(this.vm, result, this.key)
     }
   }
 
