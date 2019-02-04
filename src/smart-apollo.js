@@ -13,10 +13,6 @@ export default class SmartApollo {
     this._watchers = []
     this._destroyed = false
 
-    if (this.vm.$isServer) {
-      this.options.fetchPolicy = 'cache-first'
-    }
-
     if (autostart) {
       this.autostart()
     }

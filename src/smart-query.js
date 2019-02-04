@@ -22,7 +22,16 @@ export default class SmartQuery extends SmartApollo {
       })
     }
 
-    super(vm, key, options, autostart)
+    super(vm, key, options, false)
+
+    this.firstRun = new Promise((resolve, reject) => {
+      this._firstRunResolve = resolve
+      this._firstRunReject = reject
+    })
+
+    if (this.vm.$isServer) {
+      this.options.fetchPolicy = 'network-only'
+    }
 
     if (!options.manual) {
       this.hasDataField = this.vm.$data.hasOwnProperty(key)
@@ -39,6 +48,10 @@ export default class SmartQuery extends SmartApollo {
           configurable: true,
         })
       }
+    }
+
+    if (autostart) {
+      this.autostart()
     }
   }
 
@@ -121,7 +134,11 @@ export default class SmartQuery extends SmartApollo {
   nextResult (result) {
     super.nextResult(result)
 
-    const { data, loading } = result
+    const { data, loading, error } = result
+
+    if (error) {
+      this.firstRunReject()
+    }
 
     if (!loading) {
       this.loadingDone()
@@ -154,7 +171,8 @@ export default class SmartQuery extends SmartApollo {
 
   catchError (error) {
     super.catchError(error)
-    this.loadingDone()
+    this.firstRunReject()
+    this.loadingDone(error)
     this.nextResult(this.observer.currentResult())
     // The observable closes the sub if an error occurs
     this.resubscribeToQuery()
@@ -189,11 +207,15 @@ export default class SmartQuery extends SmartApollo {
     this.watchLoading(value === 1, value)
   }
 
-  loadingDone () {
+  loadingDone (error = null) {
     if (this.loading) {
       this.applyLoadingModifier(-1)
     }
     this.loading = false
+
+    if (!error) {
+      this.firstRunResolve()
+    }
   }
 
   fetchMore (...args) {
@@ -257,6 +279,20 @@ export default class SmartQuery extends SmartApollo {
   stopPolling (...args) {
     if (this.observer) {
       return this.observer.stopPolling(...args)
+    }
+  }
+
+  firstRunResolve () {
+    if (this._firstRunResolve) {
+      this._firstRunResolve()
+      this._firstRunResolve = null
+    }
+  }
+
+  firstRunReject () {
+    if (this._firstRunReject) {
+      this._firstRunReject()
+      this._firstRunReject = null
     }
   }
 

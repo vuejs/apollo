@@ -1,6 +1,10 @@
 # Server-Side Rendering
 
-## Vue CLI Plugin
+::: warning
+**Requires Vue 2.6+ with `serverPrefetch` support**
+:::
+
+## Vue CLI plugin
 
 I made a plugin for [vue-cli](http://cli.vuejs.org) so you can transform your vue-apollo app into an isomorphic SSR app in literary two minutes! ✨🚀
 
@@ -12,17 +16,16 @@ vue add @akryum/ssr
 
 [More info](https://github.com/Akryum/vue-cli-plugin-ssr)
 
-## Prefetch components
+## Component prefetching
 
-On the queries you want to prefetch on the server, add the `prefetch` option. It can either be:
- - a variables object,
- - a function that gets the context object (which can contain the URL for example) and return a variables object,
- - `false` to disable prefetching for this query.
+::: tip
+Follow the [offical SSR guide](https://ssr.vuejs.org) to learn more about Server-Side Rendering with Vue.
+:::
 
-If you are returning a variables object in the `prefetch` option, make sure it matches the result of the `variables` option. If they do not match, the query's data property will not be populated while rendering the template server-side.
+By default with `vue-server-renderer`, all the GraphQL queries in your server-side rendered components will be prefetched automatically.
 
-::: danger
-You don't have access to the component instance when doing prefetching on the server.
+::: tip
+You have access to `this` in options like `variables`, even on the server!
 :::
 
 Example:
@@ -31,7 +34,6 @@ Example:
 export default {
   apollo: {
     allPosts: {
-      // This will be prefetched
       query: gql`query AllPosts {
         allPosts {
           id
@@ -57,11 +59,6 @@ export default {
           description
         }
       }`,
-      prefetch: ({ route }) => {
-        return {
-          id: route.params.id,
-        }
-      },
       variables () {
         return {
           id: this.id,
@@ -72,11 +69,13 @@ export default {
 }
 ```
 
-### Skip prefetching
+## Skip prefetching
+
+You can skip server-side prefetching on a query with the `prefetch` option set to `false`.
 
 Example that doesn't prefetch the query:
 
-```js
+```js{12}
 export default {
   apollo: {
     allPosts: {
@@ -96,7 +95,7 @@ export default {
 
 If you want to skip prefetching all the queries for a specific component, use the `$prefetch` option:
 
-```js
+```js{4}
 export default {
   apollo: {
     // Don't prefetch any query
@@ -114,128 +113,16 @@ export default {
 }
 ```
 
-You can also put a `no-prefetch` attribute on any component so it will be ignored while walking the tree to gather the Apollo queries:
-
-```vue
-<ApolloQuery no-prefetch>
-```
-
-## On the server
-
-In the server entry, you need to install `ApolloSSR` plugin into Vue:
-
-```js
-import Vue from 'vue'
-import ApolloSSR from 'vue-apollo/ssr'
-
-Vue.use(ApolloSSR)
-```
-
-To prefetch all the apollo queries you marked, use the `ApolloSSR.prefetchAll` method. The first argument is the `apolloProvider`. The second argument is the array of component definition to include (e.g. from `router.getMatchedComponents` method). The third argument is the context object passed to the `prefetch` hooks (see above). It is recommended to pass the vue-router `currentRoute` object. It returns a promise resolved when all the apollo queries are loaded.
-
-Here is an example with vue-router and a Vuex store:
-
-```js
-import Vue from 'vue'
-import ApolloSSR from 'vue-apollo/ssr'
-import App from './App.vue'
-
-Vue.use(ApolloSSR, {
-  // SSR config
-  fetchPolicy: 'network-only',
-  suppressRenderErrors: false,
-})
-
-export default () => new Promise((resolve, reject) => {
-  const { app, router, store, apolloProvider } = CreateApp({
-    ssr: true,
-  })
-
-  // set router's location
-  router.push(context.url)
-
-  // wait until router has resolved possible async hooks
-  router.onReady(() => {
-    const matchedComponents = router.getMatchedComponents()
-
-    // no matched routes
-    if (!matchedComponents.length) {
-      reject({ code: 404 })
-    }
-
-    let js = ''
-
-    // Call preFetch hooks on components matched by the route.
-    // A preFetch hook dispatches a store action and returns a Promise,
-    // which is resolved when the action is complete and store state has been
-    // updated.
-
-    // Vuex Store prefetch
-    Promise.all(matchedComponents.map(component => {
-      return component.asyncData && component.asyncData({
-        store,
-        route: router.currentRoute,
-      })
-    }))
-    // Apollo prefetch
-    // This will prefetch all the Apollo queries in the whole app
-    .then(() => ApolloSSR.prefetchAll(apolloProvider, [App, ...matchedComponents], {
-      store,
-      route: router.currentRoute,
-    }))
-    .then(() => {
-      // Inject the Vuex state and the Apollo cache on the page.
-      // This will prevent unnecessary queries.
-
-      // Vuex
-      js += `window.__INITIAL_STATE__=${JSON.stringify(store.state)};`
-
-      // Apollo
-      js += ApolloSSR.exportStates(apolloProvider)
-
-      resolve({
-        app,
-        js,
-      })
-    }).catch(reject)
-  })
-})
-```
-
-Use the `ApolloSSR.exportStates(apolloProvider, options)` method to get the JavaScript code you need to inject into the generated page to pass the apollo cache data to the client.
-
-It takes an `options` argument which defaults to:
-
-```js
-{
-  // Global variable name
-  globalName: '__APOLLO_STATE__',
-  // Global object on which the variable is set
-  attachTo: 'window',
-  // Prefix for the keys of each apollo client state
-  exportNamespace: '',
-}
-```
-
-You can also use the `ApolloSSR.getStates(apolloProvider, options)` method to get the JS object instead of the script string.
-
-It takes an `options` argument which defaults to:
-
-```js
-{
-  // Prefix for the keys of each apollo client state
-  exportNamespace: '',
-}
-```
-
-### Creating the Apollo Clients
+## Create Apollo client
 
 It is recommended to create the apollo clients inside a function with an `ssr` argument, which is `true` on the server and `false` on the client.
 
+If `ssr` is false, we try to restore the state of the Apollo cache with `cache.restore`, by getting the `window.__APOLLO_STATE__` variable that we will inject in the HTML page on the server during SSR.
+
 Here is an example:
 
-```js
-// src/api/apollo.js
+```js{21-31}
+// apollo.js
 
 import Vue from 'vue'
 import { ApolloClient } from 'apollo-client'
@@ -283,16 +170,24 @@ export function createApolloClient (ssr = false) {
 }
 ```
 
-Example for common `CreateApp` method:
+## Create app
 
-```js
+Instead of creating our root Vue instance right away, we use a `createApp` function that accept a `context` parameter.
+
+This function will be used both on the client and server entries with a different `ssr` value in the context. We use this value in the `createApolloClient` method we wrote previously.
+
+Example for common `createApp` method:
+
+```js{9,37}
+// app.js
+
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Vuex from 'vuex'
 import { sync } from 'vuex-router-sync'
 
 import VueApollo from 'vue-apollo'
-import { createApolloClient } from './api/apollo'
+import { createApolloClient } from './apollo'
 
 import App from './ui/App.vue'
 import routes from './routes'
@@ -312,6 +207,12 @@ function createApp (context) {
   // sync the router with the vuex store.
   // this registers `store.state.route`
   sync(store, router)
+
+  // Vuex state restoration
+  if (!context.ssr && window.__INITIAL_STATE__) {
+    // We initialize the store state with the data injected from the server
+    store.replaceState(window.__INITIAL_STATE__)
+  }
 
   // Apollo
   const apolloClient = createApolloClient(context.ssr)
@@ -336,23 +237,34 @@ function createApp (context) {
 export default createApp
 ```
 
-On the client:
+## Client entry
+
+The client entry is very simple -- we just call `createApp` with `ssr` being `false`:
 
 ```js
-import CreateApp from './app'
+// client-entry.js
 
-CreateApp({
+import createApp from './app'
+
+createApp({
   ssr: false,
 })
 ```
 
-On the server:
+## Server entry
 
-```js
-import CreateApp from './app'
+Nothing special is required apart from storing the Apollo cache to inject it in the client HTML. Learn more about [server entry with routing](https://ssr.vuejs.org/guide/routing.html#routing-with-vue-router) and [data prefetching](https://ssr.vuejs.org/guide/data.html#data-store) in the official SSR guide.
+
+Here is an example with vue-router and a Vuex store:
+
+```js{3,26}
+// server-entry.js
+
+import ApolloSSR from 'vue-apollo/ssr'
+import createApp from './app'
 
 export default () => new Promise((resolve, reject) => {
-  const { app, router, store, apolloProvider } = CreateApp({
+  const { app, router, store, apolloProvider } = createApp({
     ssr: true,
   })
 
@@ -361,9 +273,50 @@ export default () => new Promise((resolve, reject) => {
 
   // wait until router has resolved possible async hooks
   router.onReady(() => {
-    // Prefetch, render HTML (see above)
+    // This `rendered` hook is called when the app has finished rendering
+    context.rendered = () => {
+      // After the app is rendered, our store is now
+      // filled with the state from our components.
+      // When we attach the state to the context, and the `template` option
+      // is used for the renderer, the state will automatically be
+      // serialized and injected into the HTML as `window.__INITIAL_STATE__`.
+      context.state = store.state
+
+      // ALso inject the apollo cache state
+      context.apolloState = ApolloSSR.getStates(apolloProvider)
+    }
+    resolve(app)
   })
 })
 ```
 
-See the [SSR API](../api/ssr.md) for more details and other features.
+Use the [ApolloSSR.getStates](../api/ssr.md#getstates) method to get the JavaScript code you need to inject into the generated page to pass the apollo cache data to the client.
+
+In the [page template](https://ssr.vuejs.org/guide/#using-a-page-template), use the `renderState` helper:
+
+```html
+{{{ renderState({ contextKey: 'apolloState', windowKey: '__APOLLO_STATE__' }) }}}
+```
+
+Here is a full example:
+
+```html{15}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <title>{{ title }}</title>
+    {{{ renderResourceHints() }}}
+    {{{ renderStyles() }}}
+  </head>
+  <body>
+    <!--vue-ssr-outlet-->
+    {{{ renderState() }}}
+    {{{ renderState({ contextKey: 'apolloState', windowKey: '__APOLLO_STATE__' }) }}}
+    {{{ renderScripts() }}}
+  </body>
+</html>
+```

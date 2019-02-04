@@ -4,7 +4,7 @@ function hasProperty (holder, key) {
   return typeof holder !== 'undefined' && Object.prototype.hasOwnProperty.call(holder, key)
 }
 
-function initDollarApollo () {
+function initProvider () {
   const options = this.$options
   // ApolloProvider injection
   const optionValue = options.apolloProvider
@@ -60,6 +60,8 @@ function launch () {
   let apollo = this.$options.apollo
 
   if (apollo) {
+    this.$_apolloPromises = []
+
     if (!apollo.$init) {
       apollo.$init = true
 
@@ -88,7 +90,10 @@ function launch () {
     for (let key in apollo) {
       if (key.charAt(0) !== '$') {
         let options = apollo[key]
-        this.$apollo.addSmartQuery(key, options)
+        const smart = this.$apollo.addSmartQuery(key, options)
+        if (options.prefetch !== false && apollo.$prefetch !== false) {
+          this.$_apolloPromises.push(smart.firstRun)
+        }
       }
     }
 
@@ -114,10 +119,17 @@ function defineReactiveSetter ($apollo, key, value, deep) {
   }
 }
 
+function destroy () {
+  if (this.$_apollo) {
+    this.$_apollo.destroy()
+    this.$_apollo = null
+  }
+}
+
 export function installMixin (Vue, vueVersion) {
   Vue.mixin({
     ...vueVersion === '1' ? {
-      init: initDollarApollo,
+      init: initProvider,
     } : {},
 
     ...vueVersion === '2' ? {
@@ -132,18 +144,19 @@ export function installMixin (Vue, vueVersion) {
       },
 
       beforeCreate () {
-        initDollarApollo.call(this)
+        initProvider.call(this)
         proxyData.call(this)
+      },
+
+      serverPrefetch () {
+        if (this.$_apolloPromises) {
+          return Promise.all(this.$_apolloPromises)
+        }
       },
     } : {},
 
     created: launch,
 
-    destroyed: function () {
-      if (this.$_apollo) {
-        this.$_apollo.destroy()
-        this.$_apollo = null
-      }
-    },
+    destroyed: destroy,
   })
 }
