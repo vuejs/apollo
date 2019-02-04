@@ -148,7 +148,7 @@ export function installMixin (Vue, vueVersion) {
         proxyData.call(this)
       },
 
-      ssrPrefetch () {
+      serverPrefetch () {
         if (this.$_apolloPromises) {
           return Promise.all(this.$_apolloPromises)
         }
