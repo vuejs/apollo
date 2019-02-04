@@ -50,7 +50,7 @@ module.exports = {
             link: 'https://www.patreon.com/akryum',
           },
         ],
-        sidebarDepth: 3,
+        sidebarDepth: 2,
         sidebar: {
           '/guide/': [
             '',
