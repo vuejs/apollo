@@ -1,5 +1,7 @@
 # Server-Side Rendering
 
+**Requires Vue 2.6+**
+
 ## Vue CLI Plugin
 
 I made a plugin for [vue-cli](http://cli.vuejs.org) so you can transform your vue-apollo app into an isomorphic SSR app in literary two minutes! ✨🚀
