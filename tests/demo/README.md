@@ -2,6 +2,9 @@
 
 Demo app: Vue + Apollo + Graphql + vue-cli 3
 
+
+### Setup project
+
 ```
 yarn
 ```
@@ -9,5 +12,6 @@ yarn
 ### Development
 
 ```
+yarn apollo:run
 yarn serve
 ```
