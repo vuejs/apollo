@@ -210,6 +210,18 @@ apollo: {
 },
 ```
 
+If you want to work with the data you need to do this otherwise you'll get `undefined`:
+```
+...
+  // Result hook
+  result ({data}) {
+    console.log(data)
+    console.log(data.foo)
+  },
+...
+```
+
+
 You can then access the subscription with `this.$apollo.subscriptions.<name>`.
 
 :::tip
