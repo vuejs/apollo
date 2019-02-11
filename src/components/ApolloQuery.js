@@ -130,7 +130,7 @@ export default {
           result = Object.assign({}, result)
 
           if (errors && errors.length) {
-            error = new Error(`Apollo errors occured (${errors.length})`)
+            error = new Error(`Apollo errors occurred (${errors.length})`)
             error.graphQLErrors = errors
           }
 
