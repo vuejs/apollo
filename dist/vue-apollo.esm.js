@@ -1515,7 +1515,8 @@ var CApolloQuery = {
         data: null,
         loading: false,
         networkStatus: 7,
-        error: null
+        error: null,
+        refetch: null
       },
       times: 0
     };
@@ -1563,6 +1564,8 @@ var CApolloQuery = {
         deep: this.deep,
         manual: true,
         result: function result(_result) {
+          var _this = this;
+
           var _result2 = _result,
               errors = _result2.errors,
               loading = _result2.loading,
@@ -1572,7 +1575,7 @@ var CApolloQuery = {
           _result = Object.assign({}, _result);
 
           if (errors && errors.length) {
-            error = new Error("Apollo errors occured (".concat(errors.length, ")"));
+            error = new Error("Apollo errors occurred (".concat(errors.length, ")"));
             error.graphQLErrors = errors;
           }
 
@@ -1591,7 +1594,10 @@ var CApolloQuery = {
             data: isDataFilled(data) ? data : undefined,
             loading: loading,
             error: error,
-            networkStatus: networkStatus
+            networkStatus: networkStatus,
+            refetch: function refetch() {
+              return _this.$apollo.queries.query.refetch();
+            }
           };
           this.times = ++this.$_times;
           this.$emit('result', this.result);

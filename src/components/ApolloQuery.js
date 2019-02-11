@@ -81,6 +81,7 @@ export default {
         loading: false,
         networkStatus: 7,
         error: null,
+        refetch: null,
       },
       times: 0,
     }
@@ -150,6 +151,7 @@ export default {
             loading,
             error,
             networkStatus,
+            refetch: () => this.$apollo.queries.query.refetch(),
           }
 
           this.times = ++this.$_times
