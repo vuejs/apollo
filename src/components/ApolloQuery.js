@@ -151,7 +151,7 @@ export default {
             loading,
             error,
             networkStatus,
-            refetch: () => this.$apollo.queries.query.refetch(),
+            refetch: (...args) => this.$apollo.queries.query.refetch(...args),
           }
 
           this.times = ++this.$_times
