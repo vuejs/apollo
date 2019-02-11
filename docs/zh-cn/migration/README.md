@@ -152,7 +152,7 @@ const apolloProvider = new VueApollo({
 
 // 使用 provider
 new Vue({
-  provide: apolloProvider.provide(),
+  apolloProvider,
   // ...
 })
 ```
