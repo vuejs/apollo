@@ -1596,7 +1596,14 @@ var CApolloQuery = {
             error: error,
             networkStatus: networkStatus,
             refetch: function refetch() {
-              return _this.$apollo.queries.query.refetch();
+              var _this$$apollo$queries;
+
+              return (_this$$apollo$queries = _this.$apollo.queries.query).refetch.apply(_this$$apollo$queries, arguments);
+            },
+            fetchMore: function fetchMore() {
+              var _this$$apollo$queries2;
+
+              return (_this$$apollo$queries2 = _this.$apollo.queries.query).fetchMore.apply(_this$$apollo$queries2, arguments);
             }
           };
           this.times = ++this.$_times;
