@@ -82,6 +82,7 @@ export default {
         networkStatus: 7,
         error: null,
         refetch: null,
+        fetchMore: null,
       },
       times: 0,
     }
