@@ -121,7 +121,7 @@ If `ssr` is false, we try to restore the state of the Apollo cache with `cache.r
 
 Here is an example:
 
-```js{21-31}
+```js{21-30}
 // apollo.js
 
 import Vue from 'vue'
@@ -144,7 +144,6 @@ export function createApolloClient (ssr = false) {
 
   // If on the client, recover the injected state
   if (!ssr) {
-    // If on the client, recover the injected state
     if (typeof window !== 'undefined') {
       const state = window.__APOLLO_STATE__
       if (state) {

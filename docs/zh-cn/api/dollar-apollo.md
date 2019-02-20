@@ -7,7 +7,6 @@
 - `vm`：关联的组件。
 - `queries`：组件的智能查询的数组。
 - `subscriptions`：组件的智能订阅的数组。
-- `client`：组件当前使用的 Apollo 客户端。
 - `provider`：注入的 [Apollo Provider](./apollo-provider.md)。
 - `loading`：是否至少有一个查询正在加载。
 - `skipAllQueries`：(setter) 布尔值，用于暂停或取消暂停所有智能查询。

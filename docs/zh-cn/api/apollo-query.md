@@ -9,9 +9,9 @@
 - `notifyOnNetworkStatusChange`：详见 [apollo notifyOnNetworkStatusChange](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-notifyOnNetworkStatusChange)
 - `context`：详见 [apollo context](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-context)
 - `skip`：布尔值，禁用查询获取
-- `clientId`：用于解析使用的 Apollo 客户端（在 ApolloProvider 中定义）
+- `clientId`：查询所使用的 Apollo 客户端 id（在 ApolloProvider 的 `clients` 选项中定义）
 - `deep`：布尔值，使用深度 Vue 侦听器
-- `tag`：字符串，HTML 标签名（默认值：`div`）；如果是 `undefined`，该组件将成为无渲染组件（内容不会被包装在标签中）
+- `tag`：字符串，HTML 标签名（默认值：`div`）；如果是假值（如 `null` 或 `undefined`），该组件将成为无渲染组件（内容不会被包装在标签中），在这种情况下，只有第一个子元素会被渲染
 - `debounce`：对重新获取查询结果的防抖毫秒数（例如当变量更改时）
 - `throttle`：对重新获取查询结果的节流毫秒数（例如当变量更改时）
 

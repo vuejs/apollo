@@ -8,7 +8,7 @@ Each subscription declared in the `apollo.$subscribe` option in a component resu
 - `variables`: Object or reactive function that returns an object. Each key will be mapped with a `'$'` in the GraphQL document, for example `foo` will become `$foo`.
 - `throttle`: throttle variables updates (in ms).
 - `debounce`: debounce variables updates (in ms).
-- `result(data)` is a hook called when a result is received
+- `result(data, key)` is a hook called when a result is received
 
 ## Properties
 

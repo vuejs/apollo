@@ -8,7 +8,7 @@
 - `variables`：对象或返回对象的响应式函数。每个键将用 `'$'` 映射到 GraphQL 文档中，例如 `foo` 将变为 `$foo`。
 - `throttle`：变量更新节流时间（毫秒）。
 - `debounce`：变量更新防抖时间（毫秒）。
-- `result(data)` 是收到结果时调用的钩子。
+- `result(data, key)` 是收到结果时调用的钩子。
 
 ## 属性
 
