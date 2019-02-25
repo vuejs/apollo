@@ -68,7 +68,7 @@ import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 
-// HTTP connexion to the API
+// HTTP connection to the API
 const httpLink = new HttpLink({
   // You should use an absolute URL here
   uri: 'http://localhost:3020/graphql',
