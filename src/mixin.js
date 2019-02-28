@@ -20,7 +20,7 @@ function initProvider () {
     const provided = typeof options.provide === 'function'
       ? options.provide.call(this)
       : options.provide
-    if (provided.$apolloProvider) {
+    if (provided && provided.$apolloProvider) {
       this.$apolloProvider = provided.$apolloProvider
     }
   }
