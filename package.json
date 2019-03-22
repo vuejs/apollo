@@ -74,7 +74,7 @@
     "typescript": "^3.1.3",
     "uglify-es": "^3.1.6",
     "vue": "^2.5.16",
-    "vue-property-decorator": "^7.0.0",
+    "vue-property-decorator": "^8.1.0",
     "vuepress": "^0.14.2"
   }
 }
