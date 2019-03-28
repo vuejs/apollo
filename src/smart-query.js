@@ -76,6 +76,8 @@ export default class SmartQuery extends SmartApollo {
   stop () {
     super.stop()
 
+    this.loadingDone()
+
     if (this.observer) {
       this.observer.stopPolling()
       this.observer = null
