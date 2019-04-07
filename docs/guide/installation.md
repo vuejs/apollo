@@ -65,11 +65,11 @@ In your app, create an `ApolloClient` instance:
 
 ```js
 import { ApolloClient } from 'apollo-client'
-import { HttpLink } from 'apollo-link-http'
+import { createHttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 
 // HTTP connexion to the API
-const httpLink = new HttpLink({
+const httpLink = createHttpLink({
   // You should use an absolute URL here
   uri: 'http://localhost:3020/graphql',
 })
