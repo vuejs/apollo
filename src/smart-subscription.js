@@ -34,7 +34,7 @@ export default class SmartSubscription extends SmartApollo {
         const ucb = apolloOptions.updateQuery && apolloOptions.updateQuery.bind(this.vm)
         apolloOptions.updateQuery = (...args) => {
           rcb(...args)
-          ucb && ucb(...args)
+          return ucb && ucb(...args)
         }
       }
       this.sub = this.options.linkedQuery.subscribeToMore(apolloOptions)
