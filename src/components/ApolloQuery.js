@@ -72,6 +72,11 @@ export default {
       type: String,
       default: 'div',
     },
+
+    prefetch: {
+      type: Boolean,
+      default: true,
+    },
   },
 
   data () {
@@ -123,6 +128,7 @@ export default {
         context () { return this.context },
         skip () { return this.skip },
         deep: this.deep,
+        prefetch: this.prefetch,
         manual: true,
         result (result) {
           const { errors, loading, networkStatus } = result
