@@ -202,8 +202,9 @@ apollo: {
         }
       },
       // Result hook
-      result (data) {
-        console.log(data)
+      // Don't forget to destructure `data`
+      result ({ data }) {
+        console.log(data.tagAdded)
       },
     },
   },
