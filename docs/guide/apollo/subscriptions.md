@@ -202,25 +202,14 @@ apollo: {
         }
       },
       // Result hook
-      result (data) {
-        console.log(data)
+      // Don't forget to destructure `data`
+      result ({ data }) {
+        console.log(data.tagAdded)
       },
     },
   },
 },
 ```
-
-If you want to work with the data you need to do this otherwise you'll get `undefined`:
-```
-...
-  // Result hook
-  result ({data}) {
-    console.log(data)
-    console.log(data.foo)
-  },
-...
-```
-
 
 You can then access the subscription with `this.$apollo.subscriptions.<name>`.
 
