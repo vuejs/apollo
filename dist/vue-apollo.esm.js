@@ -1786,7 +1786,7 @@ function initProvider() {
     // Temporary retro-compatibility
     var provided = typeof options.provide === 'function' ? options.provide.call(this) : options.provide;
 
-    if (provided.$apolloProvider) {
+    if (provided && provided.$apolloProvider) {
       this.$apolloProvider = provided.$apolloProvider;
     }
   }
