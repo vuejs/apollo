@@ -32,10 +32,10 @@ interface ExtendableVueApolloQueryOptions<V, R> extends _WatchQueryOptions {
   error?: ErrorHandler<V>;
   loadingKey?: string;
   watchLoading?: WatchLoading<V>;
-  skip?: (this: ApolloVueThisType<V>) => boolean | boolean;
+  skip?: ((this: ApolloVueThisType<V>) => boolean) | boolean;
   manual?: boolean;
   subscribeToMore?: ApolloVueSubscribeToMoreOptions<V> | ApolloVueSubscribeToMoreOptions<V>[];
-  prefetch?: (context: any) => any | boolean;
+  prefetch?: ((context: any) => any) | boolean;
   deep?: boolean;
 }
 export interface VueApolloQueryOptions<V, R> extends ExtendableVueApolloQueryOptions<V, R> {

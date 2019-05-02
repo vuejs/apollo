@@ -1,9 +1,10 @@
 import { addGqlError } from '../../lib/utils'
+import gql from 'graphql-tag'
 
 export default {
   props: {
     mutation: {
-      type: Object,
+      type: [Function, Object],
       required: true,
     },
 
@@ -49,8 +50,14 @@ export default {
     mutate (options) {
       this.loading = true
       this.error = null
+
+      let mutation = this.mutation
+      if (typeof mutation === 'function') {
+        mutation = mutation(gql)
+      }
+
       this.$apollo.mutate({
-        mutation: this.mutation,
+        mutation,
         client: this.clientId,
         variables: this.variables,
         optimisticResponse: this.optimisticResponse,

@@ -1,3 +1,5 @@
+import gql from 'graphql-tag'
+
 let uid = 0
 
 export default {
@@ -10,7 +12,7 @@ export default {
 
   props: {
     document: {
-      type: Object,
+      type: [Function, Object],
       required: true,
     },
 
@@ -52,8 +54,13 @@ export default {
     refresh () {
       this.destroy()
 
+      let document = this.document
+      if (typeof document === 'function') {
+        document = document(gql)
+      }
+
       this.$_sub = this.getDollarApollo().addSmartSubscription(this.$_key, {
-        document: this.document,
+        document,
         variables: this.variables,
         updateQuery: this.updateQuery,
         linkedQuery: this.getApolloQuery(),

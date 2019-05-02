@@ -33,7 +33,7 @@
     "start-server-and-test": "^1.7.9",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
-    "vue-cli-plugin-apollo": "^0.18.0",
+    "vue-cli-plugin-apollo": "^0.20.0",
     "vue-template-compiler": "^2.5.16"
   },
   "browserslist": [

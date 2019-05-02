@@ -2,7 +2,7 @@
 
 ## Props
 
-- `query`: GraphQL query (transformed by `graphql-tag`)
+- `query`: GraphQL query (transformed by `graphql-tag`) or a function that receives the `gql` tag as argument and should return the transformed query
 - `variables`: Object of GraphQL variables
 - `fetchPolicy`: See [apollo fetchPolicy](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-fetchPolicy)
 - `pollInterval`: See [apollo pollInterval](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-pollInterval)
@@ -14,6 +14,7 @@
 - `tag`: String HTML tag name (default: `div`); if falsy (for example `null` or `undefined`), the component will be renderless (the content won't be wrapped in a tag), in this case, only the first child will be rendered
 - `debounce`: Number of milliseconds for debouncing refetches (for example when the variables are changed)
 - `throttle`: Number of milliseconds for throttling refetches (for example when the variables are changed)
+- `prefetch`: If `false`, will skip prefetching during SSR
 
 ## Scoped slot
 

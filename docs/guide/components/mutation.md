@@ -6,18 +6,26 @@ Here is an example:
 
 ```vue
 <ApolloMutation
-  :mutation="require('@/graphql/userLogin.gql')"
+  :mutation="gql => gql`
+    mutation DoStuff ($name: String!) {
+      someWork (name: $name) {
+        success
+        timeSpent
+      }
+    }
+  `"
   :variables="{
-    email,
-    password,
+    name
   }"
   @done="onDone"
 >
-  <template slot-scope="{ mutate, loading, error }">
+  <template v-slot="{ mutate, loading, error }">
     <button :disabled="loading" @click="mutate()">Click me</button>
     <p v-if="error">An error occured: {{ error }}</p>
   </template>
 </ApolloMutation>
 ```
 
-See [API Reference](../../api/apollo-mutation.md).
+See [ApolloQuery](./query.md) to learn how to write GraphQL queries in the template.
+
+See [API Reference](../../api/apollo-mutation.md) for all the available options.

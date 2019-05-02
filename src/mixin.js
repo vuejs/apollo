@@ -20,7 +20,7 @@ function initProvider () {
     const provided = typeof options.provide === 'function'
       ? options.provide.call(this)
       : options.provide
-    if (provided.$apolloProvider) {
+    if (provided && provided.$apolloProvider) {
       this.$apolloProvider = provided.$apolloProvider
     }
   }
@@ -91,7 +91,7 @@ function launch () {
       if (key.charAt(0) !== '$') {
         let options = apollo[key]
         const smart = this.$apollo.addSmartQuery(key, options)
-        if (options.prefetch !== false && apollo.$prefetch !== false) {
+        if (options.prefetch !== false && apollo.$prefetch !== false && !smart.skip) {
           this.$_apolloPromises.push(smart.firstRun)
         }
       }

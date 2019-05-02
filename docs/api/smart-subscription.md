@@ -27,7 +27,7 @@ this.$apollo.subscriptions.users.skip = true
 Stops and restarts the query:
 
 ```js
-this.$apollo.subscriptions.users.restart()
+this.$apollo.subscriptions.users.refresh()
 ```
 
 ### start

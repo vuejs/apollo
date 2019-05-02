@@ -65,11 +65,11 @@ In your app, create an `ApolloClient` instance:
 
 ```js
 import { ApolloClient } from 'apollo-client'
-import { HttpLink } from 'apollo-link-http'
+import { createHttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 
 // HTTP connection to the API
-const httpLink = new HttpLink({
+const httpLink = createHttpLink({
   // You should use an absolute URL here
   uri: 'http://localhost:3020/graphql',
 })
@@ -115,3 +115,24 @@ new Vue({
 ```
 
 You are now ready to use Apollo in your components!
+
+## IDE integration
+
+### Visual Studio Code
+
+If you are using VS Code, it's recommended to install the [Apollo GraphQL extension](https://marketplace.visualstudio.com/items?itemName=apollographql.vscode-apollo).
+
+Then configure it by creating a `apollo.config.js` file in the root folder of the Vue project:
+
+```js
+// apollo.config.js
+module.exports = {
+  client: {
+    service: {
+      name: 'my-app',
+      // URL to the GraphQL API
+      url: 'http://localhost:3000/graphql',
+    },
+  },
+}
+```
