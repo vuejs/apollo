@@ -87,7 +87,7 @@ export default {
 </template>
 ```
 
-If you are not using `vue-cli-plugin-apollo`, you need to configure [vue-loader](https://vue-loader.vuejs.org) to transpile the string template tag. `vue-loader` uses [Bublé](https://buble.surge.sh/guide/) under-the-hood to transpile code inside component templates. We need to add the `dangerousTaggedTemplateString` transform to Bublé for `gql` to work. For example, with Vue CLI:
+If you are not using [vue-cli-plugin-apollo](https://github.com/Akryum/vue-cli-plugin-apollo) (`v0.20.0+`), you need to configure [vue-loader](https://vue-loader.vuejs.org) to transpile the string template tag. `vue-loader` uses [Bublé](https://buble.surge.sh/guide/) under-the-hood to transpile code inside component templates. We need to add the `dangerousTaggedTemplateString` transform to Bublé for `gql` to work. For example, with Vue CLI:
 
 ```js
 // vue.config.js
