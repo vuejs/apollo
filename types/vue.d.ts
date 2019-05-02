@@ -12,6 +12,7 @@ declare module 'vue/types/options' {
 
 declare module 'vue/types/vue' {
   interface Vue {
+    $apolloProvider?: ApolloProvider
     $apollo: DollarApollo<any>;
   }
 }
