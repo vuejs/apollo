@@ -53,6 +53,7 @@ export interface VueApolloMutationOptions<V, R> extends MutationOptions<R> {
 export interface VueApolloSubscriptionOptions<V, R> extends SubscriptionOptions {
   query: DocumentNode;
   variables?: VariableFn<V>;
+  skip?: (this: ApolloVueThisType<V>) => boolean | boolean;
   result?: (this: V, data: R) => void;
 }
 
