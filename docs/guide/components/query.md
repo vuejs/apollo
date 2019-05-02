@@ -165,6 +165,59 @@ An alternative way of using the component is by creating separate `.gql` files. 
 </template>
 ```
 
+## Query operations
+
+You can access the smart query object with the `query` slot prop. Here is an example component paginating data with `fetchMore`:
+
+```vue
+<template>
+  <ApolloQuery
+    :query="/* query */"
+    :variables="{
+      limit: $options.pageSize
+    }"
+    v-slot="{ result: { loading, error, data }, query }"
+  >
+    <!-- Display data here -->
+    <button v-if="hasMore" @click="loadMore(query)">Load more</button>
+  </ApolloQuery>
+</template>
+
+<script>
+export default {
+  pageSize: 10,
+
+  data: {
+    return {
+      page: 1,
+      hasMore: true
+    }
+  },
+
+  methods: {
+    async loadMore (query) {
+      await query.fetchMore({
+        variables: {
+          offset: this.page++ * this.$options.pageSize
+        },
+        updateQuery: (prev, { fetchMoreResult }) => {
+          if (!fetchMoreResult || fetchMoreResult.product.length === 0) {
+            this.hasMore = false
+            return prev
+          }
+          return Object.assign({}, prev, {
+            product: [...prev.product, ...fetchMoreResult.product]
+          })
+        }
+      })
+    }
+  }
+}
+</script>
+```
+
+See the [API reference](../../api/smart-query.md#methods) for all possible smart query methods.
+
 ## Using fragments
 
 Fragments are useful to share parts of GraphQL documents in other documents to retrieve the same data consistently and also to not copy-paste code.
