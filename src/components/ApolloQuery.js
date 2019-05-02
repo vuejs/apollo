@@ -1,3 +1,5 @@
+import gql from 'graphql-tag'
+
 function isDataFilled (data) {
   return Object.keys(data).length > 0
 }
@@ -14,7 +16,7 @@ export default {
 
   props: {
     query: {
-      type: Object,
+      type: [Function, Object],
       required: true,
     },
 
@@ -118,7 +120,12 @@ export default {
 
     query () {
       return {
-        query () { return this.query },
+        query () {
+          if (typeof this.query === 'function') {
+            return this.query(gql)
+          }
+          return this.query
+        },
         variables () { return this.variables },
         fetchPolicy: this.fetchPolicy,
         pollInterval: this.pollInterval,

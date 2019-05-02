@@ -12,8 +12,18 @@ Here is an example:
 <template>
   <ApolloQuery :query="...">
     <ApolloSubscribeToMore
-      :document="require('../gql/MessageAdded.gql')"
-      :variables="{ channel }"
+      :document="gql => gql`
+        subscription messageChanged ($channelId: ID!) {
+          messageAdded (channelId: $channelId) {
+            type
+            message {
+              id
+              text
+            }
+          }
+        }
+      `"
+      :variables="{ channelId }"
       :updateQuery="onMessageAdded"
     />
 
@@ -44,7 +54,9 @@ export default {
 </script>
 ```
 
-See [API Reference](../../api/apollo-subscribe-to-more.md).
+See [ApolloQuery](./query.md) to learn how to write GraphQL queries in the template.
+
+See [API Reference](../../api/apollo-subscribe-to-more.md) for all the available options.
 
 ## Examples of `updateQuery`
 

@@ -4,34 +4,26 @@ Those are components just like any others. They take a GraphQL document in their
 
 The benefit is that you can use those components in the template directly instead of using the `apollo` option of your component. In some cases you don't even need to add a script part at all in your `.vue`! This is all even more declarative.
 
-Here is a quick example of an `ApolloQuery` in a template:
+Here is a quick example of an [ApolloQuery](./query.md) in a template:
 
 ```vue
 <template>
-  <div class="users-list">
-    <!-- Apollo Query -->
-    <ApolloQuery :query="require('@/graphql/users.gql')">
-      <!-- The result will automatically updated -->
-      <template slot-scope="{ result: { data, loading } }">
-        <!-- Some content -->
-        <div v-if="loading">Loading...</div>
-        <ul v-else>
-          <li v-for="user of data.users" class="user">
-            {{ user.name }}
-          </li>
-        </ul>
-      </template>
-    </ApolloQuery>
-  </div>
+  <!-- Apollo Query -->
+  <ApolloQuery :query="/* some query */">
+    <!-- The result will automatically updated -->
+    <template slot-scope="{ result: { data, loading } }">
+      <!-- Some content -->
+      <div v-if="loading">Loading...</div>
+      <ul v-else>
+        <li v-for="user of data.users" class="user">
+          {{ user.name }}
+        </li>
+      </ul>
+    </template>
+  </ApolloQuery>
 </template>
 
 <!-- No need for script -->
-
-<style scoped>
-.user {
-  list-style: none;
-  padding: 12px;
-  color: blue;
-}
-</style>
 ```
+
+See [ApolloQuery](./query.md) to learn how to write GraphQL queries in the template.

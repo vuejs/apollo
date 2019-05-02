@@ -2,7 +2,7 @@
 
 ## Props
 
-- `mutation`: GraphQL query (transformed by `graphql-tag`)
+- `mutation`: GraphQL query (transformed by `graphql-tag`) or a function that receives the `gql` tag as argument and should return the transformed query
 - `variables`: Object of GraphQL variables
 - `optimisticResponse`: See [optimistic UI](https://www.apollographql.com/docs/react/features/optimistic-ui.html)
 - `update`: See [updating cache after mutation](https://www.apollographql.com/docs/react/api/react-apollo.html#graphql-mutation-options-update)

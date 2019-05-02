@@ -2,7 +2,7 @@
 
 ## Props
 
-- `query`: GraphQL query (transformed by `graphql-tag`)
+- `query`: GraphQL query (transformed by `graphql-tag`) or a function that receives the `gql` tag as argument and should return the transformed query
 - `variables`: Object of GraphQL variables
 - `fetchPolicy`: See [apollo fetchPolicy](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-fetchPolicy)
 - `pollInterval`: See [apollo pollInterval](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-pollInterval)
