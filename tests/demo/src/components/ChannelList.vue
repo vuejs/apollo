@@ -1,6 +1,7 @@
 <script>
 import UserCurrent from './UserCurrent.vue'
 import MockSendMessage from './MockSendMessage.vue'
+import gql from 'graphql-tag'
 
 export default {
   name: 'ChannelList',
@@ -9,6 +10,15 @@ export default {
     UserCurrent,
     MockSendMessage,
   },
+
+  fragments: {
+    channel: gql`
+      fragment channel on Channel {
+        id
+        name
+      }
+    `,
+  },
 }
 </script>
 
@@ -16,7 +26,14 @@ export default {
   <div class="channel-list">
     <UserCurrent />
 
-    <ApolloQuery :query="require('../graphql/channels.gql')">
+    <ApolloQuery :query="gql => gql`
+      query channels {
+        channels {
+          ...channel
+        }
+      }
+      ${$options.fragments.channel}
+    `">
       <template slot-scope="{ result: { data, loading } }">
         <div v-if="loading" class="loading">Loading...</div>
         <div v-else-if="data" class="channels">
