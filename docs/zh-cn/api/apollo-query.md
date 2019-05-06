@@ -2,7 +2,7 @@
 
 ## Props
 
-- `query`：GraphQL 查询（由 `graphql-tag` 转换）
+- `query`：GraphQL 查询（由 `graphql-tag` 转换）或一个接收 `gql` 标签作为参数并返回转换后的查询的函数
 - `variables`：GraphQL 变量对象
 - `fetchPolicy`：详见 [apollo fetchPolicy](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-fetchPolicy)
 - `pollInterval`：详见 [apollo pollInterval](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-pollInterval)
@@ -14,6 +14,7 @@
 - `tag`：字符串，HTML 标签名（默认值：`div`）；如果是假值（如 `null` 或 `undefined`），该组件将成为无渲染组件（内容不会被包装在标签中），在这种情况下，只有第一个子元素会被渲染
 - `debounce`：对重新获取查询结果的防抖毫秒数（例如当变量更改时）
 - `throttle`：对重新获取查询结果的节流毫秒数（例如当变量更改时）
+- `prefetch`：如为 `false`，将跳过 SSR 期间的预取
 
 ## 作用域插槽
 

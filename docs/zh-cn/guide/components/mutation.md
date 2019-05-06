@@ -6,18 +6,26 @@
 
 ```vue
 <ApolloMutation
-  :mutation="require('@/graphql/userLogin.gql')"
+  :mutation="gql => gql`
+    mutation DoStuff ($name: String!) {
+      someWork (name: $name) {
+        success
+        timeSpent
+      }
+    }
+  `"
   :variables="{
-    email,
-    password,
+    name
   }"
   @done="onDone"
 >
-  <template slot-scope="{ mutate, loading, error }">
+  <template v-slot="{ mutate, loading, error }">
     <button :disabled="loading" @click="mutate()">Click me</button>
     <p v-if="error">An error occured: {{ error }}</p>
   </template>
 </ApolloMutation>
 ```
 
-更多参见 [API 参考](../../api/apollo-mutation.md).
+在 [ApolloQuery](./query.md) 查看如何在模板中编写 GraphQL 查询。
+
+在 [API 参考](../../api/apollo-mutation.md) 查看所有可用的选项。
