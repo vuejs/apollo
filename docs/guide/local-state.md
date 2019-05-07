@@ -1,41 +1,11 @@
 # Local state
 
-If you need to manage local data, you can do so with [apollo-link-state](https://github.com/apollographql/apollo-link-state) and the `@client` directive:
+## Why use Apollo local state management?
 
-```js
-export default {
-  apollo: {
-    hello: gql`
-      query {
-        hello @client {
-          msg
-        }
-      }
-    `
-  },
-  mounted () {
-    // mutate the hello message
-    this.$apollo
-      .mutate({
-        mutation: gql`
-          mutation($msg: String!) {
-            updateHello(message: $msg) @client
-          }
-        `,
-        variables: {
-          msg: 'hello from link-state!'
-        }
-      })
-  }
-}
-```
+When you perform GraphQL queries with Apollo, the results of API calls will be stored in **Apollo cache**. Now imagine you also need to store some kind of a local application state and make it available for different components. Usually, in Vue we do with [Vuex](TODO). But having both Apollo and Vuex will mean you store your data in two different places so you have _two sources of truth_.
 
-This is an increasingly popular way of managing client-side state. Some projects even use it as a replacement of Vuex (or other Flux-inspired solutions).
+Good thing is Apollo has a mechanism of storing local application data to cache. Previously, it used an [apollo-link-state](https://github.com/apollographql/apollo-link-state) library for this. Since Apollo 2.5 release this functionality was included to Apollo core.
 
-## Examples
-
-- [Example project](https://codesandbox.io/s/zqqj82396p) (by @chriswingler)
-- [Todo App](https://codesandbox.io/s/x2jr96r8pp) (by @NikkitaFTW)
-- [Todo App - Expanded](https://codesandbox.io/s/k3621oko23) (by @ScottMolinari fork of @NikkitaFTW's)
+## Initializing an Apollo cache
 
 ---
