@@ -109,4 +109,141 @@ cache.writeData({
 
 We've just added an array of `todoItems` to our cache data and we defined that every item has a type name of `Item` (specified in our local schema).
 
-## Query local data from Apollo cache
+## Query local data
+
+Querying local cache is very similar to [sending GraphQL queries to remote server](apollo/queries.md). First, we need to create a query:
+
+```js
+// App.vue
+
+import gql from 'graphql-tag';
+
+const todoItemsQuery = gql`
+  {
+    todoItems @client {
+      id
+      text
+      done
+    }
+  }
+`;
+```
+
+The main difference with queries to remote API is `@client` directive. This directive specifies that this query should not be executed against remote GraqhQL API. Instead, Apollo client should fetch results from the local cache.
+
+Now, we can use this query in our Vue component as a usual Apollo query:
+
+```js
+// App.vue
+
+apollo: {
+  todoItems: {
+    query: todoItemsQuery
+  }
+},
+```
+
+## Change local data with mutations
+
+We have two different ways to change the local data:
+
+- direct write with `writeData` method as we did during [cache initialization](#initializing-an-apollo-cache);
+- calling a GraphQL mutation.
+
+Let's add some mutations to our [local GraphQL schema](#creating-a-local-schema):
+
+```js{10-14}
+// main.js
+
+export const typeDefs = gql`
+  type Item {
+    id: ID!
+    text: String!
+    done: Boolean!
+  }
+
+  type Mutation {
+    changeItem(id: ID!): Boolean
+    addItem(text: String!): Item
+  }
+`;
+```
+
+The `changeItem` mutation will set the Boolean `done` property of the certain item to the opposite. Let's create it using `gql`:
+
+```js
+// App.vue
+
+const checkItemMutation = gql`
+  mutation($id: ID!) {
+    checkItem(id: $id) @client
+  }
+`;
+```
+
+We defined a _local_ mutation (because we have a `@client` directive here) that will accept a unique identifier as a parameter. Now, we need a _resolver_: a function that resolves a value for a type or field in a schema.
+
+In our case, resolver will define what changes do we want to make to our local Apollo cache when we have a certain mutation. Local resolvers have the same function signature as remote resolvers (`(parent, args, context, info) => data`). In fact, we will need only args (arguments passed to the mutation) and context (we will need its cache property to read and write data).
+
+Let's add a resolver to our main file:
+
+```js
+// main.js
+
+const resolvers = {
+  Mutation: {
+    checkItem: (_, { id }, { cache }) => {
+      const data = cache.readQuery({ query: todoItemsQuery });
+      const currentItem = data.todoItems.find(item => item.id === id);
+      currentItem.done = !currentItem.done;
+      cache.writeQuery({ query: todoItemsQuery, data });
+      return currentItem.done;
+    },
+};
+```
+
+What are we doing here?
+
+1. read the `todoItemsQuery` from our cache to see what `todoItems` do we have now;
+2. looking for an item with given id;
+3. change found item `done` property to opposite;
+4. write our changed `todoItems` back to cache;
+5. return the `done` property as a mutation result.
+
+Now we need to replace an empty `resolvers` object in Apollo client options with newly created `resolvers`:
+
+```js{17}
+// main.js
+
+const resolvers = {
+  Mutation: {
+    checkItem: (_, { id }, { cache }) => {
+      const data = cache.readQuery({ query: todoItemsQuery });
+      const currentItem = data.todoItems.find(item => item.id === id);
+      currentItem.done = !currentItem.done;
+      cache.writeQuery({ query: todoItemsQuery, data });
+      return currentItem.done;
+    },
+};
+
+const apolloClient = new ApolloClient({
+  cache,
+  typeDefs,
+  resolvers,
+});
+```
+
+After this, we can use the mutation in our Vue component like normal [mutations](apollo/mutations.md)
+
+```js
+// App.vue
+
+methods: {
+  checkItem(id) {
+    this.$apollo.mutate({
+      mutation: checkItemMutation,
+      variables: { id }
+    });
+  },
+}
+```
