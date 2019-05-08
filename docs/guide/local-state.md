@@ -2,7 +2,7 @@
 
 ## Why use Apollo local state management?
 
-When you perform GraphQL queries with Apollo, the results of API calls will be stored in **Apollo cache**. Now imagine you also need to store some kind of a local application state and make it available for different components. Usually, in Vue application we can achieve this with [Vuex](TODO). But having both Apollo and Vuex will mean you store your data in two different places so you have _two sources of truth_.
+When you perform GraphQL queries with Apollo, the results of API calls will be stored in **Apollo cache**. Now imagine you also need to store some kind of a local application state and make it available for different components. Usually, in Vue application we can achieve this with [Vuex](https://vuex.vuejs.org/). But having both Apollo and Vuex will mean you store your data in two different places so you have _two sources of truth_.
 
 Good thing is Apollo has a mechanism of storing local application data to cache. Previously, it used an [apollo-link-state](https://github.com/apollographql/apollo-link-state) library for this. Since Apollo 2.5 release this functionality was included to Apollo core.
 
@@ -55,7 +55,38 @@ As you can see, we've added also an empty `resolvers` object here: if we don't a
 
 ## Extending a remote GraphQL schema locally
 
-_TODO_
+You can not only create a local schema from scratch but also add a local **virtual fields** to your existing remote schema. These fields only exist on the client and are useful for decorating server data with local state.
+
+Imagine we have a type `User` in our remote schema:
+
+```js
+type User {
+  name: String!
+  age: Int!
+}
+```
+
+And we want to add a local-only property to `User`:
+
+```js
+export const schema = gql`
+  extend type User {
+    twitter: String
+  }
+`;
+```
+
+Now, when querying a user, we will need to specify `twitter` field is local:
+
+```js
+const userQuery = gql`
+  user {
+    name
+    age
+    twitter @client
+  }
+`;
+```
 
 ## Initializing an Apollo cache
 
