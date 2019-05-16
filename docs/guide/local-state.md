@@ -194,13 +194,13 @@ export const typeDefs = gql`
   }
 
   type Mutation {
-    changeItem(id: ID!): Boolean
+    checkItem(id: ID!): Boolean
     addItem(text: String!): Item
   }
 `;
 ```
 
-The `changeItem` mutation will set the Boolean `done` property of the certain item to the opposite. Let's create it using `gql`:
+The `checkItem` mutation will set the Boolean `done` property of the certain item to the opposite. Let's create it using `gql`:
 
 ```js
 // App.vue
