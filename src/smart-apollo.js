@@ -10,6 +10,7 @@ export default class SmartApollo {
     this.initialOptions = options
     this.options = Object.assign({}, options)
     this._skip = false
+    this._pollInterval = null
     this._watchers = []
     this._destroyed = false
 
@@ -29,6 +30,28 @@ export default class SmartApollo {
     } else {
       this._skip = true
     }
+
+    if(typeof this.options.pollInterval === 'function') {
+      this._pollWatcher = this.vm.$watch(this.options.pollInterval.bind(this.vm),this.pollIntervalChanged.bind(this), {immediate:true})
+    }
+  }
+
+  pollIntervalChanged (value, oldValue) {
+    //If undefined it is initialized first time.
+    if(typeof oldValue === 'undefined' && value.pollInterval !== null) {
+      this.startPolling(value.pollInterval)
+      return
+    }
+
+    if (value.pollInterval !== oldValue.pollInterval) {
+      this.pollInterval = value.pollInterval
+
+      if(value.pollInterval == null) {
+        this.stopPolling()
+      } else {
+        this.startPolling(value.pollInterval)
+      }
+    }
   }
 
   skipChanged (value, oldValue) {
@@ -36,6 +59,14 @@ export default class SmartApollo {
       this.skip = value
     }
   }
+
+  get pollInterval() {
+    return this._pollInterval
+  }  
+
+  set pollInterval(value) {
+    this._pollInterval = value
+  }  
 
   get skip () {
     return this._skip
