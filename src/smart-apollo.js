@@ -37,12 +37,6 @@ export default class SmartApollo {
   }
 
   pollIntervalChanged (value, oldValue) {
-    //If oldValue is undefined, then apollo object is 'initialized'.
-    if(typeof oldValue === 'undefined' && value !== null) {
-      this.startPolling(value)
-      return
-    }
-
     if (value !== oldValue) {
       this.pollInterval = value
 
