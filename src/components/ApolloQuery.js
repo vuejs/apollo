@@ -45,6 +45,11 @@ export default {
       default: undefined,
     },
 
+    update: {
+      type: Function,
+      default: () => data => data,
+    },
+
     skip: {
       type: Boolean,
       default: false,
@@ -158,8 +163,11 @@ export default {
             this.$_previousData = result.data
           }
 
+          const dataNotEmpty = isDataFilled(data)
+
           this.result = {
-            data: isDataFilled(data) ? data : undefined,
+            data: dataNotEmpty ? this.update(data) : undefined,
+            fullData: dataNotEmpty ? data : undefined,
             loading,
             error,
             networkStatus,

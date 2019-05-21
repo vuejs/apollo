@@ -8,6 +8,7 @@
 - `pollInterval`: See [apollo pollInterval](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-pollInterval)
 - `notifyOnNetworkStatusChange`: See [apollo notifyOnNetworkStatusChange](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-notifyOnNetworkStatusChange)
 - `context`: See [apollo context](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-context)
+- `update`: Function to transform the result `data`, useful for picking a specific part of the response. Example: `:update="data => data.user.messages"`
 - `skip`: Boolean disabling query fetching
 - `clientId`: id of the Apollo Client used by the query (defined in ApolloProvider `clients` option)
 - `deep`: Boolean to use deep Vue watchers
@@ -19,7 +20,8 @@
 ## Scoped slot
 
 - `result`: Apollo Query result
-  - `result.data`: Data returned by the query
+  - `result.data`: Data returned by the query (can be transformed by the `update` prop)
+  - `result.fullData`: Raw data returned by the query (not transformed by the `updated` prop)
   - `result.loading`: Boolean indicating that a request is in flight
   - `result.error`: Eventual error for the current result
   - `result.networkStatus`: See [apollo networkStatus](https://www.apollographql.com/docs/react/basics/queries.html#graphql-query-data-networkStatus)
