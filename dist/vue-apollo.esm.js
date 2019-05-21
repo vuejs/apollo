@@ -743,10 +743,12 @@ function (_SmartApollo) {
 
     _defineProperty(_assertThisInitialized(_this), "_loading", false);
 
-    _this.firstRun = new Promise(function (resolve, reject) {
-      _this._firstRunResolve = resolve;
-      _this._firstRunReject = reject;
-    });
+    if (vm.$isServer) {
+      _this.firstRun = new Promise(function (resolve, reject) {
+        _this._firstRunResolve = resolve;
+        _this._firstRunReject = reject;
+      });
+    }
 
     if (_this.vm.$isServer) {
       _this.options.fetchPolicy = 'network-only';
@@ -1044,9 +1046,9 @@ function (_SmartApollo) {
     }
   }, {
     key: "firstRunReject",
-    value: function firstRunReject() {
+    value: function firstRunReject(error) {
       if (this._firstRunReject) {
-        this._firstRunReject();
+        this._firstRunReject(error);
 
         this._firstRunReject = null;
       }
@@ -4596,6 +4598,12 @@ var CApolloQuery = {
       type: Object,
       "default": undefined
     },
+    update: {
+      type: Function,
+      "default": function _default(data) {
+        return data;
+      }
+    },
     skip: {
       type: Boolean,
       "default": false
@@ -4651,6 +4659,9 @@ var CApolloQuery = {
       this.$apollo.queries.query.setOptions({
         notifyOnNetworkStatusChange: value
       });
+    },
+    '$data.$apolloData.loading': function $data$apolloDataLoading(value) {
+      this.$emit('loading', !!value);
     }
   },
   apollo: {
@@ -4708,8 +4719,10 @@ var CApolloQuery = {
             this.$_previousData = _result.data;
           }
 
+          var dataNotEmpty = isDataFilled(data);
           this.result = {
-            data: isDataFilled(data) ? data : undefined,
+            data: dataNotEmpty ? this.update(data) : undefined,
+            fullData: dataNotEmpty ? data : undefined,
             loading: loading,
             error: error,
             networkStatus: networkStatus
@@ -4849,6 +4862,11 @@ var CApolloMutation = {
       loading: false,
       error: null
     };
+  },
+  watch: {
+    loading: function loading(value) {
+      this.$emit('loading', value);
+    }
   },
   methods: {
     mutate: function mutate(options) {
@@ -4999,10 +5017,13 @@ function launch() {
       if (key.charAt(0) !== '$') {
         var options = apollo[key];
         var smart = this.$apollo.addSmartQuery(key, options);
-        options = utils_5(options, this);
 
-        if (options.prefetch !== false && apollo.$prefetch !== false && !smart.skip) {
-          this.$_apolloPromises.push(smart.firstRun);
+        if (this.$isServer) {
+          options = utils_5(options, this);
+
+          if (options.prefetch !== false && apollo.$prefetch !== false && !smart.skip) {
+            this.$_apolloPromises.push(smart.firstRun);
+          }
         }
       }
     }
@@ -5111,7 +5132,7 @@ function install(Vue, options) {
 }
 ApolloProvider.install = install; // eslint-disable-next-line no-undef
 
-ApolloProvider.version = "3.0.0-beta.29"; // Apollo provider
+ApolloProvider.version = "3.0.0-beta.30"; // Apollo provider
 
 var ApolloProvider$1 = ApolloProvider; // Components
 
