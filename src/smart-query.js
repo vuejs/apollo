@@ -24,10 +24,12 @@ export default class SmartQuery extends SmartApollo {
 
     super(vm, key, options, false)
 
-    this.firstRun = new Promise((resolve, reject) => {
-      this._firstRunResolve = resolve
-      this._firstRunReject = reject
-    })
+    if (vm.$isServer) {
+      this.firstRun = new Promise((resolve, reject) => {
+        this._firstRunResolve = resolve
+        this._firstRunReject = reject
+      })
+    }
 
     if (this.vm.$isServer) {
       this.options.fetchPolicy = 'network-only'
@@ -291,9 +293,9 @@ export default class SmartQuery extends SmartApollo {
     }
   }
 
-  firstRunReject () {
+  firstRunReject (error) {
     if (this._firstRunReject) {
-      this._firstRunReject()
+      this._firstRunReject(error)
       this._firstRunReject = null
     }
   }
