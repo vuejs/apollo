@@ -111,8 +111,8 @@ module.exports = {
               collapsable: false,
               children: [
                 'apollo-query',
-                'apollo-subscribe-to-more',
                 'apollo-mutation',
+                'apollo-subscribe-to-more',
               ],
             },
           ],

@@ -1,5 +1,29 @@
 # ApolloMutation component
 
+Example:
+
+```vue
+<ApolloMutation
+  :mutation="gql => gql`
+    mutation DoStuff ($name: String!) {
+      someWork (name: $name) {
+        success
+        timeSpent
+      }
+    }
+  `"
+  :variables="{
+    name
+  }"
+  @done="onDone"
+>
+  <template v-slot="{ mutate, loading, error }">
+    <button :disabled="loading" @click="mutate()">Click me</button>
+    <p v-if="error">An error occured: {{ error }}</p>
+  </template>
+</ApolloMutation>
+```
+
 ## Props
 
 - `mutation`: GraphQL query (transformed by `graphql-tag`) or a function that receives the `gql` tag as argument and should return the transformed query

@@ -1,5 +1,36 @@
 # ApolloQuery component
 
+Example:
+
+```vue
+<ApolloQuery
+  :query="gql => gql`
+    query MyHelloQuery ($name: String!) {
+      hello (name: $name)
+    }
+  `"
+  :variables="{ name }"
+>
+  <template v-slot="{ result: { error, data }, isLoading }">
+    <!-- Loading -->
+    <div v-if="isLoading" class="loading apollo">Loading...</div>
+
+    <!-- Error -->
+    <div v-else-if="error" class="error apollo">An error occured</div>
+
+    <!-- Result -->
+    <div v-else-if="data" class="result apollo">{{ data.hello }}</div>
+
+    <!-- No result -->
+    <div v-else class="no-result apollo">No result :(</div>
+  </template>
+</ApolloQuery>
+```
+
+::: warning
+To enable support of `gql` string tag in Vue templates, see the necessary setup in [the guide](../guide/components/query.md#tag-setup).
+:::
+
 ## Props
 
 - `query`: GraphQL query (transformed by `graphql-tag`) or a function that receives the `gql` tag as argument and should return the transformed query
@@ -22,10 +53,10 @@
 - `result`: Apollo Query result
   - `result.data`: Data returned by the query (can be transformed by the `update` prop)
   - `result.fullData`: Raw data returned by the query (not transformed by the `updated` prop)
-  - `result.loading`: Boolean indicating that a request is in flight
+  - `result.loading`: Boolean indicating that a request is in flight (you may need to set `notifyOnNetworkStatusChange` prop for it to change)
   - `result.error`: Eventual error for the current result
   - `result.networkStatus`: See [apollo networkStatus](https://www.apollographql.com/docs/react/basics/queries.html#graphql-query-data-networkStatus)
-- `query`: Smart Query associated with the component
+- `query`: Smart Query associated with the component. It's useful to do some operations like `query.refetch()` or `query.fetchMore()`.
 - `isLoading`: Smart Query loading state
 - `gqlError`: first GraphQL error if any
 - `times`: number of times the result was updated
