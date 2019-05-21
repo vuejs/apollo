@@ -47,7 +47,7 @@ export default {
 
     update: {
       type: Function,
-      default: () => data => data,
+      default: data => data,
     },
 
     skip: {
