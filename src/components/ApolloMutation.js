@@ -46,6 +46,12 @@ export default {
     }
   },
 
+  watch: {
+    loading (value) {
+      this.$emit('loading', value)
+    },
+  },
+
   methods: {
     mutate (options) {
       this.loading = true

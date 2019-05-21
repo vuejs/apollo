@@ -116,6 +116,10 @@ export default {
         notifyOnNetworkStatusChange: value,
       })
     },
+
+    '$data.$apolloData.loading' (value) {
+      this.$emit('loading', !!value)
+    },
   },
 
   apollo: {

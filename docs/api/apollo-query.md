@@ -65,3 +65,4 @@ To enable support of `gql` string tag in Vue templates, see the necessary setup 
 
 - `result(resultObject)`
 - `error(errorObject)`
+- `loading(boolean)`

@@ -45,3 +45,4 @@ Example:
 
 - `done(resultObject)`
 - `error(errorObject)`
+- `loading(boolean)`
