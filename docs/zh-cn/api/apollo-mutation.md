@@ -1,5 +1,29 @@
 # ApolloMutation 组件
 
+示例：
+
+```vue
+<ApolloMutation
+  :mutation="gql => gql`
+    mutation DoStuff ($name: String!) {
+      someWork (name: $name) {
+        success
+        timeSpent
+      }
+    }
+  `"
+  :variables="{
+    name
+  }"
+  @done="onDone"
+>
+  <template v-slot="{ mutate, loading, error }">
+    <button :disabled="loading" @click="mutate()">Click me</button>
+    <p v-if="error">An error occured: {{ error }}</p>
+  </template>
+</ApolloMutation>
+```
+
 ## Props
 
 - `mutation`：GraphQL 查询（由 `graphql-tag` 转换）或一个接收 `gql` 标签作为参数并返回转换后的查询的函数
@@ -21,3 +45,4 @@
 
 - `done(resultObject)`
 - `error(errorObject)`
+- `loading(boolean)`

@@ -88,6 +88,8 @@ export default {
 </template>
 ```
 
+### 配置标签
+
 如果你没有使用 [vue-cli-plugin-apollo](https://github.com/Akryum/vue-cli-plugin-apollo) (`v0.20.0+`)，则需要配置 [vue-loader](https://vue-loader.vuejs.org) 来转换字符串模板标签。`vue-loader` 在底层使用 [Bublé](https://buble.surge.sh/guide/) 来转换组件模板中的代码。我们需要将 `dangerousTaggedTemplateString` 变换添加到 Bublé 以使 `gql` 起作用。例如，在使用 Vue CLI 时：
 
 ```js
