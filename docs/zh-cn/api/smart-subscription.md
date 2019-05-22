@@ -27,7 +27,7 @@ this.$apollo.subscriptions.users.skip = true
 停止并重新启动查询：
 
 ```js
-this.$apollo.subscriptions.users.restart()
+this.$apollo.subscriptions.users.refresh()
 ```
 
 ### start

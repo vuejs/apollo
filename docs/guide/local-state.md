@@ -38,7 +38,7 @@ export const typeDefs = gql`
 
 `gql` here stands for the JavaScript template literal tag that parses GraphQL query strings.
 
-Now we need to add `typeDefs` to our Apollo client
+Now we need to add `typeDefs` to our Apollo client.
 
 ```js{4-5}
 // main.js
@@ -50,7 +50,7 @@ const apolloClient = new ApolloClient({
 ```
 
 :::warning WARNING
-As you can see, we've added also an empty `resolvers` object here: if we don't assign it to the Apollo client options, it won't recognize the queries to local state and will try to send a request to remote URL instead
+As you can see, we've added also an empty `resolvers` object here: if we don't assign it to the Apollo client options, it won't recognize the queries to local state and will try to send a request to remote URL instead.
 :::
 
 ## Extending a remote GraphQL schema locally
@@ -264,7 +264,7 @@ const apolloClient = new ApolloClient({
 });
 ```
 
-After this, we can use the mutation in our Vue component like normal [mutations](apollo/mutations.md)
+After this, we can use the mutation in our Vue component like normal [mutations](apollo/mutations.md):
 
 ```js
 // App.vue

@@ -12,8 +12,18 @@
 <template>
   <ApolloQuery :query="...">
     <ApolloSubscribeToMore
-      :document="require('../gql/MessageAdded.gql')"
-      :variables="{ channel }"
+      :document="gql => gql`
+        subscription messageChanged ($channelId: ID!) {
+          messageAdded (channelId: $channelId) {
+            type
+            message {
+              id
+              text
+            }
+          }
+        }
+      `"
+      :variables="{ channelId }"
       :updateQuery="onMessageAdded"
     />
 
@@ -44,7 +54,9 @@ export default {
 </script>
 ```
 
-更多参见 [API 参考](../../api/apollo-subscribe-to-more.md).
+在 [ApolloQuery](./query.md) 查看如何在模板中编写 GraphQL 查询。
+
+在 [API 参考](../../api/apollo-subscribe-to-more.md) 查看所有可用的选项。
 
 ## `updateQuery` 的示例
 

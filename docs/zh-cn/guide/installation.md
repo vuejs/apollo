@@ -65,11 +65,11 @@ yarn add vue-apollo graphql apollo-client apollo-link apollo-link-http apollo-ca
 
 ```js
 import { ApolloClient } from 'apollo-client'
-import { HttpLink } from 'apollo-link-http'
+import { createHttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 
 // 与 API 的 HTTP 连接
-const httpLink = new HttpLink({
+const httpLink = createHttpLink({
   // 你需要在这里使用绝对路径
   uri: 'http://localhost:3020/graphql',
 })
@@ -115,3 +115,29 @@ new Vue({
 ```
 
 现在你已经完成了在组件中使用 Apollo 的所有准备了！
+
+## IDE 集成
+
+### Visual Studio Code
+
+如果你使用 VS Code，建议安装 [Apollo GraphQL 扩展](https://marketplace.visualstudio.com/items?itemName=apollographql.vscode-apollo)。
+
+然后在 Vue 项目的根文件夹中创建 `apollo.config.js` 文件来配置它：
+
+```js
+// apollo.config.js
+module.exports = {
+  client: {
+    service: {
+      name: 'my-app',
+      // GraphQL API 的 URL
+      url: 'http://localhost:3000/graphql',
+    },
+    // 通过扩展名选择需要处理的文件
+    includes: [
+      'src/**/*.vue',
+      'src/**/*.js',
+    ],
+  },
+}
+```

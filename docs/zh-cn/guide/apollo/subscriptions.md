@@ -40,9 +40,9 @@ const wsLink = new WebSocketLink({
 const link = split(
   // 根据操作类型分割
   ({ query }) => {
-    const { kind, operation } = getMainDefinition(query)
-    return kind === 'OperationDefinition' &&
-      operation === 'subscription'
+    const definition = getMainDefinition(query)
+    return definition.kind === 'OperationDefinition' &&
+      definition.operation === 'subscription'
   },
   wsLink,
   httpLink
@@ -61,7 +61,7 @@ Vue.use(VueApollo)
 
 ## 订阅更多
 
-如果你需要更新一个来自订阅的查询结果，最好的方式是使用 `subscribeToMore` 查询方法。它将创建链接到查询的 [智能订阅](../../api/smart-subscription.md)。你只需要将 `subscribeToMore` 添加到查询中：
+如果你需要更新一个来自订阅的智能查询结果，最好的方式是使用 `subscribeToMore` 查询方法。它将创建链接到智能查询的 [智能订阅](../../api/smart-subscription.md)。你只需要将 `subscribeToMore` 添加到智能查询中：
 
 ```js
 apollo: {
@@ -201,8 +201,9 @@ apollo: {
         }
       },
       // 结果钩子
-      result (data) {
-        console.log(data)
+      // 不要忘记对 `data` 进行解构
+      result ({ data }) {
+        console.log(data.tagAdded)
       },
     },
   },
