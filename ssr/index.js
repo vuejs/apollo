@@ -1,4 +1,14 @@
-exports.getStates = function (apolloProvider, options) {
+const serializeJs = require('serialize-javascript');
+
+exports.serializeStates = function(apolloProvider, options = {}) {
+  const state = exports.getStates(apolloProvider, options)
+
+  return options.useUnsafeSerializer
+    ? JSON.stringify(state)
+    : serializeJs(state)
+}
+
+exports.getStates = function (apolloProvider, options = {}) {
   const finalOptions = Object.assign({}, {
     exportNamespace: '',
   }, options)
@@ -15,8 +25,8 @@ exports.exportStates = function (apolloProvider, options) {
   const finalOptions = Object.assign({}, {
     globalName: '__APOLLO_STATE__',
     attachTo: 'window',
-  }, options)
-  const states = exports.getStates(apolloProvider, finalOptions)
-  const js = `${finalOptions.attachTo}.${finalOptions.globalName} = ${JSON.stringify(states)};`
-  return js
+    useUnsafeSerializer: false,
+  }, options);
+
+  return `${finalOptions.attachTo}.${finalOptions.globalName} = ${exports.serializeStates(apolloProvider, options)};`
 }

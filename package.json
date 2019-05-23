@@ -17,6 +17,7 @@
     "test:eslint": "eslint --ext .js {src,ssr,lib,build}/**/*.js",
     "test:types": "tsc -p types/test",
     "test:e2e": "cd tests/demo && yarn test",
+    "test:unit": "yarn run jest",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs"
   },
@@ -41,6 +42,7 @@
   },
   "dependencies": {
     "chalk": "^2.4.2",
+    "serialize-javascript": "^1.7.0",
     "throttle-debounce": "^2.1.0"
   },
   "devDependencies": {
@@ -64,6 +66,7 @@
     "eslint-plugin-standard": "^4.0.0",
     "graphql": "^14.0.2",
     "graphql-tag": "^2.5.0",
+    "jest": "^24.8.0",
     "nodemon": "^1.18.4",
     "rimraf": "^2.6.1",
     "rollup": "^0.66.6",
@@ -77,5 +80,8 @@
     "vue": "^2.5.16",
     "vue-property-decorator": "^7.0.0",
     "vuepress": "^0.14.2"
+  },
+  "jest": {
+    "testRegex": "tests/unit/.*\\.test.js$"
   }
 }
