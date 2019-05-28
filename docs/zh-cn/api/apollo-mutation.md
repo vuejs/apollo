@@ -19,7 +19,7 @@
 >
   <template v-slot="{ mutate, loading, error }">
     <button :disabled="loading" @click="mutate()">Click me</button>
-    <p v-if="error">An error occured: {{ error }}</p>
+    <p v-if="error">An error occurred: {{ error }}</p>
   </template>
 </ApolloMutation>
 ```
