@@ -26,9 +26,20 @@ export type ErrorHandler<V> = (this: ApolloVueThisType<V>, error: any) => void
 
 type _WatchQueryOptions = Omit<WatchQueryOptions, 'query'>; // exclude query prop because it causes type incorrectly error
 
+export interface ApolloQueryResult<R> {
+  data: R;
+  error?: Error;
+  loading: boolean;
+  networkStatus: NetworkStatus;
+  stale: boolean;
+}
+export interface ApolloSubscriptionResult<R> {
+  data: R;
+}
+
 interface ExtendableVueApolloQueryOptions<V, R> extends _WatchQueryOptions {
   update?: (this: ApolloVueThisType<V>, data: R) => any;
-  result?: (this: ApolloVueThisType<V>, data: R, loader: any, netWorkStatus: NetworkStatus) => void;
+  result?: (this: ApolloVueThisType<V>, data: ApolloQueryResult<R>, loader: any) => void;
   error?: ErrorHandler<V>;
   loadingKey?: string;
   watchLoading?: WatchLoading<V>;
@@ -54,7 +65,7 @@ export interface VueApolloSubscriptionOptions<V, R> extends SubscriptionOptions 
   query: DocumentNode;
   variables?: VariableFn<V>;
   skip?: (this: ApolloVueThisType<V>) => boolean | boolean;
-  result?: (this: V, data: R) => void;
+  result?: (this: V, data: ApolloSubscriptionResult<R>) => void;
 }
 
 type QueryComponentProperty<V> = ((this: ApolloVueThisType<V>) => VueApolloQueryOptions<V, any>) | VueApolloQueryOptions<V, any>
