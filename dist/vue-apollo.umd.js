@@ -671,7 +671,7 @@
         } else if (error.networkError) {
           console.error("Error sending the ".concat(this.type, " '").concat(this.key, "'"), error.networkError);
         } else {
-          console.error("[vue-apollo] An error has occured for ".concat(this.type, " '").concat(this.key, "'"));
+          console.error("[vue-apollo] An error has occurred for ".concat(this.type, " '").concat(this.key, "'"));
 
           if (Array.isArray(error)) {
             var _console;
@@ -1519,7 +1519,7 @@
     if (value) {
       var customInspectFn = getCustomFn(value);
 
-      if (customInspectFn) {
+      if (customInspectFn !== undefined) {
         // $FlowFixMe(>=0.90.0)
         var customValue = customInspectFn.call(value); // check for infinite recursion
 
@@ -1639,8 +1639,10 @@
    * 
    */
   function invariant(condition, message) {
+    var booleanCondition = Boolean(condition);
     /* istanbul ignore else */
-    if (!condition) {
+
+    if (!booleanCondition) {
       throw new Error(message);
     }
   }
@@ -1878,14 +1880,14 @@
     return whitespace(len - str.length) + str;
   }
 
+  function _typeof$2(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof$2 = function _typeof(obj) { return typeof obj; }; } else { _typeof$2 = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof$2(obj); }
   /**
-   * Copyright (c) Facebook, Inc. and its affiliates.
-   *
-   * This source code is licensed under the MIT license found in the
-   * LICENSE file in the root directory of this source tree.
-   *
-   * 
+   * A GraphQLError describes an Error found during the parse, validate, or
+   * execute phases of performing a GraphQL operation. In addition to a message
+   * and stack trace, it also includes information about the locations in a
+   * GraphQL document and/or execution result that correspond to the Error.
    */
+
   function GraphQLError( // eslint-disable-line no-redeclare
   message, nodes, source, positions, path, originalError, extensions) {
     // Compute list of blame nodes.
@@ -1931,7 +1933,15 @@
       }, []);
     }
 
-    var _extensions = extensions || originalError && originalError.extensions;
+    var _extensions = extensions;
+
+    if (_extensions == null && originalError != null) {
+      var originalExtensions = originalError.extensions;
+
+      if (originalExtensions != null && _typeof$2(originalExtensions) === 'object') {
+        _extensions = originalExtensions;
+      }
+    }
 
     Object.defineProperties(this, {
       message: {
@@ -2076,24 +2086,11 @@
     // Expand a block string's raw value into independent lines.
     var lines = rawString.split(/\r\n|[\n\r]/g); // Remove common indentation from all lines but first.
 
-    var commonIndent = null;
+    var commonIndent = getBlockStringIndentation(lines);
 
-    for (var i = 1; i < lines.length; i++) {
-      var line = lines[i];
-      var indent = leadingWhitespace(line);
-
-      if (indent < line.length && (commonIndent === null || indent < commonIndent)) {
-        commonIndent = indent;
-
-        if (commonIndent === 0) {
-          break;
-        }
-      }
-    }
-
-    if (commonIndent) {
-      for (var _i = 1; _i < lines.length; _i++) {
-        lines[_i] = lines[_i].slice(commonIndent);
+    if (commonIndent !== 0) {
+      for (var i = 1; i < lines.length; i++) {
+        lines[i] = lines[i].slice(commonIndent);
       }
     } // Remove leading and trailing blank lines.
 
@@ -2108,6 +2105,29 @@
 
 
     return lines.join('\n');
+  } // @internal
+
+  function getBlockStringIndentation(lines) {
+    var commonIndent = null;
+
+    for (var i = 1; i < lines.length; i++) {
+      var line = lines[i];
+      var indent = leadingWhitespace(line);
+
+      if (indent === line.length) {
+        continue; // skip empty lines
+      }
+
+      if (commonIndent === null || indent < commonIndent) {
+        commonIndent = indent;
+
+        if (commonIndent === 0) {
+          break;
+        }
+      }
+    }
+
+    return commonIndent === null ? 0 : commonIndent;
   }
 
   function leadingWhitespace(str) {
@@ -2208,12 +2228,9 @@
     COMMENT: 'Comment'
   });
   /**
-   * The enum type representing the token kinds values.
-   */
-
-  /**
    * A helper function to describe a token as a string for debugging
    */
+
   function getTokenDesc(token) {
     var value = token.value;
     return value ? "".concat(token.kind, " \"").concat(value, "\"") : token.kind;
@@ -2637,16 +2654,18 @@
             break;
 
           case 117:
-            // u
-            var charCode = uniCharCode(body.charCodeAt(position + 1), body.charCodeAt(position + 2), body.charCodeAt(position + 3), body.charCodeAt(position + 4));
+            {
+              // uXXXX
+              var charCode = uniCharCode(body.charCodeAt(position + 1), body.charCodeAt(position + 2), body.charCodeAt(position + 3), body.charCodeAt(position + 4));
 
-            if (charCode < 0) {
-              throw syntaxError(source, position, 'Invalid character escape sequence: ' + "\\u".concat(body.slice(position + 1, position + 5), "."));
+              if (charCode < 0) {
+                throw syntaxError(source, position, 'Invalid character escape sequence: ' + "\\u".concat(body.slice(position + 1, position + 5), "."));
+              }
+
+              value += String.fromCharCode(charCode);
+              position += 4;
+              break;
             }
-
-            value += String.fromCharCode(charCode);
-            position += 4;
-            break;
 
           default:
             throw syntaxError(source, position, "Invalid character escape sequence: \\".concat(String.fromCharCode(code), "."));
@@ -4225,7 +4244,7 @@
     var start = lexer.token;
     var name = parseName(lexer);
 
-    if (DirectiveLocation.hasOwnProperty(name.value)) {
+    if (DirectiveLocation[name.value] !== undefined) {
       return name;
     }
 
@@ -4710,7 +4729,7 @@
             _result = Object.assign({}, _result);
 
             if (errors && errors.length) {
-              error = new Error("Apollo errors occured (".concat(errors.length, ")"));
+              error = new Error("Apollo errors occurred (".concat(errors.length, ")"));
               error.graphQLErrors = errors;
             }
 
@@ -5138,7 +5157,7 @@
   }
   ApolloProvider.install = install; // eslint-disable-next-line no-undef
 
-  ApolloProvider.version = "3.0.0-beta.30"; // Apollo provider
+  ApolloProvider.version = "3.0.0-rc.1"; // Apollo provider
 
   var ApolloProvider$1 = ApolloProvider; // Components
 
