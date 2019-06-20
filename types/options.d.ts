@@ -47,7 +47,8 @@ export interface VueApolloQueryOptions<V, R> extends ExtendableVueApolloQueryOpt
 export interface VueApolloMutationOptions<V, R> extends MutationOptions<R> {
   mutation: DocumentNode;
   variables?: VariableFn<V>;
-  optimisticResponse?: ((this: ApolloVueThisType<V>) => any) | any
+  optimisticResponse?: ((this: ApolloVueThisType<V>) => any) | any;
+  client?: String
 }
 
 export interface VueApolloSubscriptionOptions<V, R> extends SubscriptionOptions {

@@ -16,7 +16,7 @@ Example:
     <div v-if="isLoading" class="loading apollo">Loading...</div>
 
     <!-- Error -->
-    <div v-else-if="error" class="error apollo">An error occured</div>
+    <div v-else-if="error" class="error apollo">An error occurred</div>
 
     <!-- Result -->
     <div v-else-if="data" class="result apollo">{{ data.hello }}</div>

@@ -34,7 +34,7 @@ Inside the default slot of `ApolloQuery`, you can access various slot data about
   <div v-if="loading" class="loading apollo">Loading...</div>
 
   <!-- Error -->
-  <div v-else-if="error" class="error apollo">An error occured</div>
+  <div v-else-if="error" class="error apollo">An error occurred</div>
 
   <!-- Result -->
   <div v-else-if="data" class="result apollo">{{ data.hello }}</div>
@@ -74,7 +74,7 @@ export default {
         <div v-if="loading" class="loading apollo">Loading...</div>
 
         <!-- Error -->
-        <div v-else-if="error" class="error apollo">An error occured</div>
+        <div v-else-if="error" class="error apollo">An error occurred</div>
 
         <!-- Result -->
         <div v-else-if="data" class="result apollo">{{ data.hello }}</div>
@@ -155,7 +155,7 @@ An alternative way of using the component is by creating separate `.gql` files. 
       <div v-if="loading" class="loading apollo">Loading...</div>
 
       <!-- Error -->
-      <div v-else-if="error" class="error apollo">An error occured</div>
+      <div v-else-if="error" class="error apollo">An error occurred</div>
 
       <!-- Result -->
       <div v-else-if="data" class="result apollo">{{ data.hello }}</div>

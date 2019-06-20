@@ -172,7 +172,7 @@ export default class SmartApollo {
     } else if (error.networkError) {
       console.error(`Error sending the ${this.type} '${this.key}'`, error.networkError)
     } else {
-      console.error(`[vue-apollo] An error has occured for ${this.type} '${this.key}'`)
+      console.error(`[vue-apollo] An error has occurred for ${this.type} '${this.key}'`)
       if (Array.isArray(error)) {
         console.error(...error)
       } else {
