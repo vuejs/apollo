@@ -1,6 +1,6 @@
-const serializeJs = require('serialize-javascript');
+const serializeJs = require('serialize-javascript')
 
-exports.serializeStates = function(apolloProvider, options = {}) {
+exports.serializeStates = function (apolloProvider, options = {}) {
   const state = exports.getStates(apolloProvider, options)
 
   return options.useUnsafeSerializer
@@ -26,7 +26,7 @@ exports.exportStates = function (apolloProvider, options) {
     globalName: '__APOLLO_STATE__',
     attachTo: 'window',
     useUnsafeSerializer: false,
-  }, options);
+  }, options)
 
   return `${finalOptions.attachTo}.${finalOptions.globalName} = ${exports.serializeStates(apolloProvider, options)};`
 }
