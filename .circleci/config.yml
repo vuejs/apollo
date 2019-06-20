@@ -4,12 +4,6 @@
 #
 version: 2
 
-workflow_filters: &filters
-  filters:
-    branches:
-      ignore:
-      - docs
-
 jobs:
   build:
     docker:
