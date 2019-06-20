@@ -1,4 +1,13 @@
-import { WatchQueryOptions, MutationOptions, SubscriptionOptions, SubscribeToMoreOptions, ObservableQuery, NetworkStatus } from 'apollo-client'
+import {
+  WatchQueryOptions,
+  MutationOptions,
+  SubscriptionOptions,
+  SubscribeToMoreOptions,
+  ObservableQuery,
+  NetworkStatus,
+  ApolloQueryResult,
+} from 'apollo-client';
+import { FetchResult } from 'apollo-link';
 import { DocumentNode } from 'graphql';
 
 // include Omit type from https://github.com/Microsoft/TypeScript/issues/12215
@@ -28,7 +37,7 @@ type _WatchQueryOptions = Omit<WatchQueryOptions, 'query'>; // exclude query pro
 
 interface ExtendableVueApolloQueryOptions<V, R> extends _WatchQueryOptions {
   update?: (this: ApolloVueThisType<V>, data: R) => any;
-  result?: (this: ApolloVueThisType<V>, data: R, loader: any, netWorkStatus: NetworkStatus) => void;
+  result?: (this: ApolloVueThisType<V>, data: ApolloQueryResult<R>, loader: any, netWorkStatus: NetworkStatus) => void;
   error?: ErrorHandler<V>;
   loadingKey?: string;
   watchLoading?: WatchLoading<V>;
@@ -55,7 +64,7 @@ export interface VueApolloSubscriptionOptions<V, R> extends SubscriptionOptions 
   query: DocumentNode;
   variables?: VariableFn<V>;
   skip?: (this: ApolloVueThisType<V>) => boolean | boolean;
-  result?: (this: V, data: R) => void;
+  result?: (this: V, data: FetchResult<R>) => void;
 }
 
 type QueryComponentProperty<V> = ((this: ApolloVueThisType<V>) => VueApolloQueryOptions<V, any>) | VueApolloQueryOptions<V, any>

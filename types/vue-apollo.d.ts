@@ -1,5 +1,6 @@
 import Vue, { PluginObject, PluginFunction } from 'vue';
-import { ApolloClient, ObservableQuery } from 'apollo-client';
+import { ApolloClient, ObservableQuery, ApolloQueryResult } from 'apollo-client';
+import { FetchResult } from 'apollo-link';
 import { Observable } from 'apollo-client/util/Observable';
 import { ApolloProvider, VueApolloComponent } from './apollo-provider'
 import {
@@ -40,11 +41,6 @@ export interface SmartQuery<V> extends SmartApollo<V> {
 export interface SmartSubscription<V> extends SmartApollo<V> {
 }
 
-export declare type QueryResult<T> = {
-  data: T;
-  errors?: GraphQLError[];
-};
-
 export interface DollarApollo<V> {
   vm: V;
   queries: Record<string, SmartQuery<V>>;
@@ -57,9 +53,9 @@ export interface DollarApollo<V> {
   /* writeonly */ skipAllSubscriptions: boolean;
   /* writeonly */ skipAll: boolean;
 
-  query<R=any>(options: VueApolloQueryOptions<V, R>): Promise<QueryResult<R>>;
-  mutate<R=any>(options: VueApolloMutationOptions<V, R>): Promise<QueryResult<R>>;
-  subscribe<R=any>(options: VueApolloSubscriptionOptions<V, R>): Observable<R>;
+  query<R=any>(options: VueApolloQueryOptions<V, R>): Promise<ApolloQueryResult<R>>;
+  mutate<R=any>(options: VueApolloMutationOptions<V, R>): Promise<FetchResult<R>>;
+  subscribe<R=any>(options: VueApolloSubscriptionOptions<V, R>): Observable<FetchResult<R>>;
 
   addSmartQuery<R=any>(key: string, options: VueApolloQueryOptions<V, R>): SmartQuery<V>;
   addSmartSubscription<R=any>(key: string, options: VueApolloSubscriptionOptions<V, R>): SmartSubscription<V>;
