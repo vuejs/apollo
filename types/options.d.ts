@@ -2,8 +2,6 @@ import {
   WatchQueryOptions,
   MutationOptions,
   SubscriptionOptions,
-  SubscribeToMoreOptions,
-  ObservableQuery,
   NetworkStatus,
   ApolloQueryResult,
 } from 'apollo-client';
@@ -47,28 +45,36 @@ interface ExtendableVueApolloQueryOptions<V, R> extends _WatchQueryOptions {
   prefetch?: ((context: any) => any) | boolean;
   deep?: boolean;
 }
-export interface VueApolloQueryOptions<V, R> extends ExtendableVueApolloQueryOptions<V, R> {
+
+export interface VueApolloQueryOptions<V, R> extends WatchQueryOptions<R> {
+  client?: String;
+}
+
+export interface VueApolloWatchQueryOptions<V, R> extends ExtendableVueApolloQueryOptions<V, R> {
   query: ((this: ApolloVueThisType<V>) => DocumentNode) | DocumentNode;
   variables?: VariableFn<V>;
-  client?: String
+  client?: String;
 }
 
 export interface VueApolloMutationOptions<V, R> extends MutationOptions<R> {
   mutation: DocumentNode;
-  variables?: VariableFn<V>;
   optimisticResponse?: ((this: ApolloVueThisType<V>) => R) | R;
-  client?: String
+  client?: String;
 }
 
 export interface VueApolloSubscriptionOptions<V, R> extends SubscriptionOptions {
-  query: DocumentNode;
+  client?: String;
+}
+
+export interface VueApolloSmartSubscriptionOptions<V, R> extends SubscriptionOptions {
   variables?: VariableFn<V>;
   skip?: (this: ApolloVueThisType<V>) => boolean | boolean;
   result?: (this: V, data: FetchResult<R>) => void;
+  client?: String;
 }
 
-type QueryComponentProperty<V> = ((this: ApolloVueThisType<V>) => VueApolloQueryOptions<V, any>) | VueApolloQueryOptions<V, any>
-type SubscribeComponentProperty<V> = VueApolloSubscriptionOptions<V, any> | { [key: string]: VueApolloSubscriptionOptions<V, any> }
+type QueryComponentProperty<V> = ((this: ApolloVueThisType<V>) => VueApolloWatchQueryOptions<V, any>) | VueApolloWatchQueryOptions<V, any>
+type SubscribeComponentProperty<V> = VueApolloSmartSubscriptionOptions<V, any> | { [key: string]: VueApolloSmartSubscriptionOptions<V, any> }
 
 export type VueApolloOptions<V> = {
   $skip?: boolean,
