@@ -41,5 +41,8 @@ const js = ApolloSSR.exportStates(apolloProvider, options)
   attachTo: 'window',
   // Prefix for the keys of each apollo client state
   exportNamespace: '',
+  // By default we use sanitize js library to prevent XSS 
+  //  pass true here will perform a standard JSON.stringify on the states
+  useUnsafeSerializer: false,
 }
 ```
