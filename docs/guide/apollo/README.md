@@ -61,6 +61,42 @@ export default {
 </script>
 ```
 
+#### Common Newbie gotcha!
+
+Please note that a common beginner's error is to use a different component name from the query eg:
+```js
+apollo: {
+  world: gql` query {
+     hello
+  }`
+},
+```
+
+Notice that `world` is different from `hello`; Vue-apollo won't guess which data you want to put in the component from the query result. By default, it will just try the name you are using in the component, in this case 'world'. If the names don't match, you can either use update which is available for the very purpose of modifying resulting data eg:
+
+```js
+apollo: {
+  world: gql` query {
+      hello
+  }`,
+},
+update(data){
+  return data.hello
+}
+```
+
+ or rename the field in the document directly:
+
+I am not sure how to write the correct syntax in js please correct the following
+```js
+query {
+  options: agentStatus {
+    label
+  }
+}
+```
+correction ends here
+
 Learn more in the [Queries section](./queries.md).
 
 ## Mutations
