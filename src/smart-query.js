@@ -103,10 +103,10 @@ export default class SmartQuery extends SmartApollo {
 
     this.startQuerySubscription()
 
-    if (this.options.fetchPolicy !== 'no-cache') {
+    if (this.options.fetchPolicy !== 'no-cache' || this.options.notifyOnNetworkStatusChange) {
       const currentResult = this.maySetLoading()
 
-      if (!currentResult.loading) {
+      if (!currentResult.loading || this.options.notifyOnNetworkStatusChange) {
         this.nextResult(currentResult)
       }
     }
@@ -150,7 +150,7 @@ export default class SmartQuery extends SmartApollo {
 
     const hasResultCallback = typeof this.options.result === 'function'
 
-    if (typeof data === 'undefined') {
+    if (data == null) {
       // No result
     } else if (!this.options.manual) {
       if (typeof this.options.update === 'function') {
