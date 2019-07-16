@@ -473,60 +473,44 @@
       value: function start() {
         var _this = this;
 
-        this.starting = true; // Query callback
+        this.starting = true; // Reactive options
 
-        if (typeof this.initialOptions.query === 'function') {
-          var queryCb = this.initialOptions.query.bind(this.vm);
-          this.options.query = queryCb();
+        var _loop = function _loop() {
+          var prop = _arr[_i];
 
-          this._watchers.push(this.vm.$watch(queryCb, function (query) {
-            _this.options.query = query;
+          if (typeof _this.initialOptions[prop] === 'function') {
+            var queryCb = _this.initialOptions[prop].bind(_this.vm);
 
-            _this.refresh();
-          }, {
-            deep: this.options.deep
-          }));
-        } // Query callback
+            _this.options[prop] = queryCb();
 
+            var _cb = function _cb(query) {
+              _this.options[prop] = query;
 
-        if (typeof this.initialOptions.document === 'function') {
-          var _queryCb = this.initialOptions.document.bind(this.vm);
+              _this.refresh();
+            };
 
-          this.options.document = _queryCb();
+            _cb = _this.options.throttle ? utils_2(_cb, _this.options.throttle) : _cb;
+            _cb = _this.options.debounce ? utils_3(_cb, _this.options.debounce) : _cb;
 
-          this._watchers.push(this.vm.$watch(_queryCb, function (document) {
-            _this.options.document = document;
+            _this._watchers.push(_this.vm.$watch(queryCb, _cb, {
+              deep: _this.options.deep
+            }));
+          }
+        };
 
-            _this.refresh();
-          }, {
-            deep: this.options.deep
-          }));
-        } // Apollo context
-
-
-        if (typeof this.initialOptions.context === 'function') {
-          var cb = this.initialOptions.context.bind(this.vm);
-          this.options.context = cb();
-
-          this._watchers.push(this.vm.$watch(cb, function (context) {
-            _this.options.context = context;
-
-            _this.refresh();
-          }, {
-            deep: this.options.deep
-          }));
+        for (var _i = 0, _arr = ['query', 'document', 'context']; _i < _arr.length; _i++) {
+          _loop();
         } // GraphQL Variables
 
 
         if (typeof this.options.variables === 'function') {
-          var _cb = this.executeApollo.bind(this);
-
-          _cb = this.options.throttle ? utils_2(_cb, this.options.throttle) : _cb;
-          _cb = this.options.debounce ? utils_3(_cb, this.options.debounce) : _cb;
+          var cb = this.executeApollo.bind(this);
+          cb = this.options.throttle ? utils_2(cb, this.options.throttle) : cb;
+          cb = this.options.debounce ? utils_3(cb, this.options.debounce) : cb;
 
           this._watchers.push(this.vm.$watch(function () {
             return _this.options.variables.call(_this.vm);
-          }, _cb, {
+          }, cb, {
             immediate: true,
             deep: this.options.deep
           }));
@@ -819,10 +803,10 @@
         this.observer = this.vm.$apollo.watchQuery(this.generateApolloOptions(variables));
         this.startQuerySubscription();
 
-        if (this.options.fetchPolicy !== 'no-cache') {
+        if (this.options.fetchPolicy !== 'no-cache' || this.options.notifyOnNetworkStatusChange) {
           var currentResult = this.maySetLoading();
 
-          if (!currentResult.loading) {
+          if (!currentResult.loading || this.options.notifyOnNetworkStatusChange) {
             this.nextResult(currentResult);
           }
         }
@@ -874,7 +858,7 @@
 
         var hasResultCallback = typeof this.options.result === 'function';
 
-        if (typeof data === 'undefined') ; else if (!this.options.manual) {
+        if (data == null) ; else if (!this.options.manual) {
           if (typeof this.options.update === 'function') {
             this.setData(this.options.update.call(this.vm, data));
           } else if (typeof data[this.key] === 'undefined' && Object.keys(data).length) {
@@ -4656,6 +4640,12 @@
       prefetch: {
         type: Boolean,
         "default": true
+      },
+      options: {
+        type: Object,
+        "default": function _default() {
+          return {};
+        }
       }
     },
     data: function data() {
@@ -4694,7 +4684,7 @@
         return this.clientId;
       },
       query: function query() {
-        return {
+        return _objectSpread({
           query: function query() {
             if (typeof this.query === 'function') {
               return this.query(src);
@@ -4717,7 +4707,8 @@
             return this.skip;
           },
           deep: this.deep,
-          prefetch: this.prefetch,
+          prefetch: this.prefetch
+        }, this.options, {
           manual: true,
           result: function result(_result) {
             var _result2 = _result,
@@ -4760,7 +4751,7 @@
             this.result.error = _error;
             this.$emit('error', _error);
           }
-        };
+        });
       }
     },
     created: function created() {
@@ -5157,7 +5148,7 @@
   }
   ApolloProvider.install = install; // eslint-disable-next-line no-undef
 
-  ApolloProvider.version = "3.0.0-rc.1"; // Apollo provider
+  ApolloProvider.version = "3.0.0-rc.2"; // Apollo provider
 
   var ApolloProvider$1 = ApolloProvider; // Components
 
