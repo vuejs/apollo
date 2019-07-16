@@ -60,39 +60,21 @@ export default class SmartApollo {
   start () {
     this.starting = true
 
-    // Query callback
-    if (typeof this.initialOptions.query === 'function') {
-      const queryCb = this.initialOptions.query.bind(this.vm)
-      this.options.query = queryCb()
-      this._watchers.push(this.vm.$watch(queryCb, query => {
-        this.options.query = query
-        this.refresh()
-      }, {
-        deep: this.options.deep,
-      }))
-    }
-    // Query callback
-    if (typeof this.initialOptions.document === 'function') {
-      const queryCb = this.initialOptions.document.bind(this.vm)
-      this.options.document = queryCb()
-      this._watchers.push(this.vm.$watch(queryCb, document => {
-        this.options.document = document
-        this.refresh()
-      }, {
-        deep: this.options.deep,
-      }))
-    }
-
-    // Apollo context
-    if (typeof this.initialOptions.context === 'function') {
-      const cb = this.initialOptions.context.bind(this.vm)
-      this.options.context = cb()
-      this._watchers.push(this.vm.$watch(cb, context => {
-        this.options.context = context
-        this.refresh()
-      }, {
-        deep: this.options.deep,
-      }))
+    // Reactive options
+    for (const prop of ['query', 'document', 'context']) {
+      if (typeof this.initialOptions[prop] === 'function') {
+        const queryCb = this.initialOptions[prop].bind(this.vm)
+        this.options[prop] = queryCb()
+        let cb = query => {
+          this.options[prop] = query
+          this.refresh()
+        }
+        cb = this.options.throttle ? throttle(cb, this.options.throttle) : cb
+        cb = this.options.debounce ? debounce(cb, this.options.debounce) : cb
+        this._watchers.push(this.vm.$watch(queryCb, cb, {
+          deep: this.options.deep,
+        }))
+      }
     }
 
     // GraphQL Variables
