@@ -84,6 +84,11 @@ export default {
       type: Boolean,
       default: true,
     },
+
+    options: {
+      type: Object,
+      default: () => ({}),
+    },
   },
 
   data () {
@@ -145,6 +150,7 @@ export default {
         skip () { return this.skip },
         deep: this.deep,
         prefetch: this.prefetch,
+        ...this.options,
         manual: true,
         result (result) {
           const { errors, loading, networkStatus } = result
