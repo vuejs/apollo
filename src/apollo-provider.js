@@ -8,6 +8,7 @@ export class ApolloProvider {
     this.defaultOptions = options.defaultOptions
     this.watchLoading = options.watchLoading
     this.errorHandler = options.errorHandler
+    this.prefetch = options.prefetch
 
     this.prefetchQueries = []
   }
