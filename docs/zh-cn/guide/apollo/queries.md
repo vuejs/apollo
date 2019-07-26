@@ -77,6 +77,43 @@ export const resolvers = {
 </template>
 ```
 
+## 名称匹配
+
+请注意，初学者常见的错误是使用与查询中的字段名不相同的数据名称，例如：
+
+```js
+apollo: {
+  world: gql`query {
+    hello
+  }`
+}
+```
+
+注意 `world` 与 `hello` 的不同之处：vue-apollo 不会去猜测你想要将哪些数据从查询结果中放入组件中。默认情况下，它只会尝试你在组件中使用的数据名称（即 `apollo` 对象中的键），在本例中为 `world`。如果名称不匹配，你可以使用 `update` 选项来告诉 vue-apollo 在结果中使用什么样的数据：
+
+```js
+apollo: {
+  world: {
+    query: gql`query {
+      hello
+    }`,
+    update: data => data.hello
+  }
+}
+```
+
+你也可以直接在 GraphQL 文档中重命名该字段：
+
+```js
+apollo: {
+  world: gql`query {
+    world: hello
+  }`
+}
+```
+
+在本例中，我们将 `hello` 字段重命名为 `world`，以便 vue-apollo 来自动推断应该从结果中取回什么。
+
 ## 带参数的查询
 
 你可以通过在对象中声明 `query` 和 `variables` 将变量（读取参数）添加到 `gql` 查询中：

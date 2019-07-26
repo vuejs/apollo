@@ -9,6 +9,7 @@
 - `throttle`：变量更新节流时间（毫秒）。
 - `debounce`：变量更新防抖时间（毫秒）。
 - `result(data, key)` 是收到结果时调用的钩子。
+- `error(error)` 是有错误时调用的钩子。`error` 是一个具有 `graphQLErrors` 属性或 `networkError` 属性的 Apollo 错误对象。
 
 ## 属性
 

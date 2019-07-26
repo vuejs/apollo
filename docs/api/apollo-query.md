@@ -47,7 +47,7 @@ To enable support of `gql` string tag in Vue templates, see the necessary setup 
 - `debounce`: Number of milliseconds for debouncing refetches (for example when the variables are changed)
 - `throttle`: Number of milliseconds for throttling refetches (for example when the variables are changed)
 - `prefetch`: If `false`, will skip prefetching during SSR
-- `options`: Other Apollo Watch Query options.
+- `options`: Other Apollo Watch Query options
 
 ## Scoped slot
 
