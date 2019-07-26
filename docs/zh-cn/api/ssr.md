@@ -41,5 +41,8 @@ const js = ApolloSSR.exportStates(apolloProvider, options)
   attachTo: 'window',
   // 每个 apollo 客户端状态的 key 的前缀
   exportNamespace: '',
+  // 我们默认使用 sanitize js 库来阻止 XSS
+  // 在这里传入 true 将对状态执行标准的 JSON.stringify
+  useUnsafeSerializer: false,
 }
 ```

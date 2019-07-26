@@ -77,14 +77,14 @@ You can then use your property as usual in your vue component:
 </template>
 ```
 
-## Name macthing
+## Name matching
 
 Please note that a common beginner's error is to use a different data name from the field name in query, eg:
 
 ```js
 apollo: {
   world: gql`query {
-     hello
+    hello
   }`
 }
 ```
@@ -107,7 +107,7 @@ You can also rename the field in the GraphQL document directly:
 ```js
 apollo: {
   world: gql`query {
-     world: hello
+    world: hello
   }`
 }
 ```
