@@ -33,6 +33,18 @@ const apolloProvider = new VueApollo({
     console.log('Global error handler')
     console.error(error)
   },
+  /*
+    MUST* return a promise
+    Allows us to handle the serverPrefetch as part of ssr in a way we need
+    
+    // example: short circuit SSR gql request after 1 second
+    handleServerPrefetch(apolloPromises) {
+      const shirtCircuit = new Promise((resolve, reject) => { setTimeout(resolve, 4000) })
+      
+      return Promise.race(apolloPromises, shortCircuit)
+    }
+  */
+  handleServerPrefetch: Function: receives apolloPromises must return a Promise
 })
 ```
 

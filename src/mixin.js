@@ -153,7 +153,13 @@ export function installMixin (Vue, vueVersion) {
 
       serverPrefetch () {
         if (this.$_apolloPromises) {
-          return Promise.all(this.$_apolloPromises)
+          const promises = Promise.all(this.$_apolloPromises)
+
+          if (this.handleServerPrefetch) {
+            return this.handleServerPrefetch(promises)
+          }
+
+          return promises
         }
       },
     } : {},
