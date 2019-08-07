@@ -116,6 +116,23 @@ new Vue({
 
 You are now ready to use Apollo in your components!
 
+
+### 4. (OPTIONAL) Install Apollo Components
+
+These components were externalized to allow opting in for them to reduce bundle size.  To Install
+
+```js
+import Vue from 'vue';
+import useApolloComponents from 'node_modules/vue-apollo/components/useApolloComponents'
+
+Vue.install(useApolloComponents)
+```
+
+This will provide 
+ - ApolloQuery
+ - ApolloMutation
+ - ApolloSubscribeToMore
+
 ## IDE integration
 
 ### Visual Studio Code
