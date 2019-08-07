@@ -36,7 +36,7 @@ export function createProvider (options = {}) {
 
   const createB = createApolloClient({
     ...defaultOptions,
-    ...clientBptions,
+    ...clientBOptions,
   });
 
   const a = createA.apolloClient;
