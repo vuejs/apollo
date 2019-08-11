@@ -53,6 +53,7 @@ export interface DollarApollo<V> {
   /* writeonly */ skipAllSubscriptions: boolean;
   /* writeonly */ skipAll: boolean;
 
+  getClient<R=any>(): ApolloClient<R>;
   query<R=any>(options: VueApolloQueryOptions<V, R>): Promise<ApolloQueryResult<R>>;
   mutate<R=any>(options: VueApolloMutationOptions<V, R>): Promise<FetchResult<R>>;
   subscribe<R=any>(options: VueApolloSubscriptionOptions<V, R>): Observable<FetchResult<R>>;
