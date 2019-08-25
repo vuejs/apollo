@@ -76,7 +76,7 @@ methods: {
 }
 ```
 
-Remove an item to the cache:
+Remove an item from the cache:
 
 ```js
 methods: {
