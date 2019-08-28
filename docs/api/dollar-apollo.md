@@ -20,3 +20,4 @@ This is the Apollo manager added to any component that uses Apollo. It can be ac
 - `subscribe`: standard Apollo subscribe method (see [Subscriptions](../guide/apollo/subscriptions.md)).
 - `addSmartQuery`: manually add a Smart Query (not recommended).
 - `addSmartSubscription`: add a Smart Subscription (see [Subscriptions](../guide/apollo/subscriptions.md)).
+- `getClient`: returns the underlying ApolloClient.
