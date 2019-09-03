@@ -33,6 +33,8 @@ const apolloProvider = new VueApollo({
     console.log('Global error handler')
     console.error(error)
   },
+  // Globally turn off prefetch ssr
+  prefetch: Boolean
 })
 ```
 
