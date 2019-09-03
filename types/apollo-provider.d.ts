@@ -13,8 +13,8 @@ export class ApolloProvider<TCacheShape=any> {
     defaultClient: ApolloClient<TCacheShape>,
     defaultOptions?: VueApolloOptions<any>,
     clients?: { [key: string]: ApolloClient<TCacheShape> },
-    watchLoading?: WatchLoading<any>,
-    errorHandler?: ErrorHandler<any>
+    watchLoading?: WatchLoading,
+    errorHandler?: ErrorHandler
   })
   clients: { [key: string]: ApolloClient<TCacheShape> }
   defaultClient: ApolloClient<TCacheShape>

@@ -20,14 +20,14 @@ export class VueApollo extends ApolloProvider implements PluginObject<{}>{
   static install(pVue: typeof Vue, options?:{} | undefined): void;
 }
 
-interface SmartApollo<V> {
+interface SmartApollo {
   skip: boolean;
   refresh(): void;
   start(): void;
   stop(): void;
 }
 
-export interface SmartQuery<V> extends SmartApollo<V> {
+export interface SmartQuery extends SmartApollo {
   loading: boolean;
   fetchMore: ObservableQuery<any>['fetchMore'];
   subscribeToMore: ObservableQuery<any>['subscribeToMore'];
@@ -38,14 +38,14 @@ export interface SmartQuery<V> extends SmartApollo<V> {
   stopPolling: ObservableQuery<any>['stopPolling'];
 }
 
-export interface SmartSubscription<V> extends SmartApollo<V> {
+export interface SmartSubscription extends SmartApollo {
 }
 
 export interface DollarApollo<V> {
   vm: V;
-  queries: Record<string, SmartQuery<V>>;
-  subscriptions: Record<string, SmartSubscription<V>>;
-  readonly provider: ApolloProvider;
+  queries: Record<string, SmartQuery>
+  subscriptions: Record<string, SmartSubscription>
+  readonly provider: ApolloProvider
   readonly loading: boolean;
 
   // writeonly not yet implemented in TypeScript: https://github.com/Microsoft/TypeScript/issues/21759
@@ -53,12 +53,12 @@ export interface DollarApollo<V> {
   /* writeonly */ skipAllSubscriptions: boolean;
   /* writeonly */ skipAll: boolean;
 
-  query<R=any>(options: VueApolloQueryOptions<V, R>): Promise<ApolloQueryResult<R>>;
-  mutate<R=any>(options: VueApolloMutationOptions<V, R>): Promise<FetchResult<R>>;
-  subscribe<R=any>(options: VueApolloSubscriptionOptions<V, R>): Observable<FetchResult<R>>;
+  query<R=any>(options: VueApolloQueryOptions<R>): Promise<ApolloQueryResult<R>>;
+  mutate<R=any>(options: VueApolloMutationOptions<R>): Promise<FetchResult<R>>;
+  subscribe<R=any>(options: VueApolloSubscriptionOptions<R>): Observable<FetchResult<R>>;
 
-  addSmartQuery<R=any>(key: string, options: VueApolloQueryOptions<V, R>): SmartQuery<V>;
-  addSmartSubscription<R=any>(key: string, options: VueApolloSubscriptionOptions<V, R>): SmartSubscription<V>;
+  addSmartQuery<R=any>(key: string, options: VueApolloQueryOptions<R>): SmartQuery;
+  addSmartSubscription<R=any>(key: string, options: VueApolloSubscriptionOptions<R>): SmartSubscription;
 }
 
 export function willPrefetch (component: VueApolloComponent, contextCallback?: boolean): VueApolloComponent
