@@ -141,3 +141,26 @@ module.exports = {
   },
 }
 ```
+### Webstorm
+
+If you are using Webstorm, it's recommended to install the [JS GraphQL extension](https://plugins.jetbrains.com/plugin/8097-js-graphql/).
+
+Then configure it by creating a `.graphqlconfig` file in the root folder of the Vue project:
+
+```graphqlconfig
+{
+  "name": "Untitled GraphQL Schema",
+  "schemaPath": "./path/to/schema.graphql",
+  "extensions": {
+    "endpoints": {
+      "Default GraphQL Endpoint": {
+        "url": "http://url/to/the/graphql/api",
+        "headers": {
+          "user-agent": "JS GraphQL"
+        },
+        "introspect": false
+      }
+    }
+  }
+}
+```
