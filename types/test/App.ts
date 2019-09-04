@@ -40,7 +40,7 @@ export default Vue.extend({
           }
         }`,
         // Reactive variables
-        variables () {
+        variables (): object {
           return {
             type: this.type,
           };
@@ -50,13 +50,13 @@ export default Vue.extend({
         result (result) {
           this.updateCount ++;
         },
-        skip () {
+        skip (): boolean {
           return this.skipQuery
         },
         fetchPolicy: 'cache-and-network',
         subscribeToMore: [{
           document: SUB_QUERY,
-          variables () {
+          variables (): object {
             return { type: this.type, }
           },
           updateQuery: (previousResult, { subscriptionData }) => {
