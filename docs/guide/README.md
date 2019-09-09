@@ -77,16 +77,14 @@ If you never heard of GraphQL or Apollo, here is a sneak peek:
 
 ## Links
 
-[⚡ Live demo](https://jsfiddle.net/Akryum/oyejk2qL/)
+[<img src="https://github.com/fluidicon.png" alt="icon" width="16" height="16"/> Vue-cli plugin](https://github.com/Akryum/vue-cli-plugin-apollo)
 
-[<img src="https://assets-cdn.github.com/favicon.ico" alt="icon" width="16" height="16"/> Vue-cli plugin](https://github.com/Akryum/vue-cli-plugin-apollo)
+[<img src="https://github.com/fluidicon.png" alt="icon" width="16" height="16"/> More vue-apollo examples](https://github.com/Akryum/vue-apollo-example)
 
-[<img src="https://assets-cdn.github.com/favicon.ico" alt="icon" width="16" height="16"/> More vue-apollo examples](https://github.com/Akryum/vue-apollo-example)
-
-[<img src="https://assets-cdn.github.com/favicon.ico" alt="icon" width="16" height="16"/> Apollo graphql server example](https://github.com/Akryum/apollo-server-example)
+[<img src="https://github.com/fluidicon.png" alt="icon" width="16" height="16"/> Apollo graphql server example](https://github.com/Akryum/apollo-server-example)
 
 [<img src="https://www.howtographql.com/static/howtographql.d1a2e5b4.svg" alt="icon" width="16" height="16"/> How to GraphQL](https://www.howtographql.com/vue-apollo/0-introduction/)
 
 [<img src="https://conf.vuejs.org/img/logo-48.png" alt="icon" width="16" height="16"/> VueConf 2017 demo](https://github.com/Akryum/vueconf-2017-demo) &amp; [slides](http://slides.com/akryum/graphql#/)
 
-[<img src="https://assets-cdn.github.com/favicon.ico" alt="icon" width="16" height="16"/> Devfest Summit Example](https://github.com/Akryum/devfest-nantes-2017) (with lots of features like SSR, OAuth, Realtime updates, Apollo Engine...)
+[<img src="https://github.com/fluidicon.png" alt="icon" width="16" height="16"/> Devfest Summit Example](https://github.com/Akryum/devfest-nantes-2017) (with lots of features like SSR, OAuth, Realtime updates, Apollo Engine...)
