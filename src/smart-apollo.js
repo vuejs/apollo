@@ -31,8 +31,8 @@ export default class SmartApollo {
       this._skip = true
     }
 
-    if(typeof this.options.pollInterval === 'function') {
-      this._pollWatcher = this.vm.$watch(this.options.pollInterval.bind(this.vm),this.pollIntervalChanged.bind(this), {immediate:true})
+    if (typeof this.options.pollInterval === 'function') {
+      this._pollWatcher = this.vm.$watch(this.options.pollInterval.bind(this.vm), this.pollIntervalChanged.bind(this), { immediate: true })
     }
   }
 
@@ -40,7 +40,7 @@ export default class SmartApollo {
     if (value !== oldValue) {
       this.pollInterval = value
 
-      if(value == null) {
+      if (value == null) {
         this.stopPolling()
       } else {
         this.startPolling(value)
@@ -54,13 +54,13 @@ export default class SmartApollo {
     }
   }
 
-  get pollInterval() {
+  get pollInterval () {
     return this._pollInterval
-  }  
+  }
 
-  set pollInterval(value) {
+  set pollInterval (value) {
     this._pollInterval = value
-  }  
+  }
 
   get skip () {
     return this._skip
