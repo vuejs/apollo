@@ -8,7 +8,8 @@ import {
   ApolloQueryResult,
 } from 'apollo-client';
 import { FetchResult } from 'apollo-link';
-import { DocumentNode } from 'graphql';
+import { ServerError, ServerParseError } from 'apollo-link-http-common';
+import { DocumentNode, GraphQLError } from 'graphql';
 
 // include Omit type from https://github.com/Microsoft/TypeScript/issues/12215
 type Property = string | number | symbol;
@@ -31,7 +32,12 @@ interface ApolloVueSubscribeToMoreOptions<V> {
 }
 
 export type WatchLoading<V> = (this: ApolloVueThisType<V>, isLoading: boolean, countModifier: number) => void
-export type ErrorHandler<V> = (this: ApolloVueThisType<V>, error: any) => void
+
+export interface ErrorResponse {
+  graphQLErrors?: ReadonlyArray<GraphQLError>;
+  networkError?: Error | ServerError | ServerParseError;
+}
+export type ErrorHandler<V> = (this: ApolloVueThisType<V>, error: ErrorResponse) => void
 
 type _WatchQueryOptions = Omit<WatchQueryOptions, 'query'>; // exclude query prop because it causes type incorrectly error
 
