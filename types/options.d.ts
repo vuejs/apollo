@@ -16,7 +16,7 @@ type Diff<T extends Property, U extends Property> = ({ [P in T]: P } & { [P in U
 type Omit<T, K extends keyof T> = { [P in Diff<keyof T, K>]?: T[P] };
 
 type ApolloVueThisType<V> = V & { [key: string]: any };
-type VariableFn<V> = ((this: ApolloVueThisType<V>) => V) | V;
+type VariableFn<V> = ((this: ApolloVueThisType<V>) => Object) | Object;
 type ApolloVueUpdateQueryFn<V> = (this: ApolloVueThisType<V>, previousQueryResult: { [key: string]: any }, options: {
   error: any,
   subscriptionData: { data: any; };
