@@ -34,7 +34,11 @@ jobs:
           key: v3-dependencies-{{ checksum "yarn.lock" }}
         
       # run tests!
-      - run: yarn test
+      - run: yarn build
+      - run: yarn test:eslint
+      - run: yarn test:types
+      - run: yarn test:unit
+      - run: yarn test:e2e
 
       - store_artifacts:
           path: tests/demo/tests/e2e/videos
