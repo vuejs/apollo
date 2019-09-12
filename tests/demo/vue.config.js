@@ -1,7 +1,9 @@
 module.exports = {
   pluginOptions: {
-    graphqlMock: false,
-    apolloEngine: false,
+    apollo: {
+      enableMocks: false,
+      enableEngine: false,
+    }
   },
 
   /* Without vue-cli-plugin-apollo 0.20.0+ */
