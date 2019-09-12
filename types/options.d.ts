@@ -79,6 +79,7 @@ interface VueApolloSubscribeToMoreOptions extends SubscribeToMoreOptions {
 
 interface VueApolloSubscriptionDefinition extends SubscriptionOptions {
   variables?: QueryVariables
+  client?: string
 }
 
 export type VueApolloSubscriptionProperty =

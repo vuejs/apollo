@@ -148,7 +148,8 @@ export const hey = Vue.extend({
           return {
             foo: this.meow
           }
-        }
+        },
+        client: 'foo'
       }
     }
   },
