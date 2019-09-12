@@ -3,8 +3,10 @@ module.exports = {
     apollo: {
       enableMocks: false,
       enableEngine: false,
-    }
+    },
   },
+
+  productionSourceMap: false,
 
   /* Without vue-cli-plugin-apollo 0.20.0+ */
   // chainWebpack: config => {
