@@ -19,10 +19,6 @@ export class DollarApollo {
     return this.vm.$apolloProvider
   }
 
-  query (options) {
-    return this.getClient(options).query(options)
-  }
-
   getClient (options = null) {
     if (!options || !options.client) {
       if (typeof this.client === 'object') {
@@ -46,6 +42,10 @@ export class DollarApollo {
       throw new Error(`[vue-apollo] Missing client '${options.client}' in 'apolloProvider'`)
     }
     return client
+  }
+
+  query (options) {
+    return this.getClient(options).query(options)
   }
 
   watchQuery (options) {

@@ -1,14 +1,177 @@
 // this example src is https://github.com/Akryum/vue-apollo-example
-import gql from 'graphql-tag';
-import Vue from 'vue';
-const pageSize = 10;
+import gql from 'graphql-tag'
+import Vue from 'vue'
+import { OperationVariables } from 'apollo-client'
+import { VueApolloQueryDefinition } from '../options'
+import { DocumentNode } from 'graphql'
+
+const pageSize = 10
+
 const SUB_QUERY = gql`subscription tags($type: String!) {
   tagAdded(type: $type) {
     id
     label
     type
   }
-}`;
+}`
+
+export const hey = Vue.extend({
+  props: {
+    meow: String,
+  },
+
+  data () {
+    return {
+      waf: 'waf',
+      loading: 0
+    }
+  },
+
+  apollo: {
+    $client: 'foo',
+    $query: {
+      fetchPolicy: 'cache-only'
+    },
+    foo: gql`query`,
+    message: {
+      query: gql`query`,
+      // https://vuejs.org/v2/guide/typescript.html#Annotating-Return-Types
+      variables (): OperationVariables {
+        this.hello.toUpperCase()
+        this.meow
+        return {
+          hello: this.hello.toUpperCase()
+        }
+      },
+      update: data => data.foo.bar,
+      result (result, key) {
+        this.meow
+        console.log(this.hello.toUpperCase())
+      },
+      error (error) {
+        console.error(error.graphQLErrors, error.networkError)
+      },
+      manual: false,
+      loadingKey: 'loading',
+      watchLoading (isLoading, countModifier) {
+        this.loading += countModifier
+        if (isLoading) {
+          console.log('isLoading')
+        }
+      },
+      // https://vuejs.org/v2/guide/typescript.html#Annotating-Return-Types
+      skip (): boolean {
+        return this.meow === 'meow'
+      },
+      prefetch: true,
+      client: 'api2',
+      deep: true,
+      /* Apollo options */
+      fetchPolicy: 'cache-only',
+      errorPolicy: 'all',
+      returnPartialData: true,
+      /* Subscriptions */
+      subscribeToMore: {
+        document: gql`subscription`,
+        // https://vuejs.org/v2/guide/typescript.html#Annotating-Return-Types
+        variables (): OperationVariables {
+          return {
+            foo: this.hello,
+          }
+        },
+        updateQuery (previousResult, options) {
+          return {
+            ...previousResult,
+            foo: options.subscriptionData.data.foo
+          }
+        }
+      }
+    },
+
+    testMultiSubs: {
+      query: gql`query`,
+      subscribeToMore: [
+        {
+          document: gql`subscription`,
+          variables: {
+            foo: 'bar'
+          },
+          updateQuery (previousResult, options) {
+            return {
+              ...previousResult,
+              foo: options.subscriptionData.data.foo
+            }
+          }
+        },
+        {
+          document: gql`subscription`,
+          // https://vuejs.org/v2/guide/typescript.html#Annotating-Return-Types
+          variables (): OperationVariables {
+            return {
+              foo: this.hello,
+            }
+          },
+          updateQuery (previousResult, options) {
+            return {
+              ...previousResult,
+              foo: options.subscriptionData.data.foo
+            }
+          }
+        }
+      ],
+    },
+
+    // https://vuejs.org/v2/guide/typescript.html#Annotating-Return-Types
+    tags (): VueApolloQueryDefinition {
+      this.hello.toUpperCase()
+      this.meow
+      return {
+        query: gql`query`,
+        // https://vuejs.org/v2/guide/typescript.html#Annotating-Return-Types
+        variables: (): OperationVariables => {
+          this.hello.toUpperCase()
+          this.meow
+          return {
+            hello: this.hello.toUpperCase()
+          }
+        },
+        result: () => {
+          console.log(this.hello.toUpperCase())
+        }
+      }
+    },
+
+    $subscribe: {
+      tagAdded: {
+        query: gql`subscription`,
+        variables (): OperationVariables {
+          return {
+            foo: this.meow
+          }
+        }
+      }
+    }
+  },
+
+  computed: {
+    // https://vuejs.org/v2/guide/typescript.html#Annotating-Return-Types
+    hello (): string {
+      return this.waf === 'waf' ? 'waf waf' : 'hello'
+    }
+  },
+
+  created () {
+    this.$apollo.mutate({
+      mutation: gql`mutation {}`,
+      variables: {
+        hello: this.hello
+      },
+    })
+    this.hello.toUpperCase()
+    this.$apollo.vm.hello.toUpperCase()
+  }
+})
+
 export default Vue.extend({
   data () {
     return {
@@ -31,7 +194,7 @@ export default Vue.extend({
       loadingKey: 'loading',
       fetchPolicy: 'cache-first'
     },
-    tags() {
+    tags(): VueApolloQueryDefinition {
       return {
         query: gql`query tagList ($type: String!) {
           tags(type: $type) {
@@ -40,24 +203,26 @@ export default Vue.extend({
           }
         }`,
         // Reactive variables
-        variables () {
+        variables: (): OperationVariables => {
           return {
             type: this.type,
-          };
+          }
         },
         manual: true,
         pollInterval: 300,
-        result (result) {
-          this.updateCount ++;
+        result: (result) => {
+          this.updateCount ++
         },
-        skip () {
+        skip: (): boolean => {
           return this.skipQuery
         },
         fetchPolicy: 'cache-and-network',
         subscribeToMore: [{
           document: SUB_QUERY,
-          variables () {
-            return { type: this.type, }
+          variables: (): OperationVariables => {
+            return {
+              type: this.type,
+            }
           },
           updateQuery: (previousResult, { subscriptionData }) => {
             console.log('new tag', subscriptionData.data.tagAdded)
@@ -75,7 +240,7 @@ export default Vue.extend({
       }
     },
     randomTag: {
-      query () {
+      query (): DocumentNode | null {
         if (this.showTag === 'random') {
           return gql`{
             randomTag {
@@ -93,6 +258,7 @@ export default Vue.extend({
             }
           }`
         }
+        return null
       },
     },
     tagsPage: {
@@ -115,7 +281,7 @@ export default Vue.extend({
   },
   methods: {
     addTag() {
-      const newTag = this.newTag;
+      const newTag = this.newTag
       this.$apollo.mutate({
         mutation: gql`mutation ($type: String!, $label: String!) {
           addTag(type: $type, label: $label) {
@@ -126,12 +292,12 @@ export default Vue.extend({
         variables: { type: this.type, label: newTag, },
         updateQueries: {
           tagList: (previousResult, { mutationResult }) => {
-            const { data } = mutationResult;
+            const { data } = mutationResult
             if (!data) { return previousResult }
             if (previousResult.tags.find((tag: any) => tag.id === data.addTag.id)) {
               return previousResult
             }
-            return { tags: [ ...previousResult.tags, data.addTag ] };
+            return { tags: [ ...previousResult.tags, data.addTag ] }
           },
         },
         optimisticResponse: {
@@ -144,14 +310,14 @@ export default Vue.extend({
           },
         },
       }).then((data) => {
-        console.log(data);
+        console.log(data)
       }).catch((error) => {
-        console.error(error);
-        this.newTag = newTag;
-      });
+        console.error(error)
+        this.newTag = newTag
+      })
     },
     showMore() {
-      this.page ++;
+      this.page ++
       this.$apollo.queries.tagsPage.fetchMore({
         variables: {
           page: this.page,
@@ -159,10 +325,10 @@ export default Vue.extend({
         },
         // Mutate the previous result
         updateQuery: (previousResult: any, result: { fetchMoreResult?: any }) => {
-          const { fetchMoreResult } = result;
-          const newTags = fetchMoreResult.tagsPage.tags;
-          const hasMore = fetchMoreResult.tagsPage.hasMore;
-          this.showMoreEnabled = hasMore;
+          const { fetchMoreResult } = result
+          const newTags = fetchMoreResult.tagsPage.tags
+          const hasMore = fetchMoreResult.tagsPage.hasMore
+          this.showMoreEnabled = hasMore
           return {
             tagsPage: {
               __typename: previousResult.tagsPage.__typename,
@@ -173,9 +339,9 @@ export default Vue.extend({
               ],
               hasMore,
             },
-          };
+          }
         },
-      });
+      })
     },
     refetchTags () {
       this.$apollo.queries.tags.refetch()
@@ -187,14 +353,14 @@ export default Vue.extend({
       variables: {
         type: 'Companies',
       },
-    });
+    })
     observer.subscribe({
       next(data) {
-        console.log('this.$apollo.subscribe', data);
+        console.log('this.$apollo.subscribe', data)
       },
-    });
+    })
 
     // enable to specify client when execute request
     this.$apollo.query({ query: gql`query mockQuery { id }`, client: 'test' })
   }, 
-});
+})

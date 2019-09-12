@@ -1,22 +1,25 @@
 /* eslint no-unused-vars: 0 */
 
 import Vue, { AsyncComponent } from 'vue'
-import { VueApolloComponentOption } from './options'
 import { ApolloClient } from 'apollo-client';
-import { WatchLoading, ErrorHandler, VueApolloOptions } from './options'
+import {
+  VueApolloComponentOptions,
+  WatchLoading,
+  ErrorHandler
+} from './options'
 
-export type VueApolloComponent<V extends Vue = Vue> = VueApolloComponentOption<V> | typeof Vue | AsyncComponent;
+export type VueApolloComponent<V extends Vue = Vue> = VueApolloComponentOptions<V> | typeof Vue | AsyncComponent;
 
 export class ApolloProvider<TCacheShape=any> {
   provide: (key?: string) => this
   constructor (options: {
     defaultClient: ApolloClient<TCacheShape>,
-    defaultOptions?: VueApolloOptions<any>,
+    defaultOptions?: VueApolloComponentOptions<Vue>,
     clients?: { [key: string]: ApolloClient<TCacheShape> },
-    watchLoading?: WatchLoading<any>,
-    errorHandler?: ErrorHandler<any>
+    watchLoading?: WatchLoading,
+    errorHandler?: ErrorHandler,
+    prefetch?: boolean
   })
   clients: { [key: string]: ApolloClient<TCacheShape> }
   defaultClient: ApolloClient<TCacheShape>
-  prefetchQueries: any
 }
