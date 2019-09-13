@@ -70,7 +70,7 @@
     "jest": "^24.8.0",
     "nodemon": "^1.18.4",
     "rimraf": "^2.6.1",
-    "rollup": "^0.66.6",
+    "rollup": "^1.21.2",
     "rollup-plugin-babel": "^4.0.2",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-node-resolve": "^3.0.0",
