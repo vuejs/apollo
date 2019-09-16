@@ -7,6 +7,7 @@ import {
   WatchQueryOptions,
   MutationOptions,
   SubscriptionOptions,
+  OperationVariables,
 } from 'apollo-client'
 import { FetchResult } from 'apollo-link'
 import { Observable } from 'apollo-client/util/Observable'
@@ -54,14 +55,14 @@ interface ClientOptions {
   client?: string
 }
 
-interface ApolloClientMethods<R> {
-  query: (options: QueryOptions & ClientOptions) => ReturnType<ApolloClient<R>['query']>
-  watchQuery: (options: WatchQueryOptions & ClientOptions) => ReturnType<ApolloClient<R>['watchQuery']>
-  mutate: (options: MutationOptions & ClientOptions) => ReturnType<ApolloClient<R>['mutate']>
-  subscribe: (options: SubscriptionOptions & ClientOptions) => ReturnType<ApolloClient<R>['subscribe']>
+interface ApolloClientMethods {
+  query<R = any, TVariables = OperationVariables>(options: QueryOptions<TVariables> & ClientOptions): Promise<ApolloQueryResult<R>>
+  watchQuery<R = any, TVariables = OperationVariables>(options: WatchQueryOptions<TVariables> & ClientOptions): ObservableQuery<R, TVariables>
+  mutate<R = any, TVariables = OperationVariables>(options: MutationOptions<R, TVariables> & ClientOptions): Promise<FetchResult<R>>
+  subscribe<R = any, TVariables = OperationVariables>(options: SubscriptionOptions<TVariables> & ClientOptions): Observable<FetchResult<R>>
 }
 
-export interface DollarApollo<V, R = any> extends ApolloClientMethods<R> {
+export interface DollarApollo<V> extends ApolloClientMethods {
   vm: V
   queries: Record<string, SmartQuery<V>>
   subscriptions: Record<string, SmartSubscription<V>>

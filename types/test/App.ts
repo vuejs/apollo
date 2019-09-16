@@ -15,6 +15,14 @@ const SUB_QUERY = gql`subscription tags($type: String!) {
   }
 }`
 
+interface Foo {
+  foo: string
+}
+
+interface HelloVars {
+  hello: string
+}
+
 export const hey = Vue.extend({
   props: {
     meow: String,
@@ -161,13 +169,16 @@ export const hey = Vue.extend({
     }
   },
 
-  created () {
-    this.$apollo.mutate({
+  async created () {
+    const { data } = await this.$apollo.mutate<Foo, HelloVars>({
       mutation: gql`mutation {}`,
       variables: {
         hello: this.hello
       },
     })
+    if (data) {
+      console.log(data.foo)
+    }
     this.hello.toUpperCase()
     this.$apollo.vm.hello.toUpperCase()
   }
