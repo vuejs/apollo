@@ -1,8 +1,8 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('graphql-tag')) :
   typeof define === 'function' && define.amd ? define(['exports', 'graphql-tag'], factory) :
-  (factory((global['vue-apollo'] = {}),global.gql));
-}(this, (function (exports,gql) { 'use strict';
+  (global = global || self, factory(global['vue-apollo'] = {}, global.gql));
+}(this, function (exports, gql) { 'use strict';
 
   gql = gql && gql.hasOwnProperty('default') ? gql['default'] : gql;
 
@@ -794,7 +794,7 @@
 
         if (_this.hasDataField) {
           Object.defineProperty(_this.vm.$data.$apolloData.data, key, {
-            get: function get$$1() {
+            get: function get() {
               return _this.vm.$data[key];
             },
             enumerable: true,
@@ -802,7 +802,7 @@
           });
         } else {
           Object.defineProperty(_this.vm.$data, key, {
-            get: function get$$1() {
+            get: function get() {
               return _this.vm.$data.$apolloData.data[key];
             },
             enumerable: true,
@@ -1101,12 +1101,12 @@
       }
     }, {
       key: "client",
-      get: function get$$1() {
+      get: function get() {
         return this.vm.$apollo.getClient(this.options);
       }
     }, {
       key: "loading",
-      get: function get$$1() {
+      get: function get() {
         return this.vm.$data.$apolloData && this.vm.$data.$apolloData.queries[this.key] ? this.vm.$data.$apolloData.queries[this.key].loading : this._loading;
       },
       set: function set(value) {
@@ -1121,7 +1121,7 @@
       }
     }, {
       key: "loadingKey",
-      get: function get$$1() {
+      get: function get() {
         return this.options.loadingKey || this.vm.$apollo.loadingKey;
       }
     }]);
@@ -2079,7 +2079,7 @@
   }
   ApolloProvider.install = install; // eslint-disable-next-line no-undef
 
-  ApolloProvider.version = "3.0.0-rc.4"; // Apollo provider
+  ApolloProvider.version = "3.0.0-rc.5"; // Apollo provider
 
   var ApolloProvider$1 = ApolloProvider; // Components
 
@@ -2099,13 +2099,13 @@
     GlobalVue.use(ApolloProvider);
   }
 
-  exports.install = install;
+  exports.ApolloMutation = ApolloMutation;
   exports.ApolloProvider = ApolloProvider$1;
   exports.ApolloQuery = ApolloQuery;
   exports.ApolloSubscribeToMore = ApolloSubscribeToMore;
-  exports.ApolloMutation = ApolloMutation;
   exports.default = ApolloProvider;
+  exports.install = install;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
-})));
+}));

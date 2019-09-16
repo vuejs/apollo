@@ -788,7 +788,7 @@ function (_SmartApollo) {
 
       if (_this.hasDataField) {
         Object.defineProperty(_this.vm.$data.$apolloData.data, key, {
-          get: function get$$1() {
+          get: function get() {
             return _this.vm.$data[key];
           },
           enumerable: true,
@@ -796,7 +796,7 @@ function (_SmartApollo) {
         });
       } else {
         Object.defineProperty(_this.vm.$data, key, {
-          get: function get$$1() {
+          get: function get() {
             return _this.vm.$data.$apolloData.data[key];
           },
           enumerable: true,
@@ -1095,12 +1095,12 @@ function (_SmartApollo) {
     }
   }, {
     key: "client",
-    get: function get$$1() {
+    get: function get() {
       return this.vm.$apollo.getClient(this.options);
     }
   }, {
     key: "loading",
-    get: function get$$1() {
+    get: function get() {
       return this.vm.$data.$apolloData && this.vm.$data.$apolloData.queries[this.key] ? this.vm.$data.$apolloData.queries[this.key].loading : this._loading;
     },
     set: function set(value) {
@@ -1115,7 +1115,7 @@ function (_SmartApollo) {
     }
   }, {
     key: "loadingKey",
-    get: function get$$1() {
+    get: function get() {
       return this.options.loadingKey || this.vm.$apollo.loadingKey;
     }
   }]);
@@ -2073,7 +2073,7 @@ function install(Vue, options) {
 }
 ApolloProvider.install = install; // eslint-disable-next-line no-undef
 
-ApolloProvider.version = "3.0.0-rc.4"; // Apollo provider
+ApolloProvider.version = "3.0.0-rc.5"; // Apollo provider
 
 var ApolloProvider$1 = ApolloProvider; // Components
 
@@ -2094,4 +2094,4 @@ if (GlobalVue) {
 }
 
 export default ApolloProvider;
-export { install, ApolloProvider$1 as ApolloProvider, ApolloQuery, ApolloSubscribeToMore, ApolloMutation };
+export { ApolloMutation, ApolloProvider$1 as ApolloProvider, ApolloQuery, ApolloSubscribeToMore, install };
