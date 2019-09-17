@@ -19,7 +19,8 @@
     "module": "es2015",
     "moduleResolution": "node",
     "experimentalDecorators": true,
-    "strict": true
+    "strict": true,
+    "noImplicitAny": true
   },
   "include": [
     "*.ts",

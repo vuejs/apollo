@@ -93,7 +93,7 @@ function launch () {
         const smart = this.$apollo.addSmartQuery(key, options)
         if (this.$isServer) {
           options = reapply(options, this)
-          if (options.prefetch !== false && apollo.$prefetch !== false && !smart.skip) {
+          if (apolloProvider.prefetch !== false && options.prefetch !== false && apollo.$prefetch !== false && !smart.skip) {
             this.$_apolloPromises.push(smart.firstRun)
           }
         }

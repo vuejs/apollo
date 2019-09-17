@@ -9,7 +9,7 @@ export class ApolloProvider {
     this.watchLoading = options.watchLoading
     this.errorHandler = options.errorHandler
     this.handleServerPrefetch = options.handleServerPrefetch
-    this.prefetchQueries = []
+    this.prefetch = options.prefetch
   }
 
   provide (key = '$apolloProvider') {

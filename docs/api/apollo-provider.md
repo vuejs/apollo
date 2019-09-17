@@ -45,6 +45,8 @@ const apolloProvider = new VueApollo({
     }
   */
   handleServerPrefetch: Function: receives apolloPromises must return a Promise
+  // Globally turn off prefetch ssr
+  prefetch: Boolean
 })
 ```
 
