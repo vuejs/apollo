@@ -33,6 +33,8 @@ const apolloProvider = new VueApollo({
     console.log('Global error handler')
     console.error(error)
   },
+  // 全局关闭 ssr 的预取
+  prefetch: Boolean,
 })
 ```
 
