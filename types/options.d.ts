@@ -33,13 +33,12 @@ export interface AllVueApolloComponentSpecialOptions {
 export type VueApolloComponentSpecialOptions =
   Partial<AllVueApolloComponentSpecialOptions>
 
-interface PrivateVueApolloComponentOptions
- extends VueApolloComponentSpecialOptions {
+interface PrivateVueApolloComponentOptions extends VueApolloComponentSpecialOptions {
   [key: string] : VueApolloQueryProperty |
     VueApolloComponentSpecialOptions[keyof VueApolloComponentSpecialOptions]
 }
 
-// https://github.com/microsoft/TypeScript/issues/33392
+// DeepApplyThisType is buggy: https://github.com/microsoft/TypeScript/issues/33392
 // export type VueApolloComponentOptions<Instance> = DeepApplyThisType<PrivateVueApolloComponentOptions, Instance>
 export type VueApolloComponentOptions<Instance> = PrivateVueApolloComponentOptions & ThisType<Instance>
 
@@ -50,7 +49,7 @@ export type ErrorHandler = (error: ApolloError) => void
 
 /* Query */
 
-type QueryVariables = (() => OperationVariables) | OperationVariables
+type QueryVariables<Variables = OperationVariables> = (() => Variables) | Variables
 
 export type VueApolloQueryProperty =
   DocumentNode |
@@ -60,9 +59,9 @@ export type VueApolloQueryProperty =
 // exclude query prop because it causes type incorrectly error
 type WatchQueryOptionsWithoutQuery = Omit<WatchQueryOptions, 'query'>
 
-export interface VueApolloQueryDefinition<Result = any> extends WatchQueryOptionsWithoutQuery {
+export interface VueApolloQueryDefinition<Result = any, Variables = OperationVariables> extends WatchQueryOptionsWithoutQuery {
   query: DocumentNode | (() => DocumentNode | null)
-  variables?: QueryVariables
+  variables?: QueryVariables<Variables>
   update?: (data: Result) => any
   result?: (result: ApolloQueryResult<Result>, key: string) => void
   error?: ErrorHandler
@@ -73,17 +72,17 @@ export interface VueApolloQueryDefinition<Result = any> extends WatchQueryOption
   prefetch?: ((context: any) => any) | boolean
   client?: string
   deep?: boolean
-  subscribeToMore?: VueApolloSubscribeToMoreOptions | VueApolloSubscribeToMoreOptions[]
+  subscribeToMore?: VueApolloSubscribeToMoreOptions<Result, Variables> | VueApolloSubscribeToMoreOptions<Result, Variables>[]
 }
 
 /* Subscriptions */
 
-interface VueApolloSubscribeToMoreOptions extends SubscribeToMoreOptions {
-  variables?: QueryVariables
+export interface VueApolloSubscribeToMoreOptions<Result = any, Variables = OperationVariables> extends Omit<SubscribeToMoreOptions<Result, Variables>, 'variables'> {
+  variables?: QueryVariables<Variables>
 }
 
-interface VueApolloSubscriptionDefinition extends SubscriptionOptions {
-  variables?: QueryVariables
+export interface VueApolloSubscriptionDefinition<Variables = OperationVariables> extends Omit<SubscriptionOptions<Variables>, 'variables'> {
+  variables?: QueryVariables<Variables>
   client?: string
 }
 
