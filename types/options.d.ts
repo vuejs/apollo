@@ -9,14 +9,11 @@ import {
   NetworkStatus,
   ApolloQueryResult,
   ApolloError
-} from 'apollo-client';
-import { FetchResult } from 'apollo-link';
-import { ServerError, ServerParseError } from 'apollo-link-http-common';
-import { DocumentNode, GraphQLError } from 'graphql';
+import { DeepApplyThisType } from './utils'
 
 /* Component options */
 
-export interface AllVueApolloComponentSpecialOptions<Instance> {
+export interface AllVueApolloComponentSpecialOptions {
   $skip: boolean
   $skipAllQueries: boolean
   $skipAllSubscriptions: boolean
@@ -25,18 +22,20 @@ export interface AllVueApolloComponentSpecialOptions<Instance> {
   $loadingKey: string
   $watchLoading: WatchLoading
   $error: ErrorHandler
-  $query: Partial<VueApolloQueryDefinition<Instance>>
+  $query: Partial<VueApolloQueryDefinition>
   $subscribe: VueApolloSubscriptionProperty
 }
 
-export type VueApolloComponentSpecialOptions<Instance> =
-  Partial<AllVueApolloComponentSpecialOptions<Instance>>
+export type VueApolloComponentSpecialOptions =
+  Partial<AllVueApolloComponentSpecialOptions>
 
-export interface VueApolloComponentOptions<Instance>
- extends VueApolloComponentSpecialOptions<Instance> {
-  [key: string] : VueApolloQueryProperty<Instance> |
-    VueApolloComponentSpecialOptions<Instance>[keyof VueApolloComponentSpecialOptions<Instance>]
+interface PrivateVueApolloComponentOptions
+ extends VueApolloComponentSpecialOptions {
+  [key: string] : VueApolloQueryProperty |
+    VueApolloComponentSpecialOptions[keyof VueApolloComponentSpecialOptions]
 }
+
+export type VueApolloComponentOptions<Instance> = DeepApplyThisType<PrivateVueApolloComponentOptions, Instance>
 
 /* Special component options */
 
@@ -45,21 +44,21 @@ export type ErrorHandler = (error: ApolloError) => void
 
 /* Query */
 
-type QueryVariables = (() => OperationVariables) | OperationVariables;
+type QueryVariables = (() => OperationVariables) | OperationVariables
 
-export type VueApolloQueryProperty<Instance> =
+export type VueApolloQueryProperty =
   DocumentNode |
-  VueApolloQueryDefinition<Instance> |
-  (() => VueApolloQueryDefinition<Instance> | null)
+  VueApolloQueryDefinition |
+  (() => VueApolloQueryDefinition | null)
 
 // exclude query prop because it causes type incorrectly error
-type WatchQueryOptionsWithoutQuery = Omit<WatchQueryOptions, 'query'>;
+type WatchQueryOptionsWithoutQuery = Omit<WatchQueryOptions, 'query'>
 
-export interface VueApolloQueryDefinition<Instance = Vue, R = any> extends WatchQueryOptionsWithoutQuery {
+export interface VueApolloQueryDefinition<Result = any> extends WatchQueryOptionsWithoutQuery {
   query: DocumentNode | (() => DocumentNode | null)
   variables?: QueryVariables
-  update?: (data: R) => any
-  result?: (result: ApolloQueryResult<R>, key: string) => void
+  update?: (data: Result) => any
+  result?: (result: ApolloQueryResult<Result>, key: string) => void
   error?: ErrorHandler
   manual?: boolean
   loadingKey?: string
@@ -68,7 +67,7 @@ export interface VueApolloQueryDefinition<Instance = Vue, R = any> extends Watch
   prefetch?: ((context: any) => any) | boolean
   client?: string
   deep?: boolean
-  subscribeToMore?: VueApolloSubscribeToMoreOptions | (VueApolloSubscribeToMoreOptions & ThisType<Instance>)[]
+  subscribeToMore?: VueApolloSubscribeToMoreOptions | VueApolloSubscribeToMoreOptions[]
 }
 
 /* Subscriptions */
