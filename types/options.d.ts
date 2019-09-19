@@ -39,7 +39,9 @@ interface PrivateVueApolloComponentOptions
     VueApolloComponentSpecialOptions[keyof VueApolloComponentSpecialOptions]
 }
 
-export type VueApolloComponentOptions<Instance> = DeepApplyThisType<PrivateVueApolloComponentOptions, Instance>
+// https://github.com/microsoft/TypeScript/issues/33392
+// export type VueApolloComponentOptions<Instance> = DeepApplyThisType<PrivateVueApolloComponentOptions, Instance>
+export type VueApolloComponentOptions<Instance> = PrivateVueApolloComponentOptions & ThisType<Instance>
 
 /* Special component options */
 
