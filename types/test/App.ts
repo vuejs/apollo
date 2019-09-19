@@ -1,8 +1,8 @@
 // this example src is https://github.com/Akryum/vue-apollo-example
 import gql from 'graphql-tag'
 import Vue from 'vue'
-import { OperationVariables } from 'apollo-client'
-import { VueApolloQueryDefinition } from '../options'
+import { OperationVariables, ApolloQueryResult, ApolloError } from 'apollo-client'
+import { VueApolloQueryDefinition, VueApolloSubscribeToMoreOptions } from '../options'
 import { DocumentNode } from 'graphql'
 
 const pageSize = 10
@@ -21,6 +21,12 @@ interface Foo {
 
 interface HelloVars {
   hello: string
+}
+
+interface FooResult {
+  foo: {
+    bar: string
+  }
 }
 
 export const hey = Vue.extend({
@@ -44,17 +50,19 @@ export const hey = Vue.extend({
     message: {
       query: gql`query`,
       // https://vuejs.org/v2/guide/typescript.html#Annotating-Return-Types
-      variables (): OperationVariables {
+      variables (): HelloVars {
         this.hello.toUpperCase()
         this.meow
         return {
           hello: this.hello.toUpperCase()
         }
       },
-      update: data => data.foo.bar,
-      result (result, key) {
+      update: (data: FooResult) => data.foo.bar,
+      result (result: ApolloQueryResult<FooResult>, key) {
         this.meow
+        console.log(result.data.foo.bar.toUpperCase())
         console.log(this.hello.toUpperCase())
+        console.log(key)
       },
       error (error) {
         console.error(error.graphQLErrors, error.networkError)
@@ -98,6 +106,11 @@ export const hey = Vue.extend({
 
     testMultiSubs: {
       query: gql`query`,
+      variables (): HelloVars {
+        return {
+          hello: this.hello,
+        }
+      },
       subscribeToMore: [
         {
           document: gql`subscription`,
@@ -114,9 +127,11 @@ export const hey = Vue.extend({
         {
           document: gql`subscription`,
           // https://vuejs.org/v2/guide/typescript.html#Annotating-Return-Types
-          variables (): OperationVariables {
+          variables (): HelloVars {
             return {
-              foo: this.hello,
+              // Typescript Bug: https://github.com/microsoft/TypeScript/issues/33392
+              // @ts-ignore
+              hello: this.hello,
             }
           },
           updateQuery (previousResult, options) {
@@ -129,23 +144,31 @@ export const hey = Vue.extend({
       ],
     },
 
-    // https://vuejs.org/v2/guide/typescript.html#Annotating-Return-Types
-    tags (): VueApolloQueryDefinition {
+    tags (): VueApolloQueryDefinition<FooResult, HelloVars> {
       this.hello.toUpperCase()
       this.meow
       return {
         query: gql`query`,
         // https://vuejs.org/v2/guide/typescript.html#Annotating-Return-Types
-        variables: (): OperationVariables => {
+        variables: () => {
           this.hello.toUpperCase()
           this.meow
           return {
             hello: this.hello.toUpperCase()
           }
         },
-        result: () => {
+        result: (result) => {
           console.log(this.hello.toUpperCase())
-        }
+          console.log(result.data.foo.bar.toUpperCase())
+        },
+        subscribeToMore: [
+          {
+            document: gql``,
+            variables: () => ({
+              hello: this.hello.toUpperCase()
+            }),
+          },
+        ],
       }
     },
 
@@ -204,7 +227,7 @@ export default Vue.extend({
     $client: 'a',
     $query: {
       loadingKey: 'loading',
-      fetchPolicy: 'cache-first'
+      fetchPolicy: 'cache-first',
     },
     tags(): VueApolloQueryDefinition {
       return {
@@ -288,6 +311,10 @@ export default Vue.extend({
       variables: {
         page: 0,
         pageSize,
+      },
+      result (result) {
+        console.log(result)
+        console.log(this.loading)
       },
     },
   },

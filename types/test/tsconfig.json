@@ -20,7 +20,8 @@
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "strict": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "allowJs": true
   },
   "include": [
     "*.ts",
