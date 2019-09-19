@@ -1,14 +1,14 @@
 /* eslint no-unused-vars: 0 */
 
 import Vue, { AsyncComponent } from 'vue'
-import { ApolloClient } from 'apollo-client';
+import { ApolloClient } from 'apollo-client'
 import {
   VueApolloComponentOptions,
   WatchLoading,
   ErrorHandler
 } from './options'
 
-export type VueApolloComponent<V extends Vue = Vue> = VueApolloComponentOptions<V> | typeof Vue | AsyncComponent;
+export type VueApolloComponent<V extends Vue = Vue> = VueApolloComponentOptions<V> | typeof Vue | AsyncComponent
 
 export class ApolloProvider<TCacheShape=any> {
   provide: (key?: string) => this

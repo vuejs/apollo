@@ -9,6 +9,10 @@ import {
   NetworkStatus,
   ApolloQueryResult,
   ApolloError
+} from 'apollo-client'
+import { FetchResult } from 'apollo-link'
+import { ServerError, ServerParseError } from 'apollo-link-http-common'
+import { DocumentNode, GraphQLError } from 'graphql'
 import { DeepApplyThisType } from './utils'
 
 /* Component options */
@@ -73,7 +77,7 @@ export interface VueApolloQueryDefinition<Result = any> extends WatchQueryOption
 /* Subscriptions */
 
 interface VueApolloSubscribeToMoreOptions extends SubscribeToMoreOptions {
-  variables?: QueryVariables;
+  variables?: QueryVariables
 }
 
 interface VueApolloSubscriptionDefinition extends SubscriptionOptions {
