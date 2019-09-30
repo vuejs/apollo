@@ -87,6 +87,14 @@ export class DollarApollo {
   addSmartQuery (key, options) {
     let finalOptions = reapply(options, this.vm)
 
+    // Simple query
+    if (!finalOptions.query) {
+      const query = finalOptions
+      finalOptions = {
+        query,
+      }
+    }
+
     const apollo = this.vm.$options.apollo
     const defaultOptions = this.provider.defaultOptions
     let $query

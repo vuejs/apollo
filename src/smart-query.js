@@ -7,14 +7,6 @@ export default class SmartQuery extends SmartApollo {
   _loading = false
 
   constructor (vm, key, options, autostart = true) {
-    // Simple query
-    if (!options.query) {
-      const query = options
-      options = {
-        query,
-      }
-    }
-
     // Add reactive data related to the query
     if (vm.$data.$apolloData && !vm.$data.$apolloData.queries[key]) {
       vm.$set(vm.$data.$apolloData.queries, key, {
