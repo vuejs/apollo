@@ -359,6 +359,8 @@ You can also access the query directly and set the `skip` property:
 this.$apollo.queries.tags.skip = true
 ```
 
+If the query `skip` becomes `false`, the query will automatically execute again.
+
 ## Reactive Query Example
 
 Here is a reactive query example using polling:
