@@ -15,7 +15,7 @@
     "test": "yarn run lint --no-fix && yarn run test:e2e"
   },
   "dependencies": {
-    "graphql-type-json": "^0.2.1",
+    "graphql-type-json": "^0.3.0",
     "marked": "^0.5.1",
     "shortid": "^2.2.8",
     "vue": "^2.5.16",
