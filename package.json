@@ -69,7 +69,7 @@
     "graphql-tag": "^2.5.0",
     "jest": "^24.8.0",
     "nodemon": "^1.18.4",
-    "rimraf": "^2.6.1",
+    "rimraf": "^3.0.0",
     "rollup": "^1.21.2",
     "rollup-plugin-babel": "^4.0.2",
     "rollup-plugin-commonjs": "^10.1.0",
