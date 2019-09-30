@@ -5,6 +5,7 @@ export default class SmartQuery extends SmartApollo {
   type = 'query'
   vueApolloSpecialKeys = VUE_APOLLO_QUERY_KEYWORDS
   _loading = false
+  _linkedSubscriptions = []
 
   constructor (vm, key, options, autostart = true) {
     // Add reactive data related to the query
@@ -86,6 +87,11 @@ export default class SmartQuery extends SmartApollo {
         return
       }
       this.sub.unsubscribe()
+
+      // Subscribe to more subs
+      for (const sub of this._linkedSubscriptions) {
+        sub.stop()
+      }
     }
 
     this.previousVariablesJson = variablesJson
@@ -104,6 +110,11 @@ export default class SmartQuery extends SmartApollo {
     }
 
     super.executeApollo(variables)
+
+    // Subscribe to more subs
+    for (const sub of this._linkedSubscriptions) {
+      sub.start()
+    }
   }
 
   startQuerySubscription () {

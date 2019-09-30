@@ -150,6 +150,10 @@ export class DollarApollo {
       const smart = this.subscriptions[key] = new SmartSubscription(this.vm, key, options, false)
       smart.autostart()
 
+      if (options.linkedQuery) {
+        options.linkedQuery._linkedSubscriptions.push(smart)
+      }
+
       return smart
     }
   }
