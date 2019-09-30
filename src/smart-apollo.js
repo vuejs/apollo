@@ -94,8 +94,10 @@ export default class SmartApollo {
           this.options[prop] = query
           this.refresh()
         }
-        cb = this.options.throttle ? throttle(cb, this.options.throttle) : cb
-        cb = this.options.debounce ? debounce(cb, this.options.debounce) : cb
+        if (!this.vm.$isServer) {
+          cb = this.options.throttle ? throttle(cb, this.options.throttle) : cb
+          cb = this.options.debounce ? debounce(cb, this.options.debounce) : cb
+        }
         this._watchers.push(this.vm.$watch(queryCb, cb, {
           deep: this.options.deep,
         }))
@@ -105,8 +107,10 @@ export default class SmartApollo {
     // GraphQL Variables
     if (typeof this.options.variables === 'function') {
       let cb = this.executeApollo.bind(this)
-      cb = this.options.throttle ? throttle(cb, this.options.throttle) : cb
-      cb = this.options.debounce ? debounce(cb, this.options.debounce) : cb
+      if (!this.vm.$isServer) {
+        cb = this.options.throttle ? throttle(cb, this.options.throttle) : cb
+        cb = this.options.debounce ? debounce(cb, this.options.debounce) : cb
+      }
       this._watchers.push(this.vm.$watch(() => this.options.variables.call(this.vm), cb, {
         immediate: true,
         deep: this.options.deep,
