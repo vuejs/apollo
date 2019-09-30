@@ -364,6 +364,7 @@ function debounce (delay, atBegin, callback) {
 }
 
 var index_esm = /*#__PURE__*/Object.freeze({
+  __proto__: null,
   throttle: throttle,
   debounce: debounce
 });
@@ -520,8 +521,10 @@ function () {
             _this.refresh();
           };
 
-          _cb = _this.options.throttle ? utils_2(_cb, _this.options.throttle) : _cb;
-          _cb = _this.options.debounce ? utils_3(_cb, _this.options.debounce) : _cb;
+          if (!_this.vm.$isServer) {
+            _cb = _this.options.throttle ? utils_2(_cb, _this.options.throttle) : _cb;
+            _cb = _this.options.debounce ? utils_3(_cb, _this.options.debounce) : _cb;
+          }
 
           _this._watchers.push(_this.vm.$watch(queryCb, _cb, {
             deep: _this.options.deep
@@ -536,8 +539,11 @@ function () {
 
       if (typeof this.options.variables === 'function') {
         var cb = this.executeApollo.bind(this);
-        cb = this.options.throttle ? utils_2(cb, this.options.throttle) : cb;
-        cb = this.options.debounce ? utils_3(cb, this.options.debounce) : cb;
+
+        if (!this.vm.$isServer) {
+          cb = this.options.throttle ? utils_2(cb, this.options.throttle) : cb;
+          cb = this.options.debounce ? utils_3(cb, this.options.debounce) : cb;
+        }
 
         this._watchers.push(this.vm.$watch(function () {
           return _this.options.variables.call(_this.vm);
@@ -749,15 +755,7 @@ function (_SmartApollo) {
 
     _classCallCheck(this, SmartQuery);
 
-    // Simple query
-    if (!options.query) {
-      var query = options;
-      options = {
-        query: query
-      };
-    } // Add reactive data related to the query
-
-
+    // Add reactive data related to the query
     if (vm.$data.$apolloData && !vm.$data.$apolloData.queries[key]) {
       vm.$set(vm.$data.$apolloData.queries, key, {
         loading: false
@@ -771,6 +769,8 @@ function (_SmartApollo) {
     _defineProperty(_assertThisInitialized(_this), "vueApolloSpecialKeys", VUE_APOLLO_QUERY_KEYWORDS);
 
     _defineProperty(_assertThisInitialized(_this), "_loading", false);
+
+    _defineProperty(_assertThisInitialized(_this), "_linkedSubscriptions", []);
 
     if (vm.$isServer) {
       _this.firstRun = new Promise(function (resolve, reject) {
@@ -834,7 +834,31 @@ function (_SmartApollo) {
           return;
         }
 
-        this.sub.unsubscribe();
+        this.sub.unsubscribe(); // Subscribe to more subs
+
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = this._linkedSubscriptions[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var sub = _step.value;
+            sub.stop();
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+              _iterator["return"]();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
       }
 
       this.previousVariablesJson = variablesJson; // Create observer
@@ -850,7 +874,33 @@ function (_SmartApollo) {
         }
       }
 
-      _get(_getPrototypeOf(SmartQuery.prototype), "executeApollo", this).call(this, variables);
+      _get(_getPrototypeOf(SmartQuery.prototype), "executeApollo", this).call(this, variables); // Subscribe to more subs
+
+
+      var _iteratorNormalCompletion2 = true;
+      var _didIteratorError2 = false;
+      var _iteratorError2 = undefined;
+
+      try {
+        for (var _iterator2 = this._linkedSubscriptions[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          var _sub = _step2.value;
+
+          _sub.start();
+        }
+      } catch (err) {
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion2 && _iterator2["return"] != null) {
+            _iterator2["return"]();
+          }
+        } finally {
+          if (_didIteratorError2) {
+            throw _iteratorError2;
+          }
+        }
+      }
     }
   }, {
     key: "startQuerySubscription",
@@ -1313,17 +1363,25 @@ function () {
     value: function addSmartQuery(key, options) {
       var _this3 = this;
 
-      var finalOptions = utils_5(options, this.vm);
+      var finalOptions = utils_5(options, this.vm); // Simple query
+
+      if (!finalOptions.query) {
+        var query = finalOptions;
+        finalOptions = {
+          query: query
+        };
+      }
+
       var apollo = this.vm.$options.apollo;
       var defaultOptions = this.provider.defaultOptions;
       var $query;
 
-      if (apollo && apollo.$query) {
-        $query = apollo.$query;
+      if (defaultOptions && defaultOptions.$query) {
+        $query = defaultOptions.$query;
       }
 
-      if ((!apollo || !apollo.$query) && defaultOptions && defaultOptions.$query) {
-        $query = defaultOptions.$query;
+      if (apollo && apollo.$query) {
+        $query = _objectSpread2({}, $query || {}, {}, apollo.$query);
       }
 
       if ($query) {
@@ -1368,6 +1426,11 @@ function () {
         options = utils_5(options, this.vm);
         var smart = this.subscriptions[key] = new SmartSubscription(this.vm, key, options, false);
         smart.autostart();
+
+        if (options.linkedQuery) {
+          options.linkedQuery._linkedSubscriptions.push(smart);
+        }
+
         return smart;
       }
     }
@@ -1476,7 +1539,11 @@ function () {
     }
 
     this.clients = options.clients || {};
-    this.clients.defaultClient = this.defaultClient = options.defaultClient;
+
+    if (options.defaultClient) {
+      this.clients.defaultClient = this.defaultClient = options.defaultClient;
+    }
+
     this.defaultOptions = options.defaultOptions;
     this.watchLoading = options.watchLoading;
     this.errorHandler = options.errorHandler;
@@ -2073,7 +2140,7 @@ function install(Vue, options) {
 }
 ApolloProvider.install = install; // eslint-disable-next-line no-undef
 
-ApolloProvider.version = "3.0.0-rc.6"; // Apollo provider
+ApolloProvider.version = "3.0.0-rc.7"; // Apollo provider
 
 var ApolloProvider$1 = ApolloProvider; // Components
 
