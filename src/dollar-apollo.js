@@ -90,11 +90,14 @@ export class DollarApollo {
     const apollo = this.vm.$options.apollo
     const defaultOptions = this.provider.defaultOptions
     let $query
-    if (apollo && apollo.$query) {
-      $query = apollo.$query
-    }
-    if ((!apollo || !apollo.$query) && defaultOptions && defaultOptions.$query) {
+    if (defaultOptions && defaultOptions.$query) {
       $query = defaultOptions.$query
+    }
+    if (apollo && apollo.$query) {
+      $query = {
+        ...$query || {},
+        ...apollo.$query,
+      }
     }
     if ($query) {
       // Also replaces 'undefined' values
