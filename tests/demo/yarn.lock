@@ -693,6 +693,13 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
+"@babel/runtime@^7.5.4":
+  version "7.6.2"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.6.2.tgz#c3d6e41b304ef10dcf13777a33e7694ec4a9a6dd"
+  integrity sha512-EXxN64agfUqqIGeEjI5dL5z0Sw0ZwWo1mLTi4mQowCZ42O59b7DRpZAnTC6OqdF28wMBMFKNb/4uFGrVaigSpg==
+  dependencies:
+    regenerator-runtime "^0.13.2"
+
 "@babel/template@^7.1.0", "@babel/template@^7.4.4", "@babel/template@^7.6.0":
   version "7.6.0"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.6.0.tgz#7f0159c7f5012230dad64cca42ec9bdb5c9536e6"
@@ -1800,7 +1807,7 @@ apollo-cache-control@^0.8.4:
     apollo-server-env "^2.4.3"
     graphql-extensions "^0.10.3"
 
-apollo-cache-inmemory@^1.6.2:
+apollo-cache-inmemory@^1.6.3:
   version "1.6.3"
   resolved "https://registry.yarnpkg.com/apollo-cache-inmemory/-/apollo-cache-inmemory-1.6.3.tgz#826861d20baca4abc45f7ca7a874105905b8525d"
   integrity sha512-S4B/zQNSuYc0M/1Wq8dJDTIO9yRgU0ZwDGnmlqxGGmFombOZb9mLjylewSfQKmjNpciZ7iUIBbJ0mHlPJTzdXg==
@@ -1819,7 +1826,7 @@ apollo-cache@1.3.2, apollo-cache@^1.3.2:
     apollo-utilities "^1.3.2"
     tslib "^1.9.3"
 
-apollo-client@^2.6.3:
+apollo-client@^2.6.4:
   version "2.6.4"
   resolved "https://registry.yarnpkg.com/apollo-client/-/apollo-client-2.6.4.tgz#872c32927263a0d34655c5ef8a8949fbb20b6140"
   integrity sha512-oWOwEOxQ9neHHVZrQhHDbI6bIibp9SHgxaLRVPoGvOFy7OH5XUykZE7hBQAVxq99tQjBzgytaZffQkeWo1B4VQ==
@@ -1833,63 +1840,63 @@ apollo-client@^2.6.3:
     tslib "^1.9.3"
     zen-observable "^0.8.0"
 
-apollo-codegen-core@^0.35.2:
-  version "0.35.2"
-  resolved "https://registry.yarnpkg.com/apollo-codegen-core/-/apollo-codegen-core-0.35.2.tgz#68840603cc68bf62376b0d576443591338ad47ca"
-  integrity sha512-3kKruCupSgsXUhfkyGyQj38HvmqBqHcOhMldg3ZXdr7/9Xt3bWGziQhVWu2KV1Ybqp6hcAhHIFeqAKpt2j+84A==
+apollo-codegen-core@^0.35.3:
+  version "0.35.3"
+  resolved "https://registry.yarnpkg.com/apollo-codegen-core/-/apollo-codegen-core-0.35.3.tgz#be8e79d0a49c9707a209e9448cfc448a38e36a25"
+  integrity sha512-mSj9+wOogyd3rkt766Gnds4ZHcjqE6mcV6rYmAKoq2kUA19GsXfoMrD7vJK1AjWNgp7Q5EpSwHrfxlxtptjwjQ==
   dependencies:
     "@babel/generator" "7.5.5"
     "@babel/parser" "^7.1.3"
     "@babel/types" "7.6.1"
     apollo-env "^0.5.1"
-    apollo-language-server "^1.15.2"
+    apollo-language-server "^1.15.3"
     ast-types "^0.13.0"
     common-tags "^1.5.1"
     recast "^0.18.0"
 
-apollo-codegen-flow@^0.33.27:
-  version "0.33.27"
-  resolved "https://registry.yarnpkg.com/apollo-codegen-flow/-/apollo-codegen-flow-0.33.27.tgz#e606af98bb7922b7a1d536056a61782402e98f06"
-  integrity sha512-WZQJRM60Wkk8v7t4JMtRMcKi0bYqktGSAAQSa5lasjCtUnSLz2MJ3DGtkNdLLT9r+UQi1qWZt1Biz2kOmezYSg==
+apollo-codegen-flow@^0.33.28:
+  version "0.33.28"
+  resolved "https://registry.yarnpkg.com/apollo-codegen-flow/-/apollo-codegen-flow-0.33.28.tgz#abaa3c1bd479148f47322e07ac2bbe9dbedf4153"
+  integrity sha512-PUQQC0og6a6pn4QsT2/9dd97eKRelM2xz3d2xydB2ZnFS3hb7p6giaVC4aeahQS8FeKi9Yf8qT2X0s8RYsWdPA==
   dependencies:
     "@babel/generator" "7.5.5"
     "@babel/types" "7.6.1"
-    apollo-codegen-core "^0.35.2"
+    apollo-codegen-core "^0.35.3"
     apollo-env "^0.5.1"
     change-case "^3.0.1"
     common-tags "^1.5.1"
     inflected "^2.0.3"
 
-apollo-codegen-scala@^0.34.27:
-  version "0.34.27"
-  resolved "https://registry.yarnpkg.com/apollo-codegen-scala/-/apollo-codegen-scala-0.34.27.tgz#86ffe94f90aec7916ac69fb65210f51a9adfbca7"
-  integrity sha512-FOeAP2UcsKTmd9awmRx2cuN5se7RydYKewTxBcSc6yQDWKF7tWcyKt7+jtOiLLNFM71FXAtBDVPTdJQsit+bAQ==
+apollo-codegen-scala@^0.34.28:
+  version "0.34.28"
+  resolved "https://registry.yarnpkg.com/apollo-codegen-scala/-/apollo-codegen-scala-0.34.28.tgz#b465a6d1918bfbd9af735f0aaf5380140169538f"
+  integrity sha512-9kMy8d7Bj5NTx6YBgHxIF/75MDa4c31DKPewVAmwRJ7PyiU0nKb7p6Snp45TJ1Lj0cgqCYLGQlodt0e2GdhIqw==
   dependencies:
-    apollo-codegen-core "^0.35.2"
+    apollo-codegen-core "^0.35.3"
     apollo-env "^0.5.1"
     change-case "^3.0.1"
     common-tags "^1.5.1"
     inflected "^2.0.3"
 
-apollo-codegen-swift@^0.35.7:
-  version "0.35.7"
-  resolved "https://registry.yarnpkg.com/apollo-codegen-swift/-/apollo-codegen-swift-0.35.7.tgz#4df77b975bb23adb519642c991d09c5bc7171c2c"
-  integrity sha512-eV33tNtax1tMe1bWmC7HnP7Uj38SAOU5FQP64B+QfJMxPQODOudnOV6nQLhSqwmyNlfV8trsXzivcE6FaBIRQw==
+apollo-codegen-swift@^0.35.8:
+  version "0.35.8"
+  resolved "https://registry.yarnpkg.com/apollo-codegen-swift/-/apollo-codegen-swift-0.35.8.tgz#c3afff793f594104eca1603fcbf0d9dbc1852c19"
+  integrity sha512-VBQu2Xef5nB4Io2e4EnhceQxJQTgqxjKX0aHvBEXTXYoyBKhLzCuF75BKTw1nltrpX2wAmMmjO6ufwZ9AIUBLA==
   dependencies:
-    apollo-codegen-core "^0.35.2"
+    apollo-codegen-core "^0.35.3"
     apollo-env "^0.5.1"
     change-case "^3.0.1"
     common-tags "^1.5.1"
     inflected "^2.0.3"
 
-apollo-codegen-typescript@^0.35.2:
-  version "0.35.2"
-  resolved "https://registry.yarnpkg.com/apollo-codegen-typescript/-/apollo-codegen-typescript-0.35.2.tgz#ca7dd4b8f625177cd682d6b0f3bf06ee2e9c58f0"
-  integrity sha512-5V8mS+LWygn4wdFtlpqIMid9+SNLzNtMl7G5L/r/queSJGEZ4YXvkTDAOODn4Gm1f7mcF+wQm+VcNfAkNFLSAg==
+apollo-codegen-typescript@^0.35.3:
+  version "0.35.3"
+  resolved "https://registry.yarnpkg.com/apollo-codegen-typescript/-/apollo-codegen-typescript-0.35.3.tgz#b033e8ae7fe84637d2a577b4158bcb014569f047"
+  integrity sha512-QwZm2WaNtuDi65bqRETNwpeb/ol9nPsem237WlzfW7WoznNyNGIC47Z+61fQDU+HyK/xlFdFLA5uPS59412jTA==
   dependencies:
     "@babel/generator" "7.5.5"
     "@babel/types" "7.6.1"
-    apollo-codegen-core "^0.35.2"
+    apollo-codegen-core "^0.35.3"
     apollo-env "^0.5.1"
     change-case "^3.0.1"
     common-tags "^1.5.1"
@@ -1940,10 +1947,10 @@ apollo-graphql@^0.3.3:
     apollo-env "0.5.1"
     lodash.sortby "^4.7.0"
 
-apollo-language-server@^1.15.2:
-  version "1.15.2"
-  resolved "https://registry.yarnpkg.com/apollo-language-server/-/apollo-language-server-1.15.2.tgz#9ebbe1eb74e0a59a9ae9019748a40010a2bc2ae3"
-  integrity sha512-zkFL7qCI5d3aIEwCbm0yRwoGl5cCIaqIhE0rrWxth/3sp3tkquco/fVH74INCtrqeTNtBQ8X7b2EohG15PtOYA==
+apollo-language-server@^1.15.3:
+  version "1.15.3"
+  resolved "https://registry.yarnpkg.com/apollo-language-server/-/apollo-language-server-1.15.3.tgz#51c8cab4f2b70b2a158fff14c9edd7a2336c6a6a"
+  integrity sha512-/e3bzTepAW157z1fnw/73aL9CuVsDDSlAiAzMaqIYpx4RHHAJRI73Eg1+JjEvphr+CZPasA8oBmczHyBcOgCOA==
   dependencies:
     "@apollographql/apollo-tools" "^0.4.0"
     "@apollographql/graphql-language-service-interface" "^2.0.2"
@@ -1970,7 +1977,7 @@ apollo-language-server@^1.15.2:
     vscode-languageserver "^5.1.0"
     vscode-uri "1.0.6"
 
-apollo-link-context@^1.0.18, apollo-link-context@^1.0.9:
+apollo-link-context@^1.0.19, apollo-link-context@^1.0.9:
   version "1.0.19"
   resolved "https://registry.yarnpkg.com/apollo-link-context/-/apollo-link-context-1.0.19.tgz#3c9ba5bf75ed5428567ce057b8837ef874a58987"
   integrity sha512-TUi5TyufU84hEiGkpt+5gdH5HkB3Gx46npNfoxR4of3DKBCMuItGERt36RCaryGcU/C3u2zsICU3tJ+Z9LjFoQ==
@@ -1987,7 +1994,7 @@ apollo-link-error@^1.1.1:
     apollo-link-http-common "^0.2.15"
     tslib "^1.9.3"
 
-apollo-link-http-common@^0.2.13, apollo-link-http-common@^0.2.15:
+apollo-link-http-common@^0.2.14, apollo-link-http-common@^0.2.15:
   version "0.2.15"
   resolved "https://registry.yarnpkg.com/apollo-link-http-common/-/apollo-link-http-common-0.2.15.tgz#304e67705122bf69a9abaded4351b10bc5efd6d9"
   integrity sha512-+Heey4S2IPsPyTf8Ag3PugUupASJMW894iVps6hXbvwtg1aHSNMXUYO5VG7iRHkPzqpuzT4HMBanCTXPjtGzxg==
@@ -1996,7 +2003,7 @@ apollo-link-http-common@^0.2.13, apollo-link-http-common@^0.2.15:
     ts-invariant "^0.4.0"
     tslib "^1.9.3"
 
-apollo-link-http@^1.5.15, apollo-link-http@^1.5.5:
+apollo-link-http@^1.5.16, apollo-link-http@^1.5.5:
   version "1.5.16"
   resolved "https://registry.yarnpkg.com/apollo-link-http/-/apollo-link-http-1.5.16.tgz#44fe760bcc2803b8a7f57fc9269173afb00f3814"
   integrity sha512-IA3xA/OcrOzINRZEECI6IdhRp/Twom5X5L9jMehfzEo2AXdeRwAMlH5LuvTZHgKD8V1MBnXdM6YXawXkTDSmJw==
@@ -2021,7 +2028,7 @@ apollo-link-state@^0.4.2:
     apollo-utilities "^1.0.8"
     graphql-anywhere "^4.1.0-alpha.0"
 
-apollo-link-ws@^1.0.18:
+apollo-link-ws@^1.0.19:
   version "1.0.19"
   resolved "https://registry.yarnpkg.com/apollo-link-ws/-/apollo-link-ws-1.0.19.tgz#dfa871d4df883a8777c9556c872fc892e103daa5"
   integrity sha512-mRXmeUkc55ixOdYRtfq5rq3o9sboKghKABKroDVhJnkdS56zthBEWMAD+phajujOUbqByxjok0te8ABqByBdeQ==
@@ -2029,7 +2036,7 @@ apollo-link-ws@^1.0.18:
     apollo-link "^1.2.13"
     tslib "^1.9.3"
 
-apollo-link@^1.0.0, apollo-link@^1.2.1, apollo-link@^1.2.11, apollo-link@^1.2.12, apollo-link@^1.2.13, apollo-link@^1.2.3:
+apollo-link@^1.0.0, apollo-link@^1.2.1, apollo-link@^1.2.12, apollo-link@^1.2.13, apollo-link@^1.2.3:
   version "1.2.13"
   resolved "https://registry.yarnpkg.com/apollo-link/-/apollo-link-1.2.13.tgz#dff00fbf19dfcd90fddbc14b6a3f9a771acac6c4"
   integrity sha512-+iBMcYeevMm1JpYgwDEIDt/y0BB7VWyvlm/7x+TIPNLHCTCMgcEgDuW5kH86iQZWo0I7mNwQiTOz+/3ShPFmBw==
@@ -2046,10 +2053,10 @@ apollo-server-caching@^0.5.0:
   dependencies:
     lru-cache "^5.0.0"
 
-apollo-server-core@^2.9.3:
-  version "2.9.3"
-  resolved "https://registry.yarnpkg.com/apollo-server-core/-/apollo-server-core-2.9.3.tgz#918f836c8215d371935c831c72d0840c7bf0250f"
-  integrity sha512-KQpOM3nAXdMqKVE0HHcOkH/EVhyDqFEKLNFlsyGHGOn9ujpI6RsltX+YpXRyAdbfQHpTk11v/IAo6XksWN+g1Q==
+apollo-server-core@^2.9.4:
+  version "2.9.4"
+  resolved "https://registry.yarnpkg.com/apollo-server-core/-/apollo-server-core-2.9.4.tgz#0404455884951804d23ea64e45514c73afd34e5e"
+  integrity sha512-6mzipnn9woJxgo/JQFWTlY13svS7HCr0ZsN035eRmKOsXzROfB9ugXcTuc6MP94ICM7TlB/DtJOP+bLX53mijw==
   dependencies:
     "@apollographql/apollo-tools" "^0.4.0"
     "@apollographql/graphql-playground-html" "1.6.24"
@@ -2086,10 +2093,10 @@ apollo-server-errors@^2.0.2, apollo-server-errors@^2.3.3:
   resolved "https://registry.yarnpkg.com/apollo-server-errors/-/apollo-server-errors-2.3.3.tgz#83763b00352c10dc68fbb0d41744ade66de549ff"
   integrity sha512-MO4oJ129vuCcbqwr5ZwgxqGGiLz3hCyowz0bstUF7MR+vNGe4oe3DWajC9lv4CxrhcqUHQOeOPViOdIo1IxE3g==
 
-apollo-server-express@^2.6.7:
-  version "2.9.3"
-  resolved "https://registry.yarnpkg.com/apollo-server-express/-/apollo-server-express-2.9.3.tgz#67573404030c2676be49a7bf97d423b8462e295c"
-  integrity sha512-Hkfs+ce6GqaoSzDOJs8Pj7W3YUjH0BzGglo5HMsOXOnjPZ0pJE9v8fmK76rlkITLw7GjvIq5GKlafymC31FMBw==
+apollo-server-express@^2.9.4:
+  version "2.9.4"
+  resolved "https://registry.yarnpkg.com/apollo-server-express/-/apollo-server-express-2.9.4.tgz#ae7ca0b70a644ba9fa5e3ac395d1e2d9a4b23522"
+  integrity sha512-diX9n81E0tIJ0Sy2bHvDGPM9QsFBsZ76Nx/dszinY00ViyWG0yIAYEYWeRbsoKTeNDWWTvlMrh/3Eu2oaCIEhQ==
   dependencies:
     "@apollographql/graphql-playground-html" "1.6.24"
     "@types/accepts" "^1.3.5"
@@ -2097,7 +2104,7 @@ apollo-server-express@^2.6.7:
     "@types/cors" "^2.8.4"
     "@types/express" "4.17.1"
     accepts "^1.3.5"
-    apollo-server-core "^2.9.3"
+    apollo-server-core "^2.9.4"
     apollo-server-types "^0.2.4"
     body-parser "^1.18.3"
     cors "^2.8.4"
@@ -2132,13 +2139,14 @@ apollo-tracing@^0.8.4:
     apollo-server-env "^2.4.3"
     graphql-extensions "^0.10.3"
 
-apollo-upload-client@^10.0.1:
-  version "10.0.1"
-  resolved "https://registry.yarnpkg.com/apollo-upload-client/-/apollo-upload-client-10.0.1.tgz#e8446288d03edb1c582c91c26a18b27533f85013"
-  integrity sha512-K6WnuYQi0RRTNO+aSPVjoUWXp4QSr+eoKU4fE0OKQp25XRF2oXl2cTLs+Q4Nk0wOIHM76YGdo/IHtzuNR7jO+A==
+apollo-upload-client@^11.0.0:
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/apollo-upload-client/-/apollo-upload-client-11.0.0.tgz#465a2ed5756e6155f53befaf82d17bdb08c82060"
+  integrity sha512-JChTrBi1VSF8u6OPrkWUApJlyUvzwhw98kqRB3fSi7/CU6z0OUD42Mee9s5h8mfjKEfOanK6GNZhF4t2tIPXSw==
   dependencies:
-    apollo-link "^1.2.11"
-    apollo-link-http-common "^0.2.13"
+    "@babel/runtime" "^7.5.4"
+    apollo-link "^1.2.12"
+    apollo-link-http-common "^0.2.14"
     extract-files "^5.0.1"
 
 apollo-utilities@1.3.2, apollo-utilities@^1.0.1, apollo-utilities@^1.0.8, apollo-utilities@^1.3.0, apollo-utilities@^1.3.2:
@@ -2151,10 +2159,10 @@ apollo-utilities@1.3.2, apollo-utilities@^1.0.1, apollo-utilities@^1.0.8, apollo
     ts-invariant "^0.4.0"
     tslib "^1.9.3"
 
-apollo@^2.15.0:
-  version "2.18.2"
-  resolved "https://registry.yarnpkg.com/apollo/-/apollo-2.18.2.tgz#a7e7a7f91895762b4ba300dbe2bd3ac0deaf40c1"
-  integrity sha512-rE2irx+Q92PYbm4TZsSJciTMh051tJgpVJ4smIVJR6pXzQXBJCOdgM8a4JK2K78tuc4UWSlLSI95taaAf80wvg==
+apollo@^2.18.3:
+  version "2.18.3"
+  resolved "https://registry.yarnpkg.com/apollo/-/apollo-2.18.3.tgz#a06d8e2f3096e235ca20ec98c8e14bf5131f053a"
+  integrity sha512-NxlW4WprImYQcQvBCM87nrMV5RuhF7cynlFxnk8QIYhxVb+o79/h/b6Cs6jR3+LGrBPkY+GUKz04aO79RgHP4Q==
   dependencies:
     "@apollographql/apollo-tools" "^0.4.0"
     "@oclif/command" "1.5.18"
@@ -2165,14 +2173,14 @@ apollo@^2.15.0:
     "@oclif/plugin-not-found" "1.2.3"
     "@oclif/plugin-plugins" "1.7.8"
     "@oclif/plugin-warn-if-update-available" "1.7.0"
-    apollo-codegen-core "^0.35.2"
-    apollo-codegen-flow "^0.33.27"
-    apollo-codegen-scala "^0.34.27"
-    apollo-codegen-swift "^0.35.7"
-    apollo-codegen-typescript "^0.35.2"
+    apollo-codegen-core "^0.35.3"
+    apollo-codegen-flow "^0.33.28"
+    apollo-codegen-scala "^0.34.28"
+    apollo-codegen-swift "^0.35.8"
+    apollo-codegen-typescript "^0.35.3"
     apollo-env "^0.5.1"
     apollo-graphql "^0.3.3"
-    apollo-language-server "^1.15.2"
+    apollo-language-server "^1.15.3"
     chalk "2.4.2"
     env-ci "3.2.2"
     gaze "1.1.3"
@@ -3887,10 +3895,10 @@ deepmerge@^1.5.2:
   resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-1.5.2.tgz#10499d868844cdad4fee0842df8c7f6f0c95a753"
   integrity sha512-95k0GDqvBjZavkuvzx/YqVLv/6YYa17fz6ILMSf7neqQITCPbnfEnQvEgMPNjH4kgobe7+WIL0yJEHku+H3qtQ==
 
-deepmerge@^3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-3.3.0.tgz#d3c47fd6f3a93d517b14426b0628a17b0125f5f7"
-  integrity sha512-GRQOafGHwMHpjPx9iCvTgpu9NojZ49q794EEL94JVEw6VaeA8XTUyBKvAkOOjBX9oJNiV6G3P+T+tihFjo2TqA==
+deepmerge@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-4.0.0.tgz#3e3110ca29205f120d7cb064960a39c3d2087c09"
+  integrity sha512-YZ1rOP5+kHor4hMAH+HRQnBQHg+wvS1un1hAOuIcxcBy0hzcUf6Jg2a1w65kpoOUnurOfZbERwjI1TfZxNjcww==
 
 default-gateway@^4.2.0:
   version "4.2.0"
@@ -4139,7 +4147,7 @@ dotenv@^7.0.0:
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-7.0.0.tgz#a2be3cd52736673206e8a85fb5210eea29628e7c"
   integrity sha512-M3NhsLbV1i6HuGzBUH8vXrtxOk+tWmzWKDMbAVSUp3Zsjm7ywFeuwrUXhmhQyRK1q5B5GGy7hcXPbj3bnfZg2g==
 
-dotenv@^8.0.0:
+dotenv@^8.0.0, dotenv@^8.1.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.1.0.tgz#d811e178652bfb8a1e593c6dd704ec7e90d85ea2"
   integrity sha512-GUE3gqcDCaMltj2++g6bRQ5rBJWtkWTmqmD0fo1RnnMuUqHNCt2oTPeDnS9n6fKYvlhn7AeBkb38lymBtWBQdA==
@@ -4591,7 +4599,7 @@ execa@0.10.0, execa@^0.10.0:
     signal-exit "^3.0.0"
     strip-eof "^1.0.0"
 
-execa@2.0.4, execa@^2.0.1, execa@^2.0.3:
+execa@2.0.4, execa@^2.0.3, execa@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/execa/-/execa-2.0.4.tgz#2f5cc589c81db316628627004ea4e37b93391d8e"
   integrity sha512-VcQfhuGD51vQUQtKIq2fjGDLDbL6N1DTQVpYzxZ7LPIXw3HqTuIz6uxRmpV1qf8i31LHf2kjiaGI+GdHwRgbnQ==
@@ -5071,7 +5079,7 @@ fs-extra@^7.0.0, fs-extra@^7.0.1:
     jsonfile "^4.0.0"
     universalify "^0.1.0"
 
-fs-extra@^8.0.1:
+fs-extra@^8.1.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-8.1.0.tgz#49d43c45a88cd9677668cb7be1b46efdb8d2e1c0"
   integrity sha512-yhlQgA6mnOJUKOsRUFsgJdQCvkKhcz8tlZG5HBQfReYZy46OwLcY+Zia0mtdHsOo9y/hP+CxMN0TU9QxoOtG4g==
@@ -5422,10 +5430,10 @@ graphql-upload@^8.0.2:
     http-errors "^1.7.2"
     object-path "^0.11.4"
 
-"graphql@14.0.2 - 14.2.0 || ^14.3.1", graphql@^14.4.0, graphql@^14.5.3:
-  version "14.5.4"
-  resolved "https://registry.yarnpkg.com/graphql/-/graphql-14.5.4.tgz#b33fe957854e90c10d4c07c7d26b6c8e9f159a13"
-  integrity sha512-dPLvHoxy5m9FrkqWczPPRnH0X80CyvRE6e7Fa5AWEqEAzg9LpxHvKh24po/482E6VWHigOkAmb4xCp6P9yT9gw==
+"graphql@14.0.2 - 14.2.0 || ^14.3.1", graphql@^14.5.3, graphql@^14.5.8:
+  version "14.5.8"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-14.5.8.tgz#504f3d3114cb9a0a3f359bbbcf38d9e5bf6a6b3c"
+  integrity sha512-MMwmi0zlVLQKLdGiMfWkgQD7dY/TUKt4L+zgJ/aR0Howebod3aNgP5JkgvAULiR2HPVZaP2VEElqtdidHweLkg==
   dependencies:
     iterall "^1.2.2"
 
@@ -7439,10 +7447,10 @@ node-releases@^1.1.29:
   dependencies:
     semver "^5.3.0"
 
-nodemon@^1.19.1:
-  version "1.19.2"
-  resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-1.19.2.tgz#b0975147dc99b3761ceb595b3f9277084931dcc0"
-  integrity sha512-hRLYaw5Ihyw9zK7NF+9EUzVyS6Cvgc14yh8CAYr38tPxJa6UrOxwAQ351GwrgoanHCF0FalQFn6w5eoX/LGdJw==
+nodemon@^1.19.3:
+  version "1.19.3"
+  resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-1.19.3.tgz#db71b3e62aef2a8e1283a9fa00164237356102c0"
+  integrity sha512-TBNKRmJykEbxpTniZBusqRrUTHIEqa2fpecbTQDQj1Gxjth7kKAPP296ztR0o5gPUWsiYbuEbt73/+XMYab1+w==
   dependencies:
     chokidar "^2.1.5"
     debug "^3.1.0"
@@ -10232,10 +10240,10 @@ ts-invariant@^0.4.0:
   dependencies:
     tslib "^1.9.3"
 
-ts-node@^8, ts-node@^8.3.0:
-  version "8.3.0"
-  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-8.3.0.tgz#e4059618411371924a1fb5f3b125915f324efb57"
-  integrity sha512-dyNS/RqyVTDcmNM4NIBAeDMpsAdaQ+ojdf0GOLqE6nwJOgzEkdRNzJywhDfwnuvB10oa6NLVG1rUJQCpRN7qoQ==
+ts-node@^8, ts-node@^8.4.1:
+  version "8.4.1"
+  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-8.4.1.tgz#270b0dba16e8723c9fa4f9b4775d3810fd994b4f"
+  integrity sha512-5LpRN+mTiCs7lI5EtbXmF/HfMeCjzt7DH9CZwtkr6SywStrNQC723wG+aOWFiLNn7zT3kD/RnFqi3ZUfr4l5Qw==
   dependencies:
     arg "^4.1.0"
     diff "^4.0.1"
@@ -10611,38 +10619,38 @@ vscode-uri@^1.0.6:
   resolved "https://registry.yarnpkg.com/vscode-uri/-/vscode-uri-1.0.8.tgz#9769aaececae4026fb6e22359cb38946580ded59"
   integrity sha512-obtSWTlbJ+a+TFRYGaUumtVwb+InIUVI0Lu0VBUAPmj2cU5JutEXg3xUE0c2J5Tcy7h2DEKVJBFi+Y9ZSFzzPQ==
 
-vue-cli-plugin-apollo@^0.21.0:
-  version "0.21.0"
-  resolved "https://registry.yarnpkg.com/vue-cli-plugin-apollo/-/vue-cli-plugin-apollo-0.21.0.tgz#51249d76827db2684d23342ddc70017e5baba76b"
-  integrity sha512-UUEmwwxcx06our1s0Ln3i898wi5e/lxMid1+8Y6y+iL2qeaDKAhm8QjM5SljLpA6u8orCzjpj3+/XRMPLazseQ==
+vue-cli-plugin-apollo@^0.21.1:
+  version "0.21.1"
+  resolved "https://registry.yarnpkg.com/vue-cli-plugin-apollo/-/vue-cli-plugin-apollo-0.21.1.tgz#ce61b035c5205d76ad486ef946b71de51c735421"
+  integrity sha512-4Ym0aKoOWDSAtuNrlGkbiPzOOf/5boxTuo62xKYVaN2Sak1TZSRP+FnD49f8LcWBA/JPKemlxjGUPFqLC45GmQ==
   dependencies:
-    apollo "^2.15.0"
-    apollo-cache-inmemory "^1.6.2"
-    apollo-client "^2.6.3"
-    apollo-link "^1.2.12"
-    apollo-link-context "^1.0.18"
-    apollo-link-http "^1.5.15"
+    apollo "^2.18.3"
+    apollo-cache-inmemory "^1.6.3"
+    apollo-client "^2.6.4"
+    apollo-link "^1.2.13"
+    apollo-link-context "^1.0.19"
+    apollo-link-http "^1.5.16"
     apollo-link-persisted-queries "^0.2.2"
     apollo-link-state "^0.4.2"
-    apollo-link-ws "^1.0.18"
-    apollo-server-express "^2.6.7"
-    apollo-upload-client "^10.0.1"
+    apollo-link-ws "^1.0.19"
+    apollo-server-express "^2.9.4"
+    apollo-upload-client "^11.0.0"
     apollo-utilities "^1.3.2"
     chalk "^2.4.2"
-    deepmerge "^3.3.0"
-    dotenv "^8.0.0"
+    deepmerge "^4.0.0"
+    dotenv "^8.1.0"
     esm "^3.2.25"
-    execa "^2.0.1"
+    execa "^2.0.4"
     express "^4.17.1"
-    fs-extra "^8.0.1"
-    graphql "^14.4.0"
+    fs-extra "^8.1.0"
+    graphql "^14.5.8"
     graphql-subscriptions "^1.1.0"
     graphql-tag "^2.10.1"
     graphql-tools "^4.0.5"
     node-fetch "^2.6.0"
-    nodemon "^1.19.1"
+    nodemon "^1.19.3"
     subscriptions-transport-ws "^0.9.16"
-    ts-node "^8.3.0"
+    ts-node "^8.4.1"
 
 vue-eslint-parser@^2.0.3:
   version "2.0.3"
