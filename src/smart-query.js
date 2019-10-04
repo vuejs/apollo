@@ -89,9 +89,7 @@ export default class SmartQuery extends SmartApollo {
       this.sub.unsubscribe()
 
       // Subscribe to more subs
-      for (const sub of this._linkedSubscriptions) {
-        sub.stop()
-      }
+      this._linkedSubscriptions.forEach(sub => sub.stop())
     }
 
     this.previousVariablesJson = variablesJson
@@ -112,9 +110,7 @@ export default class SmartQuery extends SmartApollo {
     super.executeApollo(variables)
 
     // Subscribe to more subs
-    for (const sub of this._linkedSubscriptions) {
-      sub.start()
-    }
+    this._linkedSubscriptions.forEach(sub => sub.start())
   }
 
   startQuerySubscription () {

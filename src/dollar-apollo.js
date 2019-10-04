@@ -185,9 +185,7 @@ export class DollarApollo {
   }
 
   destroy () {
-    for (const unwatch of this._watchers) {
-      unwatch()
-    }
+    this._watchers.forEach(unwatch => unwatch())
     for (let key in this.queries) {
       this.queries[key].destroy()
     }

@@ -83,10 +83,10 @@ export default class SmartApollo {
   }
 
   start () {
-    this.starting = true
+    this.starting = true;
 
     // Reactive options
-    for (const prop of ['query', 'document', 'context']) {
+    ['query', 'document', 'context'].forEach(prop => {
       if (typeof this.initialOptions[prop] === 'function') {
         const queryCb = this.initialOptions[prop].bind(this.vm)
         this.options[prop] = queryCb()
@@ -102,7 +102,7 @@ export default class SmartApollo {
           deep: this.options.deep,
         }))
       }
-    }
+    })
 
     // GraphQL Variables
     if (typeof this.options.variables === 'function') {
@@ -121,9 +121,7 @@ export default class SmartApollo {
   }
 
   stop () {
-    for (const unwatch of this._watchers) {
-      unwatch()
-    }
+    this._watchers.forEach(unwatch => unwatch())
 
     if (this.sub) {
       this.sub.unsubscribe()
@@ -148,7 +146,8 @@ export default class SmartApollo {
 
   callHandlers (handlers, ...args) {
     let catched = false
-    for (const handler of handlers) {
+    for (let i = 0; i < handlers.length; i++) {
+      const handler = handlers[i]
       if (handler) {
         catched = true
         let result = handler.apply(this.vm, args)
@@ -177,9 +176,7 @@ export default class SmartApollo {
 
     if (error.graphQLErrors && error.graphQLErrors.length !== 0) {
       console.error(`GraphQL execution errors for ${this.type} '${this.key}'`)
-      for (let e of error.graphQLErrors) {
-        console.error(e)
-      }
+      error.graphQLErrors.forEach(e => console.error(e))
     } else if (error.networkError) {
       console.error(`Error sending the ${this.type} '${this.key}'`, error.networkError)
     } else {
