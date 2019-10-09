@@ -79,7 +79,7 @@ You can then use your property as usual in your vue component:
 
 ## Name matching
 
-Please note that a common beginner's error is to use a different data name from the field name in query, eg:
+Please note that a common beginner's mistake is to use a data name different from the field name in the query, e.g.:
 
 ```js
 apollo: {
