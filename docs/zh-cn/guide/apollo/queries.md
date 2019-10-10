@@ -359,6 +359,8 @@ apollo: {
 this.$apollo.queries.tags.skip = true
 ```
 
+如果查询的 `skip` 变为 `false` ，查询将再次自动执行。
+
 ## 响应式查询示例
 
 这里是一个使用轮询的响应式查询示例：
