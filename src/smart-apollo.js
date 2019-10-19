@@ -21,7 +21,7 @@ export default class SmartApollo {
 
   autostart () {
     if (typeof this.options.skip === 'function') {
-      this._skipWatcher = this.vm.$watch(this.options.skip.bind(this.vm), this.skipChanged.bind(this), {
+      this._skipWatcher = this.vm.$watch(() => this.options.skip.call(this.vm, this.vm, this.key), this.skipChanged.bind(this), {
         immediate: true,
         deep: this.options.deep,
       })
