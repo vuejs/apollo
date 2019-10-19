@@ -86,7 +86,12 @@ export default {
       @result="onResult"
     >
       <template slot-scope="{ result: { data, loading } }">
-        <div v-if="!data && loading" class="loading">Loading...</div>
+        <div
+          v-if="!data && loading"
+          class="loading"
+        >
+          Loading...
+        </div>
 
         <div v-else-if="data">
           <!-- Websockets -->
@@ -95,16 +100,23 @@ export default {
             :variables="{
               channelId: id,
             }"
-            :updateQuery="onMessageChanged"
+            :update-query="onMessageChanged"
           />
 
           <div class="wrapper">
             <div class="header">
-              <div class="id">#{{ data.channel.id }}</div>
-              <div class="name">{{ data.channel.name }}</div>
+              <div class="id">
+                #{{ data.channel.id }}
+              </div>
+              <div class="name">
+                {{ data.channel.name }}
+              </div>
             </div>
 
-            <div ref="body" class="body">
+            <div
+              ref="body"
+              class="body"
+            >
               <MessageItem
                 v-for="message in data.channel.messages"
                 :key="message.id"

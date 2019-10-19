@@ -6,8 +6,12 @@ export default {
 
 <template>
   <div class="welcome-view">
-    <div class="title">Welcome!</div>
-    <div class="info">Select a channel to start messaging</div>
+    <div class="title">
+      Welcome!
+    </div>
+    <div class="info">
+      Select a channel to start messaging
+    </div>
   </div>
 </template>
 

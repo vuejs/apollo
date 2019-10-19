@@ -27,8 +27,12 @@ export default {
     <template v-if="userCurrent">
       <i class="material-icons user-icon">account_circle</i>
       <div class="info">
-        <div class="nickname">{{ userCurrent.nickname }}</div>
-        <div class="email">{{ userCurrent.email }}</div>
+        <div class="nickname">
+          {{ userCurrent.nickname }}
+        </div>
+        <div class="email">
+          {{ userCurrent.email }}
+        </div>
       </div>
       <button
         class="icon-button"

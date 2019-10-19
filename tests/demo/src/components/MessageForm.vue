@@ -51,9 +51,9 @@ export default {
     @done="onDone"
   >
     <input
-      slot-scope="{ mutate, loading, error }"
       ref="input"
       v-model="newMessage"
+      slot-scope="{ mutate, loading }"
       :disabled="loading"
       class="form-input"
       placeholder="Type a message"

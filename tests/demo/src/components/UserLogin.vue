@@ -83,8 +83,8 @@ export default {
       @done="onDone"
     >
       <form
-        slot-scope="{ mutate, loading, gqlError: error }"
         :key="showRegister"
+        slot-scope="{ mutate, loading, gqlError: error }"
         class="form"
         @submit.prevent="mutate()"
       >
@@ -112,14 +112,21 @@ export default {
           placeholder="Nickname"
           required
         >
-        <div v-if="error" class="error">{{ error.message }}</div>
+        <div
+          v-if="error"
+          class="error"
+        >
+          {{ error.message }}
+        </div>
         <template v-if="!showRegister">
           <button
             type="submit"
             :disabled="loading"
             class="button"
             data-id="login"
-          >Login</button>
+          >
+            Login
+          </button>
           <div class="actions">
             <a
               data-id="create-account"
@@ -133,7 +140,9 @@ export default {
             :disabled="loading"
             class="button"
             data-id="submit-new-account"
-          >Create new account</button>
+          >
+            Create new account
+          </button>
           <div class="actions">
             <a @click="showRegister = false">Go back</a>
           </div>

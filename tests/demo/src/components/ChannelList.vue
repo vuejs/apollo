@@ -26,31 +26,45 @@ export default {
   <div class="channel-list">
     <UserCurrent />
 
-    <ApolloQuery :query="gql => gql`
+    <ApolloQuery
+      :query="gql => gql`
       query channels {
         channels {
           ...channel
         }
       }
       ${$options.fragments.channel}
-    `">
+    `"
+    >
       <template slot-scope="{ result: { data, loading } }">
-        <div v-if="loading" class="loading">Loading...</div>
-        <div v-else-if="data" class="channels">
+        <div
+          v-if="loading"
+          class="loading"
+        >
+          Loading...
+        </div>
+        <div
+          v-else-if="data"
+          class="channels"
+        >
           <router-link
             v-for="channel of data.channels"
             :key="channel.id"
             :to="{ name: 'channel', params: { id: channel.id } }"
             class="channel"
           >
-            <div class="id">#{{ channel.id }}</div>
-            <div class="name">{{ channel.name }}</div>
+            <div class="id">
+              #{{ channel.id }}
+            </div>
+            <div class="name">
+              {{ channel.name }}
+            </div>
           </router-link>
         </div>
       </template>
     </ApolloQuery>
 
-    <MockSendMessage/>
+    <MockSendMessage />
   </div>
 </template>
 

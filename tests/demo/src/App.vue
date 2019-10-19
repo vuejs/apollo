@@ -16,9 +16,9 @@ export default {
 
 <template>
   <div id="app">
-    <ChannelList/>
+    <ChannelList />
     <div class="content">
-      <router-view/>
+      <router-view />
     </div>
   </div>
 </template>
