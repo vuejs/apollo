@@ -16,6 +16,7 @@ Each query declared in the `apollo` definition (that is, which doesn't start wit
 - `watchLoading(isLoading, countModifier)` is a hook called when the loading state of the query changes. The `countModifier` parameter is either equal to `1` when the query is loading, or `-1` when the query is no longer loading.
 - `manual` is a boolean to disable the automatic property update. If you use it, you then need to specify a `result` callback (see example below).
 - `deep` is a boolean to use `deep: true` on Vue watchers.
+- `skip` is a boolean or a (reactive) function that returns a boolean. The function gets the current component and smart query key as arguments, so it can be used in `$query` and in `ApolloProvider`'s `defaultOptions`.
 - `subscribeToMore`: an object or an array of object which are [subscribeToMore options](../guide/apollo/subscriptions.md#subscribetomore).
 - `prefetch` is either a boolean or a function to determine if the query should be prefetched. See [Server-Side Rendering](../guide/ssr.md).
 - You can also use any other `watchQuery` options (see [Apollo docs](https://www.apollographql.com/docs/react/api/apollo-client.html#ApolloClient.watchQuery)).
