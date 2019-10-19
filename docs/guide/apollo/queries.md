@@ -79,7 +79,7 @@ You can then use your property as usual in your vue component:
 
 ## Name matching
 
-Please note that a common beginner's error is to use a different data name from the field name in query, eg:
+Please note that a common beginner's mistake is to use a data name different from the field name in the query, e.g.:
 
 ```js
 apollo: {
@@ -116,7 +116,7 @@ In this example, we rename the `hello` field to `world` so that vue-apollo can a
 
 ## Query with parameters
 
-You can add variables (read parameters) to your `gql` query by declaring `query` and `variables` in an object:
+You can add variables (and other parameters) to your `gql` query by declaring `query` and `variables` in an object instead of just the GraphQL query:
 
 ```js
 // Apollo-specific options
