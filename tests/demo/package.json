@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "graphql-type-json": "^0.3.0",
-    "marked": "^0.5.1",
+    "marked": "^0.7.0",
     "shortid": "^2.2.8",
     "vue": "^2.5.16",
     "vue-router": "^3.0.1",
