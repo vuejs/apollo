@@ -116,7 +116,7 @@ In this example, we rename the `hello` field to `world` so that vue-apollo can a
 
 ## Query with parameters
 
-You can add variables (read parameters) to your `gql` query by declaring `query` and `variables` in an object:
+You can add variables (and other parameters) to your `gql` query by declaring `query` and `variables` in an object instead of just the GraphQL query:
 
 ```js
 // Apollo-specific options

@@ -18,6 +18,7 @@ Each query declared in the `apollo` definition (that is, which doesn't start wit
 - `deep` is a boolean to use `deep: true` on Vue watchers.
 - `subscribeToMore`: an object or an array of object which are [subscribeToMore options](../guide/apollo/subscriptions.md#subscribetomore).
 - `prefetch` is either a boolean or a function to determine if the query should be prefetched. See [Server-Side Rendering](../guide/ssr.md).
+- You can also use any other `watchQuery` options (see [Apollo docs](https://www.apollographql.com/docs/react/api/apollo-client.html#ApolloClient.watchQuery)).
 
 Example:
 
