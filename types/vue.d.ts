@@ -4,8 +4,9 @@ import { DollarApollo } from './vue-apollo'
 import { VueApolloComponentOptions } from './options'
 import { ApolloProvider } from './apollo-provider'
 
-declare module 'vue/types/options' {
+type DataDef<Data, Props, V> = Data | ((this: Readonly<Props> & V) => Data)
 
+declare module 'vue/types/options' {
   interface ComponentOptions<V extends Vue, Data, Methods, Computed, PropsDef, Props> {
     apolloProvider?: ApolloProvider
     apollo?: VueApolloComponentOptions<
