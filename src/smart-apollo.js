@@ -13,6 +13,7 @@ export default class SmartApollo {
     this._pollInterval = null
     this._watchers = []
     this._destroyed = false
+    this.lastApolloOptions = null
 
     if (autostart) {
       this.autostart()
@@ -134,6 +135,7 @@ export default class SmartApollo {
   generateApolloOptions (variables) {
     const apolloOptions = omit(this.options, this.vueApolloSpecialKeys)
     apolloOptions.variables = variables
+    this.lastApolloOptions = apolloOptions
     return apolloOptions
   }
 
@@ -171,7 +173,7 @@ export default class SmartApollo {
   catchError (error) {
     addGqlError(error)
 
-    const catched = this.errorHandler(error, this.vm, this.key, this.type)
+    const catched = this.errorHandler(error, this.vm, this.key, this.type, this.lastApolloOptions)
 
     if (catched) return
 
