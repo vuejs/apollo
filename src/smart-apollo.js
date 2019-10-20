@@ -171,7 +171,7 @@ export default class SmartApollo {
   catchError (error) {
     addGqlError(error)
 
-    const catched = this.errorHandler(error)
+    const catched = this.errorHandler(error, this.vm, this.key, this.type)
 
     if (catched) return
 
