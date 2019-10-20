@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import UserLogin from './components/UserLogin.vue'
 import WelcomeView from './components/WelcomeView.vue'
 import ChannelView from './components/ChannelView.vue'
+import PartialError from './components/PartialError.vue'
 
 Vue.use(Router)
 
@@ -13,6 +14,9 @@ export default new Router({
       path: '/',
       name: 'home',
       component: WelcomeView,
+      meta: {
+        private: true,
+      },
     },
     {
       path: '/login',
@@ -24,6 +28,13 @@ export default new Router({
       name: 'channel',
       component: ChannelView,
       props: true,
+      meta: {
+        private: true,
+      },
+    },
+    {
+      path: '/partial-error',
+      component: PartialError,
     },
   ],
 })

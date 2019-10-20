@@ -67,6 +67,8 @@ type Query {
   userCurrent: User @private
   channels: [Channel] @private
   channel (id: ID!): Channel @private
+  good: String
+  bad: String
 }
 
 type Mutation {

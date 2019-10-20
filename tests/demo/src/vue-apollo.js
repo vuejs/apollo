@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueApollo from '../../../'
 import { createApolloClient, restartWebsockets } from 'vue-cli-plugin-apollo/graphql-client'
+import { print } from 'graphql'
 
 // Install the vue plugin
 Vue.use(VueApollo)
@@ -55,8 +56,8 @@ export function createProvider (options = {}, { router }) {
         fetchPolicy: 'cache-and-network',
       },
     },
-    errorHandler (error) {
-      if (isUnauthorizedError(error)) {
+    errorHandler (error, vm, key, type, options) {
+      if (isUnauthorizedError(error) && router.currentRoute.matched.some(m => m.meta.private)) {
         // Redirect to login page
         if (router.currentRoute.name !== 'login') {
           router.replace({
@@ -67,7 +68,14 @@ export function createProvider (options = {}, { router }) {
           })
         }
       } else {
-        console.log('%cError', 'background: red; color: white; padding: 2px 4px; border-radius: 3px; font-weight: bold;', error.message)
+        console.log(
+          '%cError',
+          'background: red; color: white; padding: 2px 4px; border-radius: 3px; font-weight: bold;',
+          type, key, vm.$el,
+          error.message, '\n\n',
+          print(options.query), `\n`,
+          options,
+        )
       }
     },
   })

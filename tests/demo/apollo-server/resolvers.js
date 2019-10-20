@@ -22,6 +22,10 @@ module.exports = {
     userCurrent: (root, args, context) => users.current(context),
     channels: (root, args, context) => channels.getAll(context),
     channel: (root, { id }, context) => channels.getOne(id, context),
+    good: () => 'good',
+    bad: () => {
+      throw new Error('An error')
+    },
   },
 
   Mutation: {
