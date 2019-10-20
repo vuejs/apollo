@@ -141,14 +141,33 @@ export default class SmartQuery extends SmartApollo {
   nextResult (result) {
     super.nextResult(result)
 
-    const { data, loading, error } = result
+    const { data, loading, error, errors } = result
 
-    if (error) {
+    if (error || errors) {
       this.firstRunReject()
     }
 
     if (!loading) {
       this.loadingDone()
+    }
+
+    // If `errorPolicy` is set to `all`, an error won't be thrown
+    // Instead result will have an `errors` array of GraphQL Errors
+    // so we need to reconstruct an error object similar to the normal one
+    if (errors) {
+      const e = new Error(`GraphQL error: ${errors.map(e => e.message).join(' | ')}`)
+      Object.assign(e, {
+        graphQLErrors: errors,
+        networkError: null,
+      })
+      // We skip query catchError logic
+      // as we only want to dispatch the error
+      super.catchError(e)
+    }
+
+    if (this.observer.options.errorPolicy === 'none' && (error || errors)) {
+      // Don't apply result
+      return
     }
 
     const hasResultCallback = typeof this.options.result === 'function'
