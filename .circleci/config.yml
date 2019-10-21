@@ -20,7 +20,7 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v3-dependencies-{{ checksum "yarn.lock" }}
+          - v3-dependencies-{{ checksum "yarn.lock" }}-{{ checksum "tests/demo/yarn.lock" }}-{{ checksum "tests/ssr/yarn.lock" }}
           # fallback to using the latest cache if no exact match is found
           - v3-dependencies-
 
@@ -32,7 +32,7 @@ jobs:
             - tests/demo/node_modules
             - tests/ssr/node_modules
             - ~/.cache
-          key: v3-dependencies-{{ checksum "yarn.lock" }}
+          key: v3-dependencies-{{ checksum "yarn.lock" }}-{{ checksum "tests/demo/yarn.lock" }}-{{ checksum "tests/ssr/yarn.lock" }}
         
       # run tests!
       - run: yarn build
