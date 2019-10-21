@@ -39,10 +39,15 @@ jobs:
       - run: yarn test:types
       - run: yarn test:unit
       - run: yarn test:e2e
+      - run: yarn test:ssr
 
       - store_artifacts:
           path: tests/demo/tests/e2e/videos
       - store_artifacts:
           path: tests/demo/tests/e2e/screenshots
+      - store_artifacts:
+          path: tests/ssr/tests/e2e/videos
+      - store_artifacts:
+          path: tests/ssr/tests/e2e/screenshots
 
 

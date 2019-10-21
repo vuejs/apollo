@@ -17,6 +17,7 @@
     "test:eslint": "eslint --ext .js {src,ssr,lib,build}/**/*.js",
     "test:types": "tsc -p types/test",
     "test:e2e": "cd tests/demo && yarn test && cd ../../",
+    "test:ssr": "cd tests/ssr && yarn test && cd ../../",
     "test:unit": "yarn run jest",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs"
