@@ -153,7 +153,11 @@ export function installMixin (Vue, vueVersion) {
 
       serverPrefetch () {
         if (this.$_apolloPromises) {
-          return Promise.all(this.$_apolloPromises)
+          return Promise.all(this.$_apolloPromises).then(result => {
+            // Destroy DollarApollo after SSR promises are resolved
+            destroy.call(this)
+            return result
+          })
         }
       },
     } : {},
