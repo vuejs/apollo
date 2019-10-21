@@ -20,6 +20,10 @@
 
 <br>
 
+[Contributing guide](./CONTRIBUTING.md)
+
+<br>
+
 ## Sponsors
 
 ### Gold
@@ -53,5 +57,3 @@
     <img src="https://cdn.discordapp.com/attachments/258614093362102272/557267744249085953/frontend_love-logo.png" width="56">
   </a>
 </p>
-
-[Contributing guide](./CONTRIBUTING.md)
