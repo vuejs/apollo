@@ -16,7 +16,7 @@
 
 <br>
 
-<h3 align="center"><a href="https://vue-apollo.netlify.com/">Documentation</a></h3>
+**[Documentation](https://vue-apollo.netlify.com/)**
 
 <br>
 
