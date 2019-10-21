@@ -26,6 +26,9 @@ module.exports = {
     bad: () => {
       throw new Error('An error')
     },
+    loadNumber: () => new Promise((resolve) => {
+      setTimeout(() => resolve(42), 100)
+    }),
   },
 
   Mutation: {

@@ -4,6 +4,7 @@ import UserLogin from './components/UserLogin.vue'
 import WelcomeView from './components/WelcomeView.vue'
 import ChannelView from './components/ChannelView.vue'
 import PartialError from './components/PartialError.vue'
+import ManualAddSmartQuery from './components/ManualAddSmartQuery.vue'
 
 Vue.use(Router)
 
@@ -35,6 +36,10 @@ export default new Router({
     {
       path: '/partial-error',
       component: PartialError,
+    },
+    {
+      path: '/manual-add-smart-query',
+      component: ManualAddSmartQuery,
     },
   ],
 })
