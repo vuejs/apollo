@@ -84,6 +84,9 @@
     "vue-property-decorator": "^8.2.2",
     "vuepress": "^0.14.2"
   },
+  "resolutions": {
+    "js-yaml": "^3.13.1"
+  },
   "jest": {
     "testRegex": "tests/unit/.*\\.test.js$"
   }
