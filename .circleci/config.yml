@@ -24,12 +24,13 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v3-dependencies-
 
-      - run: yarn install && cd tests/demo && yarn install
+      - run: yarn install && cd tests/demo && yarn install && cd ../ssr && yarn install
 
       - save_cache:
           paths:
             - node_modules
             - tests/demo/node_modules
+            - tests/ssr/node_modules
             - ~/.cache
           key: v3-dependencies-{{ checksum "yarn.lock" }}
         
