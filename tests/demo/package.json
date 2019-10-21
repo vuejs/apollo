@@ -29,7 +29,7 @@
     "@vue/cli-plugin-eslint": "^4.0.4",
     "@vue/cli-service": "^4.0.4",
     "@vue/eslint-config-standard": "^4.0.0",
-    "eslint": "^4.19.1",
+    "eslint": "^6.5.1",
     "eslint-plugin-graphql": "^3.1.0",
     "eslint-plugin-vue": "^5.2.3",
     "graphql-tag": "^2.5.0",
