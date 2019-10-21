@@ -13,7 +13,7 @@
     "ssr:build": "vue-cli-service ssr:build",
     "ssr:serve": "vue-cli-service ssr:serve",
     "ssr:start": "cross-env NODE_ENV=production vue-cli-service ssr:serve --mode production",
-    "test": "yarn run lint --no-fix && yarn run test:e2e",
+    "test": "yarn apollo:schema:generate && yarn run lint --no-fix && yarn run test:e2e",
     "test:e2e": "start-server-and-test apollo:start http://localhost:4042/.well-known/apollo/server-health test:e2e:run",
     "test:e2e:run": "start-server-and-test ssr:serve http://localhost:8000 test:e2e:client",
     "test:e2e:client": "vue-cli-service test:e2e --mode production --headless --url http://localhost:8000",
