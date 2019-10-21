@@ -16,7 +16,7 @@
 
 <br>
 
-**[Documentation](https://vue-apollo.netlify.com/)**
+**[Documentation](http://apollo.vuejs.org)**
 
 <br>
 
