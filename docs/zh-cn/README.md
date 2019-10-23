@@ -54,5 +54,5 @@ footer: LICENCE MIT - Created by Guillaume CHAU (@Akryum)
 </p>
 
 ::: tip 当前版本
-中文文档现在同步至 v3.0.0-rc.2
+中文文档现在同步至 v3.0.0
 :::

@@ -116,7 +116,7 @@ apollo: {
 
 ## 带参数的查询
 
-你可以通过在对象中声明 `query` 和 `variables` 将变量（读取参数）添加到 `gql` 查询中：
+你可以通过在对象中声明 `query` 和 `variables` 将变量（及其他参数）添加到 `gql` 查询中：
 
 ```js
 // Apollo 具体选项
