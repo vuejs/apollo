@@ -34,7 +34,7 @@ const apolloProvider = new VueApollo({
     console.error(error)
   },
   // Globally turn off prefetch ssr
-  prefetch: Boolean
+  prefetch: Boolean,
 })
 ```
 

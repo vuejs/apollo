@@ -141,6 +141,7 @@ module.exports = {
   },
 }
 ```
+
 ### Webstorm
 
 If you are using Webstorm, it's recommended to install the [JS GraphQL extension](https://plugins.jetbrains.com/plugin/8097-js-graphql/).

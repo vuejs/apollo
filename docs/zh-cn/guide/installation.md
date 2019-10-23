@@ -120,9 +120,9 @@ new Vue({
 
 ### Visual Studio Code
 
-如果你使用 VS Code，建议安装 [Apollo GraphQL 扩展](https://marketplace.visualstudio.com/items?itemName=apollographql.vscode-apollo)。
+如果你使用 VS Code，推荐你安装 [Apollo GraphQL 扩展](https://marketplace.visualstudio.com/items?itemName=apollographql.vscode-apollo)。
 
-然后在 Vue 项目的根文件夹中创建 `apollo.config.js` 文件来配置它：
+然后在 Vue 项目的根目录中创建 `apollo.config.js` 文件来配置它：
 
 ```js
 // apollo.config.js
@@ -139,5 +139,29 @@ module.exports = {
       'src/**/*.js',
     ],
   },
+}
+```
+
+### Webstorm
+
+如果你使用 Webstorm，推荐你安装 [JS GraphQL 扩展](https://plugins.jetbrains.com/plugin/8097-js-graphql/)。
+
+然后在 Vue 项目的根目录中创建 `.graphqlconfig` 文件来配置它：
+
+```graphqlconfig
+{
+  "name": "Untitled GraphQL Schema",
+  "schemaPath": "./path/to/schema.graphql",
+  "extensions": {
+    "endpoints": {
+      "Default GraphQL Endpoint": {
+        "url": "http://url/to/the/graphql/api",
+        "headers": {
+          "user-agent": "JS GraphQL"
+        },
+        "introspect": false
+      }
+    }
+  }
 }
 ```

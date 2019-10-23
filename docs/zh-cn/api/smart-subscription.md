@@ -10,6 +10,7 @@
 - `debounce`：变量更新防抖时间（毫秒）。
 - `result(data, key)` 是收到结果时调用的钩子。
 - `error(error)` 是有错误时调用的钩子。`error` 是一个具有 `graphQLErrors` 属性或 `networkError` 属性的 Apollo 错误对象。
+- `skip` 是一个布尔值或一个返回布尔值的（响应式）函数。该函数的参数一个是当前组件，另一个是智能查询的键名，因此可以在 `$query` 或是 `ApolloProvider` 的 `defaultOptions` 中使用。
 
 ## 属性
 

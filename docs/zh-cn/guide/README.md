@@ -77,13 +77,11 @@
 
 ## 链接
 
-[⚡ 在线演示](https://jsfiddle.net/Akryum/oyejk2qL/)
+[<img src="https://github.com/fluidicon.png" alt="icon" width="16" height="16"/> Vue-cli 插件](https://github.com/Akryum/vue-cli-plugin-apollo)
 
-[<img src="https://assets-cdn.github.com/favicon.ico" alt="icon" width="16" height="16"/> Vue-cli 插件](https://github.com/Akryum/vue-cli-plugin-apollo)
+[<img src="https://github.com/fluidicon.png" alt="icon" width="16" height="16"/> 更多 vue-apollo 示例](https://github.com/Akryum/vue-apollo-example)
 
-[<img src="https://assets-cdn.github.com/favicon.ico" alt="icon" width="16" height="16"/> 更多 vue-apollo 示例](https://github.com/Akryum/vue-apollo-example)
-
-[<img src="https://assets-cdn.github.com/favicon.ico" alt="icon" width="16" height="16"/> Apollo graphql server 示例](https://github.com/Akryum/apollo-server-example)
+[<img src="https://github.com/fluidicon.png" alt="icon" width="16" height="16"/> Apollo graphql server 示例](https://github.com/Akryum/apollo-server-example)
 
 [<img src="https://graphql.org/favicon.ico" alt="icon" width="16" height="16"/> GraphQL 中文文档](http://graphql.cn/)
 
@@ -91,4 +89,4 @@
 
 [<img src="https://conf.vuejs.org/img/logo-48.png" alt="icon" width="16" height="16"/> VueConf 2017 演示](https://github.com/Akryum/vueconf-2017-demo) &amp; [讲义](http://slides.com/akryum/graphql#/)
 
-[<img src="https://assets-cdn.github.com/favicon.ico" alt="icon" width="16" height="16"/> Devfest 峰会示例](https://github.com/Akryum/devfest-nantes-2017)（包括许多特性，如 SSR、OAuth、实时更新、Apollo Engine 等）
+[<img src="https://github.com/fluidicon.png" alt="icon" width="16" height="16"/> Devfest 峰会示例](https://github.com/Akryum/devfest-nantes-2017)（包括许多特性，如 SSR、OAuth、实时更新、Apollo Engine 等）

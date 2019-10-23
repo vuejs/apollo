@@ -20,3 +20,4 @@
 - `subscribe`：标准的 Apollo 订阅方法（详见 [订阅](../guide/apollo/subscriptions.md)）。
 - `addSmartQuery`：手动添加一个智能查询（不推荐使用）。
 - `addSmartSubscription`：添加一个智能订阅（详见 [订阅](../guide/apollo/subscriptions.md)）。
+- `getClient`：返回底层的 ApolloClient。

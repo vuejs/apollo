@@ -116,7 +116,7 @@ apollo: {
 
 ## 带参数的查询
 
-你可以通过在对象中声明 `query` 和 `variables` 将变量（读取参数）添加到 `gql` 查询中：
+你可以通过在对象中声明 `query` 和 `variables` 将变量（及其他参数）添加到 `gql` 查询中：
 
 ```js
 // Apollo 具体选项
@@ -358,6 +358,8 @@ apollo: {
 ```js
 this.$apollo.queries.tags.skip = true
 ```
+
+如果查询的 `skip` 变为 `false` ，查询将再次自动执行。
 
 ## 响应式查询示例
 
