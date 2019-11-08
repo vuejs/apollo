@@ -20,35 +20,33 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v3-dependencies-{{ checksum "yarn.lock" }}-{{ checksum "tests/demo/yarn.lock" }}-{{ checksum "tests/ssr/yarn.lock" }}
+          - v4-dependencies-{{ checksum "yarn.lock" }}
           # fallback to using the latest cache if no exact match is found
-          - v3-dependencies-
+          - v4-dependencies-
 
-      - run: yarn install && cd tests/demo && yarn install && cd ../ssr && yarn install
+      - run: yarn install
 
       - save_cache:
           paths:
             - node_modules
-            - tests/demo/node_modules
-            - tests/ssr/node_modules
             - ~/.cache
-          key: v3-dependencies-{{ checksum "yarn.lock" }}-{{ checksum "tests/demo/yarn.lock" }}-{{ checksum "tests/ssr/yarn.lock" }}
+          key: v4-dependencies-{{ checksum "yarn.lock" }}
         
       # run tests!
-      - run: yarn build
-      - run: yarn test:eslint
-      - run: yarn test:types
-      - run: yarn test:unit
-      - run: yarn test:e2e
-      - run: yarn test:ssr
+      - run: cd packages/vue-apollo && yarn build
+      - run: cd packages/vue-apollo && yarn test:eslint
+      - run: cd packages/vue-apollo && yarn test:types
+      - run: cd packages/vue-apollo && yarn test:unit
+      - run: cd packages/test-e2e yarn test:e2e
+      - run: cd packages/test-ssr yarn test:e2e
 
       - store_artifacts:
-          path: tests/demo/tests/e2e/videos
+          path: packages/test-e2e/tests/e2e/videos
       - store_artifacts:
-          path: tests/demo/tests/e2e/screenshots
+          path: packages/test-e2e/tests/e2e/screenshots
       - store_artifacts:
-          path: tests/ssr/tests/e2e/videos
+          path: packages/test-ssr/tests/e2e/videos
       - store_artifacts:
-          path: tests/ssr/tests/e2e/screenshots
+          path: packages/test-ssr/tests/e2e/screenshots
 
 
