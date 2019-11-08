@@ -16,13 +16,21 @@ module.exports = {
       description: '🚀 在你的 Vue.js 应用中集成 GraphQL！',
     }
   },
+  plugins: {
+    '@vuepress/pwa': {
+      serviceWorker: true,
+      updatePopup: {
+        '/': {
+          message: "New content is available.",
+          buttonText: "Refresh"
+        },
+      },
+    },
+  },
   themeConfig: {
     repo: 'Akryum/vue-apollo',
     docsDir: 'docs',
     editLinks: true,
-    serviceWorker: {
-      updatePopup: true,
-    },
     locales: {
       '/': {
         selectText: 'Languages',

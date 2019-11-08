@@ -226,7 +226,7 @@ Fragments are useful to share parts of GraphQL documents in other documents to r
 
 Let's say we have this `GetMessages` query with a `messages` field that is an array of `Message` objects:
 
-```gql
+```graphql
 query GetMessages {
   messages {
     id
@@ -260,7 +260,7 @@ export default {
 
 Here is what the `message` fragment, which is applied on the `Message` type, looks like:
 
-```gql
+```graphql
 fragment message on Message {
   id
   user {
@@ -307,7 +307,7 @@ gql`
 
 Which will effectively produce this GraphQL document (that you can try on the GraphQL playground of your API):
 
-```gql
+```graphql
 query GetMessages {
   messages {
     ...message
@@ -328,7 +328,7 @@ So what's happening here? GraphQL will find the `...` operator where we usually 
 
 In the end, we obtain the final query:
 
-```gql
+```graphql
 query GetMessages {
   messages {
     id

@@ -227,7 +227,7 @@ export default {
 
 假设我们有一个`GetMessages` 查询，带有一个类型是 `Message` 对象数组的 `messages` 字段：
 
-```gql
+```graphql
 query GetMessages {
   messages {
     id
@@ -261,7 +261,7 @@ export default {
 
 以下是应用于 `Message` 类型的 `message` 片段，如下所示：
 
-```gql
+```graphql
 fragment message on Message {
   id
   user {
@@ -308,7 +308,7 @@ gql`
 
 这将有效地生成 GraphQL 文档（你可以在你的 GraphQL API playground 上尝试）：
 
-```gql
+```graphql
 query GetMessages {
   messages {
     ...message
@@ -329,7 +329,7 @@ fragment message on Message {
 
 最后，我们获得最终查询：
 
-```gql
+```graphql
 query GetMessages {
   messages {
     id
