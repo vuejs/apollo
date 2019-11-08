@@ -29,7 +29,7 @@ describe('ssr states', () => {
 
   describe('serializeStates', () => {
     it('safely serializes by default', () => {
-      const safe = '{"defaultClient":{"foo":"\u003Calert\u003Ehiya!\u003C\u002Falert\u003E"},"profile":{"foo":"\u003Calert\u003Ehiya!\u003C\u002Falert\u003E"},"other":{"foo":"bar"}}'
+      const safe = '{"defaultClient":{"foo":"\\u003Calert\\u003Ehiya!\\u003C\\u002Falert\\u003E"},"profile":{"foo":"\\u003Calert\\u003Ehiya!\\u003C\\u002Falert\\u003E"},"other":{"foo":"bar"}}'
 
       const serialized = ssr.serializeStates(apolloProvider)
       expect(serialized).not.toMatch('<alert>hiya!</alert>')
