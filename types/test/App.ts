@@ -1,8 +1,7 @@
 // this example src is https://github.com/Akryum/vue-apollo-example
-import gql from 'graphql-tag'
 import Vue from 'vue'
-import { OperationVariables, ApolloQueryResult, ApolloError } from '@apollo/client'
-import { VueApolloQueryDefinition, VueApolloSubscribeToMoreOptions } from '../options'
+import { OperationVariables, ApolloQueryResult, gql } from '@apollo/client'
+import { VueApolloQueryDefinition } from '../options'
 import { DocumentNode } from 'graphql'
 
 const pageSize = 10

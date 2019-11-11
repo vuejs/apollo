@@ -1,5 +1,5 @@
 import { addGqlError } from '../../lib/utils'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export default {
   props: {
