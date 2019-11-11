@@ -7,18 +7,19 @@
 要启用基于 websocket 的订阅，需要做一些额外的设置：
 
 ```
-npm install --save apollo-link-ws apollo-utilities
+npm install --save apollo-link-ws
 ```
 
 ```js
 import Vue from 'vue'
-import { ApolloClient } from 'apollo-client'
-import { HttpLink } from 'apollo-link-http'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-// 新的引入文件
-import { split } from 'apollo-link'
+import {
+  ApolloClient,
+  HttpLink,
+  InMemoryCache,
+  split,
+  getMainDefinition
+} from '@apollo/client'
 import { WebSocketLink } from 'apollo-link-ws'
-import { getMainDefinition } from 'apollo-utilities'
 
 import VueApollo from 'vue-apollo'
 

@@ -15,7 +15,7 @@ query myHelloQueryName {
 使用 `gql` 编写你的 GraphQL 查询：
 
 ```js
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 ```
 
 直接将 [gql](https://github.com/apollographql/graphql-tag) 查询作为值：

@@ -25,7 +25,7 @@ Now we're ready to add an `Item` type to our local GraphQL schema.
 ```js
 //main.js
 
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client'
 
 export const typeDefs = gql`
   type Item {
@@ -92,11 +92,10 @@ const userQuery = gql`
 
 To initialize an Apollo cache in your application, you will need to use an `InMemoryCache` constructor. First, let's import it to your main file:
 
-```js{4,6}
+```js{4,5}
 // main.js
 
-import ApolloClient from 'apollo-boost';
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import { ApolloClient, InMemoryCache } from '@apollo/client';
 
 const cache = new InMemoryCache();
 ```
@@ -147,7 +146,7 @@ Querying local cache is very similar to [sending GraphQL queries to remote serve
 ```js
 // App.vue
 
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client'
 
 const todoItemsQuery = gql`
   {

@@ -48,7 +48,7 @@ export default {
 </template>
 
 <script>
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export default {
   apollo: {

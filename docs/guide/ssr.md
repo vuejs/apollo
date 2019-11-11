@@ -121,13 +121,11 @@ If `ssr` is false, we try to restore the state of the Apollo cache with `cache.r
 
 Here is an example:
 
-```js{21-30}
+```js
 // apollo.js
 
 import Vue from 'vue'
-import { ApolloClient } from 'apollo-client'
-import { HttpLink } from 'apollo-link-http'
-import { InMemoryCache } from 'apollo-cache-inmemory'
+import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
 import VueApollo from 'vue-apollo'
 
 // Install the vue plugin

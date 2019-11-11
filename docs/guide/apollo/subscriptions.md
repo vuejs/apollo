@@ -7,18 +7,19 @@
 To enable the websocket-based subscription, a bit of additional setup is required:
 
 ```
-npm install --save apollo-link-ws apollo-utilities
+npm install --save apollo-link-ws
 ```
 
 ```js
 import Vue from 'vue'
-import { ApolloClient } from 'apollo-client'
-import { HttpLink } from 'apollo-link-http'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-// New Imports
-import { split } from 'apollo-link'
+import {
+  ApolloClient,
+  HttpLink,
+  InMemoryCache,
+  split,
+  getMainDefinition
+} from '@apollo/client'
 import { WebSocketLink } from 'apollo-link-ws'
-import { getMainDefinition } from 'apollo-utilities'
 
 import VueApollo from 'vue-apollo'
 

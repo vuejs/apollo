@@ -48,7 +48,7 @@ In the `apollo` object, add an attribute for each property you want to feed with
 </template>
 
 <script>
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export default {
   apollo: {

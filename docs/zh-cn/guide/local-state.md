@@ -25,7 +25,7 @@
 ```js
 //main.js
 
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client'
 
 export const typeDefs = gql`
   type Item {
@@ -92,11 +92,10 @@ const userQuery = gql`
 
 要在应用中初始化 Apollo 缓存，需要使用 `InMemoryCache` 构造函数。首先，将它导入你的主文件：
 
-```js{4,6}
+```js{4,5}
 // main.js
 
-import ApolloClient from 'apollo-boost';
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import { ApolloClient, InMemoryCache } from '@apollo/client';
 
 const cache = new InMemoryCache();
 ```
@@ -147,7 +146,7 @@ cache.writeData({
 ```js
 // App.vue
 
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client'
 
 const todoItemsQuery = gql`
   {
