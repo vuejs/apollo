@@ -8,9 +8,9 @@ import {
   MutationOptions,
   SubscriptionOptions,
   OperationVariables,
-} from 'apollo-client'
+} from '@apollo/client'
 import { FetchResult } from 'apollo-link'
-import { Observable } from 'apollo-client/util/Observable'
+import { Observable } from '@apollo/client'
 import { ApolloProvider, VueApolloComponent } from './apollo-provider'
 import {
   VueApolloQueryDefinition,
@@ -34,7 +34,7 @@ interface SmartApollo<V> {
   stop(): void
 }
 
-type PickedObservableQuery = Pick<ObservableQuery, 
+type PickedObservableQuery = Pick<ObservableQuery,
   'fetchMore' |
   'subscribeToMore' |
   'refetch' |

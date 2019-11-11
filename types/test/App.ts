@@ -1,7 +1,7 @@
 // this example src is https://github.com/Akryum/vue-apollo-example
 import gql from 'graphql-tag'
 import Vue from 'vue'
-import { OperationVariables, ApolloQueryResult, ApolloError } from 'apollo-client'
+import { OperationVariables, ApolloQueryResult, ApolloError } from '@apollo/client'
 import { VueApolloQueryDefinition, VueApolloSubscribeToMoreOptions } from '../options'
 import { DocumentNode } from 'graphql'
 
@@ -401,5 +401,5 @@ export default Vue.extend({
 
     // enable to specify client when execute request
     this.$apollo.query({ query: gql`query mockQuery { id }`, client: 'test' })
-  }, 
+  },
 })

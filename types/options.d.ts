@@ -9,7 +9,7 @@ import {
   NetworkStatus,
   ApolloQueryResult,
   ApolloError
-} from 'apollo-client'
+} from '@apollo/client'
 import { FetchResult } from 'apollo-link'
 import { ServerError, ServerParseError } from 'apollo-link-http-common'
 import { DocumentNode, GraphQLError } from 'graphql'
