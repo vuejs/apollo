@@ -39,7 +39,6 @@
   "homepage": "https://github.com/Akryum/vue-apollo#readme",
   "peerDependencies": {
     "@apollo/client": "^3.0.0-beta.7",
-    "apollo-link": "^1.0.0",
     "graphql-tag": "^2.10.1"
   },
   "dependencies": {
@@ -56,8 +55,6 @@
     "@types/graphql": "^14.0.1",
     "@vue/test-utils": "^1.0.0-beta.25",
     "apollo-cache-inmemory": "^1.2.9",
-    "apollo-link": "^1.0.3",
-    "apollo-link-http": "^1.2.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "cross-env": "^6.0.0",

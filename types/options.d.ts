@@ -8,10 +8,11 @@ import {
   ObservableQuery,
   NetworkStatus,
   ApolloQueryResult,
-  ApolloError
+  ApolloError,
+  FetchResult,
+  ServerError,
+  ServerParseError,
 } from '@apollo/client'
-import { FetchResult } from 'apollo-link'
-import { ServerError, ServerParseError } from 'apollo-link-http-common'
 import { DocumentNode, GraphQLError } from 'graphql'
 import { DeepApplyThisType } from './utils'
 
