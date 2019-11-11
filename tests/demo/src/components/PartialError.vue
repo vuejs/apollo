@@ -1,5 +1,5 @@
 <script>
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client/core'
 
 function query (errorPolicy) {
   return {

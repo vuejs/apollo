@@ -1,6 +1,6 @@
 // this example src is https://github.com/Akryum/vue-apollo-example
 import Vue from 'vue'
-import { OperationVariables, ApolloQueryResult, gql } from '@apollo/client'
+import { OperationVariables, ApolloQueryResult, gql } from '@apollo/client/core'
 import { VueApolloQueryDefinition } from '../options'
 import { DocumentNode } from 'graphql'
 

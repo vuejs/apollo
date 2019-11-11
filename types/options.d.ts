@@ -12,7 +12,7 @@ import {
   FetchResult,
   ServerError,
   ServerParseError,
-} from '@apollo/client'
+} from '@apollo/client/core'
 import { DocumentNode, GraphQLError } from 'graphql'
 import { DeepApplyThisType } from './utils'
 

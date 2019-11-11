@@ -1,7 +1,7 @@
 /* eslint no-unused-vars: 0 */
 
 import Vue, { AsyncComponent } from 'vue'
-import { ApolloClient } from 'apollo-client'
+import { ApolloClient } from '@apollo/client/core'
 import {
   VueApolloComponentOptions,
   WatchLoading,

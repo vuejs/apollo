@@ -1,7 +1,7 @@
 <script>
 import UserCurrent from './UserCurrent.vue'
 import MockSendMessage from './MockSendMessage.vue'
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client/core'
 
 export default {
   name: 'ChannelList',

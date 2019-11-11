@@ -1,5 +1,5 @@
 import { Component, Vue } from 'vue-property-decorator'
-import { OperationVariables, gql } from '@apollo/client'
+import { OperationVariables, gql } from '@apollo/client/core'
 import { VueApolloComponentOptions } from '../options'
 
 @Component({

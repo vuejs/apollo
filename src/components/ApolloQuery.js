@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client/core'
 
 function isDataFilled (data) {
   return Object.keys(data).length > 0
