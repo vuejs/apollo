@@ -6,12 +6,9 @@
   ],
   "private": true,
   "scripts": {
-    "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs"
   },
   "devDependencies": {
-    "@vuepress/plugin-pwa": "^1.0.2",
-    "lerna": "^3.18.4",
-    "vuepress": "^1.2.0"
+    "core-js": "^3.4.1",
+    "lerna": "^3.18.4"
   }
 }
