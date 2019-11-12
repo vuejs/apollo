@@ -10,5 +10,8 @@
   "devDependencies": {
     "core-js": "^3.4.1",
     "lerna": "^3.18.4"
+  },
+  "resolutions": {
+    "eslint-scope": "^5.0.0"
   }
 }
