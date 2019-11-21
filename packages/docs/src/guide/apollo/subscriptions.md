@@ -174,7 +174,7 @@ this.$watch(() => this.type, (type, oldType) => {
 
 ::: danger
 If you want to update a query with the result of the subscription, use `subscribeToMore`.
-The methods below are suitable for a 'notify' use case
+The methods below are suitable for a 'notify' use case.
 :::
 
 You can declare [Smart Subscriptions](../../api/smart-subscription.md) in the `apollo` option with the `$subscribe` keyword:
@@ -216,6 +216,33 @@ You can then access the subscription with `this.$apollo.subscriptions.<name>`.
 :::tip
 Just like for queries, you can declare the subscription [with a function](./queries.md#option-function), and you can declare the `query` option [with a reactive function](./queries.md#reactive-query-definition).
 :::
+
+When server supports live queries and uses subscriptions to update them, like [Hasura](https://hasura.io/), you can
+use simple subscriptions for reactive queries:
+
+```js
+data () {
+  return {
+    tags: [],
+  };
+},
+apollo: {
+  $subscribe: {
+    tags: {
+      query: gql`subscription {
+        tags {
+          id
+          label
+          type
+        }
+      }`,
+      result ({ data }) {
+        this.tags = data.tags;
+      },
+    },
+  },
+},
+```
 
 ## Skipping the subscription
 
