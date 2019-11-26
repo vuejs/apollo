@@ -28,7 +28,7 @@
     "graphql"
   ],
   "author": "Guillaume Chau <guillaume.b.chau@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Akryum/vue-apollo/issues"
   },
