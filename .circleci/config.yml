@@ -37,8 +37,8 @@ jobs:
       - run: cd packages/vue-apollo && yarn test:eslint
       - run: cd packages/vue-apollo && yarn test:types
       - run: cd packages/vue-apollo && yarn test:unit
-      - run: cd packages/test-e2e yarn test:e2e
-      - run: cd packages/test-ssr yarn test:e2e
+      - run: cd packages/test-e2e && yarn test:e2e
+      - run: cd packages/test-ssr && yarn test:e2e
 
       - store_artifacts:
           path: packages/test-e2e/tests/e2e/videos
