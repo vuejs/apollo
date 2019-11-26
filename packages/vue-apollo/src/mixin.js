@@ -149,15 +149,20 @@ export function installMixin (Vue, vueVersion) {
       beforeCreate () {
         initProvider.call(this)
         proxyData.call(this)
+        if (this.$isServer) {
+          // Patch render function to cleanup apollo
+          const render = this.$options.render
+          this.$options.render = (h) => {
+            const result = render.call(this, h)
+            destroy.call(this)
+            return result
+          }
+        }
       },
 
       serverPrefetch () {
         if (this.$_apolloPromises) {
-          return Promise.all(this.$_apolloPromises).then(result => {
-            // Destroy DollarApollo after SSR promises are resolved
-            destroy.call(this)
-            return result
-          })
+          return Promise.all(this.$_apolloPromises)
         }
       },
     } : {},
