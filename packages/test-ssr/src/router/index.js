@@ -17,6 +17,16 @@ export function createRouter () {
       component: () => import(/* webpackChunkName: "apollo" */ '../components/ApolloExample.vue')
     },
     {
+      path: '/apollo-loading',
+      name: 'apollo-loading',
+      component: () => import(/* webpackChunkName: "apollo-loading" */ '../components/ApolloLoading.vue')
+    },
+    {
+      path: '/hello',
+      name: 'hello',
+      component: () => import(/* webpackChunkName: "hello" */ '../components/HelloWorld.vue')
+    },
+    {
       path: '/about',
       name: 'about',
       // route level code-splitting
