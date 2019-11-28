@@ -1,0 +1,46 @@
+{
+  "name": "@vue/apollo-composable",
+  "version": "4.0.0-alpha.1",
+  "description": "Apollo GraphQL for Vue Composition API",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Akryum/vue-apollo.git"
+  },
+  "keywords": [
+    "vue",
+    "apollo",
+    "graphql",
+    "composition"
+  ],
+  "author": "Guillaume Chau <guillaume.b.chau@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Akryum/vue-apollo/issues"
+  },
+  "homepage": "https://github.com/Akryum/vue-apollo#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "yarn build --watch",
+    "build": "tsc --outDir dist -d",
+    "prepublishOnly": "yarn build"
+  },
+  "peerDependencies": {
+    "@vue/composition-api": "^0.3.2",
+    "apollo-client": "^2.0.0",
+    "apollo-link": "^1.0.0",
+    "graphql": "^14.5.8",
+    "graphql-tag": "^2.0.0",
+    "vue": "^2.6.10"
+  },
+  "devDependencies": {
+    "@vue/composition-api": "^0.3.2",
+    "typescript": "^3.7.2"
+  }
+}
