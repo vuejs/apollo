@@ -22,6 +22,7 @@ export function useMutation<
 
   const loading = ref<boolean>(false)
   const error = ref<Error>(null)
+  const called = ref<boolean>(false)
 
   // Apollo Client
   const { resolveClient } = useApolloClient()
@@ -36,6 +37,7 @@ export function useMutation<
     const client = resolveClient(currentOptions.clientId)
     error.value = null
     loading.value = true
+    called.value = true
     try {
       const result = await client.mutate({
         mutation: document,
@@ -58,5 +60,6 @@ export function useMutation<
     mutate,
     loading,
     error,
+    called,
   }
 }
