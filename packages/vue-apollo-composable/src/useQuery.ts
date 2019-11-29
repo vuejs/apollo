@@ -13,8 +13,8 @@ export interface UseQueryOptions<
   TResult = any,
   TVariables = OperationVariables
 > extends Omit<WatchQueryOptions<TVariables>, 'query' | 'variables'> {
-  clientId?: string,
-  enabled?: boolean,
+  clientId?: string
+  enabled?: boolean
 }
 
 export function useQuery<
