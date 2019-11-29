@@ -54,8 +54,8 @@ module.exports = {
             link: 'https://github.com/Akryum/vue-cli-plugin-apollo',
           },
           {
-            text: 'Patreon',
-            link: 'https://www.patreon.com/akryum',
+            text: 'Sponsor',
+            link: 'https://github.com/sponsors/Akryum',
           },
         ],
         sidebarDepth: 2,

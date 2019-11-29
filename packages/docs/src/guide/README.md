@@ -1,10 +1,6 @@
 # Introduction
 
-::: danger
-This README is related to Apollo 2.x support. For the old release (supporting only Apollo 1.x), see [here](https://github.com/Akryum/vue-apollo/tree/apollo-1).
-:::
-
-This library integrates [apollo](https://www.apollographql.com/) in your [Vue](http://vuejs.org) components with declarative queries. Compatible with Vue 1.0+ and 2.0+.
+This library integrates [apollo](https://www.apollographql.com/) in your [Vue](http://vuejs.org) components with declarative queries. Compatible with Vue 2.0+ and 3.0+.
 
 [➡️ Go to Installation](./installation.md)
 
@@ -44,28 +40,9 @@ This library integrates [apollo](https://www.apollographql.com/) in your [Vue](h
 
 ## Become a sponsor
 
-Is your company using vue-apollo or vue-cli-plugin-apollo to build awesome apps? Join the other patrons and become a sponsor to add your logo on this documentation! Supporting me on Patreon allows me to work less for a job and to work more on Free Open Source Software such as vue-apollo! Thank you!
+Is your company using vue-apollo or vue-cli-plugin-apollo to build awesome apps? Join the other sponsors and add your logo on this documentation! Supporting me on GitHub allows me to work less for a job and to work more on Free Open Source Software such as vue-apollo! Thank you!
 
-<p style="text-align: center;">
-  <a href="https://www.patreon.com/akryum" target="_blank">
-    <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Become a Patreon">
-  </a>
-</p>
-
-## Slides
-
-If you never heard of GraphQL or Apollo, here is a sneak peek:
-
-<iframe
-  src="//slides.com/akryum/vue-apollo-graphql/embed?style=light"
-  width="100%"
-  height="500"
-  scrolling="no"
-  frameborder="0"
-  webkitallowfullscreen
-  mozallowfullscreen
-  allowfullscreen
-/>
+<sponsor-button/>
 
 ## What is GraphQL?
 
