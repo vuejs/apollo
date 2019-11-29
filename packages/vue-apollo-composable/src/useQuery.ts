@@ -51,6 +51,7 @@ export function useQuery<
    */
   const loading = ref(false)
   // trackQuery(loading)
+  const networkStatus = ref<number>()
 
   // Apollo Client
   const { resolveClient } = useApolloClient()
@@ -90,6 +91,7 @@ export function useQuery<
   function onNextResult (queryResult: ApolloQueryResult<TResult>) {
     result.value = queryResult.data
     loading.value = queryResult.loading
+    networkStatus.value = queryResult.networkStatus
   }
 
   function onError (queryError: any) {
@@ -243,6 +245,7 @@ export function useQuery<
   return {
     result,
     loading,
+    networkStatus,
     error,
     // @TODO doesn't fully work yet
     // enabled,
