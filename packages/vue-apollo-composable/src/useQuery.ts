@@ -162,6 +162,17 @@ export function useQuery<
     deep: true,
   })
 
+  // Fefetch
+
+  function refetch (variables: TVariables = null) {
+    if (query.value) {
+      if (variables) {
+        currentVariables = variables
+      }
+      return query.value.refetch(variables)
+    }
+  }
+
   // Subscribe to more
 
   const subscribeToMoreItems: SubscribeToMoreItem[] = []
@@ -242,6 +253,7 @@ export function useQuery<
     variables: variablesRef,
     options: optionsRef,
     query,
+    refetch,
     subscribeToMore,
   }
 }
