@@ -20,7 +20,7 @@
 
 <br>
 
-[Contributing guide](./CONTRIBUTING.md)
+[Contributing guide](../../CONTRIBUTING.md)
 
 <br>
 
