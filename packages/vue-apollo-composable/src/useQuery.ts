@@ -1,4 +1,4 @@
-import { ref, watch, onUnmounted, Ref, isRef } from '@vue/composition-api'
+import { ref, watch, onUnmounted, Ref, isRef, computed } from '@vue/composition-api'
 import Vue from 'vue'
 import { DocumentNode } from 'graphql'
 import ApolloClient, { OperationVariables, WatchQueryOptions, ObservableQuery, ApolloQueryResult, SubscribeToMoreOptions } from 'apollo-client'
@@ -60,7 +60,7 @@ export function useQuery<
    * Starts watching the query
    */
   function start () {
-    if (started) return
+    if (started || !isEnabled.value) return
     started = true
     loading.value = true
 
@@ -176,14 +176,19 @@ export function useQuery<
   }
 
   // Internal enabled returned to user
-  const enabled = ref(true)
+  // @TODO Doesn't fully work yet, need to initialize with option
+  const enabled = ref<boolean>()
+  const enabledOption = computed(() => !currentOptions.value || currentOptions.value.enabled == null || currentOptions.value.enabled)
+  const isEnabled = computed(() => !!((typeof enabled.value === 'boolean' && enabled.value) && enabledOption.value))
+
+  watch(enabled, value => {
+    if (value == null) {
+      enabled.value = enabledOption.value
+    }
+  })
 
   // Auto start & stop
-  watch(
-    () => enabled.value &&
-    // Enabled option
-    (!currentOptions.value || currentOptions.value.enabled == null || currentOptions.value.enabled)
-  , value => {
+  watch(isEnabled, value => {
     if (value) {
       start()
     } else {
@@ -198,7 +203,8 @@ export function useQuery<
     result,
     loading,
     error,
-    enabled,
+    // @TODO doesn't fully work yet
+    // enabled,
     start,
     stop,
     restart,
