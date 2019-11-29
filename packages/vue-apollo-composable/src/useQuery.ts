@@ -30,7 +30,6 @@ export function useQuery<
   if (options == null) options = {}
   const documentRef = paramToRef(document)
   const variablesRef = paramToReactive(variables)
-  console.log(variablesRef)
   const optionsRef = paramToReactive(options)
 
   // Result
@@ -144,7 +143,6 @@ export function useQuery<
   let currentVariables: TVariables
   watch(() => isRef(variablesRef) ? variablesRef.value : variablesRef, value => {
     currentVariables = value
-    console.log('currentVariables', value)
     restart()
   }, {
     deep: true,
