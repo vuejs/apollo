@@ -1,18 +1,6 @@
 # Queries
 
-The main composition function used to execute queries is `useQuery`. In your component, start by importing it:
-
-```vue
-<script>
-import { useQuery } from '@vue/apollo-composable'
-
-export default {
-  setup () {
-    // Your data & logic here...
-  },
-}
-</script>
-```
+Fetching data involves executing **queries** using standard GraphQL documents. You can learn more about queries and GraphQL documents [here](https://graphql.org/learn/queries/) and [practice running queries in the playground](https://www.apollographql.com/docs/react/development-testing/developer-tooling/#features).
 
 ## Executing a query
 
@@ -32,6 +20,20 @@ query getUsers {
 ::: tip
 It's recommended to give a name to your GraphQL operations (here `getUsers`), so it's easier to find them in the Apollo Client devtools.
 :::
+
+The main composition function used to execute queries is `useQuery`. In your component, start by importing it:
+
+```vue
+<script>
+import { useQuery } from '@vue/apollo-composable'
+
+export default {
+  setup () {
+    // Your data & logic here...
+  },
+}
+</script>
+```
 
 You can use `useQuery` in your `setup` option by passing it a GraphQL document as the first parameter and retrieve the query `result`:
 
