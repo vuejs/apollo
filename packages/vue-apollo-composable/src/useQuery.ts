@@ -52,7 +52,7 @@ export function useQuery<
 
   // Query
 
-  let query: Ref<ObservableQuery<TResult, TVariables>> = ref()
+  const query: Ref<ObservableQuery<TResult, TVariables>> = ref()
   let observer: Subscription
   let started = false
 
