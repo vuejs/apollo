@@ -1,6 +1,6 @@
 {
   "name": "vue-apollo-test-ssr",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -29,7 +29,7 @@
     "mkdirp": "^0.5.1",
     "shortid": "^2.2.8",
     "vue": "^2.6.10",
-    "vue-apollo": "^3.0.1",
+    "vue-apollo": "^3.0.2",
     "vue-router": "^3.0.6",
     "vue-server-renderer": "^2.6.0"
   },

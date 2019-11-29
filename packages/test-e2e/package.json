@@ -1,6 +1,6 @@
 {
   "name": "vue-apollo-test-e2e",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -20,7 +20,7 @@
     "marked": "^0.7.0",
     "shortid": "^2.2.8",
     "vue": "^2.5.16",
-    "vue-apollo": "^3.0.1",
+    "vue-apollo": "^3.0.2",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
   },
