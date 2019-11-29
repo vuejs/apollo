@@ -1,6 +1,6 @@
 import { DocumentNode } from 'graphql'
 import Vue from 'vue'
-import { Ref, ref, watch, isRef, onUnmounted } from '@vue/composition-api'
+import { Ref, ref, watch, isRef, onUnmounted, computed } from '@vue/composition-api'
 import { OperationVariables, SubscriptionOptions } from 'apollo-client'
 import { Observable, Subscription } from 'apollo-client/util/Observable'
 import { FetchResult } from 'apollo-link'
@@ -44,7 +44,7 @@ export function useSubscription <
   let started = false
 
   function start () {
-    if (started) return
+    if (started || !isEnabled.value) return
     started = true
     loading.value = true
 
@@ -129,14 +129,19 @@ export function useSubscription <
   })
 
   // Internal enabled returned to user
-  const enabled = ref(true)
+  // @TODO Doesn't fully work yet, need to initialize with option
+  const enabled = ref<boolean>()
+  const enabledOption = computed(() => !currentOptions.value || currentOptions.value.enabled == null || currentOptions.value.enabled)
+  const isEnabled = computed(() => !!((typeof enabled.value === 'boolean' && enabled.value) && enabledOption.value))
+
+  watch(enabled, value => {
+    if (value == null) {
+      enabled.value = enabledOption.value
+    }
+  })
 
   // Auto start & stop
-  watch(
-    () => enabled.value &&
-    // Enabled option
-    (!currentOptions.value || currentOptions.value.enabled == null || currentOptions.value.enabled)
-  , value => {
+  watch(isEnabled, value => {
     if (value) {
       start()
     } else {
@@ -151,7 +156,8 @@ export function useSubscription <
     result,
     loading,
     error,
-    enabled,
+    // @TODO doesn't fully work yet
+    // enabled,
     start,
     stop,
     restart,
