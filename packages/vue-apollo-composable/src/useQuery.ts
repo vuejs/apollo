@@ -17,6 +17,11 @@ export interface UseQueryOptions<
   enabled?: boolean
 }
 
+interface SubscribeToMoreItem {
+  options: any
+  unsubscribeFns: Function[]
+}
+
 export function useQuery<
   TResult = any,
   TVariables = OperationVariables,
@@ -77,8 +82,8 @@ export function useQuery<
       error: onError,
     })
 
-    for (const subOptions of subscribeToMoreItems) {
-      subscribeToMore(subOptions)
+    for (const item of subscribeToMoreItems) {
+      addSubscribeToMore(item)
     }
   }
 
@@ -159,20 +164,42 @@ export function useQuery<
 
   // Subscribe to more
 
-  const subscribeToMoreItems = []
+  const subscribeToMoreItems: SubscribeToMoreItem[] = []
 
   function subscribeToMore<
     TSubscriptionVariables = OperationVariables,
     TSubscriptionData = TResult
-  > (options: SubscribeToMoreOptions<TResult, TSubscriptionVariables, TSubscriptionData>) {
-    subscribeToMoreItems.push(options)
-    addSubscribeToMore(options)
+  > (
+    options: SubscribeToMoreOptions<TResult, TSubscriptionVariables, TSubscriptionData> |
+      Ref<SubscribeToMoreOptions<TResult, TSubscriptionVariables, TSubscriptionData>> |
+      ReactiveFunction<SubscribeToMoreOptions<TResult, TSubscriptionVariables, TSubscriptionData>>
+  ) {
+    const optionsRef = paramToRef(options)
+    watch(optionsRef, (value, oldValue, onCleanup) => {
+      const index = subscribeToMoreItems.findIndex(item => item.options === oldValue)
+      if (index !== -1) {
+        subscribeToMoreItems.splice(index, 1)
+      }
+      const item: SubscribeToMoreItem = {
+        options: value,
+        unsubscribeFns: [],
+      }
+      subscribeToMoreItems.push(item)
+
+      addSubscribeToMore(item)
+
+      onCleanup(() => {
+        item.unsubscribeFns.forEach(fn => fn())
+        item.unsubscribeFns = []
+      })
+    })
   }
 
-  function addSubscribeToMore (options: SubscribeToMoreOptions) {
+  function addSubscribeToMore (item: SubscribeToMoreItem) {
     if (!started) return
-    const unsubscribe = query.value.subscribeToMore(options)
+    const unsubscribe = query.value.subscribeToMore(item.options)
     onStopHandlers.push(unsubscribe)
+    item.unsubscribeFns.push(unsubscribe)
   }
 
   // Internal enabled returned to user
@@ -197,7 +224,10 @@ export function useQuery<
   })
 
   // Teardown
-  onUnmounted(stop)
+  onUnmounted(() => {
+    stop()
+    subscribeToMoreItems.length = 0
+  })
 
   return {
     result,
