@@ -19,27 +19,27 @@ footer: LICENCE MIT - Created by Guillaume CHAU (@Akryum)
 
 ### Gold
 
-<p style="text-align: center;">
+<p class="sponsors">
   <a href="https://www.sumcumo.com/en/" target="_blank">
     <img src="https://cdn.discordapp.com/attachments/258614093362102272/570728242399674380/logo-sumcumo.png" alt="sum.cumo logo" class="gold-sponsor">
+  </a>
+
+  <a href="https://www.vuemastery.com/" target="_blank">
+    <img src="https://cdn.discordapp.com/attachments/258614093362102272/557267759130607630/Vue-Mastery-Big.png" alt="Vue Mastery logo" class="gold-sponsor">
   </a>
 </p>
 
 ### Silver
 
-<p style="text-align: center;">
+<p class="sponsors">
   <a href="https://vueschool.io/" target="_blank">
     <img src="https://vueschool.io/img/logo/vueschool_logo_multicolor.svg" alt="VueSchool logo" class="silver-sponsor">
-  </a>
-
-  <a href="https://www.vuemastery.com/" target="_blank">
-    <img src="https://cdn.discordapp.com/attachments/258614093362102272/557267759130607630/Vue-Mastery-Big.png" alt="Vue Mastery logo" class="silver-sponsor">
   </a>
 </p>
 
 ### Bronze
 
-<p align="center">
+<p class="sponsors">
   <a href="https://vuetifyjs.com" target="_blank">
     <img src="https://cdn.discordapp.com/attachments/537832759985700914/537832771691872267/Horizontal_Logo_-_Dark.png" alt="Vuetify logo" class="bronze-sponsor">
   </a>
