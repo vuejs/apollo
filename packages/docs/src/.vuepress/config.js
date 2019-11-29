@@ -39,7 +39,28 @@ module.exports = {
         nav: [
           {
             text: 'Guide',
-            link: '/guide/',
+            items: [
+              {
+                text: 'Getting started',
+                link: '/guide/',
+              },
+              {
+                text: 'Option API',
+                link: '/guide-option/',
+              },
+              {
+                text: 'Composition API',
+                link: '/guide-composable/',
+              },
+              {
+                text: 'Components',
+                link: '/guide-components/',
+              },
+              {
+                text: 'Advanced topics',
+                link: '/guide-advanced/',
+              },
+            ],
           },
           {
             text: 'API Reference',
@@ -63,64 +84,111 @@ module.exports = {
           '/guide/': [
             '',
             'installation',
+          ],
+          '/guide-option/': [
             {
-              title: 'Basic usage',
+              title: 'Option API Guide',
               collapsable: false,
               children: [
-                'apollo/',
-                'apollo/queries',
-                'apollo/mutations',
-                'apollo/subscriptions',
-                'apollo/pagination',
-                'apollo/special-options',
+                '',
+                'setup',
               ],
             },
             {
-              title: 'Components',
+              title: 'Basics',
               collapsable: false,
               children: [
-                'components/',
-                'components/query',
-                'components/mutation',
-                'components/subscribe-to-more',
+                'usage',
+                'queries',
+                'mutations',
+                'subscriptions',
               ],
             },
+            {
+              title: 'Advanced',
+              collapsable: false,
+              children: [
+                'special-options',
+                'pagination',
+                'multiple-clients',
+              ],
+            },
+          ],
+          '/guide-composable/': [
+            {
+              title: 'Composition API Guide',
+              collapsable: false,
+              children: [
+                '',
+                'setup',
+              ],
+            },
+            {
+              title: 'Fetching data',
+              collapsable: false,
+              children: [
+                'query',
+                'mutation',
+                'subscription',
+              ],
+            },
+          ],
+          '/guide-components/': [
+            {
+              title: 'Components Guide',
+              collapsable: false,
+              children: [
+                '',
+                'setup',
+              ],
+            },
+            {
+              title: 'Usage',
+              collapsable: false,
+              children: [
+                'query',
+                'mutation',
+                'subscribe-to-more',
+              ],
+            },
+          ],
+          '/guide-advanced/': [
             {
               title: 'Advanced topics',
               collapsable: false,
               children: [
-                'multiple-clients',
-                'ssr',
+                '',
                 'local-state',
+                'ssr',
                 'testing',
               ],
             },
           ],
           '/api/': [
             {
-              title: 'Vue Apollo',
+              title: 'Option API',
               collapsable: false,
               children: [
                 'apollo-provider',
                 'dollar-apollo',
-                'ssr',
-              ],
-            },
-            {
-              title: 'Smart Apollo',
-              collapsable: false,
-              children: [
                 'smart-query',
                 'smart-subscription',
               ],
             },
             {
-              title: 'Apollo Components',
+              title: 'Components',
               collapsable: false,
               children: [
                 'apollo-query',
                 'apollo-mutation',
                 'apollo-subscribe-to-more',
+              ],
+            },
+            {
+              title: 'Advanced',
+              collapsable: false,
+              children: [
+                'ssr',
               ],
             },
           ],

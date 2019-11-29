@@ -1,4 +1,6 @@
-# What are Apollo components?
+# Introduction
+
+## What are Apollo components?
 
 Those are components just like any others. They take a GraphQL document in their prop and use the [scoped slot feature](https://vuejs.org/v2/guide/components-slots.html#Scoped-Slots) to pass down the results.
 
@@ -25,5 +27,3 @@ Here is a quick example of an [ApolloQuery](./query.md) in a template:
 
 <!-- No need for script -->
 ```
-
-See [ApolloQuery](./query.md) to learn how to write GraphQL queries in the template.

@@ -8,7 +8,9 @@ query myHelloQueryName {
 }
 ```
 
-In the `apollo` object, add an attribute for each property you want to feed with the result of an Apollo query. Each one of them will become a Smart Query.
+In the `apollo` object, add an attribute for each property you want to feed with the result of an Apollo query. Each one of them will become a **Smart Query**.
+
+Smart Queries are wrappers around GraphQL queries with additional features like automatic reactivity.
 
 ## Simple query
 
@@ -23,11 +25,13 @@ Put the [gql](https://github.com/apollographql/graphql-tag) query directly as th
 ```js
 apollo: {
   // Simple query that will update the 'hello' vue property
-  hello: gql`{hello}`,
+  hello: gql`query {
+    hello
+  }`,
 },
 ```
 
-You can then access the query with `this.$apollo.queries.<name>`.
+You can then access the smart query with `this.$apollo.queries.<name>`.
 
 You can initialize the property in your vue component's `data` hook:
 
@@ -206,6 +210,43 @@ And then use it in your vue component:
 </template>
 ```
 
+## Reactive parameters
+
+Use a function instead to make the parameters reactive with vue properties:
+
+```js
+// Apollo-specific options
+apollo: {
+  // Query with parameters
+  ping: {
+    query: gql`query PingMessage($message: String!) {
+      ping(message: $message)
+    }`,
+    // Reactive parameters
+    variables () {
+      // Use vue reactive properties here
+      return {
+          message: this.pingInput,
+      }
+    },
+  },
+},
+```
+
+This will re-fetch the query each time a parameter changes, for example:
+
+```vue
+<template>
+  <div class="apollo">
+    <h3>Ping</h3>
+    <input v-model="pingInput" placeholder="Enter a message" />
+    <p>
+      {{ping}}
+    </p>
+  </div>
+</template>
+```
+
 ## Loading state
 
 You can display a loading state thanks to the `$apollo.loading` prop:
@@ -284,43 +325,6 @@ featuredTag: {
 ::: tip
 This also works for [subscriptions](./subscriptions.md).
 :::
-
-## Reactive parameters
-
-Use a function instead to make the parameters reactive with vue properties:
-
-```js
-// Apollo-specific options
-apollo: {
-  // Query with parameters
-  ping: {
-    query: gql`query PingMessage($message: String!) {
-      ping(message: $message)
-    }`,
-    // Reactive parameters
-    variables () {
-      // Use vue reactive properties here
-      return {
-          message: this.pingInput,
-      }
-    },
-  },
-},
-```
-
-This will re-fetch the query each time a parameter changes, for example:
-
-```vue
-<template>
-  <div class="apollo">
-    <h3>Ping</h3>
-    <input v-model="pingInput" placeholder="Enter a message" />
-    <p>
-      {{ping}}
-    </p>
-  </div>
-</template>
-```
 
 ## Skipping the query
 

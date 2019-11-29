@@ -16,24 +16,22 @@ Then you can skip to next section: [Basic Usage](./apollo/).
 
 ## Manual installation
 
-### 1. Apollo Client
-
 You can either use [Apollo Boost](#apollo-boost) or [Apollo Client directly](#apollo-client-full-configuration) (more configuration work).
 
-#### Apollo Boost
+### Apollo Boost
 
 Apollo Boost is a zero-config way to start using Apollo Client. It includes some sensible defaults, such as our recommended `InMemoryCache` and `HttpLink`, which come configured for you with our recommended settings and it's perfect for starting to develop fast.
 
 Install it alongside `vue-apollo` and `graphql`: 
 
 ```
-npm install --save vue-apollo graphql apollo-boost
+npm install --save graphql apollo-boost
 ```
 
 Or:
 
 ```
-yarn add vue-apollo graphql apollo-boost
+yarn add graphql apollo-boost
 ```
 
 In your app, create an `ApolloClient` instance:
@@ -47,18 +45,18 @@ const apolloClient = new ApolloClient({
 })
 ```
 
-#### Apollo client full configuration
+### Apollo client full configuration
 
 If you want some more fine grained control install these packages instead of apollo-boost:
 
 ```
-npm install --save vue-apollo graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
+npm install --save graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
 ```
 
 Or:
 
 ```
-yarn add vue-apollo graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
+yarn add graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
 ```
 
 In your app, create an `ApolloClient` instance:
@@ -83,38 +81,6 @@ const apolloClient = new ApolloClient({
   cache,
 })
 ```
-
-### 2. Install the plugin into Vue
-
-```js
-import Vue from 'vue'
-import VueApollo from 'vue-apollo'
-
-Vue.use(VueApollo)
-```
-
-### 3. Apollo provider
-
-The provider holds the Apollo client instances that can then be used by all the child components.
-
-```js
-const apolloProvider = new VueApollo({
-  defaultClient: apolloClient,
-})
-```
-
-Add it to your app with the `apolloProvider` option:
-
-```js
-new Vue({
-  el: '#app',
-  // inject apolloProvider here like vue-router or vuex
-  apolloProvider,
-  render: h => h(App),
-})
-```
-
-You are now ready to use Apollo in your components!
 
 ## IDE integration
 
@@ -165,3 +131,12 @@ Then configure it by creating a `.graphqlconfig` file in the root folder of the 
   }
 }
 ```
+
+## Guides
+
+Continue with one of those guides:
+
+- [Option (Classic) API](../guide-option/setup.md)
+- [Composition (Advanced) API](../guide-compsable/setup.md)
+- [Components API](../guide-components/setup.md)
+- [Advanced topics](../guide-advanced)
