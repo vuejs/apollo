@@ -28,7 +28,7 @@ export function useSubscription <
   if (variables == null) variables = ref()
   if (!options) options = {}
   const documentRef = paramToRef(document)
-  const variablesRef = paramToReactive(variables)
+  const variablesRef = paramToRef(variables)
   const optionsRef = paramToReactive(options)
 
   const result = ref<TResult>()
@@ -112,7 +112,7 @@ export function useSubscription <
 
   // Applying variables
   let currentVariables: TVariables
-  watch(() => isRef(variablesRef) ? variablesRef.value : variablesRef, value => {
+  watch(variablesRef, value => {
     currentVariables = value
     restart()
   }, {
