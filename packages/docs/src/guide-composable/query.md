@@ -167,7 +167,9 @@ Beware that `result` may not contain your data! At the beginning, it will be `un
 </template>
 ```
 
-## Loading & Error state
+## Query status
+
+### Loading state
 
 Alongside `result`, `useQuery` returns `loading` which is a boolean `Ref`, so you can track the loading state of the query:
 
@@ -207,6 +209,8 @@ export default {
   </ul>
 </template>
 ```
+
+### Error
 
 There is also an `error` `Ref` that stores any error that may occur:
 
@@ -258,15 +262,14 @@ A sister composition function `useResult` is available alongside `userQuery` to 
 
 The first useful feature of `useResult` is picking one object from the result data. To do so, pass the `result` data as the first parameter, and a picking function as the third parameter:
 
-```vue{3,19,22,32,33}
+```vue{2,18,21,34,35}
 <script>
-import { computed } from '@vue/composition-api'
 import { useQuery, useResult } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 
 export default {
   setup () {
-    const { result, loading } = useQuery(gql`
+    const { result, loading, error } = useQuery(gql`
       query getUsers {
         users {
           id
@@ -282,6 +285,7 @@ export default {
     return {
       users,
       loading,
+      error,
     }
   },
 }
@@ -289,6 +293,8 @@ export default {
 
 <template>
   <div v-if="loading">Loading...</div>
+
+  <div v-else-if="error">Error: {{ error.message }}</div>
 
   <ul v-else-if="users">
     <li v-for="user of users" :key="user.id">
