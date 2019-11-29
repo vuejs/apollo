@@ -704,22 +704,6 @@ function enableQuery () {
 }
 ```
 
-### Polling
-
-Polling means repeatedly calling the server to automatically update the query data.
-
-You can enable polling with the `pollInterval` which will be the interval in ms between each requests repeatdly made to the server.
-
-In this example, we will poll the server every second:
-
-```js
-const { result } = useQuery(gql`
-  ...
-`, null, {
-  pollInterval: 1000,
-})
-```
-
 ### Fetch Policy
 
 The `fetchPolicy` option allow you to customize how the query will use the Apollo Client cache.
@@ -739,4 +723,78 @@ Available values are:
 - `cache-only`: return result from cache if available, fail otherwise.
 - `network-only`: return result from network, fail if network call doesn't succeed, save to cache.
 - `no-cache`: return result from network, fail if network call doesn't succeed, don't save to cache.
+
+## Updating cached results
+
+When a query is completed, it will update the cache with the result data (depending on the [fetch policy](#fetch-policy)). This optimize the next time the data needs to be rendered in your application and ensures that all components relying on a piece of data is always consistent.
+
+However, you sometimes want to make sure that this data is up-to-date compared to the server.
+
+### Polling
+
+Polling means repeatedly calling the server to automatically update the query data.
+
+You can enable polling with the `pollInterval` which will be the interval in ms between each requests repeatdly made to the server.
+
+In this example, we will poll the server every second:
+
+```js
+const { result } = useQuery(gql`
+  ...
+`, null, {
+  pollInterval: 1000,
+})
+```
+
+### Refetching
+
+The other way is manually executing the query again in response to an event, as opposed to using a fixed interval.
+
+This is done using the `refetch` function:
+
+```vue{7,24,40}
+<script>
+import { useQuery, useResult } from '@vue/apollo-composable'
+import gql from 'graphql-tag'
+
+export default {
+  setup () {
+    const { result, loading, error, refetch } = useQuery(gql`
+      query getUsers {
+        users {
+          id
+          firstname
+          lastname
+          email
+        }
+      }
+    `)
+
+    const users = useResult(result)
+
+    return {
+      users,
+      loading,
+      error,
+      refetch,
+    }
+  },
+}
+</script>
+
+<template>
+  <div v-if="loading">Loading...</div>
+
+  <div v-else-if="error">Error: {{ error.message }}</div>
+
+  <ul v-else-if="users">
+    <li v-for="user of users" :key="user.id">
+      {{ user.firstname }} {{ user.lastname }}
+    </li>
+
+    <button @click="refetch()">Refresh</button>
+  </ul>
+</template>
+```
+
 
