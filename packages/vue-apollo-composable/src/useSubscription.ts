@@ -69,6 +69,7 @@ export function useSubscription <
 
   function onError (fetchError: any) {
     error.value = fetchError
+    loading.value = false
   }
 
   function stop () {
