@@ -96,6 +96,8 @@ export function useQuery<
 
   function onError (queryError: any) {
     error.value = queryError
+    loading.value = false
+    networkStatus.value = 8
   }
 
   let onStopHandlers: (() => void)[] = []
