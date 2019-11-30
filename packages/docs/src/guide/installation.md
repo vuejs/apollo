@@ -137,6 +137,6 @@ Then configure it by creating a `.graphqlconfig` file in the root folder of the 
 Continue with one of those guides:
 
 - [Option (Classic) API](../guide-option/setup.md)
-- [Composition (Advanced) API](../guide-compsable/setup.md)
+- [Composition (Advanced) API](../guide-composable/setup.md)
 - [Components API](../guide-components/setup.md)
 - [Advanced topics](../guide-advanced)
