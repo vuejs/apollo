@@ -151,7 +151,7 @@ module.exports = {
           },
           {
             text: '赞助作者',
-            link: 'https://www.patreon.com/akryum',
+            link: 'https://github.com/sponsors/Akryum',
           },
         ],
         sidebarDepth: 3,
