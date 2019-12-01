@@ -127,6 +127,8 @@ const { mutate: sendMessage } = useMutation(gql`
 }))
 ```
 
+See the [API Reference](../api/use-mutation) for all the possible options.
+
 ### Variables
 
 There are two ways of passing a variables object to the mutation.
