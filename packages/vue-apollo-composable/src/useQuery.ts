@@ -1,7 +1,15 @@
 import { ref, watch, onUnmounted, Ref, isRef, computed } from '@vue/composition-api'
 import Vue from 'vue'
 import { DocumentNode } from 'graphql'
-import { OperationVariables, WatchQueryOptions, ObservableQuery, ApolloQueryResult, SubscribeToMoreOptions } from 'apollo-client'
+import {
+  OperationVariables,
+  WatchQueryOptions,
+  ObservableQuery,
+  ApolloQueryResult,
+  SubscribeToMoreOptions,
+  FetchMoreQueryOptions,
+  FetchMoreOptions,
+} from 'apollo-client'
 import { Subscription } from 'apollo-client/util/Observable'
 import { useApolloClient } from './useApolloClient'
 import { ReactiveFunction } from './util/ReactiveFunction'
@@ -221,6 +229,14 @@ export function useQuery<
     }
   }
 
+  // Fetch more
+
+  function fetchMore<K extends keyof TVariables> (options: FetchMoreQueryOptions<TVariables, K> & FetchMoreOptions<TResult, TVariables>) {
+    if (query.value) {
+      return query.value.fetchMore(options)
+    }
+  }
+
   // Subscribe to more
 
   const subscribeToMoreItems: SubscribeToMoreItem[] = []
@@ -303,6 +319,7 @@ export function useQuery<
     options: optionsRef,
     query,
     refetch,
+    fetchMore,
     subscribeToMore,
     onResult: resultEvent.on,
     onError: errorEvent.on,
