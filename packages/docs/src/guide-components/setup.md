@@ -2,25 +2,27 @@
 
 Make sure you have [installed Apollo Client](../guide/installation.md).
 
-## 1. Install vue-apollo
+## 1. Install @vue/apollo-components
 
 ```
-npm install --save vue-apollo
+npm install --save @vue/apollo-option @vue/apollo-components
 ```
 
 Or:
 
 ```
-yarn add vue-apollo
+yarn add @vue/apollo-option @vue/apollo-components
 ```
 
 ## 2. Install the plugin into Vue
 
 ```js
 import Vue from 'vue'
-import VueApollo from 'vue-apollo'
+import VueApollo from '@vue/apollo-option'
+import VueApolloComponents from '@vue/apollo-components'
 
 Vue.use(VueApollo)
+Vue.use(VueApolloComponents)
 ```
 
 ## 3. Inject the Apollo provider

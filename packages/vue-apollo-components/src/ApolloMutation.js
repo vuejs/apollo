@@ -1,4 +1,4 @@
-import { addGqlError } from '../../lib/utils'
+import { addGqlError } from '@vue/apollo-option/lib/utils'
 import gql from 'graphql-tag'
 
 export default {

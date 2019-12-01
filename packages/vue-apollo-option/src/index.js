@@ -1,10 +1,6 @@
 import { DollarApollo } from './dollar-apollo'
 import { ApolloProvider as plugin } from './apollo-provider'
 
-import CApolloQuery from './components/ApolloQuery'
-import CApolloSubscribeToMore from './components/ApolloSubscribeToMore'
-import CApolloMutation from './components/ApolloMutation'
-
 import { installMixin } from './mixin'
 import { Globals, omit } from '../lib/utils'
 
@@ -48,15 +44,6 @@ export function install (Vue, options) {
   })
 
   installMixin(Vue, vueVersion)
-
-  if (vueVersion === '2') {
-    Vue.component('apollo-query', CApolloQuery)
-    Vue.component('ApolloQuery', CApolloQuery)
-    Vue.component('apollo-subscribe-to-more', CApolloSubscribeToMore)
-    Vue.component('ApolloSubscribeToMore', CApolloSubscribeToMore)
-    Vue.component('apollo-mutation', CApolloMutation)
-    Vue.component('ApolloMutation', CApolloMutation)
-  }
 }
 
 plugin.install = install
@@ -66,11 +53,6 @@ plugin.version = VERSION
 
 // Apollo provider
 export const ApolloProvider = plugin
-
-// Components
-export const ApolloQuery = CApolloQuery
-export const ApolloSubscribeToMore = CApolloSubscribeToMore
-export const ApolloMutation = CApolloMutation
 
 // Auto-install
 let GlobalVue = null

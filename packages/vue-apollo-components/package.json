@@ -1,11 +1,10 @@
 {
-  "name": "vue-apollo",
-  "version": "3.0.1",
-  "description": "Use Apollo and GraphQL with Vue.js",
+  "name": "@vue/apollo-components",
+  "version": "4.0.0-alpha.1",
+  "description": "Apollo GraphQL components for Vue.js",
   "main": "dist/vue-apollo.umd.js",
   "module": "dist/vue-apollo.esm.js",
   "unpkg": "dist/vue-apollo.min.js",
-  "typings": "types/index.d.ts",
   "scripts": {
     "build": "yarn build:browser && yarn build:es && yarn build:umd",
     "build:browser": "rollup --config build/rollup.config.browser.js",
@@ -13,10 +12,8 @@
     "build:umd": "rollup --config build/rollup.config.umd.js",
     "prepublishOnly": "yarn test && yarn build",
     "dev": "nodemon --exec 'yarn build:es && yarn build:umd' --watch src --watch lib",
-    "test": "yarn build && yarn test:eslint && yarn test:types && yarn run test:unit",
-    "test:eslint": "eslint --ext .js {src,ssr,lib,build}/**/*.js",
-    "test:types": "tsc -p types/test",
-    "test:unit": "yarn run jest"
+    "test": "yarn build && yarn test:eslint",
+    "test:eslint": "eslint --ext .js {src,ssr,lib,build}/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -25,7 +22,8 @@
   "keywords": [
     "vue",
     "apollo",
-    "graphql"
+    "graphql",
+    "component"
   ],
   "author": "Guillaume Chau <guillaume.b.chau@gmail.com>",
   "license": "MIT",
@@ -36,15 +34,8 @@
   "publishConfig": {
     "access": "public"
   },
-  "peerDependencies": {
-    "apollo-client": "^2.0.0",
-    "apollo-link": "^1.0.0",
-    "graphql-tag": "^2.10.1"
-  },
   "dependencies": {
-    "chalk": "^2.4.2",
-    "serialize-javascript": "^2.1.0",
-    "throttle-debounce": "^2.1.0"
+    "@vue/apollo-option": "^4.0.0-alpha.1"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",

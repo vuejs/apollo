@@ -1,10 +1,12 @@
 import Vue from 'vue'
-import VueApollo from 'vue-apollo'
+import VueApollo from '@vue/apollo-option'
+import VueApolloComponents from '@vue/apollo-components'
 import { createApolloClient, restartWebsockets } from 'vue-cli-plugin-apollo/graphql-client'
 import { print } from 'graphql'
 
 // Install the vue plugin
 Vue.use(VueApollo)
+Vue.use(VueApolloComponents)
 
 // Name of the localStorage item
 const AUTH_TOKEN = 'apollo-token'

@@ -4,7 +4,7 @@ import { minify } from 'uglify-es'
 
 const config = Object.assign({}, base, {
   output: {
-    file: 'dist/vue-apollo.min.js',
+    file: 'dist/vue-apollo-option.min.js',
     format: 'iife',
     name: 'VueApollo',
   },
