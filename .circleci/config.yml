@@ -20,9 +20,9 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v4-dependencies-{{ checksum "yarn.lock" }}
+          - v5-dependencies-{{ checksum "yarn.lock" }}
           # fallback to using the latest cache if no exact match is found
-          - v4-dependencies-
+          - v5-dependencies-
 
       - run: yarn install
 
@@ -30,14 +30,15 @@ jobs:
           paths:
             - node_modules
             - ~/.cache
-          key: v4-dependencies-{{ checksum "yarn.lock" }}
+          key: v5-dependencies-{{ checksum "yarn.lock" }}
         
       # run tests!
-      - run: cd packages/vue-apollo && yarn build
+      - run: yarn build
       - run: cd packages/vue-apollo && yarn test:eslint
       - run: cd packages/vue-apollo && yarn test:types
       - run: cd packages/vue-apollo && yarn test:unit
       - run: cd packages/test-e2e && yarn test:e2e
+      - run: cd packages/test-e2e-composition && yarn test:e2e
       - run: cd packages/test-ssr && yarn test:e2e
 
       - store_artifacts:

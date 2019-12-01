@@ -6,6 +6,8 @@
   ],
   "private": true,
   "scripts": {
+    "build": "lerna run build",
+    "test": "lerna run test --concurrency 1"
   },
   "devDependencies": {
     "core-js": "^3.4.1",
