@@ -15,7 +15,7 @@ export function useMutation<
   TResult = any,
   TVariables = OperationVariables
 > (
-  document: DocumentNode,
+  document: DocumentNode | ReactiveFunction<DocumentNode>,
   options: UseMutationOptions<TResult, TVariables> | ReactiveFunction<UseMutationOptions<TResult, TVariables>> = null,
 ) {
   if (!options) options = {}
@@ -28,6 +28,13 @@ export function useMutation<
   const { resolveClient } = useApolloClient()
 
   async function mutate (variables: TVariables = null) {
+    let currentDocument: DocumentNode
+    if (typeof document === 'function') {
+      currentDocument = document()
+    } else {
+      currentDocument = document
+    }
+
     let currentOptions: UseMutationOptions<TResult, TVariables>
     if (typeof options === 'function') {
       currentOptions = options()
@@ -40,7 +47,7 @@ export function useMutation<
     called.value = true
     try {
       const result = await client.mutate({
-        mutation: document,
+        mutation: currentDocument,
         ...currentOptions,
         variables: {
           ...variables || {},
