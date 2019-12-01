@@ -4,13 +4,13 @@ Make sure you have [installed Apollo Client](../guide/installation.md).
 
 ## 1. Install @vue/apollo-composable
 
-```
+```shell
 npm install --save @vue/apollo-composable
 ```
 
 Or:
 
-```
+```shell
 yarn add @vue/apollo-composable
 ```
 

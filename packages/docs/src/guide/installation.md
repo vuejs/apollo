@@ -6,7 +6,7 @@ I made a plugin for [vue-cli](http://cli.vuejs.org) so you can add Apollo (with 
 
 In your vue-cli 3 project:
 
-```bash
+```shell
 vue add apollo
 ```
 
@@ -24,13 +24,13 @@ Apollo Boost is a zero-config way to start using Apollo Client. It includes some
 
 Install it alongside `vue-apollo` and `graphql`: 
 
-```
+```shell
 npm install --save graphql apollo-boost
 ```
 
 Or:
 
-```
+```shell
 yarn add graphql apollo-boost
 ```
 
@@ -49,13 +49,13 @@ const apolloClient = new ApolloClient({
 
 If you want some more fine grained control install these packages instead of apollo-boost:
 
-```
+```shell
 npm install --save graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
 ```
 
 Or:
 
-```
+```shell
 yarn add graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
 ```
 
@@ -132,7 +132,7 @@ Then configure it by creating a `.graphqlconfig` file in the root folder of the 
 }
 ```
 
-## Guides
+## Next steps
 
 Continue with one of those guides:
 
