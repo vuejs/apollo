@@ -1,10 +1,12 @@
 # Queries
 
-Fetching data involves executing **queries** using standard GraphQL documents. You can learn more about queries and GraphQL documents [here](https://graphql.org/learn/queries/) and [practice running queries in the playground](https://www.apollographql.com/docs/react/development-testing/developer-tooling/#features).
+Fetching data involves executing **query** operations using standard GraphQL documents. You can learn more about queries and GraphQL documents [here](https://graphql.org/learn/queries/) and [practice running queries in the playground](https://www.apollographql.com/docs/react/development-testing/developer-tooling/#features).
 
 ## Executing a query
 
-Let's take this GraphQL document to execute our query:
+### GraphQL document
+
+Let's take this example GraphQL document throughout this section:
 
 ```graphql
 query getUsers {
@@ -18,8 +20,70 @@ query getUsers {
 ```
 
 ::: tip
-It's recommended to give a name to your GraphQL operations (here `getUsers`), so it's easier to find them in the Apollo Client devtools.
+It is recommended to give a name to your GraphQL operations (here `getUsers`), so it is easier to find them in the Apollo Client devtools.
 :::
+
+This query would return a `data` object with an array of `users` with their `id`, `firstname`, `lastname` and `email`. It could look like this:
+
+```json
+{
+  "data": {
+    "users": [
+      {
+        "id": "abc",
+        "firstname": "James",
+        "lastname": "Holden",
+        "email": "james.holden@roci.com"
+      },
+      {
+        "id": "def",
+        "firstname": "Naomi",
+        "lastname": "Nagata",
+        "email": "naomi.nagata@roci.com"
+      }
+    ]
+  }
+}
+```
+
+You may ask: why is there a nested `users` property on `data`? Why isn't the array directly on `data`?
+
+This is because you can select multiple root fields in a GraphQL operation:
+
+```graphql
+query getCatsAndDogs {
+  cats {
+    id
+  }
+
+  dogs {
+    id
+  }
+}
+```
+
+In this case, the result could look like this:
+
+```json
+{
+  "data": {
+    "cats": [
+      { "id": "abc" },
+      { "id": "def" }
+    ],
+    "dogs": [
+      { "id": "ghi" },
+      { "id": "jkl" }
+    ]
+  }
+}
+```
+
+There can also be other optional properties on the result alongside `data`:
+- `errors` : an array of errors returned by the server
+- `extensions` : additional informations such as execution timings
+
+### useQuery
 
 The main composition function used to execute queries is `useQuery`. In your component, start by importing it:
 
@@ -35,7 +99,7 @@ export default {
 </script>
 ```
 
-You can use `useQuery` in your `setup` option by passing it a GraphQL document as the first parameter and retrieve the query `result`:
+You can use `useQuery` in your `setup` option and pass it a GraphQL document as the first parameter. Then retrieve the query `result`:
 
 ```vue{3,7-16}
 <script>
@@ -59,7 +123,7 @@ export default {
 </script>
 ```
 
-Note that `result` here is a `Ref` holding the data from the result object retrieved from Apollo.
+Note that `result` here is a `Ref` holding the data from the result returned by Apollo.
 
 If you want to directly access the data object, use `result.value`:
 
@@ -90,7 +154,7 @@ export default {
 </script>
 ```
 
-In this case, you can also watch the `Ref` directly:
+In this example, you could also watch the `Ref` directly:
 
 ```vue{19-20}
 <script>
@@ -155,7 +219,7 @@ export default {
 </template>
 ```
 
-Beware that `result` may not contain your data! At the beginning, it will be `undefined` until the query successfully completes. So it's a good idea to add a conditionnal before rendering the fetched data:
+Beware that `result` may not contain your data at all time! It will initially be `undefined` until the query successfully completes. So it's a good idea to add a conditionnal before rendering the data:
 
 ```vue{2}
 <template>
@@ -171,7 +235,7 @@ Beware that `result` may not contain your data! At the beginning, it will be `un
 
 ### Loading state
 
-Alongside `result`, `useQuery` returns `loading` which is a boolean `Ref`, so you can track the loading state of the query:
+Alongside `result`, `useQuery` returns `loading`, a boolean `Ref` tracking the loading state of the query:
 
 ```vue{7,20,27,29}
 <script>
@@ -212,7 +276,7 @@ export default {
 
 ### Error
 
-There is also an `error` `Ref` that stores any error that may occur:
+There is also an `error` `Ref` that holds any error that may occur during the request:
 
 ```vue{7,21,30}
 <script>
@@ -256,7 +320,7 @@ export default {
 
 ## useResult
 
-A sister composition function `useResult` is available alongside `userQuery` to facilitate usage of the query `result`.
+The sister composition function `useResult` is available alongside `userQuery` to facilitate usage of the query `result`.
 
 ### Result picking
 
@@ -321,7 +385,7 @@ const { result } = useQuery(gql`
 const messages = useResult(result, null, data => data.currentUser.messages)
 ```
 
-Another perk of `useResult` is that the picking function will silently throw an error if `result.value` is `undefined`, so you don't have to add additional checks:
+Another perk of `useResult` is that the picking function will silence errors inside the picking function. For example, if `result.value` is `undefined`, you don't have to add additional checks:
 
 ```js
 // You don't need to do this!
@@ -335,7 +399,7 @@ const messages = useResult(result, null, data => data.currentUser.messages)
 Don't forget that `messages.value` can still be `null` until the query successfully completes!
 :::
 
-Another use case where `useResult` is very useful is when you have multiple objects on the result data:
+Another use case where `useResult` proves to be very useful is when you have multiple objects on the result data:
 
 ```js
 const { result } = useQuery(gql`
@@ -382,7 +446,7 @@ Here `users.value` will be the `users` array retrieved from our server.
 
 ### Default value
 
-Let's say we want to sort our user on last names:
+Let's say we want to sort our users on their last names:
 
 ```vue{2,19-21,24,34,35}
 <script>
@@ -426,9 +490,9 @@ export default {
 </template>
 ```
 
-Here we will run into an error because `result.value` can be `undefined` (and potentially `result.value.users` can also be `undefined`). So `sort()` will throw when called in our computed property.
+Here we will run into an error because `result.value` can be `undefined` (and potentially `result.value.users` can also be `undefined`). So the `sort` method will throw an error when called in our `computed` property.
 
-We could add checks but it can rapidly become tedious:
+We could add checks, but it can rapidly become tedious:
 
 ```js
 const sortedUsers = computed(() => result.value && result.value.users ? result.value.users.sort(
@@ -446,7 +510,7 @@ const sortedUsers = computed(() => users.value ? users.value.sort(
 ) : [])
 ```
 
-But we can eliminate the conditional completly if we pass a default value as the 2nd parameter of `useResult`:
+But we can eliminate the conditional entirely if we pass a default value as the 2nd parameter of `useResult`:
 
 ```js{1,3,5}
 const users = useResult(result, []) // Defaults to an empty array
@@ -456,7 +520,7 @@ const sortedUsers = computed(() => users.value.sort(
 ))
 ```
 
-This is even more useful if we want to use this `users` array `Ref` in multiple places in our `setup` function!
+This is even more useful if we want to use the `users` array `Ref` in multiple places in our `setup` function!
 
 ## Variables
 
@@ -552,7 +616,7 @@ function selectUser (id) {
 }
 ```
 
-This also means you can pass `props` from `setup` directly, since `props` is a reactive object:
+This also means you can pass `props` from `setup` directly, since `props` is already a reactive object:
 
 ```js
 export default {
@@ -575,7 +639,7 @@ export default {
 }
 ```
 
-But beware if you add new props that aren't in the GraphQL query, you may run into GraphQL validation errors!
+But beware if you add new props that aren't used in the GraphQL document, you will run into GraphQL validation errors!
 
 ### Variables function
 
@@ -706,7 +770,7 @@ function enableQuery () {
 
 ### Fetch Policy
 
-The `fetchPolicy` option allow you to customize how the query will use the Apollo Client cache.
+The `fetchPolicy` option allows you to customize how the query will use the Apollo Client cache.
 
 ```js
 const { result } = useQuery(gql`
@@ -726,7 +790,7 @@ Available values are:
 
 ## Updating cached results
 
-When a query is completed, it will update the cache with the result data (depending on the [fetch policy](#fetch-policy)). This optimize the next time the data needs to be rendered in your application and ensures that all components relying on a piece of data is always consistent.
+When a query is completed, it will update the cache with the result data (depending on the [fetch policy](#fetch-policy)). This improves performance the next time the data needs to be rendered in your application and ensures that all components relying on a piece of data is always consistent.
 
 However, you sometimes want to make sure that this data is up-to-date compared to the server.
 
@@ -734,7 +798,7 @@ However, you sometimes want to make sure that this data is up-to-date compared t
 
 Polling means repeatedly calling the server to automatically update the query data.
 
-You can enable polling with the `pollInterval` which will be the interval in ms between each requests repeatdly made to the server.
+You can enable polling with the `pollInterval` which will be the interval in ms between each requests repeatedly made to the server.
 
 In this example, we will poll the server every second:
 

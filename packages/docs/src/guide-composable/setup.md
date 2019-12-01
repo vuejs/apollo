@@ -50,7 +50,7 @@ const app = new Vue({
 })
 ```
 
-You can add other client instances alongside:
+You can add other client instances alongside it:
 
 ```js
 provide(ApolloClients, {
@@ -59,3 +59,5 @@ provide(ApolloClients, {
   clientB: apolloClientB,
 })
 ```
+
+You can then select which one to use in functions we will cover next (such as `useQuery`, `useMutation` and `useSubscription`) with the `clientId` option.

@@ -4,7 +4,7 @@ Now that's we've learned [how to fetch data](./query), the next logical step is 
 
 ## Executing a mutation
 
-The `useMutation` composition function is the main way of setting up mutation in Vue components.
+The `useMutation` composition function is the main way of setting up mutations in Vue components.
 
 Start by importing it in your component:
 

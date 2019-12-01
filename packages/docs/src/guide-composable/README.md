@@ -1,6 +1,6 @@
 # Introduction
 
-The Composition API is an API allowing writing data and logic in an easily composable way inside the `setup` option.
+The Composition API is an API where you write data and logic in an easily composable way inside the `setup` option.
 
 If you are using Typescript, it is strongly recommended to start using the Composition API as its typing capabilities are unmatched by any other Vue API.
 
