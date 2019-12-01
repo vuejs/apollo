@@ -49,6 +49,10 @@ jobs:
       - store_artifacts:
           path: packages/test-e2e/tests/e2e/screenshots
       - store_artifacts:
+          path: packages/test-e2e-composition/tests/e2e/videos
+      - store_artifacts:
+          path: packages/test-e2e-composition/tests/e2e/screenshots
+      - store_artifacts:
           path: packages/test-ssr/tests/e2e/videos
       - store_artifacts:
           path: packages/test-ssr/tests/e2e/screenshots
