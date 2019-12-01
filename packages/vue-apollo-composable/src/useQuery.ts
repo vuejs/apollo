@@ -42,7 +42,9 @@ export function useQuery<
    * Result from the query
    */
   const result = ref<TResult>()
-  const error = ref(null)
+  const resultEvent = useEventHook<ApolloQueryResult<TResult>>()
+  const error = ref<Error>(null)
+  const errorEvent = useEventHook<Error>()
 
   // Loading
 
@@ -92,12 +94,14 @@ export function useQuery<
     result.value = queryResult.data
     loading.value = queryResult.loading
     networkStatus.value = queryResult.networkStatus
+    resultEvent.trigger(queryResult)
   }
 
   function onError (queryError: any) {
     error.value = queryError
     loading.value = false
     networkStatus.value = 8
+    errorEvent.trigger(queryError)
   }
 
   let onStopHandlers: (() => void)[] = []
@@ -260,5 +264,7 @@ export function useQuery<
     query,
     refetch,
     subscribeToMore,
+    onResult: resultEvent.on,
+    onError: errorEvent.on,
   }
 }
