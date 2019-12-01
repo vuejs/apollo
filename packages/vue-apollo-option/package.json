@@ -44,8 +44,6 @@
     "graphql-tag": "^2.10.1"
   },
   "dependencies": {
-    "chalk": "^2.4.2",
-    "serialize-javascript": "^2.1.0",
     "throttle-debounce": "^2.1.0"
   },
   "devDependencies": {

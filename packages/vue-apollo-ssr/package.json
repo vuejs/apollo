@@ -31,6 +31,9 @@
     "build": "tsc --outDir dist -d",
     "prepublishOnly": "yarn build"
   },
+  "dependencies": {
+    "serialize-javascript": "^2.1.0"
+  },
   "devDependencies": {
     "typescript": "^3.7.2"
   }
