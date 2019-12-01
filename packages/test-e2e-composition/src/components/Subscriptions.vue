@@ -1,5 +1,5 @@
 <script>
-import { ref, computed } from '@vue/composition-api'
+import { ref, computed, watch } from '@vue/composition-api'
 import { useSubscription, useMutation } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 
@@ -7,8 +7,9 @@ export default {
   setup () {
     const subType = ref('dog')
     const history = ref([])
+    const onResultCount = ref(0)
 
-    const { onResult } = useSubscription(gql`
+    const { result, onResult } = useSubscription(gql`
       subscription onCounterUpdate ($type: String!) {
         counterUpdated (type: $type)
       }
@@ -16,8 +17,14 @@ export default {
       type: subType.value,
     }))
 
+    watch(result, data => {
+      history.value.push(data.counterUpdated)
+    }, {
+      lazy: true,
+    })
+
     onResult(result => {
-      history.value.push(result.data.counterUpdated)
+      onResultCount.value++
     })
 
     const historyJson = computed(() => JSON.stringify(history.value))
@@ -43,6 +50,7 @@ export default {
     return {
       subType,
       historyJson,
+      onResultCount,
       inputType,
       counterValue,
       updateCounter,
@@ -117,7 +125,11 @@ export default {
     </div>
 
     <div class="sub-history">
-      {{ historyJson }}
+      history: {{ historyJson }}
+    </div>
+
+    <div class="result-count">
+      onResult called {{ onResultCount }} times
     </div>
   </div>
 </template>

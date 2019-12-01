@@ -12,5 +12,7 @@ describe('useSubscription', () => {
     cy.get('.sub-cat').click()
     cy.get('.btn-update').click()
     cy.get('.sub-history').should('contain', '[0,1,3]')
+
+    cy.get('.result-count').should('contain', '3')
   })
 })
