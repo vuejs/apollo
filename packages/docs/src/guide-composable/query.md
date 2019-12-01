@@ -861,4 +861,60 @@ export default {
 </template>
 ```
 
+## Event hooks
 
+`useQuery` returns event hooks allowing you to execute code when a specific event occurs.
+
+### onResult
+
+This is called whenever a new result is available.
+
+```js
+const { onResult } = useQuery(...)
+
+onResult(queryResult => {
+  console.log(queryResult.data)
+  console.log(queryResult.loading)
+  console.log(queryResult.networkStatus)
+  console.log(queryResult.stale)
+})
+```
+
+You can pass the `notifyOnNetworkStatusChange` option to force the query to trigger a new resutl when the network status or error is updated:
+
+```js
+useQuery(gql`
+  ...
+`, null, {
+  notifyOnNetworkStatusChange: true,
+})
+```
+
+### onError
+
+It is triggered when an error occurs:
+
+```js
+const { onError } = useQuery(...)
+
+onError(error => {
+  console.log(error.graphQLErrors)
+  console.log(error.networkError)
+})
+```
+
+You can use the `logErrorMessages` function from the `@vue/apollo-util` package to format the error in the browser console:
+
+```js
+import { logErrorMessages } from '@vue/apollo-util'
+
+const { onError } = useQuery(...)
+
+onError(error => {
+  logErrorMessages(error)
+})
+```
+
+Example error:
+
+![Error log screenshot](/error-log.jpeg)
