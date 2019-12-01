@@ -130,6 +130,7 @@ module.exports = {
                 'query',
                 'mutation',
                 'subscription',
+                'pagination',
               ],
             },
           ],
