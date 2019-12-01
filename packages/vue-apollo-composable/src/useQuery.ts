@@ -1,7 +1,7 @@
 import { ref, watch, onUnmounted, Ref, isRef, computed } from '@vue/composition-api'
 import Vue from 'vue'
 import { DocumentNode } from 'graphql'
-import ApolloClient, { OperationVariables, WatchQueryOptions, ObservableQuery, ApolloQueryResult, SubscribeToMoreOptions } from 'apollo-client'
+import { OperationVariables, WatchQueryOptions, ObservableQuery, ApolloQueryResult, SubscribeToMoreOptions } from 'apollo-client'
 import { Subscription } from 'apollo-client/util/Observable'
 import { useApolloClient } from './useApolloClient'
 import { ReactiveFunction } from './util/ReactiveFunction'
