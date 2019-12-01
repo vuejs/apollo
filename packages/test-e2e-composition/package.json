@@ -1,0 +1,51 @@
+{
+  "name": "vue-apollo-test-e2e-composable",
+  "version": "3.0.1",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "apollo:dev": "vue-cli-service apollo:dev",
+    "apollo:start": "vue-cli-service apollo:start --port 4042",
+    "test": "yarn run lint --no-fix && yarn run test:e2e",
+    "test:e2e": "start-server-and-test apollo:start http://localhost:4042/.well-known/apollo/server-health test:e2e:client",
+    "test:e2e:client": "vue-cli-service test:e2e --mode production --headless",
+    "test:e2e:dev": "start-server-and-test apollo:dev http://localhost:4042/.well-known/apollo/server-health test:e2e:dev:client",
+    "test:e2e:dev:client": "vue-cli-service test:e2e --mode development"
+  },
+  "dependencies": {
+    "@vue/apollo-composable": "^4.0.0-alpha.1",
+    "@vue/apollo-util": "^4.0.0-alpha.1",
+    "@vue/composition-api": "^0.3.2",
+    "core-js": "^3.1.2",
+    "graphql-type-json": "^0.3.0",
+    "marked": "^0.7.0",
+    "shortid": "^2.2.8",
+    "vue": "^2.5.16",
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.1"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^4.0.4",
+    "@vue/cli-plugin-e2e-cypress": "^4.0.4",
+    "@vue/cli-plugin-eslint": "^4.0.4",
+    "@vue/cli-service": "^4.0.4",
+    "@vue/eslint-config-standard": "^4.0.0",
+    "babel-eslint": "^10.0.3",
+    "eslint": "^4.19.1",
+    "eslint-plugin-graphql": "^3.1.0",
+    "eslint-plugin-vue": "^5.2.3",
+    "graphql-tag": "^2.5.0",
+    "start-server-and-test": "^1.10.6",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2",
+    "vue-cli-plugin-apollo": "^0.21.2",
+    "vue-template-compiler": "^2.5.16"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
+}

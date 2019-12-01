@@ -1,0 +1,87 @@
+scalar JSON
+
+directive @private on FIELD_DEFINITION
+
+type User {
+  id: ID!
+  nickname: String!
+  email: String!
+}
+
+input UserRegister {
+  email: String!
+  nickname: String!
+  password: String!
+}
+
+type UserToken {
+  id: ID!
+  userId: ID!
+  expiration: JSON
+}
+
+type UserLogin {
+  user: User
+  token: UserToken
+}
+
+# Channel of messages
+type Channel {
+  id: ID!
+  name: String!
+  messages: [Message]
+}
+
+# User messages
+type Message {
+  id: ID!
+  content: String!
+  # Author of the message
+  user: User
+  dateAdded: JSON
+  dateUpdated: JSON
+}
+
+input MessageAdd {
+  channelId: ID!
+  content: String!
+}
+
+input MessageUpdate {
+  id: ID!
+  content: String!
+}
+
+type MessageChanged {
+  type: MessageChangedType!
+  message: Message!
+}
+
+enum MessageChangedType {
+  added
+  updated
+  removed
+}
+
+type Query {
+  userCurrent: User @private
+  channels: [Channel] @private
+  channel (id: ID!): Channel @private
+  good: String
+  bad: String
+  loadNumber: Int!
+}
+
+type Mutation {
+  userRegister (input: UserRegister!): Boolean
+  userLogin (email: String!, password: String!): UserLogin
+  userLogout: Boolean @private
+  messageAdd (input: MessageAdd!): Message! @private
+  messageUpdate (input: MessageUpdate!): Message! @private
+  messageRemove (id: ID!): Message! @private
+  mockMessageSend: Boolean
+}
+
+type Subscription {
+  messageChanged (channelId: ID!): MessageChanged! @private
+}
