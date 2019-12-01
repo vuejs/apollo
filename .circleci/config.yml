@@ -38,8 +38,6 @@ jobs:
       - run: cd packages/vue-apollo-option && yarn test:types
       - run: cd packages/vue-apollo-option && yarn test:unit
       - run: cd packages/vue-apollo-components && yarn test:eslint
-      - run: cd packages/vue-apollo-components && yarn test:types
-      - run: cd packages/vue-apollo-components && yarn test:unit
       - run: cd packages/test-e2e && yarn test:e2e
       - run: cd packages/test-e2e-composition && yarn test:e2e
       - run: cd packages/test-ssr && yarn test:e2e
