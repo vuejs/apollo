@@ -918,3 +918,19 @@ onError(error => {
 Example error:
 
 ![Error log screenshot](/error-log.jpeg)
+
+If you are using Webpack or Vue CLI, it's a good idea to only use it in development:
+
+```js
+import { logErrorMessages } from '@vue/apollo-util'
+
+const { onError } = useQuery(...)
+
+onError(error => {
+  if (process.env.NODE_ENV !== 'production') {
+    logErrorMessages(error)
+  }
+})
+```
+
+That way it will be dropped when compiling the project for production.
