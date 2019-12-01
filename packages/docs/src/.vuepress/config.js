@@ -131,6 +131,7 @@ module.exports = {
                 'mutation',
                 'subscription',
                 'pagination',
+                'fragments',
               ],
             },
           ],
