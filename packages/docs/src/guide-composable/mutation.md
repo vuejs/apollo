@@ -434,3 +434,31 @@ const { mutate: sendMessage, error: sendMessageError } = useMutation(gql`
   }
 `)
 ```
+
+## Event hooks
+
+### onDone
+
+This is called when the mutation successfully completes.
+
+```js
+const { onDone } = useMutation(...)
+
+onDone(result => {
+  console.log(result.data)
+})
+```
+
+### onError
+
+This is triggered when an error occurs during the mutation.
+
+```js
+import { logErrorMessages } from '@vue/apollo-util'
+
+const { onError } = useMutation(...)
+
+onError(error => {
+  logErrorMessages(error)
+})
+```
