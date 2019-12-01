@@ -449,6 +449,74 @@ onDone(result => {
 })
 ```
 
+In our example, this is very useful for resetting the message input:
+
+```vue{22,40-42,55}
+<script>
+import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
+import gql from 'graphql-tag'
+
+const MESSAGES = gql`
+  query getMessages {
+    messages {
+      id
+      text
+    }
+  }
+`
+
+export default {
+  setup () {
+    // Messages list
+    const { result } = useQuery(MESSAGES)
+    const messages = useResult(result, [])
+
+    // Send a new message
+    const newMessage = ref('')
+    const { mutate: sendMessage, onDone } = useMutation(gql`
+      mutation sendMessage ($text: String!) {
+        sendMessage (text: $text) {
+          id
+          text
+        }
+      }
+    `, () => ({
+      variables: {
+        text: newMessage.value,
+      },
+      update: (cache, { data: { sendMessage } }) => {
+        const data = cache.readQuery({ query: MESSAGES })
+        data.messages.push(sendMessage)
+        cache.writeQuery({ query: MESSAGES, data })
+      },
+    }))
+
+    onDone(() => {
+      newMessage.value = ''
+    })
+
+    return {
+      messages,
+      newMessage,
+      sendMessage,
+    }
+  },
+}
+</script>
+
+<template>
+  <div>
+    <input v-model="newMessage" @keyup.enter="sendMessage()">
+
+    <ul v-if="messages">
+      <li v-for="message of messages" :key="message.id">
+        {{ message.text }}
+      </li>
+    </ul>
+  </div>
+</template>
+```
+
 ### onError
 
 This is triggered when an error occurs during the mutation.
