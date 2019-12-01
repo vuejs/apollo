@@ -80,8 +80,10 @@ type Mutation {
   messageUpdate (input: MessageUpdate!): Message! @private
   messageRemove (id: ID!): Message! @private
   mockMessageSend: Boolean
+  updateCounter (type: String!, value: Int!): Boolean
 }
 
 type Subscription {
   messageChanged (channelId: ID!): MessageChanged! @private
+  counterUpdated (type: String!): Int!
 }

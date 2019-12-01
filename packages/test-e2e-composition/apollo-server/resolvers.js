@@ -39,6 +39,12 @@ module.exports = {
     messageUpdate: (root, { input }, context) => messages.update(input, context),
     messageRemove: (root, { id }, context) => messages.remove(id, context),
     mockMessageSend: (root, args, context) => messages.mockMessageSend(context),
+    updateCounter: (root, { type, value }, context) => {
+      context.pubsub.publish('counter', {
+        type,
+        counterUpdated: value,
+      })
+    },
   },
 
   Subscription: {
@@ -46,6 +52,13 @@ module.exports = {
       subscribe: withFilter(
         (parent, args, { pubsub }) => pubsub.asyncIterator(triggers.MESSAGE_CHANGED),
         (payload, vars) => payload.messageChanged.message.channelId === vars.channelId
+      ),
+    },
+
+    counterUpdated: {
+      subscribe: withFilter(
+        (parent, args, { pubsub }) => pubsub.asyncIterator('counter'),
+        (payload, vars) => payload.type === vars.type
       ),
     },
   },
