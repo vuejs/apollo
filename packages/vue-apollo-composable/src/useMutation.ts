@@ -1,8 +1,10 @@
 import { DocumentNode } from 'graphql'
 import { MutationOptions, OperationVariables } from 'apollo-client'
 import { ref } from '@vue/composition-api'
+import { FetchResult } from 'apollo-link'
 import { useApolloClient } from './useApolloClient'
 import { ReactiveFunction } from './util/ReactiveFunction'
+import { useEventHook } from './util/useEventHook'
 
 export interface UseMutationOptions<
   TResult = any,
@@ -23,6 +25,9 @@ export function useMutation<
   const loading = ref<boolean>(false)
   const error = ref<Error>(null)
   const called = ref<boolean>(false)
+  
+  const doneEvent = useEventHook<FetchResult<TResult, Record<string, any>, Record<string, any>>>()
+  const errorEvent = useEventHook<Error>()
 
   // Apollo Client
   const { resolveClient } = useApolloClient()
@@ -55,10 +60,12 @@ export function useMutation<
         },
       })
       loading.value = false
+      doneEvent.trigger(result)
       return result
     } catch (e) {
       error.value = e
       loading.value = false
+      errorEvent.trigger(e)
       throw e
     }
   }
@@ -68,5 +75,7 @@ export function useMutation<
     loading,
     error,
     called,
+    onDone: doneEvent.on,
+    onError: errorEvent.on,
   }
 }
