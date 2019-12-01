@@ -8,6 +8,7 @@ import { ReactiveFunction } from './util/ReactiveFunction'
 import { paramToRef } from './util/paramToRef'
 import { paramToReactive } from './util/paramToReactive'
 import { useApolloClient } from './useApolloClient'
+import { useEventHook } from './util/useEventHook'
 
 export interface UseSubscriptionOptions <
   TResult = any,
@@ -32,7 +33,9 @@ export function useSubscription <
   const optionsRef = paramToReactive(options)
 
   const result = ref<TResult>()
-  const error = ref(null)
+  const resultEvent = useEventHook<FetchResult<TResult>>()
+  const error = ref<Error>(null)
+  const errorEvent = useEventHook<Error>()
 
   const loading = ref(false)
 
@@ -65,11 +68,13 @@ export function useSubscription <
   function onNextResult (fetchResult: FetchResult<TResult>) {
     result.value = fetchResult.data
     loading.value = false
+    resultEvent.trigger(fetchResult)
   }
 
   function onError (fetchError: any) {
     error.value = fetchError
     loading.value = false
+    errorEvent.trigger(fetchError)
   }
 
   function stop () {
@@ -166,5 +171,7 @@ export function useSubscription <
     variables: variablesRef,
     options: optionsRef,
     subscription,
+    onResult: resultEvent.on,
+    onError: errorEvent.on,
   }
 }
