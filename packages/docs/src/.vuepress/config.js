@@ -132,6 +132,7 @@ module.exports = {
                 'subscription',
                 'pagination',
                 'fragments',
+                'error-handling',
               ],
             },
           ],
