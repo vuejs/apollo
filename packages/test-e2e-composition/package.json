@@ -1,5 +1,5 @@
 {
-  "name": "vue-apollo-test-e2e-composable",
+  "name": "private-vue-apollo-test-e2e-composable",
   "version": "3.0.1",
   "private": true,
   "scripts": {

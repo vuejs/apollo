@@ -6,7 +6,7 @@
   ],
   "private": true,
   "scripts": {
-    "build": "lerna run build --concurrency 1",
+    "build": "lerna run build --concurrency 1 --scope {vue-apollo,@vue/apollo}*",
     "test": "lerna run test --concurrency 1"
   },
   "devDependencies": {

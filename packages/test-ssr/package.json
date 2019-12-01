@@ -1,5 +1,5 @@
 {
-  "name": "vue-apollo-test-ssr",
+  "name": "private-vue-apollo-test-ssr",
   "version": "3.0.1",
   "private": true,
   "scripts": {
