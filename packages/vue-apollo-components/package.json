@@ -2,9 +2,9 @@
   "name": "@vue/apollo-components",
   "version": "4.0.0-alpha.1",
   "description": "Apollo GraphQL components for Vue.js",
-  "main": "dist/vue-apollo.umd.js",
-  "module": "dist/vue-apollo.esm.js",
-  "unpkg": "dist/vue-apollo.min.js",
+  "main": "dist/vue-apollo-components.umd.js",
+  "module": "dist/vue-apollo-components.esm.js",
+  "unpkg": "dist/vue-apollo-components.min.js",
   "scripts": {
     "build": "yarn build:browser && yarn build:es && yarn build:umd",
     "build:browser": "rollup --config build/rollup.config.browser.js",
