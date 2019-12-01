@@ -84,20 +84,34 @@ export function useQuery<
       next: onNextResult,
       error: onError,
     })
-
-    for (const item of subscribeToMoreItems) {
-      addSubscribeToMore(item)
-    }
   }
 
   function onNextResult (queryResult: ApolloQueryResult<TResult>) {
-    result.value = queryResult.data
+    processNextResult(queryResult)
+
+    // Result errors
+    // This is set when `errorPolicy` is `all`
+    if (queryResult.errors && queryResult.errors.length) {
+      const e = new Error(`GraphQL error: ${queryResult.errors.map(e => e.message).join(' | ')}`)
+      Object.assign(e, {
+        graphQLErrors: queryResult.errors,
+        networkError: null,
+      })
+      processError(e)
+    }
+  }
+
+  function processNextResult (queryResult: ApolloQueryResult<TResult>) {
+    result.value = queryResult.data && Object.keys(queryResult.data).length === 0 ? null : queryResult.data
     loading.value = queryResult.loading
     networkStatus.value = queryResult.networkStatus
     resultEvent.trigger(queryResult)
   }
 
   function onError (queryError: any) {
+    processNextResult(query.value.currentResult() as ApolloQueryResult<TResult>)
+    processError(queryError)
+  function processError (queryError: any) {
     error.value = queryError
     loading.value = false
     networkStatus.value = 8
