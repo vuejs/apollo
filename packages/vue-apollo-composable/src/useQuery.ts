@@ -7,6 +7,7 @@ import { useApolloClient } from './useApolloClient'
 import { ReactiveFunction } from './util/ReactiveFunction'
 import { paramToRef } from './util/paramToRef'
 import { paramToReactive } from './util/paramToReactive'
+import { useEventHook } from './util/useEventHook'
 // import { trackQuery } from './util/loadingTracking'
 
 export interface UseQueryOptions<
@@ -80,6 +81,18 @@ export function useQuery<
       ...currentOptions.value,
     })
 
+    startQuerySubscription()
+
+    for (const item of subscribeToMoreItems) {
+      addSubscribeToMore(item)
+    }
+  }
+
+  function startQuerySubscription () {
+    if (observer && !observer.closed) return
+    if (!query.value) return
+
+    // Create subscription
     observer = query.value.subscribe({
       next: onNextResult,
       error: onError,
@@ -111,11 +124,24 @@ export function useQuery<
   function onError (queryError: any) {
     processNextResult(query.value.currentResult() as ApolloQueryResult<TResult>)
     processError(queryError)
+    // The observable closes the sub if an error occurs
+    resubscribeToQuery()
+  }
+
   function processError (queryError: any) {
     error.value = queryError
     loading.value = false
     networkStatus.value = 8
     errorEvent.trigger(queryError)
+  }
+
+  function resubscribeToQuery () {
+    if (!query.value) return
+    const lastError = query.value.getLastError()
+    const lastResult = query.value.getLastResult()
+    query.value.resetLastResults()
+    startQuerySubscription()
+    Object.assign(query.value, { lastError, lastResult })
   }
 
   let onStopHandlers: (() => void)[] = []
