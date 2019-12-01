@@ -179,6 +179,17 @@ module.exports = {
               ],
             },
             {
+              title: 'Composition API',
+              collapsable: false,
+              children: [
+                'use-query',
+                'use-mutation',
+                'use-subscription',
+                'use-result',
+                'use-apollo-client',
+              ],
+            },
+            {
               title: 'Components',
               collapsable: false,
               children: [
