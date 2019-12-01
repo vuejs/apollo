@@ -1,5 +1,5 @@
 import 'isomorphic-fetch'
-import ApolloSSR from 'vue-apollo/ssr'
+import * as ApolloSSR from '@vue/apollo-ssr'
 import { createApp } from './main'
 
 const prepareUrlForRouting = url => {
@@ -22,7 +22,7 @@ export default context => {
     router.onReady(() => {
       context.rendered = () => {
         // Same for Apollo client cache
-        context.apolloState = ApolloSSR.getStates(apolloProvider)
+        context.apolloState = ApolloSSR.getStates(apolloProvider.clients)
       }
       resolve(app)
     }, reject)
