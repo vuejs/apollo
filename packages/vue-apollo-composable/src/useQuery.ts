@@ -11,6 +11,7 @@ import {
   FetchMoreOptions,
 } from 'apollo-client'
 import { Subscription } from 'apollo-client/util/Observable'
+import { throttle, debounce } from 'throttle-debounce'
 import { useApolloClient } from './useApolloClient'
 import { ReactiveFunction } from './util/ReactiveFunction'
 import { paramToRef } from './util/paramToRef'
@@ -24,6 +25,8 @@ export interface UseQueryOptions<
 > extends Omit<WatchQueryOptions<TVariables>, 'query' | 'variables'> {
   clientId?: string
   enabled?: boolean
+  throttle?: number
+  debounce?: number
 }
 
 interface SubscribeToMoreItem {
@@ -181,7 +184,7 @@ export function useQuery<
   /**
    * Queue a restart of the query (on next tick) if it is already active
    */
-  function restart () {
+  function baseRestart () {
     if (!started || restarting) return
     restarting = true
     Vue.nextTick(() => {
@@ -191,6 +194,22 @@ export function useQuery<
       }
       restarting = false
     })
+  }
+
+  let debouncedRestart: Function
+  function updateRestartFn () {
+    if (currentOptions.value.throttle) {
+      debouncedRestart = throttle(currentOptions.value.throttle, baseRestart)
+    } else if (currentOptions.value.debounce) {
+      debouncedRestart = debounce(currentOptions.value.debounce, baseRestart)
+    } else {
+      debouncedRestart = baseRestart
+    }
+  }
+
+  function restart () {
+    if (!debouncedRestart) updateRestartFn()
+    debouncedRestart()
   }
 
   // Applying document
@@ -212,6 +231,12 @@ export function useQuery<
   // Applying options
   const currentOptions = ref<UseQueryOptions<TResult, TVariables>>()
   watch(() => isRef(optionsRef) ? optionsRef.value : optionsRef, value => {
+    if (currentOptions.value && (
+      currentOptions.value.throttle !== value.throttle ||
+      currentOptions.value.debounce !== value.debounce
+    )) {
+      updateRestartFn()
+    }
     currentOptions.value = value
     restart()
   }, {

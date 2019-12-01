@@ -10,6 +10,8 @@
 
   - `clientId`: Id of the client that should be used for this subscription if you have provided multiple clients.
 
+  - `debounce`: Debounce interval in ms.
+
   - `enabled`: A boolean `Ref` to enable or disable the subscription.
 
   - `fetchPolicy`: Customize cache behavior.
@@ -18,6 +20,8 @@
     - `cache-only`: return result from cache if available, fail otherwise.
     - `network-only`: return result from network, fail if network call doesn't succeed, save to cache.
     - `no-cache`: return result from network, fail if network call doesn't succeed, don't save to cache.
+
+  - `throttle`: Throttle interval in ms.
 
 ## Return
 

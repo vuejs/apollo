@@ -4,6 +4,7 @@ import { Ref, ref, watch, isRef, onUnmounted, computed } from '@vue/composition-
 import { OperationVariables, SubscriptionOptions } from 'apollo-client'
 import { Observable, Subscription } from 'apollo-client/util/Observable'
 import { FetchResult } from 'apollo-link'
+import { throttle, debounce } from 'throttle-debounce'
 import { ReactiveFunction } from './util/ReactiveFunction'
 import { paramToRef } from './util/paramToRef'
 import { paramToReactive } from './util/paramToReactive'
@@ -16,6 +17,8 @@ export interface UseSubscriptionOptions <
 > extends Omit<SubscriptionOptions<TVariables>, 'query' | 'variables'> {
   clientId?: string
   enabled?: boolean
+  throttle?: number
+  debounce?: number
 }
 
 export function useSubscription <
@@ -97,7 +100,7 @@ export function useSubscription <
   /**
    * Queue a restart of the query (on next tick) if it is already active
    */
-  function restart () {
+  function baseRestart () {
     if (!started || restarting) return
     restarting = true
     Vue.nextTick(() => {
@@ -107,6 +110,22 @@ export function useSubscription <
       }
       restarting = false
     })
+  }
+
+  let debouncedRestart: Function
+  function updateRestartFn () {
+    if (currentOptions.value.throttle) {
+      debouncedRestart = throttle(currentOptions.value.throttle, baseRestart)
+    } else if (currentOptions.value.debounce) {
+      debouncedRestart = debounce(currentOptions.value.debounce, baseRestart)
+    } else {
+      debouncedRestart = baseRestart
+    }
+  }
+
+  function restart () {
+    if (!debouncedRestart) updateRestartFn()
+    debouncedRestart()
   }
 
   // Applying document
@@ -128,6 +147,12 @@ export function useSubscription <
   // Applying options
   const currentOptions = ref<UseSubscriptionOptions<TResult, TVariables>>()
   watch(() => isRef(optionsRef) ? optionsRef.value : optionsRef, value => {
+    if (currentOptions.value && (
+      currentOptions.value.throttle !== value.throttle ||
+      currentOptions.value.debounce !== value.debounce
+    )) {
+      updateRestartFn()
+    }
     currentOptions.value = value
     restart()
   }, {

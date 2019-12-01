@@ -12,6 +12,8 @@
 
   - `context`: Context to be passed to link execution chain.
 
+  - `debounce`: Debounce interval in ms.
+
   - `enabled`: A boolean `Ref` to enable or disable the query.
 
   - `errorPolicy`: Customize error behavior. See [error handling](../guide-composable/error-handling).
@@ -35,6 +37,8 @@
   - `pollInterval`: The time interval (in milliseconds) on which this query should be refetched from the server.
 
   - `returnPartialData`: Allow returning incomplete data from the cache when a larger query cannot be fully satisfied by the cache, instead of returning nothing.
+
+  - `throttle`: Throttle interval in ms.
 
 ## Return
 

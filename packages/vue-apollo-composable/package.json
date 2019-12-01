@@ -31,6 +31,9 @@
     "build": "tsc --outDir dist -d",
     "prepublishOnly": "yarn build"
   },
+  "dependencies": {
+    "throttle-debounce": "^2.1.0"
+  },
   "peerDependencies": {
     "@vue/composition-api": "^0.3.2",
     "apollo-client": "^2.0.0",
@@ -40,6 +43,7 @@
     "vue": "^2.6.10"
   },
   "devDependencies": {
+    "@types/throttle-debounce": "^2.1.0",
     "@vue/composition-api": "^0.3.2",
     "typescript": "^3.7.2"
   }
