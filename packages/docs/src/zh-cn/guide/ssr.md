@@ -128,7 +128,7 @@ import Vue from 'vue'
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-import VueApollo from 'vue-apollo'
+import VueApollo from '@vue/apollo-option'
 
 // 安装 vue 插件
 Vue.use(VueApollo)
@@ -185,7 +185,7 @@ import VueRouter from 'vue-router'
 import Vuex from 'vuex'
 import { sync } from 'vuex-router-sync'
 
-import VueApollo from 'vue-apollo'
+import VueApollo from '@vue/apollo-option'
 import { createApolloClient } from './apollo'
 
 import App from './ui/App.vue'

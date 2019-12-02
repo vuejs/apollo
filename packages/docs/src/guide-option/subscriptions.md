@@ -20,7 +20,7 @@ import { split } from 'apollo-link'
 import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
 
-import VueApollo from 'vue-apollo'
+import VueApollo from '@vue/apollo-option'
 
 const httpLink = new HttpLink({
   // You should use an absolute URL here

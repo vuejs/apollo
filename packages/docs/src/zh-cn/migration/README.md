@@ -25,7 +25,7 @@ npm install --save vue-apollo@next graphql apollo-client apollo-link apollo-link
 ```js
 import Vue from 'vue'
 import { ApolloClient, createBatchingNetworkInterface } from 'apollo-client'
-import VueApollo from 'vue-apollo'
+import VueApollo from '@vue/apollo-option'
 ```
 
 之后：
@@ -35,7 +35,7 @@ import Vue from 'vue'
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-import VueApollo from 'vue-apollo'
+import VueApollo from '@vue/apollo-option'
 ```
 
 ### Apollo 设置

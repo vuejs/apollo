@@ -20,7 +20,7 @@ import { split } from 'apollo-link'
 import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
 
-import VueApollo from 'vue-apollo'
+import VueApollo from '@vue/apollo-option'
 
 const httpLink = new HttpLink({
   // 你需要在这里使用绝对路径
