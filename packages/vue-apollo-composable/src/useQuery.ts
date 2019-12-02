@@ -306,7 +306,7 @@ export function useQuery<
   // @TODO Doesn't fully work yet, need to initialize with option
   const enabled = ref<boolean>()
   const enabledOption = computed(() => !currentOptions.value || currentOptions.value.enabled == null || currentOptions.value.enabled)
-  const isEnabled = computed(() => !!((typeof enabled.value === 'boolean' && enabled.value) && enabledOption.value))
+  const isEnabled = computed(() => !!((typeof enabled.value !== 'boolean' || enabled.value) && enabledOption.value))
 
   watch(enabled, value => {
     if (value == null) {
