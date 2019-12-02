@@ -320,7 +320,7 @@ export default {
 
 ## useResult
 
-The sister composition function `useResult` is available alongside `userQuery` to facilitate usage of the query `result`.
+The sister composition function `useResult` is available alongside `useQuery` to facilitate usage of the query `result`.
 
 ### Result picking
 
@@ -527,7 +527,7 @@ This is even more useful if we want to use the `users` array `Ref` in multiple p
 You can pass a `variables` object to the 2nd parameter of `useQuery`:
 
 ```js
-const { result } = userQuery(gql`
+const { result } = useQuery(gql`
   query getUserById ($id: ID!) {
     user (id: $id) {
       id
@@ -544,7 +544,7 @@ const { result } = userQuery(gql`
 You can change them later by retrieving their `variables` `Ref`:
 
 ```js{1,12-16}
-const { result, variables } = userQuery(gql`
+const { result, variables } = useQuery(gql`
   query getUserById ($id: ID!) {
     user (id: $id) {
       id
@@ -573,7 +573,7 @@ const variables = ref({
   id: 'abc-abc-abc',
 })
 
-const { result } = userQuery(gql`
+const { result } = useQuery(gql`
   query getUserById ($id: ID!) {
     user (id: $id) {
       id
@@ -602,7 +602,7 @@ const variables = reactive({
   id: 'abc-abc-abc',
 })
 
-const { result } = userQuery(gql`
+const { result } = useQuery(gql`
   query getUserById ($id: ID!) {
     user (id: $id) {
       id
@@ -623,7 +623,7 @@ export default {
   props: ['id'],
 
   setup (props) {
-    const { result } = userQuery(gql`
+    const { result } = useQuery(gql`
       query getUserById ($id: ID!) {
         user (id: $id) {
           id
@@ -650,7 +650,7 @@ export default {
   props: ['id'],
 
   setup (props) {
-    const { result } = userQuery(gql`
+    const { result } = useQuery(gql`
       query getUserById ($id: ID!) {
         user (id: $id) {
           id
@@ -675,7 +675,7 @@ This syntax is also useful if you want to use some `Ref`s in the `variables`:
 ```js
 const id = ref('abc-abc-abc')
 
-const { result } = userQuery(gql`
+const { result } = useQuery(gql`
   query getUserById ($id: ID!) {
     user (id: $id) {
       id
