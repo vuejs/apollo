@@ -1,4 +1,4 @@
-import { ref, watch, onUnmounted, Ref, isRef, computed } from '@vue/composition-api'
+import { ref, Ref, isRef, computed, watch, onServerPrefetch, onUnmounted, getCurrentInstance } from '@vue/composition-api'
 import Vue from 'vue'
 import { DocumentNode } from 'graphql'
 import {
@@ -43,6 +43,10 @@ export function useQuery<
   variables: TVariables | Ref<TVariables> | ReactiveFunction<TVariables> = null,
   options: UseQueryOptions<TResult, TVariables> | Ref<UseQueryOptions<TResult, TVariables>> | ReactiveFunction<UseQueryOptions<TResult, TVariables>> = {},
 ) {
+  // Is on server?
+  const vm = getCurrentInstance()
+  const isServer = vm.$isServer
+
   if (variables == null) variables = ref()
   if (options == null) options = {}
   const documentRef = paramToRef(document)
@@ -67,6 +71,14 @@ export function useQuery<
   trackQuery(loading)
   const networkStatus = ref<number>()
 
+  // SSR
+  let firstResolve: Function
+  let firstReject: Function
+  onServerPrefetch(() => new Promise((resolve, reject) => {
+    firstResolve = resolve
+    firstReject = reject
+  }).finally(stop))
+
   // Apollo Client
   const { resolveClient } = useApolloClient()
 
@@ -90,12 +102,17 @@ export function useQuery<
       query: currentDocument,
       variables: currentVariables,
       ...currentOptions.value,
+      ...isServer ? {
+        fetchPolicy: 'network-only'
+      } : {}
     })
 
     startQuerySubscription()
 
-    for (const item of subscribeToMoreItems) {
-      addSubscribeToMore(item)
+    if (!isServer) {
+      for (const item of subscribeToMoreItems) {
+        addSubscribeToMore(item)
+      }
     }
   }
 
@@ -122,6 +139,12 @@ export function useQuery<
         networkError: null,
       })
       processError(e)
+    } else {
+      if (firstResolve) {
+        firstResolve()
+        firstResolve = null
+        stop()
+      }
     }
   }
 
@@ -135,6 +158,11 @@ export function useQuery<
   function onError (queryError: any) {
     processNextResult(query.value.currentResult() as ApolloQueryResult<TResult>)
     processError(queryError)
+    if (firstReject) {
+      firstReject(queryError)
+      firstReject = null
+      stop()
+    }
     // The observable closes the sub if an error occurs
     resubscribeToQuery()
   }
@@ -198,7 +226,9 @@ export function useQuery<
 
   let debouncedRestart: Function
   function updateRestartFn () {
-    if (currentOptions.value.throttle) {
+    if (!currentOptions) {
+      debouncedRestart = baseRestart
+    } else if (currentOptions.value.throttle) {
       debouncedRestart = throttle(currentOptions.value.throttle, baseRestart)
     } else if (currentOptions.value.debounce) {
       debouncedRestart = debounce(currentOptions.value.debounce, baseRestart)
@@ -274,6 +304,7 @@ export function useQuery<
       Ref<SubscribeToMoreOptions<TResult, TSubscriptionVariables, TSubscriptionData>> |
       ReactiveFunction<SubscribeToMoreOptions<TResult, TSubscriptionVariables, TSubscriptionData>>
   ) {
+    if (isServer) return
     const optionsRef = paramToRef(options)
     watch(optionsRef, (value, oldValue, onCleanup) => {
       const index = subscribeToMoreItems.findIndex(item => item.options === oldValue)
