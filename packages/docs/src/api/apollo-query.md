@@ -28,7 +28,7 @@ Example:
 ```
 
 ::: warning
-To enable support of `gql` string tag in Vue templates, see the necessary setup in [the guide](../guide/components/query.md#tag-setup).
+To enable support of `gql` string tag in Vue templates, see the necessary setup in [the guide](../guide-components/query.md#tag-setup).
 :::
 
 ## Props
