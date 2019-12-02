@@ -11,7 +11,7 @@ export interface AppLoadingTracking extends LoadingTracking {
 }
 
 export function getAppTracking () {
-  const root = getCurrentInstance().$root
+  const root: any = getCurrentInstance().$root
   let appTracking: AppLoadingTracking
 
   if (!root._apolloAppTracking) {
