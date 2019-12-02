@@ -454,13 +454,13 @@ export default {
 
 It expects either an object or a function that will automatically be reactive:
 
-```
+```js
 subscribeToMore({
   // options...
 })
 ```
 
-```
+```js
 subscribeToMore(() => ({
   // options...
 }))
