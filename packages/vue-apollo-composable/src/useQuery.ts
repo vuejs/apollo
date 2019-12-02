@@ -109,6 +109,14 @@ export function useQuery<
 
     startQuerySubscription()
 
+    if (!isServer && (currentOptions.value.fetchPolicy !== 'no-cache' || currentOptions.value.notifyOnNetworkStatusChange)) {
+      const currentResult = query.value.currentResult()
+
+      if (!currentResult.loading || currentOptions.value.notifyOnNetworkStatusChange) {
+        onNextResult(currentResult as ApolloQueryResult<TResult>)
+      }
+    }
+
     if (!isServer) {
       for (const item of subscribeToMoreItems) {
         addSubscribeToMore(item)
