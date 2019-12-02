@@ -10,6 +10,7 @@ import { paramToRef } from './util/paramToRef'
 import { paramToReactive } from './util/paramToReactive'
 import { useApolloClient } from './useApolloClient'
 import { useEventHook } from './util/useEventHook'
+import { trackSubscription } from './util/loadingTracking'
 
 export interface UseSubscriptionOptions <
   TResult = any,
@@ -41,6 +42,7 @@ export function useSubscription <
   const errorEvent = useEventHook<Error>()
 
   const loading = ref(false)
+  trackSubscription(loading)
 
   // Apollo Client
   const { resolveClient } = useApolloClient()

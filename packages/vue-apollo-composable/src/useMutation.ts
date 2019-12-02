@@ -5,6 +5,7 @@ import { FetchResult } from 'apollo-link'
 import { useApolloClient } from './useApolloClient'
 import { ReactiveFunction } from './util/ReactiveFunction'
 import { useEventHook } from './util/useEventHook'
+import { trackMutation } from './util/loadingTracking'
 
 export interface UseMutationOptions<
   TResult = any,
@@ -23,6 +24,7 @@ export function useMutation<
   if (!options) options = {}
 
   const loading = ref<boolean>(false)
+  trackMutation(loading)
   const error = ref<Error>(null)
   const called = ref<boolean>(false)
   

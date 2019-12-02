@@ -1,6 +1,4 @@
-import { Ref, watch, onUnmounted, ref } from '@vue/composition-api'
-import { getCurrentVue, getCurrentVM } from '@vue/composition-api/dist/runtimeContext'
-import { VueConstructor } from 'vue'
+import { Ref, watch, onUnmounted, ref, getCurrentInstance } from '@vue/composition-api'
 
 export interface LoadingTracking {
   queries: Ref<number>
@@ -12,22 +10,20 @@ export interface AppLoadingTracking extends LoadingTracking {
   components: Map<any, LoadingTracking>
 }
 
-const trackingMap = new Map<VueConstructor, AppLoadingTracking>()
-
 export function getAppTracking () {
-  const currentVue = getCurrentVue()
+  const root = getCurrentInstance().$root
   let appTracking: AppLoadingTracking
 
-  if (!trackingMap.has(currentVue)) {
+  if (!root._apolloAppTracking) {
     // Add per Vue tracking
-    trackingMap.set(currentVue, appTracking = {
+    appTracking = root._apolloAppTracking = {
       queries: ref(0),
       mutations: ref(0),
       subscriptions: ref(0),
       components: new Map(),
-    })
+    }
   } else {
-    appTracking = trackingMap.get(currentVue)
+    appTracking = root._apolloAppTracking
   }
 
   return {
@@ -37,23 +33,23 @@ export function getAppTracking () {
 
 export function getCurrentTracking () {
   const { appTracking } = getAppTracking()
-  const currentVM = getCurrentVM()
+  const currentInstance = getCurrentInstance()
   
   let tracking: LoadingTracking
 
-  if (!appTracking.components.has(currentVM)) {
+  if (!appTracking.components.has(currentInstance)) {
     // Add per-component tracking
-    appTracking.components.set(currentVM, tracking = {
+    appTracking.components.set(currentInstance, tracking = {
       queries: ref(0),
       mutations: ref(0),
       subscriptions: ref(0),
     })
     // Cleanup
     onUnmounted(() => {
-      appTracking.components.delete(currentVM)
+      appTracking.components.delete(currentInstance)
     })
   } else {
-    tracking = appTracking.components.get(currentVM)
+    tracking = appTracking.components.get(currentInstance)
   }
 
   return {

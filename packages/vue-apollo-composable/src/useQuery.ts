@@ -17,7 +17,7 @@ import { ReactiveFunction } from './util/ReactiveFunction'
 import { paramToRef } from './util/paramToRef'
 import { paramToReactive } from './util/paramToReactive'
 import { useEventHook } from './util/useEventHook'
-// import { trackQuery } from './util/loadingTracking'
+import { trackQuery } from './util/loadingTracking'
 
 export interface UseQueryOptions<
   TResult = any,
@@ -64,7 +64,7 @@ export function useQuery<
    * Indicates if a network request is pending
    */
   const loading = ref(false)
-  // trackQuery(loading)
+  trackQuery(loading)
   const networkStatus = ref<number>()
 
   // Apollo Client
