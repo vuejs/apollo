@@ -78,7 +78,7 @@ export function useQuery<
   onServerPrefetch(() => new Promise((resolve, reject) => {
     firstResolve = resolve
     firstReject = reject
-  }).finally(stop))
+  }).then(stop).catch(stop))
 
   // Apollo Client
   const { resolveClient } = useApolloClient()
