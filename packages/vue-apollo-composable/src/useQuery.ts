@@ -27,6 +27,7 @@ export interface UseQueryOptions<
   enabled?: boolean
   throttle?: number
   debounce?: number
+  prefetch?: boolean
 }
 
 interface SubscribeToMoreItem {
@@ -93,6 +94,8 @@ export function useQuery<
    */
   function start () {
     if (started || !isEnabled.value) return
+    if (isServer && currentOptions.value.prefetch === false) return
+
     started = true
     loading.value = true
 

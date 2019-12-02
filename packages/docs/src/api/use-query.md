@@ -34,6 +34,8 @@
 
   - `notifyOnNetworkStatusChange`: Whether or not updates to the network status should trigger next on the observer of this query.
 
+  - `prefetch`: (default: `true`) Enable prefetching on the server during Server-Side Rendering.
+
   - `pollInterval`: The time interval (in milliseconds) on which this query should be refetched from the server.
 
   - `returnPartialData`: Allow returning incomplete data from the cache when a larger query cannot be fully satisfied by the cache, instead of returning nothing.
