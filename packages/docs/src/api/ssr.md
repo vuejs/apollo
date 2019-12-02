@@ -11,7 +11,7 @@ See [SSR guide](../guide/ssr.md).
 Returns the apollo stores states as JavaScript objects.
 
 ```js
-const states = ApolloSSR.getStates(apolloProvider, options)
+const states = ApolloSSR.getStates(clientsObject, options)
 ```
 
 `options` defaults to:
@@ -28,7 +28,7 @@ const states = ApolloSSR.getStates(apolloProvider, options)
 Returns the apollo stores states as JavaScript code inside a String. This code can be directly injected to the page HTML inside a `<script>` tag.
 
 ```js
-const js = ApolloSSR.exportStates(apolloProvider, options)
+const js = ApolloSSR.exportStates(clientsObject, options)
 ```
 
 `options` defaults to:

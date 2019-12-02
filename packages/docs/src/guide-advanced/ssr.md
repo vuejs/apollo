@@ -18,6 +18,18 @@ vue add @akryum/ssr
 
 ## Component prefetching
 
+Install the SSR utils with:
+
+```shell
+npm install --save @vue/apollo-ssr
+```
+
+Or:
+
+```shell
+yarn add @vue/apollo-ssr
+```
+
 ::: tip
 Follow the [offical SSR guide](https://ssr.vuejs.org) to learn more about Server-Side Rendering with Vue.
 :::
@@ -128,7 +140,7 @@ import Vue from 'vue'
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-import VueApollo from 'vue-apollo'
+import VueApollo from '@vue/apollo-option'
 
 // Install the vue plugin
 Vue.use(VueApollo)
@@ -185,7 +197,7 @@ import VueRouter from 'vue-router'
 import Vuex from 'vuex'
 import { sync } from 'vuex-router-sync'
 
-import VueApollo from 'vue-apollo'
+import VueApollo from '@vue/apollo-option'
 import { createApolloClient } from './apollo'
 
 import App from './ui/App.vue'
@@ -259,7 +271,7 @@ Here is an example with vue-router and a Vuex store:
 ```js{3,26}
 // server-entry.js
 
-import ApolloSSR from 'vue-apollo/ssr'
+import * as ApolloSSR from '@vue/apollo-ssr'
 import createApp from './app'
 
 export default () => new Promise((resolve, reject) => {
@@ -282,7 +294,7 @@ export default () => new Promise((resolve, reject) => {
       context.state = store.state
 
       // ALso inject the apollo cache state
-      context.apolloState = ApolloSSR.getStates(apolloProvider)
+      context.apolloState = ApolloSSR.getStates(apolloProvider.clients)
     }
     resolve(app)
   })
