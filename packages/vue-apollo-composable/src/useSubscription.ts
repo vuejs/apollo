@@ -1,6 +1,6 @@
 import { DocumentNode } from 'graphql'
 import Vue from 'vue'
-import { Ref, ref, watch, isRef, onUnmounted, computed } from '@vue/composition-api'
+import { Ref, ref, watch, isRef, onUnmounted, computed, getCurrentInstance } from '@vue/composition-api'
 import { OperationVariables, SubscriptionOptions } from 'apollo-client'
 import { Observable, Subscription } from 'apollo-client/util/Observable'
 import { FetchResult } from 'apollo-link'
@@ -30,6 +30,10 @@ export function useSubscription <
   variables: TVariables | Ref<TVariables> | ReactiveFunction<TVariables> = null,
   options: UseSubscriptionOptions<TResult, TVariables> | Ref<UseSubscriptionOptions<TResult, TVariables>> | ReactiveFunction<UseSubscriptionOptions<TResult, TVariables>> = null
 ) {
+  // Is on server?
+  const vm = getCurrentInstance()
+  const isServer = vm.$isServer
+
   if (variables == null) variables = ref()
   if (!options) options = {}
   const documentRef = paramToRef(document)
@@ -52,7 +56,7 @@ export function useSubscription <
   let started = false
 
   function start () {
-    if (started || !isEnabled.value) return
+    if (started || !isEnabled.value || isServer) return
     started = true
     loading.value = true
 
