@@ -2,7 +2,7 @@
 
 ## Usage
 
-See [SSR guide](../guide/ssr.md).
+See [SSR guide](../guide-advanced/ssr.md).
 
 ## Methods
 
