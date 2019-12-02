@@ -252,7 +252,7 @@ export default {
 </template>
 ```
 
-The variables objects will be merged merged if you sepcify one in the options and one when calling `mutate`:
+The variables objects will be merged if you specify one in the options and one when calling `mutate`:
 
 ```js
 const text = ref('')
