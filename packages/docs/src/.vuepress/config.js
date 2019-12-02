@@ -186,6 +186,7 @@ module.exports = {
                 'use-mutation',
                 'use-subscription',
                 'use-result',
+                'use-loading',
                 'use-apollo-client',
               ],
             },
