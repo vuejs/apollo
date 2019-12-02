@@ -1,4 +1,4 @@
-const ssr = require('../../ssr')
+const ssr = require('../../../vue-apollo-ssr')
 
 describe('ssr states', () => {
   function buildClient (cache) {
@@ -19,19 +19,17 @@ describe('ssr states', () => {
     'foo': 'bar',
   })
 
-  const apolloProvider = {
-    clients: {
-      defaultClient,
-      profile: defaultClient,
-      other: otherClient,
-    },
+  const clients = {
+    defaultClient,
+    profile: defaultClient,
+    other: otherClient,
   }
 
   describe('serializeStates', () => {
     it('safely serializes by default', () => {
       const safe = '{"defaultClient":{"foo":"\\u003Calert\\u003Ehiya!\\u003C\\u002Falert\\u003E"},"profile":{"foo":"\\u003Calert\\u003Ehiya!\\u003C\\u002Falert\\u003E"},"other":{"foo":"bar"}}'
 
-      const serialized = ssr.serializeStates(apolloProvider)
+      const serialized = ssr.serializeStates(clients)
       expect(serialized).not.toMatch('<alert>hiya!</alert>')
       expect(serialized).toMatch(safe)
     })
@@ -39,13 +37,13 @@ describe('ssr states', () => {
     it('allows option to use raw JSON stringify', () => {
       const unsafe = '{"defaultClient":{"foo":"<alert>hiya!</alert>"},"profile":{"foo":"<alert>hiya!</alert>"},"other":{"foo":"bar"}}'
 
-      expect(ssr.serializeStates(apolloProvider, { useUnsafeSerializer: true })).toMatch(unsafe)
+      expect(ssr.serializeStates(clients, { useUnsafeSerializer: true })).toMatch(unsafe)
     })
   })
 
   describe('getStates', () => {
     it('exports provider clients to object', () => {
-      expect(ssr.getStates(apolloProvider)).toMatchObject({
+      expect(ssr.getStates(clients)).toMatchObject({
         defaultClient: { foo: '<alert>hiya!</alert>' },
         profile: { foo: '<alert>hiya!</alert>' },
         other: { foo: 'bar' },
@@ -55,7 +53,7 @@ describe('ssr states', () => {
 
   describe('exportStates', () => {
     it('sets attachTo and globalName equal to serializedstates', () => {
-      const string = ssr.exportStates(apolloProvider, { globalName: 'NUXT', attachTo: 'global' })
+      const string = ssr.exportStates(clients, { globalName: 'NUXT', attachTo: 'global' })
 
       expect(string).toMatch(/^global\.NUXT/)
     })
