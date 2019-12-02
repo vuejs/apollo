@@ -35,7 +35,7 @@
     "throttle-debounce": "^2.1.0"
   },
   "peerDependencies": {
-    "@vue/composition-api": "^0.3.2",
+    "@vue/composition-api": "^0.3.3",
     "apollo-client": "^2.0.0",
     "apollo-link": "^1.0.0",
     "graphql": "^14.5.8",
@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@types/throttle-debounce": "^2.1.0",
-    "@vue/composition-api": "^0.3.2",
+    "@vue/composition-api": "^0.3.3",
     "typescript": "^3.7.2"
   }
 }
