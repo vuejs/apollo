@@ -20,9 +20,9 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v7-dependencies-{{ checksum "yarn.lock" }}
+          - v8-dependencies-{{ checksum "yarn.lock" }}
           # fallback to using the latest cache if no exact match is found
-          - v7-dependencies-
+          - v8-dependencies-
 
       - run: yarn install
 
@@ -33,13 +33,14 @@ jobs:
             - packages/test-e2e/node_modules
             - packages/test-e2e-composition/node_modules
             - packages/test-ssr/node_modules
+            - packages/test-ssr-composition/node_modules
             - packages/vue-apollo-components/node_modules
             - packages/vue-apollo-composable/node_modules
             - packages/vue-apollo-option/node_modules
             - packages/vue-apollo-ssr/node_modules
             - packages/vue-apollo-util/node_modules
             - ~/.cache
-          key: v7-dependencies-{{ checksum "yarn.lock" }}
+          key: v8-dependencies-{{ checksum "yarn.lock" }}
         
       # run tests!
       - run: yarn build
