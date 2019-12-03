@@ -229,7 +229,7 @@ this.$apollo.queries.users.setVariables({
 
 ### setOptions
 
-Update the Apollo [watchQuery](https://www.apollographql.com/docs/react/api/apollo-client.html#ApolloClient.watchQuery) options and refetch:
+Update the Apollo [watchQuery](https://www.apollographql.com/docs/react/api/apollo-client/#ApolloClient.watchQuery) options and refetch:
 
 ```js
 this.$apollo.queries.users.setOptions({

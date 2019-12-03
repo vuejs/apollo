@@ -28,11 +28,12 @@ Example:
 
 - `mutation`: GraphQL query (transformed by `graphql-tag`) or a function that receives the `gql` tag as argument and should return the transformed query
 - `variables`: Object of GraphQL variables
-- `optimisticResponse`: See [optimistic UI](https://www.apollographql.com/docs/react/features/optimistic-ui.html)
-- `update`: See [updating cache after mutation](https://www.apollographql.com/docs/react/api/react-apollo.html#graphql-mutation-options-update)
-- `refetchQueries`: See [refetching queries after mutation](https://www.apollographql.com/docs/react/api/react-apollo.html#graphql-mutation-options-refetchQueries)
+- `optimisticResponse`: See [optimistic UI](https://www.apollographql.com/docs/react/performance/optimistic-ui/)
+- `update`: See [updating cache after mutation](https://www.apollographql.com/docs/react/data/mutations/#options)
+- `refetchQueries`: See [refetching queries after mutation](https://www.apollographql.com/docs/react/data/mutations/#options)
 - `clientId`: id of the Apollo Client used by the query (defined in ApolloProvider `clients` option)
 - `tag`: String HTML tag name (default: `div`); if `undefined`, the component will be renderless (the content won't be wrapped in a tag)
+- `context`: See [apollo context](https://www.apollographql.com/docs/react/data/mutations/#options)
 
 ## Scoped slot props
 
