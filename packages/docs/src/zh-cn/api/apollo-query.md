@@ -38,7 +38,7 @@
 - `fetchPolicy`：详见 [apollo fetchPolicy](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-fetchPolicy)
 - `pollInterval`：详见 [apollo pollInterval](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-pollInterval)
 - `notifyOnNetworkStatusChange`：详见 [apollo notifyOnNetworkStatusChange](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-notifyOnNetworkStatusChange)
-- `context`：详见 [apollo context](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-context)
+- `context`：详见 [apollo context](https://www.apollographql.com/docs/react/api/apollo-client/#ApolloClient.mutate)
 - `update`：用于转换结果 `data` 的函数，用于在响应中选择特定部分。示例：`:update="data => data.user.messages"`
 - `skip`：布尔值，禁用查询获取
 - `clientId`：查询所使用的 Apollo 客户端 id（在 ApolloProvider 的 `clients` 选项中定义）

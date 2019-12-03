@@ -33,6 +33,7 @@
 - `refetchQueries`：详见 [变更后重新获取查询](https://www.apollographql.com/docs/react/api/react-apollo.html#graphql-mutation-options-refetchQueries)
 - `clientId`：查询所使用的 Apollo 客户端 id（在 ApolloProvider 的 `clients` 选项中定义）
 - `tag`：字符串，HTML 标签名（默认值：`div`）；如果是 `undefined`，该组件将成为无渲染组件（内容不会被包装在标签中）
+- `context`：详见 [apollo context](https://www.apollographql.com/docs/react/api/apollo-client/#ApolloClient.mutate)
 
 ## 作用域插槽 props
 

@@ -38,7 +38,7 @@ To enable support of `gql` string tag in Vue templates, see the necessary setup 
 - `fetchPolicy`: See [apollo fetchPolicy](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-fetchPolicy)
 - `pollInterval`: See [apollo pollInterval](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-pollInterval)
 - `notifyOnNetworkStatusChange`: See [apollo notifyOnNetworkStatusChange](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-notifyOnNetworkStatusChange)
-- `context`: See [apollo context](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-context)
+- `context`: See [apollo context](https://www.apollographql.com/docs/react/api/apollo-client/#ApolloClient.mutate)
 - `update`: Function to transform the result `data`, useful for picking a specific part of the response. Example: `:update="data => data.user.messages"`
 - `skip`: Boolean disabling query fetching
 - `clientId`: id of the Apollo Client used by the query (defined in ApolloProvider `clients` option)
