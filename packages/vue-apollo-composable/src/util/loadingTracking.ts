@@ -61,29 +61,35 @@ export function getCurrentTracking () {
 export function trackQuery (loading: Ref<boolean>) {
   const { appTracking, tracking } = getCurrentTracking()
 
-  watch(loading, value => {
-    const mod = value ? 1 : -1
-    tracking.queries.value += mod
-    appTracking.queries.value += mod
+  watch(loading, (value, oldValue) => {
+    if (oldValue != null) {
+      const mod = value ? 1 : -1
+      tracking.queries.value += mod
+      appTracking.queries.value += mod
+    }
   })
 }
 
 export function trackMutation (loading: Ref<boolean>) {
   const { appTracking, tracking } = getCurrentTracking()
 
-  watch(loading, value => {
-    const mod = value ? 1 : -1
-    tracking.mutations.value += mod
-    appTracking.mutations.value += mod
+  watch(loading, (value, oldValue) => {
+    if (oldValue != null) {
+      const mod = value ? 1 : -1
+      tracking.mutations.value += mod
+      appTracking.mutations.value += mod
+    }
   })
 }
 
 export function trackSubscription (loading: Ref<boolean>) {
   const { appTracking, tracking } = getCurrentTracking()
 
-  watch(loading, value => {
-    const mod = value ? 1 : -1
-    tracking.subscriptions.value += mod
-    appTracking.subscriptions.value += mod
+  watch(loading, (value, oldValue) => {
+    if (oldValue != null) {
+      const mod = value ? 1 : -1
+      tracking.subscriptions.value += mod
+      appTracking.subscriptions.value += mod
+    }
   })
 }
