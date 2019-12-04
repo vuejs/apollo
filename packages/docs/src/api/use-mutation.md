@@ -40,7 +40,7 @@
 
 ## Return
 
-- `mutate`: call the mutation with this function.
+- `mutate(variables, overrideOptions)`: call the mutation with this function.
 
 - `loading`: boolean `Ref` tracking the progress of the mutation.
 
