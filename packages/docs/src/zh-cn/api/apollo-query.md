@@ -35,10 +35,10 @@
 
 - `query`：GraphQL 查询（由 `graphql-tag` 转换）或一个接收 `gql` 标签作为参数并返回转换后的查询的函数
 - `variables`：GraphQL 变量对象
-- `fetchPolicy`：详见 [apollo fetchPolicy](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-fetchPolicy)
-- `pollInterval`：详见 [apollo pollInterval](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-pollInterval)
-- `notifyOnNetworkStatusChange`：详见 [apollo notifyOnNetworkStatusChange](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-notifyOnNetworkStatusChange)
-- `context`：详见 [apollo context](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-context)
+- `fetchPolicy`：详见 [apollo fetchPolicy](https://www.apollographql.com/docs/react/data/queries/#options)
+- `pollInterval`：详见 [apollo pollInterval](https://www.apollographql.com/docs/react/data/queries/#options)
+- `notifyOnNetworkStatusChange`：详见 [apollo notifyOnNetworkStatusChange](https://www.apollographql.com/docs/react/data/queries/#options)
+- `context`：详见 [apollo context](https://www.apollographql.com/docs/react/data/queries/#options)
 - `update`：用于转换结果 `data` 的函数，用于在响应中选择特定部分。示例：`:update="data => data.user.messages"`
 - `skip`：布尔值，禁用查询获取
 - `clientId`：查询所使用的 Apollo 客户端 id（在 ApolloProvider 的 `clients` 选项中定义）
@@ -56,7 +56,7 @@
   - `result.fullData`：查询返回的原始数据（未使用 `update` 属性转换）
   - `result.loading`：布尔值，表明请求正在进行中（你可能需要设置 `notifyOnNetworkStatusChange` 属性来修改它）
   - `result.error`：当前结果的最终错误
-  - `result.networkStatus`：详见 [apollo networkStatus](https://www.apollographql.com/docs/react/basics/queries.html#graphql-query-data-networkStatus)
+  - `result.networkStatus`：详见 [apollo networkStatus](https://www.apollographql.com/docs/react/data/queries/#result)
 - `query`：与组件关联的智能查询，用于执行 `query.refetch()` 或 `query.fetchMore()` 之类的操作
 - `isLoading`：智能查询加载状态
 - `gqlError`：第一个 GraphQL 错误（如果有）

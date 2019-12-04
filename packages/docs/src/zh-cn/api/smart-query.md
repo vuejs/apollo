@@ -224,7 +224,7 @@ this.$apollo.queries.users.setVariables({
 
 ### setOptions
 
-更新 Apollo [watchQuery](https://www.apollographql.com/docs/react/api/apollo-client.html#ApolloClient.watchQuery) 选项并重新获取：
+更新 Apollo [watchQuery](https://www.apollographql.com/docs/react/api/apollo-client/#ApolloClient.watchQuery) 选项并重新获取：
 
 ```js
 this.$apollo.queries.users.setOptions({

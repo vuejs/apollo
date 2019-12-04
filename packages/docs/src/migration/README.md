@@ -193,4 +193,4 @@ import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
 ```
 
-Learn more at the [official apollo documentation](https://www.apollographql.com/docs/react/2.0-migration.html).
+Learn more at the [official apollo documentation](https://www.apollographql.com/docs/react/v2.5/recipes/2.0-migration).

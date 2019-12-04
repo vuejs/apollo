@@ -140,7 +140,7 @@ apollo: {
  - `pollInterval`
  - ...
 
-更多细节请查看 [apollo 文档](https://www.apollographql.com/docs/react/api/apollo-client.html#ApolloClient.watchQuery)。
+更多细节请查看 [apollo 文档](https://www.apollographql.com/docs/react/api/apollo-client/#ApolloClient.watchQuery)。
 
 例如，你可以像这样添加 `fetchPolicy` apollo 选项：
 

@@ -193,4 +193,4 @@ import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
 ```
 
-了解更多请查看 [apollo 官方文档](https://www.apollographql.com/docs/react/2.0-migration.html)。
+了解更多请查看 [apollo 官方文档](https://www.apollographql.com/docs/react/v2.5/recipes/2.0-migration)。
