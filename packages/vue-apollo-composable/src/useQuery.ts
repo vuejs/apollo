@@ -236,20 +236,26 @@ export function useQuery<
   }
 
   let debouncedRestart: Function
+  let isRestartDebounceSetup = false
   function updateRestartFn () {
+    // On server, will be called before currentOptions is initialized
+    // @TODO investigate
     if (!currentOptions) {
       debouncedRestart = baseRestart
-    } else if (currentOptions.value.throttle) {
-      debouncedRestart = throttle(currentOptions.value.throttle, baseRestart)
-    } else if (currentOptions.value.debounce) {
-      debouncedRestart = debounce(currentOptions.value.debounce, baseRestart)
     } else {
-      debouncedRestart = baseRestart
+      if (currentOptions.value.throttle) {
+        debouncedRestart = throttle(currentOptions.value.throttle, baseRestart)
+      } else if (currentOptions.value.debounce) {
+        debouncedRestart = debounce(currentOptions.value.debounce, baseRestart)
+      } else {
+        debouncedRestart = baseRestart
+      }
+      isRestartDebounceSetup = true
     }
   }
 
   function restart () {
-    if (!debouncedRestart) updateRestartFn()
+    if (!isRestartDebounceSetup) updateRestartFn()
     debouncedRestart()
   }
 
