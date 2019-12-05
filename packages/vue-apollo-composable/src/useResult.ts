@@ -1,13 +1,15 @@
 import { Ref, computed } from '@vue/composition-api'
 
 export function useResult<
+  TReturnValue = any,
+  TDefaultValue = any,
   TResult = any
 > (
   result: Ref<TResult>,
-  defaultValue: any = null,
-  pick: (data: TResult) => any = null,
+  defaultValue: TDefaultValue = null,
+  pick: (data: TResult) => TReturnValue = null,
 ) {
-  return computed(() => {
+  return computed<TDefaultValue | TReturnValue>(() => {
     const value = result.value
     if (value) {
       if (pick) {
