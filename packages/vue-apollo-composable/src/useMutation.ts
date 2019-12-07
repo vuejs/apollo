@@ -53,7 +53,7 @@ export function useMutation<
     loading.value = true
     called.value = true
     try {
-      const result = await client.mutate({
+      const result = await client.mutate<TResult>({
         mutation: currentDocument,
         ...currentOptions,
         ...overrideOptions,
