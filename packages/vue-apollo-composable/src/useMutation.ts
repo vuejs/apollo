@@ -27,7 +27,7 @@ export function useMutation<
   trackMutation(loading)
   const error = ref<Error>(null)
   const called = ref<boolean>(false)
-  
+
   const doneEvent = useEventHook<FetchResult<TResult, Record<string, any>, Record<string, any>>>()
   const errorEvent = useEventHook<Error>()
 
