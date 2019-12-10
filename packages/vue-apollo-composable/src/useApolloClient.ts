@@ -7,7 +7,7 @@ export const ApolloClients = Symbol('apollo-clients')
 export function useApolloClient<TCacheShape = any> (clientId: string = null) {
   const providedApolloClients: { [key: string]: ApolloClient<TCacheShape> } = inject(ApolloClients, null)
   const providedApolloClient: ApolloClient<TCacheShape> = inject(DefaultApolloClient, null)
-  
+
   function resolveClient (clientId: string = null): ApolloClient<TCacheShape> {
     let resolvedClient
     if (clientId) {
