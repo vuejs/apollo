@@ -41,6 +41,27 @@ test('called Apollo mutation in addHero() method', () => {
 })
 ```
 
+### Testing loading state with mocking $apollo
+If you want to test how your component renders when results from the GraphQL API are still loading, you can also mock a loading state in respective Apollo queries:
+
+```js
+test('renders correctly when loading allHeroes', () => {
+  const wrapper = mount(App, {
+    mocks: {
+      $apollo: {
+        queries: {
+          allHeroes: {
+            loading: true,
+          },
+        },
+      },
+    },
+  })
+
+  expect(wrapper.element).toMatchSnapshot();
+})
+```
+
 ## Tests with mocked GraqhQL schema
 
 You can also make some more deep and complicated tests with [mocked GraphQL schema](https://www.apollographql.com/docs/graphql-tools/mocking.html). This method doesn't include Apollo, but lets you check if certain query will be executed correctly with given schema.
