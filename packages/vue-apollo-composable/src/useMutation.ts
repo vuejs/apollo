@@ -1,6 +1,6 @@
 import { DocumentNode } from 'graphql'
 import { MutationOptions, OperationVariables } from 'apollo-client'
-import { ref } from '@vue/composition-api'
+import { ref, onBeforeUnmount } from '@vue/composition-api'
 import { FetchResult } from 'apollo-link'
 import { useApolloClient } from './useApolloClient'
 import { ReactiveFunction } from './util/ReactiveFunction'
@@ -72,6 +72,10 @@ export function useMutation<
       throw e
     }
   }
+
+  onBeforeUnmount(() => {
+    loading.value = false
+  })
 
   return {
     mutate,

@@ -1,6 +1,6 @@
 import { DocumentNode } from 'graphql'
 import Vue from 'vue'
-import { Ref, ref, watch, isRef, onUnmounted, computed, getCurrentInstance } from '@vue/composition-api'
+import { Ref, ref, watch, isRef, computed, getCurrentInstance, onBeforeUnmount } from '@vue/composition-api'
 import { OperationVariables, SubscriptionOptions } from 'apollo-client'
 import { Observable, Subscription } from 'apollo-client/util/Observable'
 import { FetchResult } from 'apollo-link'
@@ -188,7 +188,7 @@ export function useSubscription <
   })
 
   // Teardown
-  onUnmounted(stop)
+  onBeforeUnmount(stop)
 
   return {
     result,

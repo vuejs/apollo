@@ -1,4 +1,4 @@
-import { ref, Ref, isRef, computed, watch, onServerPrefetch, onUnmounted, getCurrentInstance } from '@vue/composition-api'
+import { ref, Ref, isRef, computed, watch, onServerPrefetch, getCurrentInstance, onBeforeUnmount } from '@vue/composition-api'
 import Vue from 'vue'
 import { DocumentNode } from 'graphql'
 import {
@@ -373,7 +373,7 @@ export function useQuery<
   })
 
   // Teardown
-  onUnmounted(() => {
+  onBeforeUnmount(() => {
     stop()
     subscribeToMoreItems.length = 0
   })
