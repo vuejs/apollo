@@ -1,4 +1,4 @@
-import { Ref, watch, onUnmounted, ref, getCurrentInstance } from '@vue/composition-api'
+import { Ref, watch, onUnmounted, ref, getCurrentInstance, onBeforeUnmount } from '@vue/composition-api'
 
 export interface LoadingTracking {
   queries: Ref<number>
@@ -58,38 +58,33 @@ export function getCurrentTracking () {
   }
 }
 
-export function trackQuery (loading: Ref<boolean>) {
+function track (loading: Ref<boolean>, type: keyof LoadingTracking) {
   const { appTracking, tracking } = getCurrentTracking()
 
   watch(loading, (value, oldValue) => {
-    if (oldValue != null) {
+    if (oldValue != null && value !== oldValue) {
       const mod = value ? 1 : -1
-      tracking.queries.value += mod
-      appTracking.queries.value += mod
+      tracking[type].value += mod
+      appTracking[type].value += mod
     }
   })
+
+  onBeforeUnmount(() => {
+    if (loading.value) {
+      tracking[type].value--
+      appTracking[type].value--
+    }
+  })
+}
+
+export function trackQuery (loading: Ref<boolean>) {
+  track(loading, 'queries')
 }
 
 export function trackMutation (loading: Ref<boolean>) {
-  const { appTracking, tracking } = getCurrentTracking()
-
-  watch(loading, (value, oldValue) => {
-    if (oldValue != null) {
-      const mod = value ? 1 : -1
-      tracking.mutations.value += mod
-      appTracking.mutations.value += mod
-    }
-  })
+  track(loading, 'mutations')
 }
 
 export function trackSubscription (loading: Ref<boolean>) {
-  const { appTracking, tracking } = getCurrentTracking()
-
-  watch(loading, (value, oldValue) => {
-    if (oldValue != null) {
-      const mod = value ? 1 : -1
-      tracking.subscriptions.value += mod
-      appTracking.subscriptions.value += mod
-    }
-  })
+  track(loading, 'subscriptions')
 }
