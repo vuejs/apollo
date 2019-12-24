@@ -304,7 +304,7 @@ In this example, if we already loaded the list of messages containing the one wi
 
 ### Making all other cache updates
 
-If a mutation modifies multiple entities, or if it creates or deletes one or many entities, the Apollo Client will *not* automatically update the cache to reflect the changes made by the mutation. Instad, you should update the cache using an `update` function in the options.
+If a mutation modifies multiple entities, or if it creates or deletes one or many entities, the Apollo Client will *not* automatically update the cache to reflect the changes made by the mutation. Instead, you should update the cache using an `update` function in the options.
 
 The purpose of this `update` function is to modify your cached data to match the changes made by the mutation on the server.
 
@@ -397,11 +397,37 @@ const { mutate: sendMessage } = useMutation(gql`
 }))
 ```
 
-The `update` function gets a `cache` object reprensenting the Apollo Client cache. It provides the `readQuery` and `writeQuery` function that enable you to execute GraphQL operations on the cache and modify the expected result.
+The `update` function gets a `cache` object representing the Apollo Client cache. It provides the `readQuery` and `writeQuery` function that enable you to execute GraphQL operations on the cache and modify the expected result.
 
 The 2nd argument is an object containing the data from the mutation result. This should be used to modify the cached data and write it back with `cache.writeQuery`.
 
 After the `update` function is called, the components whose data has been changed in the cache will automatically re-render. In our example, the list of messages will automatically update with the new message received from the mutation result.
+
+Alternatively, we can pass an `update` function within the second parameter when calling the `mutate`  function:
+
+```js{14-20}
+const { mutate: sendMessage } = useMutation(gql`
+  mutation sendMessage ($text: String!) {
+    sendMessage (text: $text) {
+      id
+      text
+    }
+  }
+`)
+
+sendMessage(
+  {
+    text: text.value
+  },
+  {
+    update: (cache, { data: { sendMessage } }) => {
+      const data = cache.readQuery({ query: MESSAGES });
+      data.messages.push(sendMessage);
+      cache.writeQuery({ query: MESSAGES, data });
+    }
+  }
+);
+```
 
 ## Mutation state
 
