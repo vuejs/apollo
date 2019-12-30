@@ -76,6 +76,6 @@ export interface DollarApollo<V> extends ApolloClientMethods {
 
   getClient<R = any>(): ApolloClient<R>
 
-  addSmartQuery<R = any>(key: string, options: VueApolloQueryDefinition<R>): SmartQuery<V>
+  addSmartQuery<R = any, TVariables = OperationVariables>(key: string, options: VueApolloQueryDefinition<R, TVariables>): SmartQuery<V>
   addSmartSubscription<R = any>(key: string, options: VueApolloSubscriptionDefinition): SmartSubscription<V>
 }
