@@ -29,7 +29,9 @@
   "scripts": {
     "dev": "yarn build --watch",
     "build": "tsc --outDir dist -d",
-    "prepublishOnly": "yarn build"
+    "prepublishOnly": "yarn test && yarn build",
+    "test": "yarn test:types",
+    "test:types": "tsc -p tests/types/"
   },
   "dependencies": {
     "throttle-debounce": "^2.1.0"
