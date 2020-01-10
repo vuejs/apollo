@@ -34,7 +34,7 @@ export function useMutation<
   // Apollo Client
   const { resolveClient } = useApolloClient()
 
-  async function mutate (variables: TVariables = null, overrideOptions: Omit<UseMutationOptions, 'variables'>) {
+  async function mutate (variables: TVariables = null, overrideOptions: Omit<UseMutationOptions, 'variables'> = {}) {
     let currentDocument: DocumentNode
     if (typeof document === 'function') {
       currentDocument = document()
