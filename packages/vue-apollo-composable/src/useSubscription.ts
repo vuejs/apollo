@@ -134,6 +134,21 @@ export function useSubscription <
     debouncedRestart()
   }
 
+  // Applying options
+  const currentOptions = ref<UseSubscriptionOptions<TResult, TVariables>>()
+  watch(() => isRef(optionsRef) ? optionsRef.value : optionsRef, value => {
+    if (currentOptions.value && (
+      currentOptions.value.throttle !== value.throttle ||
+      currentOptions.value.debounce !== value.debounce
+    )) {
+      updateRestartFn()
+    }
+    currentOptions.value = value
+    restart()
+  }, {
+    deep: true,
+  })
+
   // Applying document
   let currentDocument: DocumentNode
   watch(documentRef, value => {
@@ -145,21 +160,6 @@ export function useSubscription <
   let currentVariables: TVariables
   watch(variablesRef, value => {
     currentVariables = value
-    restart()
-  }, {
-    deep: true,
-  })
-
-  // Applying options
-  const currentOptions = ref<UseSubscriptionOptions<TResult, TVariables>>()
-  watch(() => isRef(optionsRef) ? optionsRef.value : optionsRef, value => {
-    if (currentOptions.value && (
-      currentOptions.value.throttle !== value.throttle ||
-      currentOptions.value.debounce !== value.debounce
-    )) {
-      updateRestartFn()
-    }
-    currentOptions.value = value
     restart()
   }, {
     deep: true,
