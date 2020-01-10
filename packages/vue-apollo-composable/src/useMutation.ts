@@ -1,6 +1,6 @@
 import { DocumentNode } from 'graphql'
 import { MutationOptions, OperationVariables } from 'apollo-client'
-import { ref, onBeforeUnmount, Ref } from '@vue/composition-api'
+import { ref, onBeforeUnmount, isRef, Ref } from '@vue/composition-api'
 import { FetchResult } from 'apollo-link'
 import { useApolloClient } from './useApolloClient'
 import { ReactiveFunction } from './util/ReactiveFunction'
@@ -75,8 +75,8 @@ export function useMutation<
   TResult,
   TVariables extends OperationVariables
 > (
-  document: DocumentNode | ReactiveFunction<DocumentNode>,
-  options?: UseMutationOptions<TResult, TVariables> | ReactiveFunction<UseMutationOptions<TResult, TVariables>>,
+  document: DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>,
+  options?: UseMutationOptions<TResult, TVariables> | Ref<UseMutationOptions<TResult, TVariables>> | ReactiveFunction<UseMutationOptions<TResult, TVariables>>,
 ): UseMutationReturn<TResult, TVariables> {
   if (!options) options = {}
 
@@ -91,10 +91,12 @@ export function useMutation<
   // Apollo Client
   const { resolveClient } = useApolloClient()
 
-  async function mutate (variables?: TVariables, overrideOptions?: Omit<UseMutationOptions, 'variables'>) {
+  async function mutate (variables?: TVariables, overrideOptions: Omit<UseMutationOptions, 'variables'> = {}) {
     let currentDocument: DocumentNode
     if (typeof document === 'function') {
       currentDocument = document()
+    } else if (isRef(document)) {
+      currentDocument = document.value
     } else {
       currentDocument = document
     }
@@ -102,6 +104,8 @@ export function useMutation<
     let currentOptions: UseMutationOptions<TResult, TVariables>
     if (typeof options === 'function') {
       currentOptions = options()
+    } else if (isRef(options)) {
+      currentOptions = options.value
     } else {
       currentOptions = options
     }
