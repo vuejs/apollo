@@ -23,7 +23,7 @@ export interface UseMutationOptions<
 export type UseMutationOptionsNoVariables<
   TResult = any,
   TVariables = OperationVariables
-> = Omit<UseMutationOptions<TResult, TVariables>, 'variables'>;
+> = Omit<UseMutationOptions<TResult, TVariables>, 'variables'>
 
 /**
  * `useMutation` options for mutations require variables.
@@ -36,15 +36,15 @@ export interface UseMutationOptionsWithVariables<
 }
 
 export interface UseMutationReturn<TResult, TVariables> {
-  mutate: (variables?: TVariables, overrideOptions?: Pick<UseMutationOptions<any, OperationVariables>, "update" | "optimisticResponse" | "context" | "updateQueries" | "refetchQueries" | "awaitRefetchQueries" | "errorPolicy" | "fetchPolicy" | "clientId">) => Promise<FetchResult<any, Record<string, any>, Record<string, any>>>;
-  loading: Ref<boolean>;
-  error: Ref<Error>;
-  called: Ref<boolean>;
+  mutate: (variables?: TVariables, overrideOptions?: Pick<UseMutationOptions<any, OperationVariables>, 'update' | 'optimisticResponse' | 'context' | 'updateQueries' | 'refetchQueries' | 'awaitRefetchQueries' | 'errorPolicy' | 'fetchPolicy' | 'clientId'>) => Promise<FetchResult<any, Record<string, any>, Record<string, any>>>
+  loading: Ref<boolean>
+  error: Ref<Error>
+  called: Ref<boolean>
   onDone: (fn: (param?: FetchResult<TResult, Record<string, any>, Record<string, any>>) => void) => {
-      off: () => void;
+      off: () => void
   };
   onError: (fn: (param?: Error) => void) => {
-      off: () => void;
+      off: () => void
   };
 };
 

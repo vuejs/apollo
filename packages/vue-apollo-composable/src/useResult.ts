@@ -37,7 +37,7 @@ export function useResult<TResult, TResultKey extends keyof TResult = keyof TRes
 export function useResult<TResult, TDefaultValue, TResultKey extends keyof TResult = keyof TResult>(
   result: Ref<TResult>,
   defaultValue: TDefaultValue
-): UseResultReturn<TDefaultValue | ExtractSingleKey<TResult, TResultKey>>;
+): UseResultReturn<TDefaultValue | ExtractSingleKey<TResult, TResultKey>>
 
 /**
  * Resolve a `result`, returning the `result` mapped with the `pick` function.
@@ -62,7 +62,7 @@ export function useResult<
   result: Ref<TResult>,
   defaultValue: TDefaultValue | undefined,
   pick: (data: TResult) => TReturnValue
-): UseResultReturn<TDefaultValue | TReturnValue>;
+): UseResultReturn<TDefaultValue | TReturnValue>
 
 export function useResult<
   TResult,

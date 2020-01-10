@@ -5,9 +5,9 @@ export const DefaultApolloClient = Symbol('default-apollo-client')
 export const ApolloClients = Symbol('apollo-clients')
 
 export interface UseApolloClientReturn<TCacheShape> {
-  resolveClient: (clientId?: string) => ApolloClient<TCacheShape>;
-  readonly client: ApolloClient<TCacheShape>;
-};
+  resolveClient: (clientId?: string) => ApolloClient<TCacheShape>
+  readonly client: ApolloClient<TCacheShape>
+}
 
 export function useApolloClient<TCacheShape = any> (clientId?: string): UseApolloClientReturn<TCacheShape> {
   const providedApolloClients: { [key: string]: ApolloClient<TCacheShape> } = inject(ApolloClients, null)
