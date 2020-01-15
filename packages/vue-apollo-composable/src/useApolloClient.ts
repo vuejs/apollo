@@ -9,35 +9,45 @@ export interface UseApolloClientReturn<TCacheShape> {
   readonly client: ApolloClient<TCacheShape>
 }
 
-export function useApolloClient<TCacheShape = any> (clientId?: string): UseApolloClientReturn<TCacheShape> {
-  const providedApolloClients: { [key: string]: ApolloClient<TCacheShape> } = inject(ApolloClients, null)
+type ClientId = string
+type ClientDict<T> = Record<ClientId, ApolloClient<T>>
+
+function resolveDefaultClient<T>(providedApolloClients: ClientDict<T>, providedApolloClient: ApolloClient<T>): ApolloClient<T> {
+  const resolvedClient = providedApolloClients ?
+    providedApolloClients.default
+    : providedApolloClient
+  if (!resolvedClient) {
+    throw new Error('Apollo Client with id default not found')
+  }
+  return resolvedClient
+}
+
+function resolveClientWithId<T>(providedApolloClients: ClientDict<T>, clientId: ClientId): ApolloClient<T> {
+  if (!providedApolloClients) {
+    throw new Error(`No apolloClients injection found, tried to resolve '${clientId}' clientId`)
+  }
+  const resolvedClient = providedApolloClients[clientId]
+  if (!resolvedClient) {
+    throw new Error(`Apollo Client with id ${clientId} not found`)
+  }
+  return resolvedClient
+}
+
+export function useApolloClient<TCacheShape = any>(clientId?: ClientId): UseApolloClientReturn<TCacheShape> {
+  const providedApolloClients: ClientDict<TCacheShape> = inject(ApolloClients, null)
   const providedApolloClient: ApolloClient<TCacheShape> = inject(DefaultApolloClient, null)
 
-  function resolveClient (clientId: string = null): ApolloClient<TCacheShape> {
-    let resolvedClient
+  function resolveClient() {
     if (clientId) {
-      if (!providedApolloClients) {
-        throw new Error(`No apolloClients injection found, tried to resolve '${clientId}' clientId`)
-      }
-      resolvedClient = providedApolloClients[clientId]
-    } else {
-      clientId = 'default'
-      if (providedApolloClients) {
-        resolvedClient = providedApolloClients.default
-      } else {
-        resolvedClient = providedApolloClient
-      }
+      resolveClientWithId(providedApolloClients, clientId)
     }
-    if (!resolvedClient) {
-      throw new Error(`Apollo Client with id ${clientId} not found`)
-    }
-    return resolvedClient
+    return resolveDefaultClient(providedApolloClients, providedApolloClient)
   }
 
   return {
     resolveClient,
     get client () {
-      return resolveClient(clientId)
+      return resolveClient()
     }
   }
 }
