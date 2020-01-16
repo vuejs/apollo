@@ -79,6 +79,17 @@ export default class SmartQuery extends SmartApollo {
     }
   }
 
+  generateApolloOptions (variables) {
+    const apolloOptions = super.generateApolloOptions(variables)
+
+    if (this.vm.$isServer) {
+      // Don't poll on the server, that would run indefinitely
+      delete apolloOptions.pollInterval
+    }
+
+    return apolloOptions
+  }
+
   executeApollo (variables) {
     const variablesJson = JSON.stringify(variables)
 
