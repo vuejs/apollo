@@ -1,6 +1,6 @@
 {
   "name": "@vue/apollo-components",
-  "version": "4.0.0-alpha.2",
+  "version": "4.0.0-alpha.6",
   "description": "Apollo GraphQL components for Vue.js",
   "main": "dist/vue-apollo-components.umd.js",
   "module": "dist/vue-apollo-components.esm.js",
@@ -35,7 +35,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@vue/apollo-option": "^4.0.0-alpha.2"
+    "@vue/apollo-option": "^4.0.0-alpha.6"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",

@@ -1,6 +1,6 @@
 {
   "name": "private-vue-apollo-docs",
-  "version": "4.0.0-4.0.0-alpha.6.0",
+  "version": "4.0.0-alpha.6",
   "private": true,
   "scripts": {
     "dev": "vuepress dev src",
