@@ -211,9 +211,14 @@ export function useSubscription <
 
   // Applying variables
   let currentVariables: TVariables
-  watch(variablesRef, value => {
-    currentVariables = value
-    restart()
+  let currentVariablesSerialized: string
+  watch(variablesRef, (value, oldValue) => {
+    const serialized = JSON.stringify(value)
+    if (serialized !== currentVariablesSerialized) {
+      currentVariables = value
+      restart()
+    }
+    currentVariablesSerialized = serialized
   }, {
     deep: true,
   })
