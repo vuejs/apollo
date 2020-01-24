@@ -197,7 +197,5 @@ export class DollarApollo {
     this._apolloSubscriptions.forEach((sub) => {
       sub.unsubscribe()
     })
-    this._apolloSubscriptions = null
-    this.vm = null
   }
 }

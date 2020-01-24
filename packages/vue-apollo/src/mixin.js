@@ -125,7 +125,6 @@ function defineReactiveSetter ($apollo, key, value, deep) {
 function destroy () {
   if (this.$_apollo) {
     this.$_apollo.destroy()
-    this.$_apollo = null
   }
 }
 
@@ -149,20 +148,16 @@ export function installMixin (Vue, vueVersion) {
       beforeCreate () {
         initProvider.call(this)
         proxyData.call(this)
-        if (this.$isServer) {
-          // Patch render function to cleanup apollo
-          const render = this.$options.render
-          this.$options.render = (h) => {
-            const result = render.call(this, h)
-            destroy.call(this)
-            return result
-          }
-        }
       },
 
       serverPrefetch () {
         if (this.$_apolloPromises) {
-          return Promise.all(this.$_apolloPromises)
+          return Promise.all(this.$_apolloPromises).then(() => {
+            destroy.call(this)
+          }).catch(e => {
+            destroy.call(this)
+            return Promise.reject(e)
+          })
         }
       },
     } : {},

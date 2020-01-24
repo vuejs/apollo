@@ -1,5 +1,7 @@
 /** @type {import('@vue/cli-service').ProjectOptions} */
 module.exports = {
+  runtimeCompiler: true,
+
   pluginOptions: {
     apollo: {
       enableMocks: false,
