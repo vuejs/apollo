@@ -6,13 +6,13 @@ Les principaux changements concernent la mise en place du client Apollo. Le code
 
 ### Packages
 
-Avant:
+Avant :
 
 ```
 npm install --save vue-apollo apollo-client
 ```
 
-Après:
+Après :
 
 ```
 npm install --save vue-apollo@next graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
@@ -20,7 +20,7 @@ npm install --save vue-apollo@next graphql apollo-client apollo-link apollo-link
 
 ### Imports
 
-Avant:
+Avant :
 
 ```js
 import Vue from 'vue'
@@ -28,7 +28,7 @@ import { ApolloClient, createBatchingNetworkInterface } from 'apollo-client'
 import VueApollo from 'vue-apollo'
 ```
 
-Après:
+Après :
 
 ```js
 import Vue from 'vue'
@@ -40,7 +40,7 @@ import VueApollo from 'vue-apollo'
 
 ### Apollo Setup
 
-Avant:
+Avant :
 
 ```js
 // Création de l'interface réseau
@@ -67,7 +67,7 @@ const apolloClient = new ApolloClient({
 })
 ```
 
-Après:
+Après :
 
 ```js
 const httpLink = new HttpLink({
@@ -106,7 +106,7 @@ const apolloClient = new ApolloClient({
 
 ### Plugin Setup
 
-Avant:
+Avant :
 
 ```js
 // Création du client Apollo
@@ -127,7 +127,7 @@ new Vue({
 })
 ```
 
-Après:
+Après :
 
 ```js
 const httpLink = new HttpLink({
@@ -165,13 +165,13 @@ Les query reducers ont été retirés. Utilisez l'API `update` pour mettre le ca
 
 ### Packages
 
-Avant:
+Avant :
 
 ```
 npm install --save subscriptions-transport-ws
 ```
 
-Après:
+Après :
 
 ```
 npm install --save apollo-link-ws apollo-utilities
@@ -179,13 +179,13 @@ npm install --save apollo-link-ws apollo-utilities
 
 ### Imports
 
-Avant:
+Avant :
 
 ```js
 import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws'
 ```
 
-Après:
+Après :
 
 ```js
 import { split } from 'apollo-link'
