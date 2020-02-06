@@ -50,6 +50,6 @@ export default {
 
 ## Props
 
-- `document`: un document GraphQL qui contient la souscription ou une fonction qui reçoit le gabrit `gql` en argument et doit retourner le document transformé.
+- `document`: un document GraphQL qui contient la souscription ou une fonction qui reçoit le gabarit `gql` en argument et doit retourner le document transformé.
 - `variables`: un objet qui met automatiquement à jour les variables de souscription.
 - `updateQuery`: une fonction qui met à jour le résultat de requête si nécessaire.
