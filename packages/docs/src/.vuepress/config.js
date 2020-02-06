@@ -233,7 +233,7 @@ module.exports = {
         },
       },
       '/fr/': {
-        selectText: 'Languges',
+        selectText: 'Langages',
         label: 'Français',
         lastUpdated: 'Dernière mise à jour',
         nav: [
