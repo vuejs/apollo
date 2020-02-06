@@ -40,7 +40,7 @@ Exemple :
 - `mutate(options = undefined)`: une fonction pour appeler une mutation. Vous pouvez écraser les options de mutation (par exemple : `mutate({ variables: { foo: 'bar } })`)
 - `loading`: un booléen qui indique que la requête est en cours
 - `error`: une erreur éventuelle lors de la dernière mutation
-- `gqlError`: la première erreur GraphQL évntuelle
+- `gqlError`: la première erreur GraphQL éventuelle
 
 ## Événements
 
