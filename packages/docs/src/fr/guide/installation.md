@@ -1,6 +1,6 @@
 # Installation
 
-## Vue CLI Plugin
+## Plugin Vue CLI
 
 J'ai créé un plugin pour [vue-cli](http://cli.vuejs.org) afin que vous puissiez ajouter Apollo (ainsi qu'un serveur GraphQL optionnel!) en deux minutes ! ✨🚀
 

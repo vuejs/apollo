@@ -26,4 +26,4 @@ Voici un rapide exemple d'une [ApolloQuery](./query.md) dans un template :
 <!-- Pas besoin de script -->
 ```
 
-Jetez un œil à [ApolloQuery](./query.md) pour en savoir plus sur comment écrire des requêtes GraphQL dans le template.
+Consultez [ApolloQuery](./query.md) pour en savoir plus sur comment écrire des requêtes GraphQL dans le template.
