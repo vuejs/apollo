@@ -29,7 +29,7 @@ Par défaut, avez `vue-server-renderer`, toutes les requêtes GraphQL de vos com
 Vous avec accès à `this` dans les options telles que `variables`, même côté serveur !
 :::
 
-Example :
+Exemple :
 
 ```js
 export default {
@@ -47,7 +47,7 @@ export default {
 }
 ```
 
-Example 2 :
+Exemple 2 :
 
 ```js
 export default {
