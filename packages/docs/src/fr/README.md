@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.png
 actionText: Commencer →
-actionLink: /guide/
+actionLink: /fr/guide/
 features:
 - title: Rafraîchissements automatiques
   details: Ne vous préoccupez pas de refraîchir l'interface utilisteur ou de refaire les requêtes !

@@ -29,6 +29,10 @@ module.exports = {
           message: "New content is available.",
           buttonText: "Refresh"
         },
+        '/fr/': {
+          message: "Du nouveau contenu est disponible.",
+          buttonText: "Rafraîchir"
+        },
       },
     },
   },
@@ -229,21 +233,21 @@ module.exports = {
         },
       },
       '/fr/': {
-        selectText: 'Languages',
+        selectText: 'Languges',
         label: 'Français',
         lastUpdated: 'Dernière mise à jour',
         nav: [
           {
             text: 'Guide',
-            link: '/guide/',
+            link: '/fr/guide/',
           },
           {
             text: 'API',
-            link: '/api/',
+            link: '/fr/api/',
           },
           {
             text: 'Migration',
-            link: '/migration/',
+            link: '/fr/migration/',
           },
           {
             text: 'Plugin CLI',
@@ -256,7 +260,7 @@ module.exports = {
         ],
         sidebarDepth: 2,
         sidebar: {
-          '/guide/': [
+          '/fr/guide/': [
             '',
             'installation',
             {
@@ -292,7 +296,7 @@ module.exports = {
               ],
             },
           ],
-          '/api/': [
+          '/fr/api/': [
             {
               title: 'Vue Apollo',
               collapsable: false,
@@ -320,7 +324,7 @@ module.exports = {
               ],
             },
           ],
-          '/migration/': [''],
+          '/fr/migration/': [''],
         },
       },
     },
