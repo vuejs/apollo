@@ -36,7 +36,7 @@ export interface UseMutationOptionsWithVariables<
 }
 
 export interface UseMutationReturn<TResult, TVariables> {
-  mutate: (variables?: TVariables, overrideOptions?: Pick<UseMutationOptions<any, OperationVariables>, 'update' | 'optimisticResponse' | 'context' | 'updateQueries' | 'refetchQueries' | 'awaitRefetchQueries' | 'errorPolicy' | 'fetchPolicy' | 'clientId'>) => Promise<FetchResult<any, Record<string, any>, Record<string, any>>>
+  mutate: (variables?: TVariables, overrideOptions?: Pick<UseMutationOptions<any, OperationVariables>, 'update' | 'optimisticResponse' | 'context' | 'updateQueries' | 'refetchQueries' | 'awaitRefetchQueries' | 'errorPolicy' | 'fetchPolicy' | 'clientId'>) => Promise<FetchResult<TResult, Record<string, any>, Record<string, any>>>
   loading: Ref<boolean>
   error: Ref<Error>
   called: Ref<boolean>
