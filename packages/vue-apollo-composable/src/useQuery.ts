@@ -168,7 +168,7 @@ export function useQuery<
     startQuerySubscription()
 
     if (!isServer && (currentOptions.value.fetchPolicy !== 'no-cache' || currentOptions.value.notifyOnNetworkStatusChange)) {
-      const currentResult = query.value.currentResult()
+      const currentResult = query.value.getCurrentResult()
 
       if (!currentResult.loading || currentOptions.value.notifyOnNetworkStatusChange) {
         onNextResult(currentResult as ApolloQueryResult<TResult>)
@@ -222,7 +222,7 @@ export function useQuery<
   }
 
   function onError (queryError: any) {
-    processNextResult(query.value.currentResult() as ApolloQueryResult<TResult>)
+    processNextResult(query.value.getCurrentResult() as ApolloQueryResult<TResult>)
     processError(queryError)
     if (firstReject) {
       firstReject(queryError)
