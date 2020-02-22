@@ -39,14 +39,14 @@ export function install (Vue, options) {
 
   // Lazy creation
   if (!Vue.prototype.hasOwnProperty('$apollo')) {
-      Object.defineProperty(Vue.prototype, '$apollo', {
-        get () {
-          if (!this.$_apollo) {
-            this.$_apollo = new DollarApollo(this)
-          }
-          return this.$_apollo
-        },
-      })
+    Object.defineProperty(Vue.prototype, '$apollo', {
+      get () {
+        if (!this.$_apollo) {
+          this.$_apollo = new DollarApollo(this)
+        }
+        return this.$_apollo
+      },
+    })
   }
 
   installMixin(Vue, vueVersion)
