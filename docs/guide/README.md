@@ -88,3 +88,5 @@ If you never heard of GraphQL or Apollo, here is a sneak peek:
 [<img src="https://conf.vuejs.org/img/logo-48.png" alt="icon" width="16" height="16"/> VueConf 2017 demo](https://github.com/Akryum/vueconf-2017-demo) &amp; [slides](http://slides.com/akryum/graphql#/)
 
 [<img src="https://github.com/fluidicon.png" alt="icon" width="16" height="16"/> Devfest Summit Example](https://github.com/Akryum/devfest-nantes-2017) (with lots of features like SSR, OAuth, Realtime updates, Apollo Engine...)
+
+[<img src="https://graphql-engine-cdn.hasura.io/learn-hasura/assets/homepage/logo.png" alt="icon" width="16" height="16"/> Vue GraphQL Tutorial](https://hasura.io/learn/graphql/vue/introduction/)
