@@ -41,6 +41,28 @@ test('called Apollo mutation in addHero() method', () => {
 })
 ```
 
+### 使用模拟 $apollo 测试加载状态
+
+如果需要测试组件在 GraphQL API 返回的结果仍在加载时会如何渲染，你可以在相应的 Apollo 查询中模拟加载的状态：
+
+```js
+test('renders correctly when loading allHeroes', () => {
+  const wrapper = mount(App, {
+    mocks: {
+      $apollo: {
+        queries: {
+          allHeroes: {
+            loading: true,
+          },
+        },
+      },
+    },
+  })
+
+  expect(wrapper.element).toMatchSnapshot();
+})
+```
+
 ## 使用模拟 GraqhQL schema 进行测试
 
 你还可以使用 [模拟 GraphQL schema](https://www.apollographql.com/docs/graphql-tools/mocking.html) 进行更深入、更复杂的测试。这种方法并不包含 Apollo，但能够让你检查某些查询是否能够在给定的 schema 中正确执行。
