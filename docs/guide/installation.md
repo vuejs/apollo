@@ -2,11 +2,11 @@
 
 ## Vue CLI Plugin
 
-I made a plugin for [vue-cli](http://cli.vuejs.org) so you can add Apollo (with an optional GraphQL server!) in literally two minutes! ✨🚀
+You can use a [vue-cli](http://cli.vuejs.org) plugin to add Apollo (with an optional GraphQL server!) in literally two minutes! ✨🚀
 
 In your vue-cli 3 project:
 
-```bash
+```sh
 vue add apollo
 ```
 
@@ -26,13 +26,13 @@ Apollo Boost is a zero-config way to start using Apollo Client. It includes some
 
 Install it alongside `vue-apollo` and `graphql`: 
 
-```
-npm install --save vue-apollo graphql apollo-boost
+```sh
+npm i vue-apollo graphql apollo-boost
 ```
 
 Or:
 
-```
+```sh
 yarn add vue-apollo graphql apollo-boost
 ```
 
@@ -51,8 +51,8 @@ const apolloClient = new ApolloClient({
 
 If you want some more fine grained control install these packages instead of apollo-boost:
 
-```
-npm install --save vue-apollo graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
+```sh
+npm i vue-apollo graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
 ```
 
 Or:
