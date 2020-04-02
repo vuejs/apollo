@@ -36,11 +36,11 @@ export interface UseMutationOptionsWithVariables<
 }
 
 type MutateOverrideOptions = Pick<UseMutationOptions<any, OperationVariables>, 'update' | 'optimisticResponse' | 'context' | 'updateQueries' | 'refetchQueries' | 'awaitRefetchQueries' | 'errorPolicy' | 'fetchPolicy' | 'clientId'>
-type MutateResult = Promise<FetchResult<any, Record<string, any>, Record<string, any>>>
-export type MutateWithOptionalVariables<TVariables> = (variables?: TVariables, overrideOptions?: MutateOverrideOptions) => MutateResult
-export type MutateWithRequiredVariables<TVariables> = (variables: TVariables, overrideOptions?: MutateOverrideOptions) => MutateResult
+type MutateResult<TResult> = Promise<FetchResult<TResult, Record<string, any>, Record<string, any>>>
+export type MutateWithOptionalVariables<TResult, TVariables> = (variables?: TVariables, overrideOptions?: MutateOverrideOptions) => MutateResult<TResult>
+export type MutateWithRequiredVariables<TResult, TVariables> = (variables: TVariables, overrideOptions?: MutateOverrideOptions) => MutateResult<TResult>
 
-export interface UseMutationReturn<TResult, TVariables, Mutate extends MutateWithOptionalVariables<TVariables> = MutateWithOptionalVariables<TVariables>> {
+export interface UseMutationReturn<TResult, TVariables, Mutate extends MutateWithOptionalVariables<TResult, TVariables> = MutateWithOptionalVariables<TResult, TVariables>> {
   mutate: Mutate
   loading: Ref<boolean>
   error: Ref<Error>
@@ -54,35 +54,20 @@ export interface UseMutationReturn<TResult, TVariables, Mutate extends MutateWit
 };
 
 /**
- * Use a mutation that does not require variables or options.
- * */
-export function useMutation<TResult = any>(
-  document: DocumentNode | ReactiveFunction<DocumentNode>
-): UseMutationReturn<TResult, undefined>
-
-/**
- * Use a mutation that does not require variables.
- */
-export function useMutation<TResult = any>(
-  document: DocumentNode | ReactiveFunction<DocumentNode>,
-  options: UseMutationOptionsNoVariables<TResult, undefined> | ReactiveFunction<UseMutationOptionsNoVariables<TResult, undefined>>
-): UseMutationReturn<TResult, undefined>
-
-/**
- * Use a mutation that requires variables.
+ * Use a mutation with variables.
  */
 export function useMutation<TResult = any, TVariables extends OperationVariables = OperationVariables>(
   document: DocumentNode | ReactiveFunction<DocumentNode>,
-  options: UseMutationOptionsWithVariables<TResult, TVariables> | ReactiveFunction<UseMutationOptionsWithVariables<TResult, TVariables>>
+  options?: UseMutationOptionsWithVariables<TResult, TVariables> | ReactiveFunction<UseMutationOptionsWithVariables<TResult, TVariables>>
 ): UseMutationReturn<TResult, TVariables>
 
 /**
- * Use a mutation that requires variables, but without a default.
+ * Use a mutation with variables, but without a default.
  */
 export function useMutation<TResult = any, TVariables extends OperationVariables = OperationVariables>(
   document: DocumentNode | ReactiveFunction<DocumentNode>,
   options?: UseMutationOptionsNoVariables<TResult, undefined> | ReactiveFunction<UseMutationOptionsNoVariables<TResult, undefined>>
-): UseMutationReturn<TResult, TVariables, MutateWithRequiredVariables<TVariables>>
+): UseMutationReturn<TResult, TVariables, MutateWithRequiredVariables<TResult, TVariables>>
 
 export function useMutation<
   TResult,

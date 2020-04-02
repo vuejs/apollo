@@ -11,8 +11,59 @@ import { assertExactType } from "./assertions";
 // =============================================================================
 // With no types:
 // - TResult should be `any`
-// - TVariables should be `undefined`
 // =============================================================================
+{
+  const useMutationNoTypes = useMutation(ExampleDocument);
+
+  useMutationNoTypes.onDone(param => {
+    assertExactType<typeof param, FetchResult<any> | undefined>(param);
+    param?.data.dataType.is.anything;
+  });
+
+  useMutationNoTypes.mutate();
+}
+{
+  const useMutationNoTypes = useMutation(ExampleDocument);
+
+  useMutationNoTypes.onDone(param => {
+    assertExactType<typeof param, FetchResult<any> | undefined>(param);
+    param?.data.dataType.is.anything;
+  });
+
+  useMutationNoTypes.mutate({
+    input: {
+      foo: 'bar',
+    },
+  });
+}
+{
+  const useMutationNoTypes = useMutation(ExampleDocument);
+
+  useMutationNoTypes.onDone(param => {
+    assertExactType<typeof param, FetchResult<any> | undefined>(param);
+    param?.data.dataType.is.anything;
+  });
+
+  useMutationNoTypes.mutate({
+    input: {
+      foo: 'bar',
+    },
+  }, {
+    fetchPolicy: 'cache-first',
+  });
+}
+{
+  const useMutationNoTypes = useMutation(ExampleDocument);
+
+  useMutationNoTypes.onDone(param => {
+    assertExactType<typeof param, FetchResult<any> | undefined>(param);
+    param?.data.dataType.is.anything;
+  });
+
+  useMutationNoTypes.mutate(null, {
+    fetchPolicy: 'cache-first',
+  });
+}
 {
   const useMutationNoTypes = useMutation(ExampleDocument);
 
@@ -119,7 +170,7 @@ import { assertExactType } from "./assertions";
     }
   );
 
-  assertExactType<typeof withVariablesInOptions.mutate, MutateWithOptionalVariables<ExampleUpdateMutationVariables>>(
+  assertExactType<typeof withVariablesInOptions.mutate, MutateWithOptionalVariables<ExampleUpdateMutation, ExampleUpdateMutationVariables>>(
     withVariablesInOptions.mutate
   )
 
@@ -142,7 +193,7 @@ import { assertExactType } from "./assertions";
     ExampleDocument
   );
 
-  assertExactType<typeof withNoOptions.mutate, MutateWithRequiredVariables<ExampleUpdateMutationVariables>>(
+  assertExactType<typeof withNoOptions.mutate, MutateWithRequiredVariables<ExampleUpdateMutation, ExampleUpdateMutationVariables>>(
     withNoOptions.mutate
   )
 
@@ -185,7 +236,7 @@ import { assertExactType } from "./assertions";
     }
   );
 
-  assertExactType<typeof withNoVariablesInOptions.mutate, MutateWithRequiredVariables<ExampleUpdateMutationVariables>>(
+  assertExactType<typeof withNoVariablesInOptions.mutate, MutateWithRequiredVariables<ExampleUpdateMutation, ExampleUpdateMutationVariables>>(
     withNoVariablesInOptions.mutate
   )
 
@@ -198,13 +249,6 @@ import { assertExactType } from "./assertions";
 }
 
 // ====== Expected failures, uncomment to test ======
-
-// // @ts-expect-error
-// // With everything typed:
-// // - TResult should be the mutation type
-// // - TVariables should be *required*
-// const expectedFailureNoRequiredVars
-//   = useMutation<ExampleUpdateMutation, ExampleUpdateMutationVariables>(ExampleDocument)
 
 // // @ts-expect-error
 // // With everything typed:
