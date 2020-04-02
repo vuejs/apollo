@@ -35,8 +35,13 @@ export interface UseMutationOptionsWithVariables<
   variables: TVariables
 }
 
-export interface UseMutationReturn<TResult, TVariables> {
-  mutate: (variables?: TVariables, overrideOptions?: Pick<UseMutationOptions<any, OperationVariables>, 'update' | 'optimisticResponse' | 'context' | 'updateQueries' | 'refetchQueries' | 'awaitRefetchQueries' | 'errorPolicy' | 'fetchPolicy' | 'clientId'>) => Promise<FetchResult<any, Record<string, any>, Record<string, any>>>
+type MutateOverrideOptions = Pick<UseMutationOptions<any, OperationVariables>, 'update' | 'optimisticResponse' | 'context' | 'updateQueries' | 'refetchQueries' | 'awaitRefetchQueries' | 'errorPolicy' | 'fetchPolicy' | 'clientId'>
+type MutateResult = Promise<FetchResult<any, Record<string, any>, Record<string, any>>>
+export type MutateWithOptionalVariables<TVariables> = (variables?: TVariables, overrideOptions?: MutateOverrideOptions) => MutateResult
+export type MutateWithRequiredVariables<TVariables> = (variables: TVariables, overrideOptions?: MutateOverrideOptions) => MutateResult
+
+export interface UseMutationReturn<TResult, TVariables, Mutate extends MutateWithOptionalVariables<TVariables> = MutateWithOptionalVariables<TVariables>> {
+  mutate: Mutate
   loading: Ref<boolean>
   error: Ref<Error>
   called: Ref<boolean>
@@ -70,6 +75,14 @@ export function useMutation<TResult = any, TVariables extends OperationVariables
   document: DocumentNode | ReactiveFunction<DocumentNode>,
   options: UseMutationOptionsWithVariables<TResult, TVariables> | ReactiveFunction<UseMutationOptionsWithVariables<TResult, TVariables>>
 ): UseMutationReturn<TResult, TVariables>
+
+/**
+ * Use a mutation that requires variables, but without a default.
+ */
+export function useMutation<TResult = any, TVariables extends OperationVariables = OperationVariables>(
+  document: DocumentNode | ReactiveFunction<DocumentNode>,
+  options?: UseMutationOptionsNoVariables<TResult, undefined> | ReactiveFunction<UseMutationOptionsNoVariables<TResult, undefined>>
+): UseMutationReturn<TResult, TVariables, MutateWithRequiredVariables<TVariables>>
 
 export function useMutation<
   TResult,
