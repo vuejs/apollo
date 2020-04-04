@@ -117,8 +117,8 @@ export function useMutation<
         ...currentOptions,
         ...overrideOptions,
         variables: {
-          ...variables || {},
           ...currentOptions.variables || {},
+          ...variables || {},
         },
       })
       loading.value = false
