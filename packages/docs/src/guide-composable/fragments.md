@@ -78,7 +78,7 @@ export const COMMENT_QUERY = gql`
 `
 ```
 
-You can see the full source code to the `CommentsPage` in GitHunt [here](https://github.com/apollographql/GitHunt-React/blob/master/src/routes/CommentsPage.js).
+~~You can see the full source code to the `CommentsPage` in GitHunt [here](https://github.com/apollographql/GitHunt-React/blob/master/src/routes/CommentsPage.js).~~
 
 ## Colocating fragments
 
