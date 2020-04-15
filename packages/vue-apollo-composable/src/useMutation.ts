@@ -67,7 +67,7 @@ export function useMutation<TResult = any, TVariables extends OperationVariables
 export function useMutation<TResult = any, TVariables extends OperationVariables = OperationVariables>(
   document: DocumentNode | ReactiveFunction<DocumentNode>,
   options?: UseMutationOptionsNoVariables<TResult, undefined> | ReactiveFunction<UseMutationOptionsNoVariables<TResult, undefined>>
-): UseMutationReturn<TResult, TVariables, MutateWithRequiredVariables<TResult, TVariables>>
+): UseMutationReturn<TResult, TVariables, MutateWithOptionalVariables<TResult, TVariables>>
 
 export function useMutation<
   TResult,
