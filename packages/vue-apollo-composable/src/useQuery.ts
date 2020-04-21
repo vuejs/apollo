@@ -66,20 +66,27 @@ export function useQuery<TResult = any>(
 ): UseQueryReturn<TResult, undefined>
 
 /**
+ * Use a query that has optional variables but not options
+ */
+export function useQuery<TResult = any, TVariables extends OperationVariables = OperationVariables>(
+  document: DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>
+): UseQueryReturn<TResult, TVariables>
+
+/**
+ * Use a query that has required variables but not options
+ */
+export function useQuery<TResult = any, TVariables extends OperationVariables = OperationVariables>(
+  document: DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>,
+  variables: TVariables
+): UseQueryReturn<TResult, TVariables>
+
+/**
  * Use a query that requires options but not variables.
  */
 export function useQuery<TResult = any, TVariables extends undefined = undefined>(
   document: DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>,
   variables: TVariables,
   options: UseQueryOptions<TResult, TVariables> | Ref<UseQueryOptions<TResult, TVariables>> | ReactiveFunction<UseQueryOptions<TResult, TVariables>>
-): UseQueryReturn<TResult, TVariables>
-
-/**
- * Use a query that requires variables.
- */
-export function useQuery<TResult = any, TVariables extends OperationVariables = OperationVariables>(
-  document: DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>,
-  variables: TVariables | Ref<TVariables> | ReactiveFunction<TVariables>
 ): UseQueryReturn<TResult, TVariables>
 
 /**

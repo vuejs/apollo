@@ -72,6 +72,23 @@ import { assertExactType } from "./assertions";
 }
 
 // =============================================================================
+// With all types and without variables because the query has optional variables
+// - TResult should be the query type
+// - TVariables should be the variables type
+// =============================================================================
+{
+  const useQueryAllTyped = useQuery<ExampleQuery, ExampleQueryVariables>(ExampleDocument);
+
+  const useQueryAllTypedResult = useQueryAllTyped.result.value;
+  assertExactType<typeof useQueryAllTypedResult, ExampleQuery>(useQueryAllTypedResult);
+
+  const useQueryAllTypedVariables = useQueryAllTyped.variables.value;
+  assertExactType<typeof useQueryAllTypedVariables, ExampleQueryVariables>(
+    useQueryAllTypedVariables
+  );
+}
+
+// =============================================================================
 // With query types, and no variables
 // - TResult should be the query type
 // - TVariables should be `undefined`
