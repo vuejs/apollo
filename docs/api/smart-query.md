@@ -95,7 +95,7 @@ Manual mode example:
 
 ## Properties
 
-### Skip
+### skip
 
 You can pause or unpause with `skip`:
 
