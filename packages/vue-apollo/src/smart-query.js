@@ -128,7 +128,7 @@ export default class SmartQuery extends SmartApollo {
   }
 
   maySetLoading (force = false) {
-    const currentResult = this.observer.currentResult()
+    const currentResult = this.observer.getCurrentResult ? this.observer.getCurrentResult() : this.observer.currentResult()
     if (force || currentResult.loading) {
       if (!this.loading) {
         this.applyLoadingModifier(1)
@@ -199,7 +199,7 @@ export default class SmartQuery extends SmartApollo {
     super.catchError(error)
     this.firstRunReject()
     this.loadingDone(error)
-    this.nextResult(this.observer.currentResult())
+    this.nextResult(this.observer.getCurrentResult ? this.observer.getCurrentResult() : this.observer.currentResult())
     // The observable closes the sub if an error occurs
     this.resubscribeToQuery()
   }
