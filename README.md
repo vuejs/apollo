@@ -8,7 +8,7 @@
 <p align="center">
   <img src="https://cdn-images-1.medium.com/max/800/1*H9AANoofLqjS10Xd5TwRYw.png">
   <br>
-  <a href="https://www.patreon.com/akryum" target="_blank">
+  <a href="https://github.com/sponsors/Akryum/" target="_blank">
     <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Become a Patreon">
   </a>
   <br>
