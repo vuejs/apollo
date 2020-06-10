@@ -67,6 +67,8 @@ function track (loading: Ref<boolean>, type: keyof LoadingTracking) {
       tracking[type].value += mod
       appTracking[type].value += mod
     }
+  }, {
+    immediate: true
   })
 
   onBeforeUnmount(() => {

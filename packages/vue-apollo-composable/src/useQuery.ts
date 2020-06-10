@@ -319,6 +319,8 @@ export function useQuery<
   watch(documentRef, value => {
     currentDocument = value
     restart()
+  }, {
+    immediate: true
   })
 
   // Applying variables
@@ -333,6 +335,7 @@ export function useQuery<
     currentVariablesSerialized = serialized
   }, {
     deep: true,
+    immediate: true
   })
 
   // Applying options
@@ -348,6 +351,7 @@ export function useQuery<
     restart()
   }, {
     deep: true,
+    immediate: true
   })
 
   // Fefetch
@@ -400,6 +404,8 @@ export function useQuery<
         item.unsubscribeFns.forEach(fn => fn())
         item.unsubscribeFns = []
       })
+    }, {
+      immediate: true
     })
   }
 
@@ -430,6 +436,8 @@ export function useQuery<
     } else {
       stop()
     }
+  }, {
+    immediate: true
   })
 
   // Teardown
