@@ -34,7 +34,7 @@ export function getAppTracking () {
 export function getCurrentTracking () {
   const { appTracking } = getAppTracking()
   const currentInstance = getCurrentInstance()
-  
+
   let tracking: LoadingTracking
 
   if (!appTracking.components.has(currentInstance)) {
