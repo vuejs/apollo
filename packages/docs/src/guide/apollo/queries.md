@@ -89,7 +89,7 @@ apollo: {
 }
 ```
 
-Notice how `world` is different from `hello`; vue-apollo won't guess which data you want to put in the component from the query result. By default, it will just try the name you are using for the data in the component (which is the key in the `apollo` object), in this case `world`. If the names don't match, you can use `update` option to tell vue-apollo what to use as data from the result:
+Notice how `world` is different from `hello`; `vue-apollo` won't guess which data you want to put in the component from the query result. By default, it will just try the name you are using for the data in the component (which is the key in the `apollo` object), in this case `world`. If the names don't match, you can use `update` option to tell `vue-apollo` what to use as data from the result:
 
 ```js
 apollo: {
@@ -112,7 +112,7 @@ apollo: {
 }
 ```
 
-In this example, we rename the `hello` field to `world` so that vue-apollo can automatically infer what should be retrieved from the result.
+In this example, we rename the `hello` field to `world` so that `vue-apollo` can automatically infer what should be retrieved from the result.
 
 ## Query with parameters
 
@@ -445,4 +445,4 @@ Internally, this method is called for each query entry in the component `apollo`
 
 ## Advanced options
 
-There are even more options specific to vue-apollo, see the [API Reference](../../api/smart-query.md).
+There are even more options specific to `vue-apollo`, see the [API Reference](../../api/smart-query.md).

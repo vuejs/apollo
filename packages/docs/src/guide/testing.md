@@ -1,6 +1,6 @@
 # Testing
 
-To create unit tests for vue-apollo queries and mutations you can choose either a simple testing or tests with mocked GraqhQL schema. All examples here use [Jest](https://jestjs.io/) and [vue-test-utils](https://github.com/vuejs/vue-test-utils)
+To create unit tests for `vue-apollo` queries and mutations you can choose either a simple testing or tests with mocked GraqhQL schema. All examples here use [Jest](https://jestjs.io/) and [vue-test-utils](https://github.com/vuejs/vue-test-utils)
 
 ## Simple tests
 
