@@ -143,7 +143,9 @@ export default class SmartQuery extends SmartApollo {
 
     const { data, loading, error, errors } = result
 
-    if (error || errors) {
+    const anyErrors = errors && errors.length
+
+    if (error || anyErrors) {
       this.firstRunReject()
     }
 
@@ -154,7 +156,7 @@ export default class SmartQuery extends SmartApollo {
     // If `errorPolicy` is set to `all`, an error won't be thrown
     // Instead result will have an `errors` array of GraphQL Errors
     // so we need to reconstruct an error object similar to the normal one
-    if (errors && errors.length) {
+    if (anyErrors) {
       const e = new Error(`GraphQL error: ${errors.map(e => e.message).join(' | ')}`)
       Object.assign(e, {
         graphQLErrors: errors,
@@ -165,7 +167,7 @@ export default class SmartQuery extends SmartApollo {
       super.catchError(e)
     }
 
-    if (this.observer.options.errorPolicy === 'none' && (error || errors)) {
+    if (this.observer.options.errorPolicy === 'none' && (error || anyErrors)) {
       // Don't apply result
       return
     }
