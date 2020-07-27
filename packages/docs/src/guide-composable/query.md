@@ -562,6 +562,10 @@ function selectUser (id) {
 }
 ```
 
+::: tip
+This will re-fetch the query each time a property from the `variables` object changes.
+:::
+
 Alternatively, you can pass a `Ref` directly:
 
 ```js
