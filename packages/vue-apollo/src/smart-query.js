@@ -210,7 +210,7 @@ export default class SmartQuery extends SmartApollo {
 
   catchError (error) {
     super.catchError(error)
-    this.firstRunReject()
+    this.firstRunReject(error)
     this.loadingDone(error)
     this.nextResult(this.observer.getCurrentResult ? this.observer.getCurrentResult() : this.observer.currentResult())
     // The observable closes the sub if an error occurs
