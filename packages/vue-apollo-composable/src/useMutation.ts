@@ -17,31 +17,12 @@ export interface UseMutationOptions<
   clientId?: string
 }
 
-/**
- * `useMutation` options for mutations that don't use variables.
- */
-export type UseMutationOptionsNoVariables<
-  TResult = any,
-  TVariables = OperationVariables
-> = Omit<UseMutationOptions<TResult, TVariables>, 'variables'>
+export type MutateOverrideOptions = Pick<UseMutationOptions<any, OperationVariables>, 'update' | 'optimisticResponse' | 'context' | 'updateQueries' | 'refetchQueries' | 'awaitRefetchQueries' | 'errorPolicy' | 'fetchPolicy' | 'clientId'>
+export type MutateResult<TResult> = Promise<FetchResult<TResult, Record<string, any>, Record<string, any>>>
+export type MutateFunction<TResult, TVariables> = (variables?: TVariables, overrideOptions?: MutateOverrideOptions) => MutateResult<TResult>
 
-/**
- * `useMutation` options for mutations require variables.
- */
-export interface UseMutationOptionsWithVariables<
-  TResult = any,
-  TVariables = OperationVariables
-> extends UseMutationOptions<TResult, TVariables> {
-  variables: TVariables
-}
-
-type MutateOverrideOptions = Pick<UseMutationOptions<any, OperationVariables>, 'update' | 'optimisticResponse' | 'context' | 'updateQueries' | 'refetchQueries' | 'awaitRefetchQueries' | 'errorPolicy' | 'fetchPolicy' | 'clientId'>
-type MutateResult<TResult> = Promise<FetchResult<TResult, Record<string, any>, Record<string, any>>>
-export type MutateWithOptionalVariables<TResult, TVariables> = (variables?: TVariables, overrideOptions?: MutateOverrideOptions) => MutateResult<TResult>
-export type MutateWithRequiredVariables<TResult, TVariables> = (variables: TVariables, overrideOptions?: MutateOverrideOptions) => MutateResult<TResult>
-
-export interface UseMutationReturn<TResult, TVariables, Mutate extends MutateWithOptionalVariables<TResult, TVariables> = MutateWithOptionalVariables<TResult, TVariables>> {
-  mutate: Mutate
+export interface UseMutationReturn<TResult, TVariables> {
+  mutate: MutateFunction<TResult, TVariables>
   loading: Ref<boolean>
   error: Ref<Error>
   called: Ref<boolean>
@@ -58,7 +39,7 @@ export interface UseMutationReturn<TResult, TVariables, Mutate extends MutateWit
  */
 export function useMutation<TResult = any, TVariables extends OperationVariables = OperationVariables>(
   document: DocumentNode | ReactiveFunction<DocumentNode>,
-  options?: UseMutationOptionsWithVariables<TResult, TVariables> | ReactiveFunction<UseMutationOptionsWithVariables<TResult, TVariables>>
+  options?: UseMutationOptions<TResult, TVariables> | ReactiveFunction<UseMutationOptions<TResult, TVariables>>
 ): UseMutationReturn<TResult, TVariables>
 
 /**
@@ -66,8 +47,8 @@ export function useMutation<TResult = any, TVariables extends OperationVariables
  */
 export function useMutation<TResult = any, TVariables extends OperationVariables = OperationVariables>(
   document: DocumentNode | ReactiveFunction<DocumentNode>,
-  options?: UseMutationOptionsNoVariables<TResult, undefined> | ReactiveFunction<UseMutationOptionsNoVariables<TResult, undefined>>
-): UseMutationReturn<TResult, TVariables, MutateWithRequiredVariables<TResult, TVariables>>
+  options?: UseMutationOptions<TResult, undefined> | ReactiveFunction<UseMutationOptions<TResult, undefined>>
+): UseMutationReturn<TResult, TVariables>
 
 export function useMutation<
   TResult,

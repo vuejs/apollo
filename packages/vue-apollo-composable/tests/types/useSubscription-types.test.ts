@@ -111,6 +111,33 @@ import { assertExactType } from "./assertions";
 }
 
 // =============================================================================
+// With all types and without variables because the query has optional variables
+// - TResult should be the subscription type
+// - TVariables should be the variables type
+// =============================================================================
+{
+  const useSubscription_AllTyped = useSubscription<
+    ExampleUpdatedSubscription,
+    ExampleUpdatedSubscriptionVariables
+  >(ExampleDocument);
+
+  // Result type should match the passed in subscription type
+  const useSubscription_AllTypedResult = useSubscription_AllTyped.result.value;
+  assertExactType<typeof useSubscription_AllTypedResult, ExampleUpdatedSubscription>(
+    useSubscription_AllTypedResult
+  );
+
+  // Variables type should match the passed in variables type
+  const useSubscription_AllTypedVariables = useSubscription_AllTyped.variables.value;
+  assertExactType<typeof useSubscription_AllTypedVariables, ExampleUpdatedSubscriptionVariables>(
+    useSubscription_AllTypedVariables
+  );
+
+  // Result data type should be the passed in result
+  useSubscription_AllTyped.onResult(result => result?.data?.exampleUpdated.name);
+}
+
+// =============================================================================
 // With subscription types, and no variables
 // - TResult should be the subscription type
 // - TVariables should be `undefined`

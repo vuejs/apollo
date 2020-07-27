@@ -1,5 +1,5 @@
 import { FetchResult } from "apollo-link";
-import { useMutation, MutateWithOptionalVariables, MutateWithRequiredVariables } from "../../src";
+import { useMutation, MutateFunction } from "../../src";
 import {
   ExampleDocument,
   ExampleUpdateMutation,
@@ -138,6 +138,37 @@ import { assertExactType } from "./assertions";
 }
 
 // =============================================================================
+// With all types and without variables because the query has optional variables
+// - TResult should be the mutation type
+// - TVariables should be the variables type
+// =============================================================================
+{
+  const useMutationAllTyped = useMutation<ExampleUpdateMutation, ExampleUpdateMutationVariables>(ExampleDocument);
+
+  useMutationAllTyped.mutate({ id: "2", example: { name: "remix" } }, {});
+
+  useMutationAllTyped.onDone(param => {
+    assertExactType<typeof param, FetchResult<ExampleUpdateMutation> | undefined>(param);
+    assertExactType<typeof param.data.exampleUpdate, ExampleUpdatePayload>(
+      param.data.exampleUpdate
+    );
+  });
+}
+
+{
+  const useMutationAllTyped = useMutation<ExampleUpdateMutation, ExampleUpdateMutationVariables>(ExampleDocument);
+
+  useMutationAllTyped.mutate({ id: "2", example: { name: "remix" } }, {});
+
+  useMutationAllTyped.onDone(param => {
+    assertExactType<typeof param, FetchResult<ExampleUpdateMutation> | undefined>(param);
+    assertExactType<typeof param.data.exampleUpdate, ExampleUpdatePayload>(
+      param.data.exampleUpdate
+    );
+  });
+}
+
+// =============================================================================
 // With all things typed and with options and variables
 // - TResult should be the mutation type
 // - TVariables should be the variables type
@@ -170,7 +201,7 @@ import { assertExactType } from "./assertions";
     }
   );
 
-  assertExactType<typeof withVariablesInOptions.mutate, MutateWithOptionalVariables<ExampleUpdateMutation, ExampleUpdateMutationVariables>>(
+  assertExactType<typeof withVariablesInOptions.mutate, MutateFunction<ExampleUpdateMutation, ExampleUpdateMutationVariables>>(
     withVariablesInOptions.mutate
   )
 
@@ -193,7 +224,7 @@ import { assertExactType } from "./assertions";
     ExampleDocument
   );
 
-  assertExactType<typeof withNoOptions.mutate, MutateWithRequiredVariables<ExampleUpdateMutation, ExampleUpdateMutationVariables>>(
+  assertExactType<typeof withNoOptions.mutate, MutateFunction<ExampleUpdateMutation, ExampleUpdateMutationVariables>>(
     withNoOptions.mutate
   )
 
@@ -236,7 +267,7 @@ import { assertExactType } from "./assertions";
     }
   );
 
-  assertExactType<typeof withNoVariablesInOptions.mutate, MutateWithRequiredVariables<ExampleUpdateMutation, ExampleUpdateMutationVariables>>(
+  assertExactType<typeof withNoVariablesInOptions.mutate, MutateFunction<ExampleUpdateMutation, ExampleUpdateMutationVariables>>(
     withNoVariablesInOptions.mutate
   )
 

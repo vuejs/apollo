@@ -67,6 +67,13 @@ export function useSubscription<TResult = any, TVariables extends OperationVaria
 ): UseSubscriptionReturn<TResult, TVariables>
 
 /**
+ * Use a subscription that has optional variables.
+ */
+export function useSubscription<TResult = any, TVariables extends OperationVariables = OperationVariables>(
+  document: DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>
+): UseSubscriptionReturn<TResult, TVariables>
+
+/**
  * Use a subscription that requires variables and options.
  */
 export function useSubscription<TResult = any, TVariables extends OperationVariables = OperationVariables>(
