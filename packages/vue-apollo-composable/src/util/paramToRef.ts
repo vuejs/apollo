@@ -1,4 +1,4 @@
-import { Ref, isRef, computed, ref, UnwrapRef } from '@vue/composition-api'
+import { Ref, isRef, computed, ref } from '@vue/composition-api'
 import { ReactiveFunction } from './ReactiveFunction'
 
 export function paramToRef<T> (param: T | Ref<T> | ReactiveFunction<T>): Ref<T> {
