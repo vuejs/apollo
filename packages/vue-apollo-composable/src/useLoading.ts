@@ -1,5 +1,5 @@
 import { getCurrentTracking, getAppTracking } from './util/loadingTracking'
-import { computed } from '@vue/composition-api'
+import { computed } from 'vue-demi'
 
 export function useQueryLoading () {
   const { tracking } = getCurrentTracking()

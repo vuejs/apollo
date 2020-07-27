@@ -1,4 +1,4 @@
-import { ref, Ref, isRef, computed, watch, onServerPrefetch, getCurrentInstance, onBeforeUnmount } from '@vue/composition-api'
+import { ref, Ref, isRef, computed, watch, onServerPrefetch, getCurrentInstance, onBeforeUnmount } from 'vue-demi'
 import Vue from 'vue'
 import { DocumentNode } from 'graphql'
 import {

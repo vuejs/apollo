@@ -1,6 +1,6 @@
 import { DocumentNode } from 'graphql'
 import { MutationOptions, OperationVariables } from 'apollo-client'
-import { ref, onBeforeUnmount, isRef, Ref } from '@vue/composition-api'
+import { ref, onBeforeUnmount, isRef, Ref } from 'vue-demi'
 import { FetchResult } from 'apollo-link'
 import { useApolloClient } from './useApolloClient'
 import { ReactiveFunction } from './util/ReactiveFunction'

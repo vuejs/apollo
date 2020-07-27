@@ -1,4 +1,4 @@
-import { Ref, computed } from '@vue/composition-api'
+import { Ref, computed } from 'vue-demi'
 import { ExtractSingleKey } from './util/ExtractSingleKey'
 
 export type UseResultReturn<T> = Readonly<Ref<Readonly<T>>>

@@ -1,6 +1,6 @@
 import { DocumentNode } from 'graphql'
 import Vue from 'vue'
-import { Ref, ref, watch, isRef, computed, getCurrentInstance, onBeforeUnmount } from '@vue/composition-api'
+import { Ref, ref, watch, isRef, computed, getCurrentInstance, onBeforeUnmount } from 'vue-demi'
 import { OperationVariables, SubscriptionOptions } from 'apollo-client'
 import { Observable, Subscription } from 'apollo-client/util/Observable'
 import { FetchResult } from 'apollo-link'

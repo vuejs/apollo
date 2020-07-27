@@ -1,4 +1,4 @@
-import { Ref, watch, onUnmounted, ref, getCurrentInstance, onBeforeUnmount } from '@vue/composition-api'
+import { Ref, watch, onUnmounted, ref, getCurrentInstance, onBeforeUnmount } from 'vue-demi'
 
 export interface LoadingTracking {
   queries: Ref<number>
@@ -34,7 +34,7 @@ export function getAppTracking () {
 export function getCurrentTracking () {
   const { appTracking } = getAppTracking()
   const currentInstance = getCurrentInstance()
-  
+
   let tracking: LoadingTracking
 
   if (!appTracking.components.has(currentInstance)) {

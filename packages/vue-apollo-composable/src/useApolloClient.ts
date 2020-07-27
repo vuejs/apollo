@@ -1,4 +1,4 @@
-import { inject } from '@vue/composition-api'
+import { inject } from 'vue-demi'
 import ApolloClient from 'apollo-client'
 
 export const DefaultApolloClient = Symbol('default-apollo-client')

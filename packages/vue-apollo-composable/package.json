@@ -34,7 +34,8 @@
     "test:types": "tsc -p tests/types/"
   },
   "dependencies": {
-    "throttle-debounce": "^2.1.0"
+    "throttle-debounce": "^2.1.0",
+    "vue-demi": "latest"
   },
   "peerDependencies": {
     "@vue/composition-api": "^0.6.1",
