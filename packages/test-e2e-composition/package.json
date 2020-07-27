@@ -17,7 +17,7 @@
   "dependencies": {
     "@vue/apollo-composable": "^4.0.0-alpha.8",
     "@vue/apollo-util": "^4.0.0-alpha.6",
-    "@vue/composition-api": "^0.3.2",
+    "@vue/composition-api": "^0.6.1",
     "core-js": "^3.1.2",
     "graphql-type-json": "^0.3.0",
     "marked": "^0.7.0",

@@ -7,6 +7,6 @@ export function paramToRef<T> (param: T | Ref<T> | ReactiveFunction<T>): Ref<T> 
   } else if (typeof param === 'function') {
     return computed(param as ReactiveFunction<T>)
   } else {
-    return ref(param)
+    return ref(param) as Ref<T>
   }
 }

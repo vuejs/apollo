@@ -207,6 +207,7 @@ export function useSubscription <
     restart()
   }, {
     deep: true,
+    immediate: true
   })
 
   // Applying document
@@ -214,6 +215,8 @@ export function useSubscription <
   watch(documentRef, value => {
     currentDocument = value
     restart()
+  }, {
+    immediate: true
   })
 
   // Applying variables
@@ -228,6 +231,7 @@ export function useSubscription <
     currentVariablesSerialized = serialized
   }, {
     deep: true,
+    immediate: true
   })
 
   // Internal enabled returned to user
@@ -250,6 +254,8 @@ export function useSubscription <
     } else {
       stop()
     }
+  }, {
+    immediate: true
   })
 
   // Teardown
