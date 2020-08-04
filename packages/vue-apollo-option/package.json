@@ -14,7 +14,7 @@
     "prepublishOnly": "yarn test && yarn build",
     "dev": "nodemon --exec 'yarn build:es && yarn build:umd' --watch src --watch lib",
     "test": "yarn build && yarn test:eslint && yarn test:types && yarn run test:unit",
-    "test:eslint": "eslint --ext .js {src,ssr,lib,build}/**/*.js",
+    "test:eslint": "eslint --ext .js {src,lib,build}/**/*.js",
     "test:types": "tsc -p types/test",
     "test:unit": "yarn run jest"
   },
@@ -39,9 +39,7 @@
     "access": "public"
   },
   "peerDependencies": {
-    "apollo-client": "^2.0.0",
-    "apollo-link": "^1.0.0",
-    "graphql-tag": "^2.10.1"
+    "@apollo/client": "^3.1.1"
   },
   "dependencies": {
     "throttle-debounce": "^2.1.0"
@@ -53,10 +51,7 @@
     "@babel/preset-env": "^7.1.0",
     "@types/graphql": "^14.0.1",
     "@vue/test-utils": "^1.0.0-beta.25",
-    "apollo-cache-inmemory": "^1.2.9",
-    "apollo-client": "^2.4.1",
-    "apollo-link": "^1.0.3",
-    "apollo-link-http": "^1.2.0",
+    "@apollo/client": "^3.1.1",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "cross-env": "^6.0.0",
@@ -67,7 +62,6 @@
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
     "graphql": "^14.0.2",
-    "graphql-tag": "^2.5.0",
     "jest": "^24.8.0",
     "nodemon": "^1.18.4",
     "rimraf": "^3.0.0",

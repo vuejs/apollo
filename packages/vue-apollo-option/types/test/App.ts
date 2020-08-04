@@ -1,8 +1,8 @@
 // this example src is https://github.com/Akryum/vue-apollo-example
 import gql from 'graphql-tag'
 import Vue from 'vue'
-import { OperationVariables, ApolloQueryResult, ApolloError } from 'apollo-client'
-import { VueApolloQueryDefinition, VueApolloSubscribeToMoreOptions } from '../options'
+import { OperationVariables, ApolloQueryResult } from '@apollo/client'
+import { VueApolloQueryDefinition } from '../options'
 import { DocumentNode } from 'graphql'
 
 const pageSize = 10
@@ -60,7 +60,7 @@ export const hey = Vue.extend({
       update: (data: FooResult) => data.foo.bar,
       result (result: ApolloQueryResult<FooResult>, key) {
         this.meow
-        console.log(result.data.foo.bar.toUpperCase())
+        console.log(result.data?.foo.bar.toUpperCase())
         console.log(this.hello.toUpperCase())
         console.log(key)
       },
@@ -159,7 +159,7 @@ export const hey = Vue.extend({
         },
         result: (result) => {
           console.log(this.hello.toUpperCase())
-          console.log(result.data.foo.bar.toUpperCase())
+          console.log(result.data?.foo.bar.toUpperCase())
         },
         subscribeToMore: [
           {
@@ -394,7 +394,7 @@ export default Vue.extend({
       },
     })
     observer.subscribe({
-      next(data) {
+      next(data: any) {
         console.log('this.$apollo.subscribe', data)
       },
     })

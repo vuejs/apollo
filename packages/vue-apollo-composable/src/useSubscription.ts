@@ -1,9 +1,7 @@
 import { DocumentNode } from 'graphql'
 import Vue from 'vue'
 import { Ref, ref, watch, isRef, computed, getCurrentInstance, onBeforeUnmount } from 'vue-demi'
-import { OperationVariables, SubscriptionOptions } from 'apollo-client'
-import { Observable, Subscription } from 'apollo-client/util/Observable'
-import { FetchResult } from 'apollo-link'
+import { OperationVariables, SubscriptionOptions, Observable, ObservableSubscription, FetchResult } from '@apollo/client'
 import { throttle, debounce } from 'throttle-debounce'
 import { ReactiveFunction } from './util/ReactiveFunction'
 import { paramToRef } from './util/paramToRef'
@@ -112,7 +110,7 @@ export function useSubscription <
   const { resolveClient } = useApolloClient()
 
   const subscription: Ref<Observable<FetchResult<TResult>>> = ref()
-  let observer: Subscription
+  let observer: ObservableSubscription
   let started = false
 
   function start () {

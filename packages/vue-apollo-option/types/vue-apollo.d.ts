@@ -8,17 +8,14 @@ import {
   MutationOptions,
   SubscriptionOptions,
   OperationVariables,
-} from 'apollo-client'
-import { FetchResult } from 'apollo-link'
-import { Observable } from 'apollo-client/util/Observable'
+  FetchResult,
+  Observable
+} from '@apollo/client'
 import { ApolloProvider, VueApolloComponent } from './apollo-provider'
 import {
   VueApolloQueryDefinition,
   VueApolloSubscriptionDefinition,
-  WatchLoading,
-  ErrorHandler,
 } from './options'
-import { GraphQLError } from 'graphql'
 
 export class VueApollo extends ApolloProvider implements PluginObject<{}>{
   [key: string]: any

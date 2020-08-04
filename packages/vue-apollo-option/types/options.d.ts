@@ -1,19 +1,12 @@
-import Vue from 'vue'
 import {
   WatchQueryOptions,
   OperationVariables,
-  MutationOptions,
   SubscriptionOptions,
   SubscribeToMoreOptions,
-  ObservableQuery,
-  NetworkStatus,
   ApolloQueryResult,
   ApolloError
-} from 'apollo-client'
-import { FetchResult } from 'apollo-link'
-import { ServerError, ServerParseError } from 'apollo-link-http-common'
-import { DocumentNode, GraphQLError } from 'graphql'
-import { DeepApplyThisType } from './utils'
+} from '@apollo/client'
+import { DocumentNode } from 'graphql'
 
 /* Component options */
 

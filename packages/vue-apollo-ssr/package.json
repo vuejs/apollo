@@ -32,9 +32,10 @@
     "prepublishOnly": "yarn build"
   },
   "dependencies": {
-    "serialize-javascript": "^2.1.0"
+    "serialize-javascript": "^4.0.0"
   },
   "devDependencies": {
+    "@types/serialize-javascript": "^4.0.0",
     "typescript": "^3.7.2"
   }
 }

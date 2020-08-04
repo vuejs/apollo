@@ -1,4 +1,4 @@
-import { OperationVariables } from "apollo-client";
+import { OperationVariables } from "@apollo/client";
 import { useQuery } from "../../src";
 import {
   ExampleDocument,
@@ -131,8 +131,8 @@ import { assertExactType } from "./assertions";
       enabled: true,
       errorPolicy: "all",
       fetchPolicy: "cache-and-network",
-      fetchResults: true,
-      metadata: "any",
+      // fetchResults: true,
+      // metadata: "any",
       notifyOnNetworkStatusChange: true,
       pollInterval: 500,
       prefetch: true,
