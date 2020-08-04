@@ -23,9 +23,6 @@ function resolveDefaultClient<T>(providedApolloClients: ClientDict<T>, providedA
 }
 
 function resolveClientWithId<T>(providedApolloClients: ClientDict<T>, clientId: ClientId): ApolloClient<T> {
-  if (!providedApolloClients) {
-    throw new Error(`No apolloClients injection found, tried to resolve '${clientId}' clientId`)
-  }
   const resolvedClient = providedApolloClients[clientId]
   if (!resolvedClient) {
     throw new Error(`Apollo Client with id ${clientId} not found`)
@@ -33,12 +30,19 @@ function resolveClientWithId<T>(providedApolloClients: ClientDict<T>, clientId: 
   return resolvedClient
 }
 
+function assertProvidedApolloClients<T>(providedApolloClients: ClientDict<T>, clientId: ClientId) {
+  if (!providedApolloClients) {
+    throw new Error(`No apolloClients injection found, tried to resolve '${clientId}' clientId`)
+  }
+}
+
 export function useApolloClient<TCacheShape = any>(clientId?: ClientId): UseApolloClientReturn<TCacheShape> {
-  const providedApolloClients: ClientDict<TCacheShape> = inject(ApolloClients, null)
-  const providedApolloClient: ApolloClient<TCacheShape> = inject(DefaultApolloClient, null)
+  const providedApolloClients = inject<ClientDict<TCacheShape>>(ApolloClients, null)
+  const providedApolloClient = inject<ApolloClient<TCacheShape>>(DefaultApolloClient, null)
 
   function resolveClient() {
     if (clientId) {
+      assertProvidedApolloClients(providedApolloClients, clientId)
       resolveClientWithId(providedApolloClients, clientId)
     }
     return resolveDefaultClient(providedApolloClients, providedApolloClient)
