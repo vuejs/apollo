@@ -4,13 +4,13 @@ import ApolloClient from 'apollo-client'
 export const DefaultApolloClient = Symbol('default-apollo-client')
 export const ApolloClients = Symbol('apollo-clients')
 
-export interface UseApolloClientReturn<TCacheShape> {
-  resolveClient: (clientId?: string) => ApolloClient<TCacheShape>
-  readonly client: ApolloClient<TCacheShape>
-}
-
 type ClientId = string
 type ClientDict<T> = Record<ClientId, ApolloClient<T>>
+
+export interface UseApolloClientReturn<TCacheShape> {
+  resolveClient: (clientId?: ClientId) => ApolloClient<TCacheShape>
+  readonly client: ApolloClient<TCacheShape>
+}
 
 function resolveDefaultClient<T>(providedApolloClients: ClientDict<T>, providedApolloClient: ApolloClient<T>): ApolloClient<T> {
   const resolvedClient = providedApolloClients ?
@@ -40,7 +40,7 @@ export function useApolloClient<TCacheShape = any>(clientId?: ClientId): UseApol
   const providedApolloClients = inject<ClientDict<TCacheShape>>(ApolloClients, null)
   const providedApolloClient = inject<ApolloClient<TCacheShape>>(DefaultApolloClient, null)
 
-  function resolveClient() {
+  function resolveClient(clientId?: ClientId) {
     if (clientId) {
       assertProvidedApolloClients(providedApolloClients, clientId)
       return resolveClientWithId(providedApolloClients, clientId)
@@ -51,7 +51,7 @@ export function useApolloClient<TCacheShape = any>(clientId?: ClientId): UseApol
   return {
     resolveClient,
     get client () {
-      return resolveClient()
+      return resolveClient(clientId)
     }
   }
 }
