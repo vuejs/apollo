@@ -1,6 +1,6 @@
 # Local state
 
-## Why use Apollo local state management?
+## Why use Apollo local state management
 
 When you perform GraphQL queries with Apollo, the results of API calls will be stored in **Apollo cache**. Now imagine you also need to store some kind of a local application state and make it available for different components. Usually, in Vue application we can achieve this with [Vuex](https://vuex.vuejs.org/). But having both Apollo and Vuex will mean you store your data in two different places so you have _two sources of truth_.
 
@@ -25,7 +25,7 @@ Now we're ready to add an `Item` type to our local GraphQL schema.
 ```js
 //main.js
 
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client';
 
 export const typeDefs = gql`
   type Item {
@@ -147,7 +147,7 @@ Querying local cache is very similar to [sending GraphQL queries to remote serve
 ```js
 // App.vue
 
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client';
 
 const todoItemsQuery = gql`
   {

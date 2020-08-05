@@ -1,4 +1,4 @@
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 function isDataFilled (data) {
   return Object.keys(data).length > 0

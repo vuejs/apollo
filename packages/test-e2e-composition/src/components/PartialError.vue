@@ -1,5 +1,5 @@
 <script>
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 import Vue from 'vue'
 import { useQuery, useResult } from '@vue/apollo-composable'
 import { reactive } from '@vue/composition-api'

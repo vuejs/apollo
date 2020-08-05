@@ -1,7 +1,7 @@
 import { ref, Ref, isRef, computed, watch, onServerPrefetch, getCurrentInstance, onBeforeUnmount } from 'vue-demi'
 import Vue from 'vue'
-import { DocumentNode } from 'graphql'
 import {
+  DocumentNode,
   OperationVariables,
   WatchQueryOptions,
   ObservableQuery,

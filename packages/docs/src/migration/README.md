@@ -15,7 +15,7 @@ npm install --save vue-apollo apollo-client
 After:
 
 ```
-npm install --save vue-apollo@next graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
+npm install --save vue-apollo@next graphql @apollo/client
 ```
 
 ### Imports
@@ -32,9 +32,7 @@ After:
 
 ```js
 import Vue from 'vue'
-import { ApolloClient } from 'apollo-client'
-import { HttpLink } from 'apollo-link-http'
-import { InMemoryCache } from 'apollo-cache-inmemory'
+import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
 import VueApollo from '@vue/apollo-option'
 ```
 
@@ -174,7 +172,7 @@ npm install --save subscriptions-transport-ws
 After:
 
 ```
-npm install --save apollo-link-ws apollo-utilities
+npm install --save @apollo/client
 ```
 
 ### Imports
@@ -188,9 +186,9 @@ import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-trans
 After:
 
 ```js
-import { split } from 'apollo-link'
-import { WebSocketLink } from 'apollo-link-ws'
-import { getMainDefinition } from 'apollo-utilities'
+import { split } from '@apollo/client'
+import { WebSocketLink } from '@apollo/client/link/ws'
+import { getMainDefinition } from '@apollo/client/utilities'
 ```
 
 Learn more at the [official apollo documentation](https://www.apollographql.com/docs/react/2.0-migration.html).

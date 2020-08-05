@@ -31,7 +31,7 @@ Example:
 </template>
 
 <script>
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 const pageSize = 10
 

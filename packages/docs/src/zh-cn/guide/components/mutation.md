@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import gql from 'gql-tag'
+import { gql } from '@apollo/client'
 
 const fragments = {
   message: gql`
@@ -143,7 +143,7 @@ export default {
 </template>
 
 <script>
-import gql from 'gql-tag'
+import { gql } from '@apollo/client'
 
 const fragments = {
   message: gql`

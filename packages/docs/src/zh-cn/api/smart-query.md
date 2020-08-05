@@ -10,7 +10,7 @@
 - `debounce`：变量更新防抖时间（毫秒）。
 - `pollInterval`：使用轮询自动更新的时间（表示每隔 `x` 毫秒重新获取一次）。
 - `update(data) {return ...}` 用来自定义设置到 vue 属性中的值，例如当字段名称不匹配时。
-- `result(ApolloQueryResult, key)` 是收到结果时调用的钩子（更多参见 [ApolloQueryResult](https://github.com/apollographql/apollo-client/blob/master/packages/apollo-client/src/core/types.ts) 的文档）。`key` 是在 `apollo` 选项中定义此查询时使用的键名。
+- `result(ApolloQueryResult, key)` 是收到结果时调用的钩子（更多参见 [ApolloQueryResult](https://github.com/apollographql/apollo-client/blob/master/src/core/types.ts) 的文档）。`key` 是在 `apollo` 选项中定义此查询时使用的键名。
 - `error(error, vm, key, type, options)` 是出现错误时调用的钩子。`error` 是一个具有 `graphQLErrors` 属性或 `networkError` 属性的 Apollo 错误对象。`vm` 是关联组件的实例。`key` 是智能查询的键名。`type` 是 `'query'` 或 `'subscription'` 中的一项。`options` 是最终的 `watchQuery` 选项对象。
 - `loadingKey` 将更新你传递的值所对应的组件数据属性。你应该在组件的 `data()` 钩子中将此属性初始化为 `0` 。当查询正在加载时，此属性将增加 1；当不再加载时，它将减去 1。这样，该属性可以表示当前正在加载中的查询的计数器。
 - `watchLoading(isLoading, countModifier)` 是一个在查询的加载状态发生变化时调用的钩子。`countModifier` 参数当查询正在加载时等于 `1`，不再加载时为 `-1`。
@@ -19,7 +19,7 @@
 - `skip` 是一个布尔值或一个返回布尔值的（响应式）函数。该函数的参数一个是当前组件，另一个是智能查询的键名，因此可以在 `$query` 或是 `ApolloProvider` 的 `defaultOptions` 中使用。
 - `subscribeToMore`：一个或一组 [subscribeToMore 选项](../guide/apollo/subscriptions.md#subscribetomore) 对象。
 - `prefetch` 是一个布尔值或函数来确定是否应该预取查询。详见 [服务端渲染](../guide/ssr.md)。
-- 你还可以使用任意 `watchQuery` 的选项（参见 [Apollo 文档](https://www.apollographql.com/docs/react/api/apollo-client.html#ApolloClient.watchQuery)）。
+- 你还可以使用任意 `watchQuery` 的选项（参见 [Apollo 文档](https://www.apollographql.com/docs/react/api/core/ApolloClient/#ApolloClient.watchQuery)）。
 
 示例：
 
@@ -224,7 +224,7 @@ this.$apollo.queries.users.setVariables({
 
 ### setOptions
 
-更新 Apollo [watchQuery](https://www.apollographql.com/docs/react/api/apollo-client.html#ApolloClient.watchQuery) 选项并重新获取：
+更新 Apollo [watchQuery](https://www.apollographql.com/docs/react/api/core/ApolloClient/#ApolloClient.watchQuery) 选项并重新获取：
 
 ```js
 this.$apollo.queries.users.setOptions({

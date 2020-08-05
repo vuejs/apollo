@@ -17,7 +17,7 @@ Smart Queries are wrappers around GraphQL queries with additional features like 
 Use `gql` to write your GraphQL queries:
 
 ```js
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 ```
 
 Put the [gql](https://github.com/apollographql/graphql-tag) query directly as the value:
@@ -140,11 +140,12 @@ apollo: {
 ```
 
 You can use the apollo `watchQuery` options in the object, like:
- - `fetchPolicy`
- - `pollInterval`
- - ...
 
-See the [apollo doc](https://www.apollographql.com/docs/react/api/apollo-client.html#ApolloClient.watchQuery) for more details.
+- `fetchPolicy`
+- `pollInterval`
+- ...
+
+See the [apollo doc](https://www.apollographql.com/docs/react/api/core/ApolloClient/#ApolloClient.watchQuery) for more details.
 
 For example, you could add the `fetchPolicy` apollo option like this:
 

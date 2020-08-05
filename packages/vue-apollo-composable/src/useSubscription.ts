@@ -1,7 +1,6 @@
-import { DocumentNode } from 'graphql'
 import Vue from 'vue'
 import { Ref, ref, watch, isRef, computed, getCurrentInstance, onBeforeUnmount } from 'vue-demi'
-import { OperationVariables, SubscriptionOptions, Observable, ObservableSubscription, FetchResult } from '@apollo/client'
+import { DocumentNode, OperationVariables, SubscriptionOptions, Observable, ObservableSubscription, FetchResult } from '@apollo/client'
 import { throttle, debounce } from 'throttle-debounce'
 import { ReactiveFunction } from './util/ReactiveFunction'
 import { paramToRef } from './util/paramToRef'

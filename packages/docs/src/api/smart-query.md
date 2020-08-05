@@ -10,7 +10,7 @@ Each query declared in the `apollo` definition (that is, which doesn't start wit
 - `debounce`: debounce variables updates (in ms).
 - `pollInterval`: auto update using polling (which means refetching every `x` ms). Default: `undefined`, `0` - stop polling.
 - `update(data) {return ...}` to customize the value that is set in the vue property, for example if the field names don't match.
-- `result(ApolloQueryResult, key)` is a hook called when a result is received (see documentation for [ApolloQueryResult](https://github.com/apollographql/apollo-client/blob/master/packages/apollo-client/src/core/types.ts)). `key` is the query key in the `apollo` option.
+- `result(ApolloQueryResult, key)` is a hook called when a result is received (see documentation for [ApolloQueryResult](https://github.com/apollographql/apollo-client/blob/master/src/core/types.ts)). `key` is the query key in the `apollo` option.
 - `error(error, vm, key, type, options)` is a hook called when there are errors. `error` is an Apollo error object with either a `graphQLErrors` property or a `networkError` property. `vm` is the related component instance. `key` is the smart query key. `type` is either `'query'` or `'subscription'`. `options` is the final `watchQuery` options object.
 - `loadingKey` will update the component data property you pass as the value. You should initialize this property to `0` in the component `data()` hook. When the query is loading, this property will be incremented by 1; when it is no longer loading, it will be decremented by 1. That way, the property can represent a counter of currently loading queries.
 - `watchLoading(isLoading, countModifier)` is a hook called when the loading state of the query changes. The `countModifier` parameter is either equal to `1` when the query is loading, or `-1` when the query is no longer loading.
@@ -19,7 +19,7 @@ Each query declared in the `apollo` definition (that is, which doesn't start wit
 - `skip` is a boolean or a (reactive) function that returns a boolean. The function gets the current component and smart query key as arguments, so it can be used in `$query` and in `ApolloProvider`'s `defaultOptions`.
 - `subscribeToMore`: an object or an array of object which are [subscribeToMore options](../guide-option/subscriptions.md#subscribetomore).
 - `prefetch` is either a boolean or a function to determine if the query should be prefetched. See [Server-Side Rendering](../guide-advanced/ssr.md).
-- You can also use any other `watchQuery` options (see [Apollo docs](https://www.apollographql.com/docs/react/api/apollo-client.html#ApolloClient.watchQuery)).
+- You can also use any other `watchQuery` options (see [Apollo docs](https://www.apollographql.com/docs/react/api/core/ApolloClient/#ApolloClient.watchQuery)).
 
 Example:
 
@@ -229,7 +229,7 @@ this.$apollo.queries.users.setVariables({
 
 ### setOptions
 
-Update the Apollo [watchQuery](https://www.apollographql.com/docs/react/api/apollo-client.html#ApolloClient.watchQuery) options and refetch:
+Update the Apollo [watchQuery](https://www.apollographql.com/docs/react/api/core/ApolloClient/#ApolloClient.watchQuery) options and refetch:
 
 ```js
 this.$apollo.queries.users.setOptions({

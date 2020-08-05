@@ -1,5 +1,5 @@
 <script>
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 import { useMutation } from '@vue/apollo-composable'
 
 export default {

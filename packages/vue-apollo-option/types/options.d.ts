@@ -1,4 +1,5 @@
 import {
+  DocumentNode,
   WatchQueryOptions,
   OperationVariables,
   SubscriptionOptions,
@@ -6,7 +7,6 @@ import {
   ApolloQueryResult,
   ApolloError
 } from '@apollo/client'
-import { DocumentNode } from 'graphql'
 
 /* Component options */
 

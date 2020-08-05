@@ -246,7 +246,7 @@ query GetMessages {
 首先将 `gql` 标签导入组件：
 
 ```js
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 ```
 
 然后，在组件定义中，声明一个新的 `fragments` 对象：
@@ -357,7 +357,7 @@ fragment message on Message {
 ```vue
 <!-- MessageList.vue -->
 <script>
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export default {
   fragments: {
@@ -399,7 +399,7 @@ export default {
 ```vue
 <!-- MessageForm.vue -->
 <script>
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 import MessageList from './MessageList.vue'
 
 export default {

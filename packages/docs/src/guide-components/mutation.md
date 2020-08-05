@@ -32,7 +32,7 @@ See [API Reference](../../api/apollo-mutation.md) for all the available options.
 
 ## Updating the cache
 
-If the mutation is only updating objects you already have in the cache (for example, editing existing fields), you don't need to do anything as Apollo Client will update the cache automatically. This works only if the object in the mutation result contains the `__typename` and `id` fields (or the custom fields you use to [normalize the cache](https://www.apollographql.com/docs/react/advanced/caching#normalization)).
+If the mutation is only updating objects you already have in the cache (for example, editing existing fields), you don't need to do anything as Apollo Client will update the cache automatically. This works only if the object in the mutation result contains the `__typename` and `id` fields (or the custom fields you use to [normalize the cache](https://www.apollographql.com/docs/react/caching/cache-configuration/#data-normalization)).
 
 Otherwise, you need to tell Apollo Client how to update the cache with the mutation result. For example, if the mutation adds a new item, you have to update the relevent query result to effectively push this new items to the query.
 
@@ -62,7 +62,7 @@ Otherwise, you need to tell Apollo Client how to update the cache with the mutat
 </template>
 
 <script>
-import gql from 'gql-tag'
+import { gql } from '@apollo/client'
 
 const fragments = {
   message: gql`
@@ -143,7 +143,7 @@ export default {
 </template>
 
 <script>
-import gql from 'gql-tag'
+import { gql } from '@apollo/client'
 
 const fragments = {
   message: gql`
