@@ -50,7 +50,7 @@ export default {
       :class="errorPolicy"
       class="query"
     >
-      <div>errorPolicy: '{{ errorPolicy }}' => <span class="result">{{ results[errorPolicy].value }}</span></div>
+      <div>errorPolicy: '{{ errorPolicy }}' => <span class="result">{{ results[errorPolicy] }}</span></div>
       <div
         v-if="errors[errorPolicy]"
         class="error"
