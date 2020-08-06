@@ -1,7 +1,7 @@
 <script>
 import { ref, computed, watch } from '@vue/composition-api'
 import { useSubscription, useMutation } from '@vue/apollo-composable'
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client/core'
 
 export default {
   setup () {

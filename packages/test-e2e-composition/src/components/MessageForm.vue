@@ -1,7 +1,7 @@
 <script>
 import { ref } from '@vue/composition-api'
 import { useMutation } from '@vue/apollo-composable'
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client/core'
 import MESSAGE_FRAGMENT from '../graphql/messageFragment.gql'
 import USER_FRAGMENT from '../graphql/userFragment.gql'
 

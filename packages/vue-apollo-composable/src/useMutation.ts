@@ -1,4 +1,4 @@
-import { MutationOptions, OperationVariables, FetchResult, DocumentNode } from '@apollo/client'
+import { MutationOptions, OperationVariables, FetchResult, DocumentNode } from '@apollo/client/core'
 import { ref, onBeforeUnmount, isRef, Ref } from 'vue-demi'
 import { useApolloClient } from './useApolloClient'
 import { ReactiveFunction } from './util/ReactiveFunction'

@@ -32,7 +32,7 @@ After:
 
 ```js
 import Vue from 'vue'
-import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
+import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client/core'
 import VueApollo from '@vue/apollo-option'
 ```
 
@@ -186,7 +186,7 @@ import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-trans
 After:
 
 ```js
-import { split } from '@apollo/client'
+import { split } from '@apollo/client/core'
 import { WebSocketLink } from '@apollo/client/link/ws'
 import { getMainDefinition } from '@apollo/client/utilities'
 ```

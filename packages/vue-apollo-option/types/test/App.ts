@@ -1,6 +1,6 @@
 // this example src is https://github.com/Akryum/vue-apollo-example
 import Vue from 'vue'
-import { gql, OperationVariables, ApolloQueryResult, DocumentNode } from '@apollo/client'
+import { gql, OperationVariables, ApolloQueryResult, DocumentNode } from '@apollo/client/core'
 import { VueApolloQueryDefinition } from '../options'
 
 const pageSize = 10

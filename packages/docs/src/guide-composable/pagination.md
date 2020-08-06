@@ -25,7 +25,7 @@ Let's take this example query loading a feed of potentially infinite number of p
 ```vue
 <script>
 import { useQuery } from '@vue/apollo-composable'
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client/core'
 
 const FEED_QUERY = gql`
   query getFeed ($type: FeedType!, $offset: Int, $limit: Int) {

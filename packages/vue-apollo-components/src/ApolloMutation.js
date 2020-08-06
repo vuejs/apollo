@@ -1,5 +1,5 @@
 import { addGqlError } from '@vue/apollo-option/lib/utils'
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client/core'
 
 export default {
   props: {

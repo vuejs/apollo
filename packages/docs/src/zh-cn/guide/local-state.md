@@ -25,7 +25,7 @@
 ```js
 //main.js
 
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client/core';
 
 export const typeDefs = gql`
   type Item {
@@ -147,7 +147,7 @@ cache.writeData({
 ```js
 // App.vue
 
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client/core';
 
 const todoItemsQuery = gql`
   {

@@ -35,7 +35,7 @@ Apollo Client provides a zero-config way to start using Apollo Client. It includ
 In your app, create an `ApolloClient` instance:
 
 ```js
-import ApolloClient from '@apollo/client'
+import ApolloClient from '@apollo/client/core'
 
 const apolloClient = new ApolloClient({
   // You should use an absolute URL here
@@ -48,7 +48,7 @@ const apolloClient = new ApolloClient({
 In your app, create an `ApolloClient` instance:
 
 ```js
-import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client'
+import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client/core'
 
 // HTTP connection to the API
 const httpLink = createHttpLink({

@@ -6,7 +6,7 @@ import {
   SubscribeToMoreOptions,
   ApolloQueryResult,
   ApolloError
-} from '@apollo/client'
+} from '@apollo/client/core'
 
 /* Component options */
 

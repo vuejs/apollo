@@ -10,7 +10,7 @@ import {
   FetchMoreQueryOptions,
   FetchMoreOptions,
   ObservableSubscription
-} from '@apollo/client'
+} from '@apollo/client/core'
 import { throttle, debounce } from 'throttle-debounce'
 import { useApolloClient } from './useApolloClient'
 import { ReactiveFunction } from './util/ReactiveFunction'

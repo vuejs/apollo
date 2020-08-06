@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client/core'
 
 const pageSize = 10
 

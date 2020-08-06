@@ -1,5 +1,5 @@
 declare module '*.gql' {
-  import { DocumentNode } from '@apollo/client'
+  import { DocumentNode } from '@apollo/client/core'
 
   const content: DocumentNode
   export default content
@@ -7,7 +7,7 @@ declare module '*.gql' {
 }
 
 declare module '*.graphql' {
-  import { DocumentNode } from '@apollo/client'
+  import { DocumentNode } from '@apollo/client/core'
 
   const content: DocumentNode
   export default content

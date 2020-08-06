@@ -105,7 +105,7 @@ You can use `useQuery` in your `setup` option and pass it a GraphQL document as 
 ```vue{3,7-16}
 <script>
 import { useQuery } from '@vue/apollo-composable'
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client/core'
 
 export default {
   setup () {
@@ -132,7 +132,7 @@ If you want to directly access the data object, use `result.value`:
 <script>
 import { watch } from '@vue/composition-api'
 import { useQuery } from '@vue/apollo-composable'
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client/core'
 
 export default {
   setup () {
@@ -161,7 +161,7 @@ In this example, you could also watch the `Ref` directly:
 <script>
 import { watch } from '@vue/composition-api'
 import { useQuery } from '@vue/apollo-composable'
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client/core'
 
 export default {
   setup () {
@@ -189,7 +189,7 @@ Let's expose our result in the template:
 ```vue{18-20,25-31}
 <script>
 import { useQuery } from '@vue/apollo-composable'
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client/core'
 
 export default {
   setup () {
@@ -241,7 +241,7 @@ Alongside `result`, `useQuery` returns `loading`, a boolean `Ref` tracking the l
 ```vue{7,20,27,29}
 <script>
 import { useQuery } from '@vue/apollo-composable'
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client/core'
 
 export default {
   setup () {
@@ -282,7 +282,7 @@ There is also an `error` `Ref` that holds any error that may occur during the re
 ```vue{7,21,30}
 <script>
 import { useQuery } from '@vue/apollo-composable'
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client/core'
 
 export default {
   setup () {
@@ -330,7 +330,7 @@ The first useful feature of `useResult` is picking one object from the result da
 ```vue{2,18,21,34,35}
 <script>
 import { useQuery, useResult } from '@vue/apollo-composable'
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client/core'
 
 export default {
   setup () {
@@ -453,7 +453,7 @@ Let's say we want to sort our users on their last names:
 <script>
 import { computed } from '@vue/composition-api'
 import { useQuery } from '@vue/apollo-composable'
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client/core'
 
 export default {
   setup () {
@@ -824,7 +824,7 @@ This is done using the `refetch` function:
 ```vue{7,24,40}
 <script>
 import { useQuery, useResult } from '@vue/apollo-composable'
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client/core'
 
 export default {
   setup () {

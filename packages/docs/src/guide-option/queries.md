@@ -17,7 +17,7 @@ Smart Queries are wrappers around GraphQL queries with additional features like 
 Use `gql` to write your GraphQL queries:
 
 ```js
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client/core'
 ```
 
 Put the [gql](https://github.com/apollographql/graphql-tag) query directly as the value:

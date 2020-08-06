@@ -32,7 +32,7 @@ The most straightforward use of fragments is to reuse parts of queries (or mutat
 To do so, we can simply share a fragment describing the fields we need for a comment:
 
 ```js
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client/core'
 
 export const commentFragment = {
   comment: gql`

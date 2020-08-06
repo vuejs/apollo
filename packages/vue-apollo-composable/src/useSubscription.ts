@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { Ref, ref, watch, isRef, computed, getCurrentInstance, onBeforeUnmount } from 'vue-demi'
-import { DocumentNode, OperationVariables, SubscriptionOptions, Observable, ObservableSubscription, FetchResult } from '@apollo/client'
+import { DocumentNode, OperationVariables, SubscriptionOptions, Observable, ObservableSubscription, FetchResult } from '@apollo/client/core'
 import { throttle, debounce } from 'throttle-debounce'
 import { ReactiveFunction } from './util/ReactiveFunction'
 import { paramToRef } from './util/paramToRef'

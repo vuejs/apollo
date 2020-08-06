@@ -10,7 +10,7 @@ import {
   OperationVariables,
   FetchResult,
   Observable
-} from '@apollo/client'
+} from '@apollo/client/core'
 import { ApolloProvider, VueApolloComponent } from './apollo-provider'
 import {
   VueApolloQueryDefinition,

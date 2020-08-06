@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
 import 'isomorphic-fetch'
-import { ApolloClient, HttpLink } from '@apollo/client'
+import { ApolloClient, HttpLink } from '@apollo/client/core'
 
 import VueApollo from '../index'
 import App from './App'
