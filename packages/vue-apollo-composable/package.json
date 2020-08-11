@@ -21,14 +21,24 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "type": "module",
+  "main": "dist/cjs/index.js",
+  "exports": {
+    ".": {
+      "require": "./dist/commonjs/index.js",
+      "default": "./dist/esm/index.js"
+    }
+  },
+  "types": "dist/esm/index.d.ts",
+  "module": "./dist/esm/index.js",
   "files": [
     "dist"
   ],
   "scripts": {
     "dev": "yarn build --watch",
-    "build": "tsc --outDir dist -d",
+    "build": "npm run build:esm && npm run build:commonjs",
+    "build:esm": "tsc -m es2015 -d --lib \"DOM\",\"ES5\",\"es2020.symbol.wellknown\" --outDir dist/esm",
+    "build:commonjs": "tsc -m commonjs --lib \"DOM\",\"ES5\",\"es2020.symbol.wellknown\" --outDir dist/commonjs",
     "prepublishOnly": "yarn test && yarn build",
     "test": "yarn test:types",
     "test:types": "tsc -p tests/types/"

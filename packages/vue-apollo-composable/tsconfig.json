@@ -3,8 +3,9 @@
     "target": "es5",
     "module": "commonjs",
     "sourceMap": true,
+    "outDir": "dist",
+    "moduleResolution": "node"
   },
-  "include": [
-    "src/**/*",
-  ],
+  "exclude": ["node_modules", "**/node_modules/*"],
+  "include": ["src/**/*"]
 }
