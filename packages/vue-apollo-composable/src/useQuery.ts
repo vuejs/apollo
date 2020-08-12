@@ -137,10 +137,12 @@ export function useQuery<
   // SSR
   let firstResolve: Function
   let firstReject: Function
-  onServerPrefetch(() => new Promise((resolve, reject) => {
-    firstResolve = resolve
-    firstReject = reject
-  }).then(stop).catch(stop))
+  if (onServerPrefetch) {
+    onServerPrefetch(() => new Promise((resolve, reject) => {
+      firstResolve = resolve
+      firstReject = reject
+    }).then(stop).catch(stop))
+  }
 
   // Apollo Client
   const { resolveClient } = useApolloClient()
