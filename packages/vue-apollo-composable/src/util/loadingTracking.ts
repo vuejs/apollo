@@ -11,7 +11,7 @@ export interface AppLoadingTracking extends LoadingTracking {
 }
 
 export function getAppTracking () {
-  const vm = getCurrentInstance()
+  const vm: any = getCurrentInstance()
   const root: any = vm.$root || vm.root
   let appTracking: AppLoadingTracking
 
