@@ -1,5 +1,4 @@
-import { ref, Ref, isRef, computed, watch, onServerPrefetch, getCurrentInstance, onBeforeUnmount } from 'vue-demi'
-import Vue from 'vue'
+import { ref, Ref, isRef, computed, watch, onServerPrefetch, getCurrentInstance, onBeforeUnmount, nextTick } from 'vue-demi'
 import { DocumentNode } from 'graphql'
 import {
   OperationVariables,
@@ -290,7 +289,7 @@ export function useQuery<
   function baseRestart () {
     if (!started || restarting) return
     restarting = true
-    Vue.nextTick(() => {
+    nextTick(() => {
       if (started) {
         stop()
         start()
