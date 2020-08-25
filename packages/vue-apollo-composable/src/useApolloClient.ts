@@ -38,11 +38,9 @@ export function useApolloClient<TCacheShape = any>(clientId?: ClientId): UseApol
   const providedApolloClient: ApolloClient<TCacheShape> = inject(DefaultApolloClient, null)
 
   function resolveClient(resolvedClientId?: ClientId) {
-    if (resolvedClientId) {
-      clientId = resolvedClientId
-    }
-    if (clientId) {
-      return resolveClientWithId(providedApolloClients, clientId)
+    const id = resolvedClientId ? resolvedClientId : clientId
+    if (id) {
+      return resolveClientWithId(providedApolloClients, id)
     }
     return resolveDefaultClient(providedApolloClients, providedApolloClient)
   }
