@@ -15,6 +15,7 @@ import {
   FetchResult,
   Observable,
   ObservableSubscription,
+  TypedDocumentNode,
 } from '@apollo/client/core'
 import { throttle, debounce } from 'throttle-debounce'
 import { ReactiveFunction } from './util/ReactiveFunction'
@@ -23,6 +24,8 @@ import { paramToReactive } from './util/paramToReactive'
 import { useApolloClient } from './useApolloClient'
 import { useEventHook } from './util/useEventHook'
 import { trackSubscription } from './util/loadingTracking'
+
+import type { CurrentInstance } from './util/types'
 
 export interface UseSubscriptionOptions <
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -35,21 +38,21 @@ export interface UseSubscriptionOptions <
   debounce?: number
 }
 
-type DocumentParameter = DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>
+type DocumentParameter<TResult, TVariables> = DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode> | TypedDocumentNode<TResult, TVariables> | Ref<TypedDocumentNode<TResult, TVariables>> | ReactiveFunction<TypedDocumentNode<TResult, TVariables>>
 type VariablesParameter<TVariables> = TVariables | Ref<TVariables> | ReactiveFunction<TVariables>
 type OptionsParameter<TResult, TVariables> = UseSubscriptionOptions<TResult, TVariables> | Ref<UseSubscriptionOptions<TResult, TVariables>> | ReactiveFunction<UseSubscriptionOptions<TResult, TVariables>>
 
 export interface UseSubscriptionReturn<TResult, TVariables> {
-  result: Ref<TResult>
+  result: Ref<TResult | null | undefined>
   loading: Ref<boolean>
-  error: Ref<Error>
+  error: Ref<Error | null>
   start: () => void
   stop: () => void
   restart: () => void
   document: Ref<DocumentNode>
-  variables: Ref<TVariables>
+  variables: Ref<TVariables | undefined>
   options: UseSubscriptionOptions<TResult, TVariables> | Ref<UseSubscriptionOptions<TResult, TVariables>>
-  subscription: Ref<Observable<FetchResult<TResult, Record<string, any>, Record<string, any>>>>
+  subscription: Ref<Observable<FetchResult<TResult, Record<string, any>, Record<string, any>>> | null>
   onResult: (fn: (param: FetchResult<TResult, Record<string, any>, Record<string, any>>) => void) => {
     off: () => void
   }
@@ -62,14 +65,14 @@ export interface UseSubscriptionReturn<TResult, TVariables> {
  * Use a subscription that does not require variables or options.
  * */
 export function useSubscription<TResult = any> (
-  document: DocumentParameter
+  document: DocumentParameter<TResult, undefined>
 ): UseSubscriptionReturn<TResult, undefined>
 
 /**
  * Use a subscription that requires options but not variables.
  */
 export function useSubscription<TResult = any> (
-  document: DocumentParameter,
+  document: DocumentParameter<TResult, undefined>,
   variables: undefined | null,
   options: OptionsParameter<TResult, null>
 ): UseSubscriptionReturn<TResult, null>
@@ -78,7 +81,7 @@ export function useSubscription<TResult = any> (
  * Use a subscription that requires variables.
  */
 export function useSubscription<TResult = any, TVariables extends OperationVariables = OperationVariables> (
-  document: DocumentParameter,
+  document: DocumentParameter<TResult, TVariables>,
   variables: VariablesParameter<TVariables>
 ): UseSubscriptionReturn<TResult, TVariables>
 
@@ -86,14 +89,14 @@ export function useSubscription<TResult = any, TVariables extends OperationVaria
  * Use a subscription that has optional variables.
  */
 export function useSubscription<TResult = any, TVariables extends OperationVariables = OperationVariables> (
-  document: DocumentParameter
+  document: DocumentParameter<TResult, TVariables>,
 ): UseSubscriptionReturn<TResult, TVariables>
 
 /**
  * Use a subscription that requires variables and options.
  */
 export function useSubscription<TResult = any, TVariables extends OperationVariables = OperationVariables> (
-  document: DocumentParameter,
+  document: DocumentParameter<TResult, TVariables>,
   variables: VariablesParameter<TVariables>,
   options: OptionsParameter<TResult, TVariables>
 ): UseSubscriptionReturn<TResult, TVariables>
@@ -102,23 +105,21 @@ export function useSubscription <
   TResult,
   TVariables
 > (
-  document: DocumentParameter,
-  variables: VariablesParameter<TVariables> = null,
-  options: OptionsParameter<TResult, TVariables> = null,
+  document: DocumentParameter<TResult, TVariables>,
+  variables: VariablesParameter<TVariables> | undefined = undefined,
+  options: OptionsParameter<TResult, TVariables> = {},
 ): UseSubscriptionReturn<TResult, TVariables> {
   // Is on server?
-  const vm: any = getCurrentInstance()
-  const isServer = vm?.$isServer
+  const vm = getCurrentInstance() as CurrentInstance | null
+  const isServer = vm?.$isServer ?? false
 
-  if (variables == null) variables = ref()
-  if (!options) options = {}
   const documentRef = paramToRef(document)
   const variablesRef = paramToRef(variables)
   const optionsRef = paramToReactive(options)
 
-  const result = ref<TResult>()
+  const result = ref<TResult | null | undefined>()
   const resultEvent = useEventHook<FetchResult<TResult>>()
-  const error = ref<Error>(null)
+  const error = ref<Error | null>(null)
   const errorEvent = useEventHook<Error>()
 
   const loading = ref(false)
@@ -127,8 +128,8 @@ export function useSubscription <
   // Apollo Client
   const { resolveClient } = useApolloClient()
 
-  const subscription: Ref<Observable<FetchResult<TResult>>> = ref()
-  let observer: ObservableSubscription
+  const subscription: Ref<Observable<FetchResult<TResult>> | null> = ref(null)
+  let observer: ObservableSubscription | null = null
   let started = false
 
   function start () {
@@ -136,7 +137,7 @@ export function useSubscription <
     started = true
     loading.value = true
 
-    const client = resolveClient(currentOptions.value.clientId)
+    const client = resolveClient(currentOptions.value?.clientId)
 
     subscription.value = client.subscribe<TResult, TVariables>({
       query: currentDocument,
@@ -197,9 +198,9 @@ export function useSubscription <
 
   let debouncedRestart: Function
   function updateRestartFn () {
-    if (currentOptions.value.throttle) {
+    if (currentOptions.value?.throttle) {
       debouncedRestart = throttle(currentOptions.value.throttle, baseRestart)
-    } else if (currentOptions.value.debounce) {
+    } else if (currentOptions.value?.debounce) {
       debouncedRestart = debounce(currentOptions.value.debounce, baseRestart)
     } else {
       debouncedRestart = baseRestart
@@ -237,7 +238,7 @@ export function useSubscription <
   })
 
   // Applying variables
-  let currentVariables: TVariables
+  let currentVariables: TVariables | undefined
   let currentVariablesSerialized: string
   watch(variablesRef, (value, oldValue) => {
     const serialized = JSON.stringify(value)

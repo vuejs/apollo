@@ -6,7 +6,7 @@ export function useLazyQuery<
   TResult = any,
   TVariables = any,
 > (
-  document: DocumentParameter,
+  document: DocumentParameter<TResult, TVariables>,
   variables?: VariablesParameter<TVariables>,
   options?: OptionsParameter<TResult, TVariables>,
 ) {

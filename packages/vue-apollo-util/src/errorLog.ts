@@ -1,9 +1,13 @@
 import { print } from 'graphql/language/printer'
+import { ApolloError } from '@apollo/client/core'
+import { ErrorResponse } from '@apollo/client/link/error'
 
-export function getErrorMessages (error) {
+export function getErrorMessages (error: ErrorResponse | ApolloError) {
   const messages: string[] = []
-  const { graphQLErrors, networkError, operation, stack } = error
-  let printedQuery
+  const { graphQLErrors, networkError } = error
+  const operation = 'operation' in error ? error.operation : undefined;
+  const stack = 'stack' in error ? error.stack : undefined;
+  let printedQuery: string;
 
   if (operation) {
     printedQuery = print(operation.query)
@@ -20,7 +24,7 @@ export function getErrorMessages (error) {
       }
     })
   }
-  
+
   if (networkError) messages.push(`[Network error] ${networkError}`)
 
   if (stack) messages.push(stack)
@@ -28,7 +32,7 @@ export function getErrorMessages (error) {
   return messages
 }
 
-export function logErrorMessages (error, printStack = true) {
+export function logErrorMessages (error: ApolloError | ErrorResponse, printStack = true) {
   getErrorMessages(error).map(message => {
     const result = /\[([\w ]*)](.*)/.exec(message)
     if (result) {
@@ -41,6 +45,8 @@ export function logErrorMessages (error, printStack = true) {
 
   if (printStack) {
     let stack = new Error().stack
+    if (stack == null) return
+
     const newLineIndex = stack.indexOf('\n')
     stack = stack.substr(stack.indexOf('\n', newLineIndex + 1))
     console.log(`%c${stack}`, 'color:grey;')
@@ -52,21 +58,25 @@ interface ErrorLocation {
   column: number
 }
 
-function logOperation (printedQuery: string, locations: ErrorLocation[]) {
+function logOperation (printedQuery: string, locations: readonly ErrorLocation[] | undefined) {
   const lines = printedQuery.split('\n')
   const l = lines.length
   const result = lines.slice()
-  const lineMap = {}
+  const lineMap: Record<number, number> = {}
   for (let i = 0; i < l; i++) {
     lineMap[i] = i
   }
-  for (const { line, column } of locations) {
-    const index = lineMap[line]
-    result.splice(index, 0, '▲'.padStart(column, ' '))
-    // Offset remaining lines
-    for (let i = index + 1; i < l; i++) {
-      lineMap[i]++
+
+  if (locations) {
+    for (const { line, column } of locations) {
+      const index = lineMap[line]
+      result.splice(index, 0, '▲'.padStart(column, ' '))
+      // Offset remaining lines
+      for (let i = index + 1; i < l; i++) {
+        lineMap[i]++
+      }
     }
   }
+
   return result.join('\n')
 }

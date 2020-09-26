@@ -94,8 +94,8 @@ const { result: multiKeyResult } = multiKeyQuery
     assertExactType<typeof result, 'secret'>(result)
     useResult_WithDefaultValue_MultiKey.value
   } else {
-    useResult_WithDefaultValue_MultiKey.value.example?.__typename
-    useResult_WithDefaultValue_MultiKey.value.otherExample?.__typename
+    useResult_WithDefaultValue_MultiKey.value?.example?.__typename
+    useResult_WithDefaultValue_MultiKey.value?.otherExample?.__typename
   }
 }
 
@@ -107,7 +107,7 @@ const { result: multiKeyResult } = multiKeyQuery
   const useResult_WithPickFunction = useResult(
     multiKeyResult,
     [] as const,
-    data => data.otherExample?.__typename,
+    data => data?.otherExample?.__typename,
   )
 
   assertExactType<

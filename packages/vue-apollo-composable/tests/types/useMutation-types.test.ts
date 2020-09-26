@@ -5,6 +5,7 @@ import {
   ExampleUpdateMutation,
   ExampleUpdateMutationVariables,
   ExampleUpdatePayload,
+  ExampleTypedMutationDocument,
 } from '../fixtures/graphql-example-types'
 import { assertExactType } from './assertions'
 
@@ -85,8 +86,11 @@ import { assertExactType } from './assertions'
 
   useMutationOnlyMutationType.onDone(param => {
     assertExactType<typeof param, FetchResult<ExampleUpdateMutation> | undefined>(param)
-    assertExactType<typeof param.data.exampleUpdate, ExampleUpdatePayload>(
-      param.data.exampleUpdate,
+    assertExactType<
+    NonNullable<NonNullable<typeof param>['data']>['exampleUpdate'],
+    ExampleUpdatePayload | null | undefined
+    >(
+      param?.data?.exampleUpdate,
     )
   })
 
@@ -108,8 +112,11 @@ import { assertExactType } from './assertions'
 
   useMutationOnlyMutationTypeWithOptions.onDone(param => {
     assertExactType<typeof param, FetchResult<ExampleUpdateMutation> | undefined>(param)
-    assertExactType<typeof param.data.exampleUpdate, ExampleUpdatePayload>(
-      param.data.exampleUpdate,
+    assertExactType<
+    NonNullable<NonNullable<typeof param>['data']>['exampleUpdate'],
+    ExampleUpdatePayload | null | undefined
+    >(
+      param?.data?.exampleUpdate,
     )
   })
 
@@ -131,8 +138,11 @@ import { assertExactType } from './assertions'
 
   useMutationAllTyped.onDone(param => {
     assertExactType<typeof param, FetchResult<ExampleUpdateMutation> | undefined>(param)
-    assertExactType<typeof param.data.exampleUpdate, ExampleUpdatePayload>(
-      param.data.exampleUpdate,
+    assertExactType<
+    NonNullable<NonNullable<typeof param>['data']>['exampleUpdate'],
+    ExampleUpdatePayload | null | undefined
+    >(
+      param?.data?.exampleUpdate,
     )
   })
 }
@@ -149,8 +159,11 @@ import { assertExactType } from './assertions'
 
   useMutationAllTyped.onDone(param => {
     assertExactType<typeof param, FetchResult<ExampleUpdateMutation> | undefined>(param)
-    assertExactType<typeof param.data.exampleUpdate, ExampleUpdatePayload>(
-      param.data.exampleUpdate,
+    assertExactType<
+    NonNullable<NonNullable<typeof param>['data']>['exampleUpdate'],
+    ExampleUpdatePayload | null | undefined
+    >(
+      param?.data?.exampleUpdate,
     )
   })
 }
@@ -162,8 +175,11 @@ import { assertExactType } from './assertions'
 
   useMutationAllTyped.onDone(param => {
     assertExactType<typeof param, FetchResult<ExampleUpdateMutation> | undefined>(param)
-    assertExactType<typeof param.data.exampleUpdate, ExampleUpdatePayload>(
-      param.data.exampleUpdate,
+    assertExactType<
+    NonNullable<NonNullable<typeof param>['data']>['exampleUpdate'],
+    ExampleUpdatePayload | null | undefined
+    >(
+      param?.data?.exampleUpdate,
     )
   })
 }
@@ -207,8 +223,11 @@ import { assertExactType } from './assertions'
 
   withVariablesInOptions.onDone(param => {
     assertExactType<typeof param, FetchResult<ExampleUpdateMutation> | undefined>(param)
-    assertExactType<typeof param.data.exampleUpdate, ExampleUpdatePayload>(
-      param.data.exampleUpdate,
+    assertExactType<
+    NonNullable<NonNullable<typeof param>['data']>['exampleUpdate'],
+    ExampleUpdatePayload | null | undefined
+    >(
+      param?.data?.exampleUpdate,
     )
   })
 }
@@ -230,8 +249,11 @@ import { assertExactType } from './assertions'
 
   withNoOptions.onDone(param => {
     assertExactType<typeof param, FetchResult<ExampleUpdateMutation> | undefined>(param)
-    assertExactType<typeof param.data.exampleUpdate, ExampleUpdatePayload>(
-      param.data.exampleUpdate,
+    assertExactType<
+    NonNullable<NonNullable<typeof param>['data']>['exampleUpdate'],
+    ExampleUpdatePayload | null | undefined
+    >(
+      param?.data?.exampleUpdate,
     )
   })
 }
@@ -273,8 +295,35 @@ import { assertExactType } from './assertions'
 
   withNoVariablesInOptions.onDone(param => {
     assertExactType<typeof param, FetchResult<ExampleUpdateMutation> | undefined>(param)
-    assertExactType<typeof param.data.exampleUpdate, ExampleUpdatePayload>(
-      param.data.exampleUpdate,
+    assertExactType<
+    NonNullable<NonNullable<typeof param>['data']>['exampleUpdate'],
+    ExampleUpdatePayload | null | undefined
+    >(
+      param?.data?.exampleUpdate,
+    )
+  })
+}
+
+// =============================================================================
+// With a TypedQueryDocument:
+// - TResult should be the mutation type
+// - TVariables should be the variables type
+// =============================================================================
+{
+  const useMutationAllTyped = useMutation(
+    ExampleTypedMutationDocument,
+    { variables: { id: '1', example: { name: 'new' } } },
+  )
+
+  useMutationAllTyped.mutate({ id: '2', example: { name: 'remix' } }, {})
+
+  useMutationAllTyped.onDone(param => {
+    assertExactType<typeof param, FetchResult<ExampleUpdateMutation> | undefined>(param)
+    assertExactType<
+    NonNullable<NonNullable<typeof param>['data']>['exampleUpdate'],
+    ExampleUpdatePayload | null | undefined
+    >(
+      param?.data?.exampleUpdate,
     )
   })
 }

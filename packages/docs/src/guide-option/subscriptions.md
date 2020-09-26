@@ -4,21 +4,11 @@
 
 *For the server implementation, you can take a look at [this simple example](https://github.com/Akryum/apollo-server-example).*
 
-To enable the websocket-based subscription, a bit of additional setup is required:
-
-```
-npm install --save apollo-link-ws apollo-utilities
-```
-
 ```js
 import Vue from 'vue'
-import { ApolloClient } from 'apollo-client'
-import { HttpLink } from 'apollo-link-http'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-// New Imports
-import { split } from 'apollo-link'
-import { WebSocketLink } from 'apollo-link-ws'
-import { getMainDefinition } from 'apollo-utilities'
+import { ApolloClient, HttpLink, InMemoryCache, split } from '@apollo/client/core'
+import { WebSocketLink } from '@apollo/client/link/ws'
+import { getMainDefinition } from '@apollo/client/utilities'
 
 import VueApollo from '@vue/apollo-option'
 

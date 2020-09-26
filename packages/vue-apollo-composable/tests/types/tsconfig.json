@@ -4,8 +4,8 @@
     "module": "commonjs",
     "noEmit": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
-    // "strict": true // TODO: this should be enabled, but src is broken with strict
+    "skipLibCheck": true,
+    "strict": true
   },
   "include": [
     "*.test.ts"

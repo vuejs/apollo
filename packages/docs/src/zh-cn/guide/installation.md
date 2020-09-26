@@ -18,55 +18,20 @@ vue add apollo
 
 ### 1. Apollo Client
 
-你可以使用 [Apollo Boost](#apollo-boost) 或 [直接使用 Apollo Client](#apollo-client-full-configuration)（需要更多配置工作）。
-
-#### Apollo Boost
-
-Apollo Boost 是一种零配置开始使用 Apollo Client 的方式。它包含一些实用的默认值，例如我们推荐的 `InMemoryCache` 和 `HttpLink`，它非常适合用于快速启动开发。
-
-将它与 `vue-apollo` 和 `graphql` 一起安装：
-
 ```
-npm install --save vue-apollo graphql apollo-boost
+npm install --save graphql graphql-tag @apollo/client
 ```
 
 或：
 
 ```
-yarn add vue-apollo graphql apollo-boost
+yarn add graphql graphql-tag @apollo/client
 ```
 
 在你的应用中创建一个 `ApolloClient` 实例：
 
 ```js
-import ApolloClient from 'apollo-boost'
-
-const apolloClient = new ApolloClient({
-  // 你需要在这里使用绝对路径
-  uri: 'https://api.graphcms.com/simple/v1/awesomeTalksClone'
-})
-```
-
-#### Apollo 客户端完整配置
-
-如果你想要更细粒度的控制，安装这些包来代替 `apollo-boost`：
-
-```
-npm install --save vue-apollo graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
-```
-
-或：
-
-```
-yarn add vue-apollo graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
-```
-
-在你的应用中创建一个 `ApolloClient` 实例：
-
-```js
-import { ApolloClient } from 'apollo-client'
-import { createHttpLink } from 'apollo-link-http'
-import { InMemoryCache } from 'apollo-cache-inmemory'
+import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client/core'
 
 // 与 API 的 HTTP 连接
 const httpLink = createHttpLink({

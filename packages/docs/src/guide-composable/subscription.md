@@ -53,26 +53,14 @@ A future version of Apollo or GraphQL might include support for live queries, wh
 
 ## Client setup
 
-The most popular transport for GraphQL subscriptions today is [`subscriptions-transport-ws`](https://github.com/apollographql/subscriptions-transport-ws). This package is maintained by the Apollo community, but can be used with any client or server GraphQL implementation. In this article, we'll explain how to set it up on the client, but you'll also need a server implementation. You can [read about how to use subscriptions with a JavaScript server](https://www.apollographql.com/docs/graphql-subscriptions/setup), or enjoy subscriptions set up out of the box if you are using a GraphQL backend as a service like [Graphcool](https://www.graph.cool/docs/tutorials/worldchat-subscriptions-example-ui0eizishe/).
+In this article, we'll explain how to set it up on the client, but you'll also need a server implementation. You can [read about how to use subscriptions with a JavaScript server](https://www.apollographql.com/docs/graphql-subscriptions/setup), or enjoy subscriptions set up out of the box if you are using a GraphQL backend as a service like [Graphcool](https://www.graph.cool/docs/tutorials/worldchat-subscriptions-example-ui0eizishe/).
 
 Let's look at how to add support for this transport to Apollo Client.
 
-First, install the WebSocket Apollo Link (`apollo-link-ws`) from npm:
-
-```shell
-npm install --save apollo-link-ws subscriptions-transport-ws
-```
-
-Or:
-
-```shell
-yarn add apollo-link-ws subscriptions-transport-ws
-```
-
-Then, initialize a GraphQL subscriptions transport link:
+First, initialize a GraphQL web socket link:
 
 ```js
-import { WebSocketLink } from "apollo-link-ws";
+import { WebSocketLink } from "@apollo/client/link/ws";
 
 const wsLink = new WebSocketLink({
   uri: `ws://localhost:5000/`,
@@ -85,10 +73,9 @@ const wsLink = new WebSocketLink({
 We need to either use the `WebSocketLink` or the `HttpLink` depending on the operation type:
 
 ```js
-import { split } from "apollo-link";
-import { HttpLink } from "apollo-link-http";
-import { WebSocketLink } from "apollo-link-ws";
-import { getMainDefinition } from "apollo-utilities";
+import { HttpLink, split } from "@apollo/client/core";
+import { WebSocketLink } from "@apollo/client/link/ws";
+import { getMainDefinition } from "@apollo/client/utilities";
 
 // Create an http link:
 const httpLink = new HttpLink({
@@ -569,7 +556,7 @@ subscribeToMore(() => ({
 In many cases it is necessary to authenticate clients before allowing them to receive subscription results. To do this, the `SubscriptionClient` constructor accepts a `connectionParams` field, which passes a custom object that the server can use to validate the connection before setting up any subscriptions.
 
 ```js
-import { WebSocketLink } from 'apollo-link-ws';
+import { WebSocketLink } from "@apollo/client/link/ws";
 
 const wsLink = new WebSocketLink({
   uri: `ws://localhost:5000/`,

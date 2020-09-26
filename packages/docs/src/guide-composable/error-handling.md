@@ -55,10 +55,10 @@ export default {
 
 ## Network Errors
 
-When using Apollo Link, the ability to handle network errors is way more powerful. The best way to do this is to use the `apollo-link-error` to catch and handle server errors, network errors, and GraphQL errors. If you would like to combine with other links, see [composing links](https://www.apollographql.com/docs/link/composition).
+When using Apollo Link, the ability to handle network errors is way more powerful. The best way to do this is to use the `@apollo/client/link/error` to catch and handle server errors, network errors, and GraphQL errors. If you would like to combine with other links, see [composing links](https://www.apollographql.com/docs/link/composition).
 
 ```js
-import { onError } from 'apollo-link-error'
+import { onError } from '@apollo/client/link/error'
 
 const link = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
@@ -75,7 +75,7 @@ const link = onError(({ graphQLErrors, networkError }) => {
 You can also use the `logErrorMessages` function from the `@vue/apollo-util` package to format the error in the browser console:
 
 ```js
-import { onError } from 'apollo-link-error'
+import { onError } from '@apollo/client/link/error'
 import { logErrorMessages } from '@vue/apollo-util'
 
 const link = onError(error => {
@@ -90,7 +90,7 @@ Example error:
 If you are using Webpack or Vue CLI, it's a good idea to only use it in development:
 
 ```js
-import { onError } from 'apollo-link-error'
+import { onError } from '@apollo/client/link/error'
 import { logErrorMessages } from '@vue/apollo-util'
 
 const link = onError(error => {

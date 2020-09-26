@@ -3,8 +3,8 @@
     "target": "es5",
     "module": "amd",
     "sourceMap": true,
-    "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
     "outDir": "dist",
     "moduleResolution": "node",
     "lib": [
@@ -12,9 +12,10 @@
       "ES2015",
       "ES2020.Symbol.WellKnown"
     ],
-    "declaration": true
+    "declaration": true,
+    "strict": true
   },
   "include": [
-    "src/**/*",
-  ],
+    "src/**/*"
+  ]
 }

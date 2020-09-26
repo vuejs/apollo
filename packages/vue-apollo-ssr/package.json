@@ -35,6 +35,7 @@
     "serialize-javascript": "^5.0.1"
   },
   "devDependencies": {
+    "@types/serialize-javascript": "^4.0.0",
     "typescript": "^4"
   }
 }

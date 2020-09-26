@@ -7,7 +7,7 @@ import { assertExactType } from './assertions'
 // =============================================================================
 {
   const noClientId = useApolloClient()
-  noClientId.client.extract(true).storeType.is.any
+  noClientId.client?.extract(true).storeType.is.any
 }
 
 // =============================================================================
@@ -16,7 +16,7 @@ import { assertExactType } from './assertions'
 // =============================================================================
 {
   const withClientId = useApolloClient('88K2tP')
-  withClientId.client.extract(true).storeType.is.any
+  withClientId.client?.extract(true).storeType.is.any
 }
 
 // =============================================================================
@@ -25,8 +25,8 @@ import { assertExactType } from './assertions'
 // =============================================================================
 {
   const withType = useApolloClient<'cacheShape'>('38pX2d')
-  const store = withType.client.extract(true)
+  const store = withType.client?.extract(true)
 
   assertExactType<typeof withType, UseApolloClientReturn<'cacheShape'>>(withType)
-  assertExactType<typeof store, 'cacheShape'>(store)
+  assertExactType<typeof store, 'cacheShape' | undefined>(store)
 }

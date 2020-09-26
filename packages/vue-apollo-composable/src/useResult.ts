@@ -16,9 +16,9 @@ export type UseResultReturn<T> = Readonly<Ref<Readonly<T>>>
  * @param  {Ref<TResult>} result A `result` returned from `useQuery` to resolve.
  * @returns Readonly ref with `undefined` or the resolved `result`.
  */
-export function useResult<TResult, TResultKey extends keyof TResult = keyof TResult> (
+export function useResult<TResult, TResultKey extends keyof NonNullable<TResult> = keyof NonNullable<TResult>> (
   result: Ref<TResult>
-): UseResultReturn<undefined | ExtractSingleKey<TResult, TResultKey>>
+): UseResultReturn<undefined | ExtractSingleKey<NonNullable<TResult>, TResultKey>>
 
 /**
  * Resolve a `result`, returning either the first key of the `result` if there
@@ -34,10 +34,10 @@ export function useResult<TResult, TResultKey extends keyof TResult = keyof TRes
  * @param  {TDefaultValue} defaultValue The default return value before `result` is resolved.
  * @returns Readonly ref with the `defaultValue` or the resolved `result`.
  */
-export function useResult<TResult, TDefaultValue, TResultKey extends keyof TResult = keyof TResult> (
+export function useResult<TResult, TDefaultValue, TResultKey extends keyof NonNullable<TResult> = keyof NonNullable<TResult>> (
   result: Ref<TResult>,
   defaultValue: TDefaultValue
-): UseResultReturn<TDefaultValue | ExtractSingleKey<TResult, TResultKey>>
+): UseResultReturn<TDefaultValue | ExtractSingleKey<NonNullable<TResult>, TResultKey>>
 
 /**
  * Resolve a `result`, returning the `result` mapped with the `pick` function.

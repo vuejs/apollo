@@ -9,8 +9,8 @@ import {
   SubscriptionOptions,
   OperationVariables,
   FetchResult,
+  Observable
 } from '@apollo/client/core'
-import { Observable } from '@apollo/client/utilities/observables/Observable'
 import { ApolloProvider } from './apollo-provider'
 import {
   VueApolloQueryDefinition,
