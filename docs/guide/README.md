@@ -73,7 +73,7 @@ If you never heard of GraphQL or Apollo, here is a sneak peek:
 
 ## What is Apollo?
 
-[Apollo](https://www.apollographql.com/) is a set of tools and community effort to help you use GraphQL in your apps. It's well known for its [client](https://www.apollographql.com/client) and its [server](https://www.apollographql.com/server). Apollo is developed and supported by the [Meteor Development Group](https://www.meteor.io/).
+[Apollo](https://www.apollographql.com/) is a set of tools and community effort to help you use GraphQL in your apps. It's well known for its [client](https://www.apollographql.com/client) and its [server](https://www.apollographql.com/server).
 
 ## Links
 
