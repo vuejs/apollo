@@ -34,20 +34,18 @@
     "test:types": "tsc -p tests/types/"
   },
   "dependencies": {
-    "throttle-debounce": "^2.1.0",
-    "vue-demi": "latest"
+    "throttle-debounce": "^2.3.0",
+    "vue-demi": "^0.4.0"
   },
   "peerDependencies": {
-    "@vue/composition-api": "^0.6.1",
-    "apollo-client": "^2.0.0",
-    "apollo-link": "^1.0.0",
+    "@apollo/client": "^3.2.1",
+    "@vue/composition-api": "^1.0.0-beta.16",
     "graphql": "^14.5.8",
-    "graphql-tag": "^2.0.0",
     "vue": "^2.6.10"
   },
   "devDependencies": {
     "@types/throttle-debounce": "^2.1.0",
-    "@vue/composition-api": "^0.6.1",
-    "typescript": "^3.7.2"
+    "@vue/composition-api": "^1.0.0-beta.16",
+    "typescript": "^4"
   }
 }

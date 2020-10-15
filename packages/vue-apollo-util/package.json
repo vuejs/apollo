@@ -32,6 +32,6 @@
     "prepublishOnly": "yarn build"
   },
   "devDependencies": {
-    "typescript": "^3.7.2"
+    "typescript": "^4"
   }
 }
