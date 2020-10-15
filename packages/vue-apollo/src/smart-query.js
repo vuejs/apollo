@@ -157,7 +157,7 @@ export default class SmartQuery extends SmartApollo {
     const anyErrors = errors && errors.length
 
     if (error || anyErrors) {
-      this.firstRunReject()
+      this.firstRunReject(error)
     }
 
     if (!loading) {
