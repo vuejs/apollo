@@ -14,7 +14,7 @@
 
 ## Become a sponsor
 
-你的公司是否使用了 vue-apollo 或 vue-cli-plugin-apollo 来构建出色的应用程序？加入资助者并成为赞助商，在此文档中添加你的 logo！在 Patreon 上支持我，将节省我用于谋生的工作时间，从而能够在如 vue-apollo 一样的免费开源软件上工作更多！谢谢！
+你的公司是否使用了 `vue-apollo` 或 vue-cli-plugin-apollo 来构建出色的应用程序？加入资助者并成为赞助商，在此文档中添加你的 logo！在 Patreon 上支持我，将节省我用于谋生的工作时间，从而能够在如 vue-apollo 一样的免费开源软件上工作更多！谢谢！
 
 <p style="text-align: center;">
   <a href="https://www.patreon.com/akryum" target="_blank">

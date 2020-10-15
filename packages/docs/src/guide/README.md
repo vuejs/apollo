@@ -10,7 +10,7 @@ This library integrates [apollo](https://www.apollographql.com/) in your [Vue](h
 
 ## Become a sponsor
 
-Is your company using vue-apollo or vue-cli-plugin-apollo to build awesome apps? Join the other sponsors and add your logo on this documentation! Supporting me on GitHub allows me to work less for a job and to work more on Free Open Source Software such as vue-apollo! Thank you!
+Is your company using `vue-apollo` or `vue-cli-plugin-apollo` to build awesome apps? Join the other sponsors and add your logo on this documentation! Supporting me on GitHub allows me to work less for a job and to work more on Free Open Source Software such as `vue-apollo`! Thank you!
 
 <sponsor-button/>
 
