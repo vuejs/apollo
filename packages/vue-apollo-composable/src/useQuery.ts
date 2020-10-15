@@ -1,5 +1,4 @@
-import { ref, Ref, isRef, computed, watch, onServerPrefetch, getCurrentInstance, onBeforeUnmount } from 'vue-demi'
-import Vue from 'vue'
+import { ref, Ref, isRef, computed, watch, onServerPrefetch, getCurrentInstance, onBeforeUnmount, nextTick } from 'vue-demi'
 import { DocumentNode } from 'graphql'
 import {
   OperationVariables,
@@ -137,7 +136,7 @@ export function useQuery<
   // SSR
   let firstResolve: Function | undefined
   let firstReject: Function | undefined
-  onServerPrefetch(async () => {
+  onServerPrefetch && onServerPrefetch(async () => {
     if (!isEnabled.value || (isServer && currentOptions.value.prefetch === false)) return;
 
     return new Promise((resolve, reject) => {
@@ -304,7 +303,7 @@ export function useQuery<
   function baseRestart () {
     if (!started || restarting) return
     restarting = true
-    Vue.nextTick(() => {
+    nextTick(() => {
       if (started) {
         stop()
         start()
