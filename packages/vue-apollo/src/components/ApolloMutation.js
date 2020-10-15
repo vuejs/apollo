@@ -67,7 +67,7 @@ export default {
         mutation = mutation(gql)
       }
 
-      this.$apollo.mutate({
+      return this.$apollo.mutate({
         mutation,
         client: this.clientId,
         variables: this.variables,
