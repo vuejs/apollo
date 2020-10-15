@@ -134,14 +134,24 @@ export function useQuery<
   const networkStatus = ref<number>()
 
   // SSR
-  let firstResolve: Function
-  let firstReject: Function
-  if (onServerPrefetch) {
-    onServerPrefetch(() => new Promise((resolve, reject) => {
-      firstResolve = resolve
-      firstReject = reject
-    }).then(stop).catch(stop))
-  }
+  let firstResolve: Function | undefined
+  let firstReject: Function | undefined
+  onServerPrefetch && onServerPrefetch(async () => {
+    if (!isEnabled.value || (isServer && currentOptions.value.prefetch === false)) return;
+
+    return new Promise((resolve, reject) => {
+      firstResolve = () => {
+        resolve();
+        firstResolve = undefined;
+        firstReject = undefined;
+      }
+      firstReject = () => {
+        reject();
+        firstResolve = undefined;
+        firstReject = undefined;
+      }
+    }).then(stop).catch(stop)
+  })
 
   // Apollo Client
   const { resolveClient } = useApolloClient()
@@ -156,8 +166,13 @@ export function useQuery<
    * Starts watching the query
    */
   function start () {
-    if (started || !isEnabled.value) return
-    if (isServer && currentOptions.value.prefetch === false) return
+    if (
+      started || !isEnabled.value ||
+      (isServer && currentOptions.value.prefetch === false)
+    ) {
+      if (firstResolve) firstResolve();
+      return
+    }
 
     started = true
     loading.value = true
@@ -216,7 +231,6 @@ export function useQuery<
     } else {
       if (firstResolve) {
         firstResolve()
-        firstResolve = null
         stop()
       }
     }
@@ -234,7 +248,6 @@ export function useQuery<
     processError(queryError)
     if (firstReject) {
       firstReject(queryError)
-      firstReject = null
       stop()
     }
     // The observable closes the sub if an error occurs
@@ -263,6 +276,7 @@ export function useQuery<
    * Stop watching the query
    */
   function stop () {
+    if (firstResolve) firstResolve();
     if (!started) return
     started = false
     loading.value = false
