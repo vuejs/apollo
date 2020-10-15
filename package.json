@@ -6,6 +6,7 @@
   ],
   "private": true,
   "scripts": {
+    "release": "lerna publish"
   },
   "devDependencies": {
     "core-js": "^3.4.1",
