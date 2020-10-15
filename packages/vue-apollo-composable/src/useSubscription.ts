@@ -1,6 +1,5 @@
 import { DocumentNode } from 'graphql'
-import Vue from 'vue'
-import { Ref, ref, watch, isRef, computed, getCurrentInstance, onBeforeUnmount } from 'vue-demi'
+import { Ref, ref, watch, isRef, computed, getCurrentInstance, onBeforeUnmount, nextTick } from 'vue-demi'
 import { OperationVariables, SubscriptionOptions } from 'apollo-client'
 import { Observable, Subscription } from 'apollo-client/util/Observable'
 import { FetchResult } from 'apollo-link'
@@ -169,7 +168,7 @@ export function useSubscription <
   function baseRestart () {
     if (!started || restarting) return
     restarting = true
-    Vue.nextTick(() => {
+    nextTick(() => {
       if (started) {
         stop()
         start()
