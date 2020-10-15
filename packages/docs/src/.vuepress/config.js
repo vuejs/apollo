@@ -53,7 +53,7 @@ module.exports = {
                 link: '/guide-composable/',
               },
               {
-                text: 'Components',
+                text: 'Component API',
                 link: '/guide-components/',
               },
               {
