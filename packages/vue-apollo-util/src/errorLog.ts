@@ -1,4 +1,4 @@
-import { print } from 'graphql'
+import { print } from 'graphql/language/printer'
 
 export function getErrorMessages (error) {
   const messages: string[] = []
