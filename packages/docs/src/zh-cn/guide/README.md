@@ -10,41 +10,11 @@
 
 ## 赞助商
 
-### Gold
-
-<p style="text-align: center;">
-  <a href="https://www.sumcumo.com/en/" target="_blank">
-    <img src="https://cdn.discordapp.com/attachments/258614093362102272/570728242399674380/logo-sumcumo.png" alt="sum.cumo logo" class="gold-sponsor">
-  </a>
-</p>
-
-### 银牌赞助商
-
-<p style="text-align: center;">
-  <a href="https://vueschool.io/" target="_blank">
-    <img src="https://vueschool.io/img/logo/vueschool_logo_multicolor.svg" alt="VueSchool logo" class="silver-sponsor">
-  </a>
-
-  <a href="https://www.vuemastery.com/" target="_blank">
-    <img src="https://cdn.discordapp.com/attachments/258614093362102272/557267759130607630/Vue-Mastery-Big.png" alt="Vue Mastery logo" class="silver-sponsor">
-  </a>
-</p>
-
-### 铜牌赞助商
-
-<p align="center">
-  <a href="https://vuetifyjs.com" target="_blank">
-    <img src="https://cdn.discordapp.com/attachments/537832759985700914/537832771691872267/Horizontal_Logo_-_Dark.png" alt="Vuetify logo" class="bronze-sponsor">
-  </a>
-
-  <a href="https://www.frontenddeveloperlove.com/" target="_blank" title="Frontend Developer Love">
-    <img src="https://cdn.discordapp.com/attachments/258614093362102272/557267744249085953/frontend_love-logo.png" alt="Frontend Developer Love logo" class="bronze-sponsor">
-  </a>
-</p>
+[![sponsors logos](https://guillaume-chau.info/sponsors.png)](https://guillaume-chau.info/sponsors)
 
 ## Become a sponsor
 
-你的公司是否使用了 vue-apollo 或 vue-cli-plugin-apollo 来构建出色的应用程序？加入资助者并成为赞助商，在此文档中添加你的 logo！在 Patreon 上支持我，将节省我用于谋生的工作时间，从而能够在如 vue-apollo 一样的免费开源软件上工作更多！谢谢！
+你的公司是否使用了 `vue-apollo` 或 vue-cli-plugin-apollo 来构建出色的应用程序？加入资助者并成为赞助商，在此文档中添加你的 logo！在 Patreon 上支持我，将节省我用于谋生的工作时间，从而能够在如 vue-apollo 一样的免费开源软件上工作更多！谢谢！
 
 <p style="text-align: center;">
   <a href="https://www.patreon.com/akryum" target="_blank">

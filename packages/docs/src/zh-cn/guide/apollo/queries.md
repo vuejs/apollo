@@ -89,7 +89,7 @@ apollo: {
 }
 ```
 
-注意 `world` 与 `hello` 的不同之处：vue-apollo 不会去猜测你想要将哪些数据从查询结果中放入组件中。默认情况下，它只会尝试你在组件中使用的数据名称（即 `apollo` 对象中的键），在本例中为 `world`。如果名称不匹配，你可以使用 `update` 选项来告诉 vue-apollo 在结果中使用什么样的数据：
+注意 `world` 与 `hello` 的不同之处：`vue-apollo` 不会去猜测你想要将哪些数据从查询结果中放入组件中。默认情况下，它只会尝试你在组件中使用的数据名称（即 `apollo` 对象中的键），在本例中为 `world`。如果名称不匹配，你可以使用 `update` 选项来告诉 vue-apollo 在结果中使用什么样的数据：
 
 ```js
 apollo: {
@@ -445,4 +445,4 @@ created () {
 
 ## 高级选项
 
-还有更多专用于 vue-apollo 的选项，请查看 [API 参考](../../api/smart-query.md)。
+还有更多专用于 `vue-apollo` 的选项，请查看 [API 参考](../../api/smart-query.md)。

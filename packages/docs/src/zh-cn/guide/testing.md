@@ -1,6 +1,6 @@
 # 测试
 
-要为 vue-apollo 查询和变更创建单元测试，你可以选择简单测试或使用模拟 GraqhQL schema 进行测试。所有的示例都使用了 [Jest](https://jestjs.io/) 和 [vue-test-utils](https://github.com/vuejs/vue-test-utils)。
+要为 `vue-apollo` 查询和变更创建单元测试，你可以选择简单测试或使用模拟 GraqhQL schema 进行测试。所有的示例都使用了 [Jest](https://jestjs.io/) 和 [vue-test-utils](https://github.com/vuejs/vue-test-utils)。
 
 ## 简单测试
 

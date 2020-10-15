@@ -22,4 +22,9 @@ describe('SSR Apollo', () => {
     cy.get('.input').type('Anne')
     cy.get('.hello').should('contain', 'Hello Anne!')
   })
+
+  it('should support inline template', () => {
+    cy.visit('/inline-template')
+    cy.get('.text').should('contain', 'inline template')
+  })
 })

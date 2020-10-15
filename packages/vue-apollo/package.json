@@ -1,6 +1,6 @@
 {
   "name": "vue-apollo",
-  "version": "3.0.2",
+  "version": "3.0.4",
   "description": "Use Apollo and GraphQL with Vue.js",
   "main": "dist/vue-apollo.umd.js",
   "module": "dist/vue-apollo.esm.js",
@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "chalk": "^2.4.2",
-    "serialize-javascript": "^2.1.0",
+    "serialize-javascript": "^4.0.0",
     "throttle-debounce": "^2.1.0"
   },
   "devDependencies": {

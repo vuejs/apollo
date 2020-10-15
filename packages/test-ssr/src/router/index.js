@@ -22,6 +22,11 @@ export function createRouter () {
       component: () => import(/* webpackChunkName: "apollo-loading" */ '../components/ApolloLoading.vue')
     },
     {
+      path: '/inline-template',
+      name: 'inline-template',
+      component: () => import(/* webpackChunkName: "inline-template" */ '../components/InlineTemplate.vue')
+    },
+    {
       path: '/hello',
       name: 'hello',
       component: () => import(/* webpackChunkName: "hello" */ '../components/HelloWorld.vue')

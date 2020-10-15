@@ -1,6 +1,6 @@
 # Testing
 
-To create unit tests for vue-apollo queries and mutations you can choose either a simple testing or tests with mocked GraqhQL schema. All examples here use [Jest](https://jestjs.io/) and [vue-test-utils](https://github.com/vuejs/vue-test-utils)
+To create unit tests for `vue-apollo` queries and mutations you can choose either a simple testing or tests with mocked GraqhQL schema. All examples here use [Jest](https://jestjs.io/) and [vue-test-utils](https://github.com/vuejs/vue-test-utils)
 
 ## Simple tests
 
@@ -38,6 +38,27 @@ test('called Apollo mutation in addHero() method', () => {
   })
   wrapper.vm.addHero()
   expect(mutate).toBeCalled()
+})
+```
+
+### Testing loading state with mocking $apollo
+If you want to test how your component renders when results from the GraphQL API are still loading, you can also mock a loading state in respective Apollo queries:
+
+```js
+test('renders correctly when loading allHeroes', () => {
+  const wrapper = mount(App, {
+    mocks: {
+      $apollo: {
+        queries: {
+          allHeroes: {
+            loading: true,
+          },
+        },
+      },
+    },
+  })
+
+  expect(wrapper.element).toMatchSnapshot();
 })
 ```
 
