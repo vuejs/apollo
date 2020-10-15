@@ -394,7 +394,7 @@ export default Vue.extend({
       },
     })
     observer.subscribe({
-      next(data) {
+      next(data: any) {
         console.log('this.$apollo.subscribe', data)
       },
     })

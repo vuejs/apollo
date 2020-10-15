@@ -10,15 +10,12 @@ import {
   OperationVariables,
 } from 'apollo-client'
 import { FetchResult } from 'apollo-link'
-import { Observable } from 'apollo-client/util/Observable'
-import { ApolloProvider, VueApolloComponent } from './apollo-provider'
+import Observable from 'zen-observable'
+import { ApolloProvider } from './apollo-provider'
 import {
   VueApolloQueryDefinition,
   VueApolloSubscriptionDefinition,
-  WatchLoading,
-  ErrorHandler,
 } from './options'
-import { GraphQLError } from 'graphql'
 
 export class VueApollo extends ApolloProvider implements PluginObject<{}>{
   [key: string]: any
@@ -76,6 +73,6 @@ export interface DollarApollo<V> extends ApolloClientMethods {
 
   getClient<R = any>(): ApolloClient<R>
 
-  addSmartQuery<R = any>(key: string, options: VueApolloQueryDefinition<R>): SmartQuery<V>
-  addSmartSubscription<R = any>(key: string, options: VueApolloSubscriptionDefinition): SmartSubscription<V>
+  addSmartQuery<R = any, Variables = OperationVariables>(key: string, options: VueApolloQueryDefinition<R, Variables>): SmartQuery<V>
+  addSmartSubscription<Variables = OperationVariables>(key: string, options: VueApolloSubscriptionDefinition<Variables>): SmartSubscription<V>
 }

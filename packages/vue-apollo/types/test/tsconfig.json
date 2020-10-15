@@ -21,7 +21,8 @@
     "experimentalDecorators": true,
     "strict": true,
     "noImplicitAny": true,
-    "allowJs": true
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": [
     "*.ts",
