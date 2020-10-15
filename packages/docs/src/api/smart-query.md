@@ -39,6 +39,12 @@ apollo: {
         message: this.pingInput,
       }
     },
+    // Polling interval in milliseconds
+    pollInterval: 10000,
+    // Or, set polling interval as a vue reactive property
+    pollInterval() {
+      return this.pollInterval;
+    },
     // Variables: deep object watch
     deep: false,
     // We use a custom update callback because
