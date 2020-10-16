@@ -1,8 +1,17 @@
-// https://docs.cypress.io/api/introduction/api.html
-
-describe('My First Test', () => {
-  it('Visits the app root url', () => {
+describe('Vue 3 + Apollo Composable', () => {
+  beforeEach(() => {
     cy.visit('/')
-    cy.contains('h1', 'Welcome to Your Vue.js + TypeScript App')
+  })
+
+  it('loads channels', () => {
+    cy.contains('#app', 'Loading channels...')
+    cy.get('.channel-link').should('have.lengthOf', 2)
+    cy.contains('.channel-link', '# General')
+    cy.contains('.channel-link', '# Random')
+  })
+
+  it('load one channel', () => {
+    cy.get('.channel-link').eq(0).click()
+    cy.contains('#app', 'Currently viewing # General')
   })
 })

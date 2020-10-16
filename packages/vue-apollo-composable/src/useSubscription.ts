@@ -1,8 +1,7 @@
 import { DocumentNode } from 'graphql'
 import { Ref, ref, watch, isRef, computed, getCurrentInstance, onBeforeUnmount, nextTick } from 'vue-demi'
-import { OperationVariables, SubscriptionOptions } from 'apollo-client'
-import { Observable, Subscription } from 'apollo-client/util/Observable'
-import { FetchResult } from 'apollo-link'
+import { OperationVariables, SubscriptionOptions, FetchResult } from '@apollo/client/core'
+import { Observable, ObservableSubscription as Subscription } from '@apollo/client/utilities/observables/Observable'
 import { throttle, debounce } from 'throttle-debounce'
 import { ReactiveFunction } from './util/ReactiveFunction'
 import { paramToRef } from './util/paramToRef'
@@ -90,7 +89,7 @@ export function useSubscription <
   options: UseSubscriptionOptions<TResult, TVariables> | Ref<UseSubscriptionOptions<TResult, TVariables>> | ReactiveFunction<UseSubscriptionOptions<TResult, TVariables>> = null
 ): UseSubscriptionReturn<TResult, TVariables> {
   // Is on server?
-  const vm = getCurrentInstance()
+  const vm: any = getCurrentInstance()
   const isServer = vm?.$isServer
 
   if (variables == null) variables = ref()

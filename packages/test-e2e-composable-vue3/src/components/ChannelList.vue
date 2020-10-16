@@ -29,17 +29,33 @@ export default defineComponent({
 </script>
 
 <template>
-  <div v-if="loading">
+  <div v-if="loading" class="p-12 text-gray-500">
     Loading channels...
   </div>
 
-  <template v-else>
-    <button
+  <div v-else class="flex flex-col bg-white">
+    <router-link
       v-for="channel of channels"
       :key="channel.id"
-      class="block"
+      :to="{
+        name: 'channel',
+        params: {
+          id: channel.id,
+        },
+      }"
+      custom
+      #default="{ href, navigate, isActive }"
     >
-      {{ channel.label }}
-    </button>
-  </template>
+      <a
+        :href="href"
+        class="channel-link px-4 py-2 hover:bg-green-100 text-green-700"
+        :class="{
+          'bg-green-200 hover:bg-green-300 text-green-900': isActive,
+        }"
+        @click="navigate"
+      >
+        # {{ channel.label }}
+      </a>
+    </router-link>
+  </div>
 </template>

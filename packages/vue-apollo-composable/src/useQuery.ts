@@ -4,6 +4,7 @@ import {
   isRef,
   computed,
   watch,
+  // @ts-ignore
   onServerPrefetch,
   getCurrentInstance,
   onBeforeUnmount,
@@ -18,8 +19,8 @@ import {
   SubscribeToMoreOptions,
   FetchMoreQueryOptions,
   FetchMoreOptions,
-} from 'apollo-client'
-import { Subscription } from 'apollo-client/util/Observable'
+} from '@apollo/client/core'
+import { ObservableSubscription as Subscription } from '@apollo/client/utilities/observables/Observable'
 import { throttle, debounce } from 'throttle-debounce'
 import { useApolloClient } from './useApolloClient'
 import { ReactiveFunction } from './util/ReactiveFunction'
@@ -116,7 +117,7 @@ export function useQuery<
   options?: UseQueryOptions<TResult, TVariables> | Ref<UseQueryOptions<TResult, TVariables>> | ReactiveFunction<UseQueryOptions<TResult, TVariables>>,
 ): UseQueryReturn<TResult, TVariables> {
   // Is on server?
-  const vm = getCurrentInstance()
+  const vm: any = getCurrentInstance()
   const isServer = vm?.$isServer
 
   if (variables == null) variables = ref()

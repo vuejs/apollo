@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const { gql, ApolloServer, ApolloError, PubSub, withFilter } = require('apollo-server')
 const shortid = require('shortid')
 
