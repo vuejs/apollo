@@ -89,21 +89,21 @@ const resolvers = {
       })
       pubsub.publish('messageUpdated', { messageUpdated: message })
       return message
-    }
+    },
   },
 
   Subscription: {
     messageAdded: {
       subscribe: withFilter(
         () => pubsub.asyncIterator('messageAdded'),
-        (payload, variables) => payload.messageAdded.channel.id === variables.channelId, 
+        (payload, variables) => payload.messageAdded.channel.id === variables.channelId,
       ),
     },
 
     messageUpdated: {
       subscribe: withFilter(
         () => pubsub.asyncIterator('messageUpdated'),
-        (payload, variables) => payload.messageUpdated.channel.id === variables.channelId, 
+        (payload, variables) => payload.messageUpdated.channel.id === variables.channelId,
       ),
     },
   },
@@ -117,5 +117,5 @@ const server = new ApolloServer({
 server.listen({
   port: 4042,
 }).then(({ url }) => {
-  console.log(`🚀  Server ready at ${url}`);
+  console.log(`🚀  Server ready at ${url}`)
 })
