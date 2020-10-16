@@ -1,4 +1,14 @@
-import { ref, Ref, isRef, computed, watch, onServerPrefetch, getCurrentInstance, onBeforeUnmount, nextTick } from 'vue-demi'
+import {
+  ref,
+  Ref,
+  isRef,
+  computed,
+  watch,
+  onServerPrefetch,
+  getCurrentInstance,
+  onBeforeUnmount,
+  nextTick,
+} from 'vue-demi'
 import { DocumentNode } from 'graphql'
 import {
   OperationVariables,
@@ -107,7 +117,7 @@ export function useQuery<
 ): UseQueryReturn<TResult, TVariables> {
   // Is on server?
   const vm = getCurrentInstance()
-  const isServer = vm.$isServer
+  const isServer = vm?.$isServer
 
   if (variables == null) variables = ref()
   if (options == null) options = {}

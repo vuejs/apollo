@@ -1,0 +1,42 @@
+{
+  "name": "test-e2e-global-composable-vue3",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "test:e2e": "vue-cli-service test:e2e",
+    "lint": "vue-cli-service lint",
+    "api": "node server.js"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.2.1",
+    "@vue/apollo-composable": "^4.0.0-alpha.10",
+    "apollo-server": "^2.18.2",
+    "core-js": "^3.6.5",
+    "graphql": "^15.3.0",
+    "shortid": "^2.2.15",
+    "vue": "^3.0.0",
+    "vue-demi": "^0.4.0"
+  },
+  "devDependencies": {
+    "@types/shortid": "^0.0.29",
+    "@typescript-eslint/eslint-plugin": "^2.33.0",
+    "@typescript-eslint/parser": "^2.33.0",
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-e2e-cypress": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-typescript": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.0",
+    "@vue/eslint-config-standard": "^5.1.2",
+    "@vue/eslint-config-typescript": "^5.0.2",
+    "eslint": "^6.7.2",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "eslint-plugin-vue": "^7.0.0-0",
+    "typescript": "^4.0.3"
+  }
+}

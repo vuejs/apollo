@@ -33,24 +33,28 @@ export function getAppTracking () {
 }
 
 export function getCurrentTracking () {
+  const vm = getCurrentInstance()
+  if (!vm) {
+    throw new Error('getCurrentTracking must be used during a component setup')
+  }
+
   const { appTracking } = getAppTracking()
-  const currentInstance = getCurrentInstance()
 
   let tracking: LoadingTracking
 
-  if (!appTracking.components.has(currentInstance)) {
+  if (!appTracking.components.has(vm)) {
     // Add per-component tracking
-    appTracking.components.set(currentInstance, tracking = {
+    appTracking.components.set(vm, tracking = {
       queries: ref(0),
       mutations: ref(0),
       subscriptions: ref(0),
     })
     // Cleanup
     onUnmounted(() => {
-      appTracking.components.delete(currentInstance)
+      appTracking.components.delete(vm)
     })
   } else {
-    tracking = appTracking.components.get(currentInstance)
+    tracking = appTracking.components.get(vm)
   }
 
   return {

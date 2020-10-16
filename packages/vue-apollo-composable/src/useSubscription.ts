@@ -91,7 +91,7 @@ export function useSubscription <
 ): UseSubscriptionReturn<TResult, TVariables> {
   // Is on server?
   const vm = getCurrentInstance()
-  const isServer = vm.$isServer
+  const isServer = vm?.$isServer
 
   if (variables == null) variables = ref()
   if (!options) options = {}
