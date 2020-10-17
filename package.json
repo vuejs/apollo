@@ -7,7 +7,8 @@
   "private": true,
   "scripts": {
     "build": "lerna run build --concurrency 1 --scope \"{vue-apollo,@vue/apollo}*\"",
-    "test": "lerna run test --concurrency 1"
+    "test": "lerna run test --concurrency 1",
+    "release": "lerna publish"
   },
   "devDependencies": {
     "core-js": "^3.4.1",
