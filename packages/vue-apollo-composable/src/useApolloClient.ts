@@ -7,50 +7,53 @@ export const ApolloClients = Symbol('apollo-clients')
 type ClientId = string
 type ClientDict<T> = Record<ClientId, ApolloClient<T>>
 
+type ResolveClient<TCacheShape, TReturn = ApolloClient<TCacheShape>> = (clientId?: ClientId) => TReturn
+type NullableApolloClient<TCacheShape> = ApolloClient<TCacheShape> | undefined
+
 export interface UseApolloClientReturn<TCacheShape> {
-  resolveClient: (clientId?: ClientId) => ApolloClient<TCacheShape>
+  resolveClient: ResolveClient<TCacheShape>
   readonly client: ApolloClient<TCacheShape>
 }
 
-function resolveDefaultClient<T> (providedApolloClients: ClientDict<T>, providedApolloClient: ApolloClient<T>): ApolloClient<T> {
+function resolveDefaultClient<T> (providedApolloClients: ClientDict<T>, providedApolloClient: ApolloClient<T>): NullableApolloClient<T> {
   const resolvedClient = providedApolloClients
     ? providedApolloClients.default
     : providedApolloClient
-  if (!resolvedClient) {
-    throw new Error('Apollo Client with id default not found')
-  }
   return resolvedClient
 }
 
-function resolveClientWithId<T> (providedApolloClients: ClientDict<T>, clientId: ClientId): ApolloClient<T> {
+function resolveClientWithId<T> (providedApolloClients: ClientDict<T>, clientId: ClientId): NullableApolloClient<T> {
   if (!providedApolloClients) {
     throw new Error(`No apolloClients injection found, tried to resolve '${clientId}' clientId`)
   }
-  const resolvedClient = providedApolloClients[clientId]
-  if (!resolvedClient) {
-    throw new Error(`Apollo Client with id ${clientId} not found`)
-  }
-  return resolvedClient
+  return providedApolloClients[clientId]
 }
 
 export function useApolloClient<TCacheShape = any> (clientId?: ClientId): UseApolloClientReturn<TCacheShape> {
+  let resolveImpl: ResolveClient<TCacheShape, NullableApolloClient<TCacheShape>>
+
   if (!getCurrentInstance()) {
-    return {
-      resolveClient: () => currentApolloClient,
-      get client () { return currentApolloClient },
+    resolveImpl = () => currentApolloClient
+  } else {
+    const providedApolloClients: ClientDict<TCacheShape> = inject(ApolloClients, null)
+    const providedApolloClient: ApolloClient<TCacheShape> = inject(DefaultApolloClient, null)
+
+    resolveImpl = (id: ClientId) => {
+      if (currentApolloClient) {
+        return currentApolloClient
+      } else if (id) {
+        return resolveClientWithId(providedApolloClients, id)
+      }
+      return resolveDefaultClient(providedApolloClients, providedApolloClient)
     }
   }
 
-  const providedApolloClients: ClientDict<TCacheShape> = inject(ApolloClients, null)
-  const providedApolloClient: ApolloClient<TCacheShape> = inject(DefaultApolloClient, null)
-
   function resolveClient (id: ClientId = clientId) {
-    if (currentApolloClient) {
-      return currentApolloClient
-    } else if (id) {
-      return resolveClientWithId(providedApolloClients, id)
+    const client = resolveImpl(id)
+    if (!client) {
+      throw new Error(`Apollo client with id ${id || 'default'} not found. Use provideApolloClient() if you are outside of a component setup.`)
     }
-    return resolveDefaultClient(providedApolloClients, providedApolloClient)
+    return client
   }
 
   return {
