@@ -60,10 +60,10 @@ export interface UseQueryReturn<TResult, TVariables> {
   refetch: (variables?: TVariables) => Promise<ApolloQueryResult<TResult>>
   fetchMore: <K extends keyof TVariables>(options: FetchMoreQueryOptions<TVariables, K> & FetchMoreOptions<TResult, TVariables>) => Promise<ApolloQueryResult<TResult>>
   subscribeToMore: <TSubscriptionVariables = OperationVariables, TSubscriptionData = TResult>(options: SubscribeToMoreOptions<TResult, TSubscriptionVariables, TSubscriptionData> | Ref<SubscribeToMoreOptions<TResult, TSubscriptionVariables, TSubscriptionData>> | ReactiveFunction<SubscribeToMoreOptions<TResult, TSubscriptionVariables, TSubscriptionData>>) => void
-  onResult: (fn: (param?: ApolloQueryResult<TResult>) => void) => {
+  onResult: (fn: (param: ApolloQueryResult<TResult>) => void) => {
       off: () => void
   }
-  onError: (fn: (param?: Error) => void) => {
+  onError: (fn: (param: Error) => void) => {
       off: () => void
   }
 }
