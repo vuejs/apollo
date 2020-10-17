@@ -1,10 +1,18 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "commonjs",
+    "module": "amd",
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "outDir": "dist",
+    "moduleResolution": "node",
+    "lib": [
+      "DOM",
+      "ES2015",
+      "ES2020.Symbol.WellKnown"
+    ],
+    "declaration": true
   },
   "include": [
     "src/**/*",
