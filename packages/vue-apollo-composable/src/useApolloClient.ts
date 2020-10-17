@@ -48,7 +48,7 @@ export function useApolloClient<TCacheShape = any>(clientId?: ClientId): UseApol
     if (currentApolloClient) {
       return currentApolloClient
     } else if (id) {
-      return resolveClientWithId(providedApolloClients, clientId)
+      return resolveClientWithId(providedApolloClients, id)
     }
     return resolveDefaultClient(providedApolloClients, providedApolloClient)
   }
