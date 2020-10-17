@@ -1,4 +1,4 @@
-import { FetchResult } from 'apollo-link'
+import { FetchResult } from '@apollo/client/core'
 import { useMutation, MutateFunction } from '../../src'
 import {
   ExampleDocument,
@@ -49,7 +49,7 @@ import { assertExactType } from './assertions'
       foo: 'bar',
     },
   }, {
-    fetchPolicy: 'cache-first',
+    fetchPolicy: 'no-cache',
   })
 }
 {
@@ -61,7 +61,7 @@ import { assertExactType } from './assertions'
   })
 
   useMutationNoTypes.mutate(null, {
-    fetchPolicy: 'cache-first',
+    fetchPolicy: 'no-cache',
   })
 }
 {
@@ -102,7 +102,7 @@ import { assertExactType } from './assertions'
   const useMutationOnlyMutationTypeWithOptions = useMutation<ExampleUpdateMutation>(
     ExampleDocument,
     {
-      fetchPolicy: 'cache-first',
+      fetchPolicy: 'no-cache',
     },
   )
 
@@ -183,7 +183,7 @@ import { assertExactType } from './assertions'
       clientId: '37Hn7m',
       context: 'any',
       errorPolicy: 'all',
-      fetchPolicy: 'cache-first',
+      fetchPolicy: 'no-cache',
       optimisticResponse: (vars: ExampleUpdateMutationVariables) => ({
         exampleUpdate: { example: { id: '' } },
       }),
@@ -250,7 +250,7 @@ import { assertExactType } from './assertions'
       clientId: '37Hn7m',
       context: 'any',
       errorPolicy: 'all',
-      fetchPolicy: 'cache-first',
+      fetchPolicy: 'no-cache',
       optimisticResponse: (vars: ExampleUpdateMutationVariables) => ({
         exampleUpdate: { example: { id: '' } },
       }),

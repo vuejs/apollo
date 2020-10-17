@@ -1,4 +1,4 @@
-import { Ref } from '@vue/composition-api'
+import { ComputedRef } from 'vue-demi'
 import {
   useGlobalMutationLoading,
   useGlobalQueryLoading,
@@ -11,40 +11,40 @@ import { assertExactType } from './assertions'
 
 {
   const useQueryLoadingReturn = useQueryLoading()
-  assertExactType<typeof useQueryLoadingReturn, Readonly<Ref<boolean>>>(useQueryLoadingReturn)
+  assertExactType<typeof useQueryLoadingReturn, ComputedRef<boolean>>(useQueryLoadingReturn)
 }
 
 {
   const useMutationLoadingReturn = useMutationLoading()
-  assertExactType<typeof useMutationLoadingReturn, Readonly<Ref<boolean>>>(
+  assertExactType<typeof useMutationLoadingReturn, ComputedRef<boolean>>(
     useMutationLoadingReturn,
   )
 }
 
 {
   const useSubscriptionLoadingReturn = useSubscriptionLoading()
-  assertExactType<typeof useSubscriptionLoadingReturn, Readonly<Ref<boolean>>>(
+  assertExactType<typeof useSubscriptionLoadingReturn, ComputedRef<boolean>>(
     useSubscriptionLoadingReturn,
   )
 }
 
 {
   const useGlobalQueryLoadingReturn = useGlobalQueryLoading()
-  assertExactType<typeof useGlobalQueryLoadingReturn, Readonly<Ref<boolean>>>(
+  assertExactType<typeof useGlobalQueryLoadingReturn, ComputedRef<boolean>>(
     useGlobalQueryLoadingReturn,
   )
 }
 
 {
   const useGlobalMutationLoadingReturn = useGlobalMutationLoading()
-  assertExactType<typeof useGlobalMutationLoadingReturn, Readonly<Ref<boolean>>>(
+  assertExactType<typeof useGlobalMutationLoadingReturn, ComputedRef<boolean>>(
     useGlobalMutationLoadingReturn,
   )
 }
 
 {
   const useGlobalSubscriptionLoadingReturn = useGlobalSubscriptionLoading()
-  assertExactType<typeof useGlobalSubscriptionLoadingReturn, Readonly<Ref<boolean>>>(
+  assertExactType<typeof useGlobalSubscriptionLoadingReturn, ComputedRef<boolean>>(
     useGlobalSubscriptionLoadingReturn,
   )
 }

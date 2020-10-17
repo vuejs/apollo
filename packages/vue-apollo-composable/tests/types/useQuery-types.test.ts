@@ -131,8 +131,6 @@ import { assertExactType } from './assertions'
       enabled: true,
       errorPolicy: 'all',
       fetchPolicy: 'cache-and-network',
-      fetchResults: true,
-      metadata: 'any',
       notifyOnNetworkStatusChange: true,
       pollInterval: 500,
       prefetch: true,
