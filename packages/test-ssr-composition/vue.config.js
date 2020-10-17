@@ -16,5 +16,6 @@ module.exports = {
     config.module.noParse([
       /iconv-loader/
     ])
+    config.resolve.alias.set('vue-demi', '@vue/composition-api')
   }
 }

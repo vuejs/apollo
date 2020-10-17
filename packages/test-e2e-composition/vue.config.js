@@ -1,3 +1,4 @@
+/** @type {import('@vue/cli-service').ProjectOptions} */
 module.exports = {
   pluginOptions: {
     apollo: {
@@ -26,5 +27,6 @@ module.exports = {
 
   chainWebpack (config) {
     config.resolve.symlinks(false)
+    config.resolve.alias.set('vue-demi', '@vue/composition-api')
   },
 }

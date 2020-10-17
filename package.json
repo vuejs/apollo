@@ -14,6 +14,8 @@
     "lerna": "^3.18.4"
   },
   "resolutions": {
-    "eslint-scope": "^5.0.0"
+    "eslint-scope": "^5.0.0",
+    "subscriptions-transport-ws": "0.9.18",
+    "graphql": "15.3.0"
   }
 }
