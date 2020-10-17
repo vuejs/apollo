@@ -1,6 +1,6 @@
 {
   "name": "private-vue-apollo-test-ssr",
-  "version": "4.0.0-alpha.7",
+  "version": "4.0.0-alpha.11",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -22,8 +22,8 @@
     "test:e2e:dev:client": "vue-cli-service test:e2e --mode development --url http://localhost:8000"
   },
   "dependencies": {
-    "@vue/apollo-components": "^4.0.0-alpha.7",
-    "@vue/apollo-option": "^4.0.0-alpha.7",
+    "@vue/apollo-components": "^4.0.0-alpha.11",
+    "@vue/apollo-option": "^4.0.0-alpha.11",
     "core-js": "^3.1.2",
     "graphql-type-json": "^0.3.2",
     "isomorphic-fetch": "^3.0.0",

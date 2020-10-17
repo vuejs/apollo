@@ -1,6 +1,6 @@
 {
   "name": "@vue/apollo-option",
-  "version": "4.0.0-alpha.7",
+  "version": "4.0.0-alpha.11",
   "description": "Use Apollo and GraphQL with Vue.js using the `apollo` option",
   "main": "dist/vue-apollo-option.umd.js",
   "module": "dist/vue-apollo-option.esm.js",
@@ -45,13 +45,13 @@
     "throttle-debounce": "^2.3.0"
   },
   "devDependencies": {
+    "@apollo/client": "^3.2.4",
     "@babel/core": "^7.1.2",
     "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@babel/plugin-transform-for-of": "^7.4.4",
     "@babel/preset-env": "^7.1.0",
     "@types/graphql": "^14.0.1",
     "@vue/test-utils": "^1.0.0-beta.25",
-    "@apollo/client": "^3.2.4",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "cross-env": "^6.0.0",
