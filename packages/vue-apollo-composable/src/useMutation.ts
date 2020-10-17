@@ -25,10 +25,10 @@ export interface UseMutationReturn<TResult, TVariables> {
   loading: Ref<boolean>
   error: Ref<Error>
   called: Ref<boolean>
-  onDone: (fn: (param?: FetchResult<TResult, Record<string, any>, Record<string, any>>) => void) => {
+  onDone: (fn: (param: FetchResult<TResult, Record<string, any>, Record<string, any>>) => void) => {
       off: () => void
   };
-  onError: (fn: (param?: Error) => void) => {
+  onError: (fn: (param: Error) => void) => {
       off: () => void
   };
 };

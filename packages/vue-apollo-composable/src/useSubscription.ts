@@ -45,10 +45,10 @@ export interface UseSubscriptionReturn<TResult, TVariables> {
   variables: Ref<TVariables>
   options: UseSubscriptionOptions<TResult, TVariables> | Ref<UseSubscriptionOptions<TResult, TVariables>>
   subscription: Ref<Observable<FetchResult<TResult, Record<string, any>, Record<string, any>>>>
-  onResult: (fn: (param?: FetchResult<TResult, Record<string, any>, Record<string, any>>) => void) => {
+  onResult: (fn: (param: FetchResult<TResult, Record<string, any>, Record<string, any>>) => void) => {
       off: () => void
   }
-  onError: (fn: (param?: Error) => void) => {
+  onError: (fn: (param: Error) => void) => {
       off: () => void
   }
 }
