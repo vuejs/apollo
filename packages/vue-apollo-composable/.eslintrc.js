@@ -10,5 +10,6 @@ module.exports = {
     '@typescript-eslint/strict-boolean-expressions': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/promise-function-async': 'off',
+    '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'off',
   },
 }
