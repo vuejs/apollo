@@ -64,7 +64,7 @@ export function useApolloClient<TCacheShape = any> (clientId?: ClientId): UseApo
   }
 }
 
-let currentApolloClient: ApolloClient<any>
+let currentApolloClient: NullableApolloClient<any>
 
 export function provideApolloClient<TCacheShape = any> (client: ApolloClient<TCacheShape>) {
   currentApolloClient = client
