@@ -1,24 +1,24 @@
-import gql from "graphql-tag";
+import gql from 'graphql-tag'
 
-export type ID = string;
+export type ID = string
 
-export type Example = {
-  id: ID;
-  name?: string;
-  colors?: string[];
-};
+export interface Example {
+  id: ID
+  name?: string
+  colors?: string[]
+}
 
 export const ExampleFragmentDoc = gql`
   fragment ExampleFragment on Example {
     name
     colors
   }
-`;
+`
 
-export type ExampleFragment = {
-  name?: string;
-  colors?: string[];
-};
+export interface ExampleFragment {
+  name?: string
+  colors?: string[]
+}
 
 export const ExampleDocument = gql`
   query getExample($id: ID!) {
@@ -29,57 +29,57 @@ export const ExampleDocument = gql`
   }
 
   ${ExampleFragmentDoc}
-`;
+`
 
-export type ExampleQuery = {
+export interface ExampleQuery {
   example?: {
-    __typename?: "Example";
-    id?: string;
-  } & ExampleFragment;
-};
+    __typename?: 'Example'
+    id?: string
+  } & ExampleFragment
+}
 
-export type ExampleQueryVariables = {
-  id: ID;
-};
+export interface ExampleQueryVariables {
+  id: ID
+}
 
-export type ExampleUpdatePayload = {
-  errors?: string[];
-  example?: Example;
-};
+export interface ExampleUpdatePayload {
+  errors?: string[]
+  example?: Example
+}
 
-export type ExampleUpdateMutation = {
-  exampleUpdate?: ExampleUpdatePayload;
-};
+export interface ExampleUpdateMutation {
+  exampleUpdate?: ExampleUpdatePayload
+}
 
-export type ExampleInput = {
-  name?: string;
-  colors?: string[];
-};
+export interface ExampleInput {
+  name?: string
+  colors?: string[]
+}
 
-export type ExampleUpdateMutationVariables = {
-  id: ID;
-  example: ExampleInput;
-};
+export interface ExampleUpdateMutationVariables {
+  id: ID
+  example: ExampleInput
+}
 
-export type ExampleUpdatedSubscription = {
-  exampleUpdated: ExampleFragment;
-};
+export interface ExampleUpdatedSubscription {
+  exampleUpdated: ExampleFragment
+}
 
-export type ExampleUpdatedSubscriptionVariables = {
-  id: ID;
-};
+export interface ExampleUpdatedSubscriptionVariables {
+  id: ID
+}
 
-export type SingleKeyExampleQuery = {
+export interface SingleKeyExampleQuery {
   example?: {
-    __typename?: "Example";
-  };
-};
+    __typename?: 'Example'
+  }
+}
 
-export type MultiKeyExampleQuery = {
+export interface MultiKeyExampleQuery {
   example?: {
-    __typename?: "Example";
-  };
+    __typename?: 'Example'
+  }
   otherExample?: {
-    __typename?: "OtherExample";
-  };
-};
+    __typename?: 'OtherExample'
+  }
+}

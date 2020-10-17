@@ -28,7 +28,7 @@ export function getAppTracking () {
   }
 
   return {
-    appTracking
+    appTracking,
   }
 }
 
@@ -59,7 +59,7 @@ export function getCurrentTracking () {
 
   return {
     appTracking,
-    tracking
+    tracking,
   }
 }
 
@@ -73,7 +73,7 @@ function track (loading: Ref<boolean>, type: keyof LoadingTracking) {
       appTracking[type].value += mod
     }
   }, {
-    immediate: true
+    immediate: true,
   })
 
   onBeforeUnmount(() => {

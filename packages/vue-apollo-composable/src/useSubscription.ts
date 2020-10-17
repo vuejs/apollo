@@ -25,6 +25,7 @@ import { useEventHook } from './util/useEventHook'
 import { trackSubscription } from './util/loadingTracking'
 
 export interface UseSubscriptionOptions <
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   TResult = any,
   TVariables = OperationVariables
 > extends Omit<SubscriptionOptions<TVariables>, 'query' | 'variables'> {
@@ -46,25 +47,24 @@ export interface UseSubscriptionReturn<TResult, TVariables> {
   options: UseSubscriptionOptions<TResult, TVariables> | Ref<UseSubscriptionOptions<TResult, TVariables>>
   subscription: Ref<Observable<FetchResult<TResult, Record<string, any>, Record<string, any>>>>
   onResult: (fn: (param: FetchResult<TResult, Record<string, any>, Record<string, any>>) => void) => {
-      off: () => void
+    off: () => void
   }
   onError: (fn: (param: Error) => void) => {
-      off: () => void
+    off: () => void
   }
 }
-
 
 /**
  * Use a subscription that does not require variables or options.
  * */
-export function useSubscription<TResult = any>(
+export function useSubscription<TResult = any> (
   document: DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>
 ): UseSubscriptionReturn<TResult, undefined>
 
 /**
  * Use a subscription that requires options but not variables.
  */
-export function useSubscription<TResult = any, TVariables extends undefined = undefined>(
+export function useSubscription<TResult = any, TVariables extends undefined = undefined> (
   document: DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>,
   variables: TVariables,
   options: UseSubscriptionOptions<TResult, TVariables> | Ref<UseSubscriptionOptions<TResult, TVariables>> | ReactiveFunction<UseSubscriptionOptions<TResult, TVariables>>
@@ -73,7 +73,7 @@ export function useSubscription<TResult = any, TVariables extends undefined = un
 /**
  * Use a subscription that requires variables.
  */
-export function useSubscription<TResult = any, TVariables extends OperationVariables = OperationVariables>(
+export function useSubscription<TResult = any, TVariables extends OperationVariables = OperationVariables> (
   document: DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>,
   variables: TVariables | Ref<TVariables> | ReactiveFunction<TVariables>
 ): UseSubscriptionReturn<TResult, TVariables>
@@ -81,14 +81,14 @@ export function useSubscription<TResult = any, TVariables extends OperationVaria
 /**
  * Use a subscription that has optional variables.
  */
-export function useSubscription<TResult = any, TVariables extends OperationVariables = OperationVariables>(
+export function useSubscription<TResult = any, TVariables extends OperationVariables = OperationVariables> (
   document: DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>
 ): UseSubscriptionReturn<TResult, TVariables>
 
 /**
  * Use a subscription that requires variables and options.
  */
-export function useSubscription<TResult = any, TVariables extends OperationVariables = OperationVariables>(
+export function useSubscription<TResult = any, TVariables extends OperationVariables = OperationVariables> (
   document: DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>,
   variables: TVariables | Ref<TVariables> | ReactiveFunction<TVariables>,
   options: UseSubscriptionOptions<TResult, TVariables> | Ref<UseSubscriptionOptions<TResult, TVariables>> | ReactiveFunction<UseSubscriptionOptions<TResult, TVariables>>
@@ -100,7 +100,7 @@ export function useSubscription <
 > (
   document: DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>,
   variables: TVariables | Ref<TVariables> | ReactiveFunction<TVariables> = null,
-  options: UseSubscriptionOptions<TResult, TVariables> | Ref<UseSubscriptionOptions<TResult, TVariables>> | ReactiveFunction<UseSubscriptionOptions<TResult, TVariables>> = null
+  options: UseSubscriptionOptions<TResult, TVariables> | Ref<UseSubscriptionOptions<TResult, TVariables>> | ReactiveFunction<UseSubscriptionOptions<TResult, TVariables>> = null,
 ): UseSubscriptionReturn<TResult, TVariables> {
   // Is on server?
   const vm: any = getCurrentInstance()
@@ -181,6 +181,7 @@ export function useSubscription <
   function baseRestart () {
     if (!started || restarting) return
     restarting = true
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     nextTick(() => {
       if (started) {
         stop()
@@ -219,7 +220,7 @@ export function useSubscription <
     restart()
   }, {
     deep: true,
-    immediate: true
+    immediate: true,
   })
 
   // Applying document
@@ -228,7 +229,7 @@ export function useSubscription <
     currentDocument = value
     restart()
   }, {
-    immediate: true
+    immediate: true,
   })
 
   // Applying variables
@@ -243,7 +244,7 @@ export function useSubscription <
     currentVariablesSerialized = serialized
   }, {
     deep: true,
-    immediate: true
+    immediate: true,
   })
 
   // Internal enabled returned to user
@@ -267,7 +268,7 @@ export function useSubscription <
       stop()
     }
   }, {
-    immediate: true
+    immediate: true,
   })
 
   // Teardown

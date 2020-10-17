@@ -26,17 +26,17 @@ export interface UseMutationReturn<TResult, TVariables> {
   error: Ref<Error>
   called: Ref<boolean>
   onDone: (fn: (param: FetchResult<TResult, Record<string, any>, Record<string, any>>) => void) => {
-      off: () => void
-  };
+    off: () => void
+  }
   onError: (fn: (param: Error) => void) => {
-      off: () => void
-  };
+    off: () => void
+  }
 };
 
 /**
  * Use a mutation with variables.
  */
-export function useMutation<TResult = any, TVariables extends OperationVariables = OperationVariables>(
+export function useMutation<TResult = any, TVariables extends OperationVariables = OperationVariables> (
   document: DocumentNode | ReactiveFunction<DocumentNode>,
   options?: UseMutationOptions<TResult, TVariables> | ReactiveFunction<UseMutationOptions<TResult, TVariables>>
 ): UseMutationReturn<TResult, TVariables>
@@ -44,7 +44,7 @@ export function useMutation<TResult = any, TVariables extends OperationVariables
 /**
  * Use a mutation with variables, but without a default.
  */
-export function useMutation<TResult = any, TVariables extends OperationVariables = OperationVariables>(
+export function useMutation<TResult = any, TVariables extends OperationVariables = OperationVariables> (
   document: DocumentNode | ReactiveFunction<DocumentNode>,
   options?: UseMutationOptions<TResult, undefined> | ReactiveFunction<UseMutationOptions<TResult, undefined>>
 ): UseMutationReturn<TResult, TVariables>

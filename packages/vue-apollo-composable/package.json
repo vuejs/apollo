@@ -31,7 +31,8 @@
     "dev": "tsc --watch --outFile dist/vue-apollo-composable.js",
     "build": "tsc --outFile dist/vue-apollo-composable.js && tsc -m es2015 ",
     "prepublishOnly": "yarn test && yarn build",
-    "test": "yarn test:types",
+    "test": "yarn test:lint && yarn test:types",
+    "test:lint": "eslint . --ext .js,.ts",
     "test:types": "tsc -p tests/types/"
   },
   "dependencies": {
@@ -46,7 +47,15 @@
   },
   "devDependencies": {
     "@types/throttle-debounce": "^2.1.0",
+    "@typescript-eslint/eslint-plugin": "^4.4.1",
+    "@typescript-eslint/parser": "^4.4.1",
     "@vue/composition-api": "^1.0.0-beta.16",
-    "typescript": "^4"
+    "eslint": "^7.11.0",
+    "eslint-config-standard-with-typescript": "^19.0.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "typescript": "^4.0.3"
   }
 }

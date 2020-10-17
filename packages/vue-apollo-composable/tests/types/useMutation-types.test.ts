@@ -1,48 +1,48 @@
-import { FetchResult } from "apollo-link";
-import { useMutation, MutateFunction } from "../../src";
+import { FetchResult } from 'apollo-link'
+import { useMutation, MutateFunction } from '../../src'
 import {
   ExampleDocument,
   ExampleUpdateMutation,
   ExampleUpdateMutationVariables,
-  ExampleUpdatePayload
-} from "../fixtures/graphql-example-types";
-import { assertExactType } from "./assertions";
+  ExampleUpdatePayload,
+} from '../fixtures/graphql-example-types'
+import { assertExactType } from './assertions'
 
 // =============================================================================
 // With no types:
 // - TResult should be `any`
 // =============================================================================
 {
-  const useMutationNoTypes = useMutation(ExampleDocument);
+  const useMutationNoTypes = useMutation(ExampleDocument)
 
   useMutationNoTypes.onDone(param => {
-    assertExactType<typeof param, FetchResult<any> | undefined>(param);
-    param?.data.dataType.is.anything;
-  });
+    assertExactType<typeof param, FetchResult<any> | undefined>(param)
+    param?.data.dataType.is.anything
+  })
 
-  useMutationNoTypes.mutate();
+  useMutationNoTypes.mutate()
 }
 {
-  const useMutationNoTypes = useMutation(ExampleDocument);
+  const useMutationNoTypes = useMutation(ExampleDocument)
 
   useMutationNoTypes.onDone(param => {
-    assertExactType<typeof param, FetchResult<any> | undefined>(param);
-    param?.data.dataType.is.anything;
-  });
+    assertExactType<typeof param, FetchResult<any> | undefined>(param)
+    param?.data.dataType.is.anything
+  })
 
   useMutationNoTypes.mutate({
     input: {
       foo: 'bar',
     },
-  });
+  })
 }
 {
-  const useMutationNoTypes = useMutation(ExampleDocument);
+  const useMutationNoTypes = useMutation(ExampleDocument)
 
   useMutationNoTypes.onDone(param => {
-    assertExactType<typeof param, FetchResult<any> | undefined>(param);
-    param?.data.dataType.is.anything;
-  });
+    assertExactType<typeof param, FetchResult<any> | undefined>(param)
+    param?.data.dataType.is.anything
+  })
 
   useMutationNoTypes.mutate({
     input: {
@@ -50,29 +50,29 @@ import { assertExactType } from "./assertions";
     },
   }, {
     fetchPolicy: 'cache-first',
-  });
+  })
 }
 {
-  const useMutationNoTypes = useMutation(ExampleDocument);
+  const useMutationNoTypes = useMutation(ExampleDocument)
 
   useMutationNoTypes.onDone(param => {
-    assertExactType<typeof param, FetchResult<any> | undefined>(param);
-    param?.data.dataType.is.anything;
-  });
+    assertExactType<typeof param, FetchResult<any> | undefined>(param)
+    param?.data.dataType.is.anything
+  })
 
   useMutationNoTypes.mutate(null, {
     fetchPolicy: 'cache-first',
-  });
+  })
 }
 {
-  const useMutationNoTypes = useMutation(ExampleDocument);
+  const useMutationNoTypes = useMutation(ExampleDocument)
 
   useMutationNoTypes.onDone(param => {
-    assertExactType<typeof param, FetchResult<any> | undefined>(param);
-    param?.data.dataType.is.anything;
-  });
+    assertExactType<typeof param, FetchResult<any> | undefined>(param)
+    param?.data.dataType.is.anything
+  })
 
-  useMutationNoTypes.mutate(undefined, {});
+  useMutationNoTypes.mutate(undefined, {})
 }
 
 // =============================================================================
@@ -81,16 +81,16 @@ import { assertExactType } from "./assertions";
 // - TVariables should be `undefined`
 // =============================================================================
 {
-  const useMutationOnlyMutationType = useMutation<ExampleUpdateMutation>(ExampleDocument);
+  const useMutationOnlyMutationType = useMutation<ExampleUpdateMutation>(ExampleDocument)
 
   useMutationOnlyMutationType.onDone(param => {
-    assertExactType<typeof param, FetchResult<ExampleUpdateMutation> | undefined>(param);
+    assertExactType<typeof param, FetchResult<ExampleUpdateMutation> | undefined>(param)
     assertExactType<typeof param.data.exampleUpdate, ExampleUpdatePayload>(
-      param.data.exampleUpdate
-    );
-  });
+      param.data.exampleUpdate,
+    )
+  })
 
-  useMutationOnlyMutationType.mutate(undefined, {});
+  useMutationOnlyMutationType.mutate(undefined, {})
 }
 
 // =============================================================================
@@ -102,18 +102,18 @@ import { assertExactType } from "./assertions";
   const useMutationOnlyMutationTypeWithOptions = useMutation<ExampleUpdateMutation>(
     ExampleDocument,
     {
-      fetchPolicy: "cache-first"
-    }
-  );
+      fetchPolicy: 'cache-first',
+    },
+  )
 
   useMutationOnlyMutationTypeWithOptions.onDone(param => {
-    assertExactType<typeof param, FetchResult<ExampleUpdateMutation> | undefined>(param);
+    assertExactType<typeof param, FetchResult<ExampleUpdateMutation> | undefined>(param)
     assertExactType<typeof param.data.exampleUpdate, ExampleUpdatePayload>(
-      param.data.exampleUpdate
-    );
-  });
+      param.data.exampleUpdate,
+    )
+  })
 
-  useMutationOnlyMutationTypeWithOptions.mutate(undefined, {});
+  useMutationOnlyMutationTypeWithOptions.mutate(undefined, {})
 }
 
 // =============================================================================
@@ -124,17 +124,17 @@ import { assertExactType } from "./assertions";
 {
   const useMutationAllTyped = useMutation<ExampleUpdateMutation, ExampleUpdateMutationVariables>(
     ExampleDocument,
-    { variables: { id: "1", example: { name: "new" } } }
-  );
+    { variables: { id: '1', example: { name: 'new' } } },
+  )
 
-  useMutationAllTyped.mutate({ id: "2", example: { name: "remix" } }, {});
+  useMutationAllTyped.mutate({ id: '2', example: { name: 'remix' } }, {})
 
   useMutationAllTyped.onDone(param => {
-    assertExactType<typeof param, FetchResult<ExampleUpdateMutation> | undefined>(param);
+    assertExactType<typeof param, FetchResult<ExampleUpdateMutation> | undefined>(param)
     assertExactType<typeof param.data.exampleUpdate, ExampleUpdatePayload>(
-      param.data.exampleUpdate
-    );
-  });
+      param.data.exampleUpdate,
+    )
+  })
 }
 
 // =============================================================================
@@ -143,29 +143,29 @@ import { assertExactType } from "./assertions";
 // - TVariables should be the variables type
 // =============================================================================
 {
-  const useMutationAllTyped = useMutation<ExampleUpdateMutation, ExampleUpdateMutationVariables>(ExampleDocument);
+  const useMutationAllTyped = useMutation<ExampleUpdateMutation, ExampleUpdateMutationVariables>(ExampleDocument)
 
-  useMutationAllTyped.mutate({ id: "2", example: { name: "remix" } }, {});
+  useMutationAllTyped.mutate({ id: '2', example: { name: 'remix' } }, {})
 
   useMutationAllTyped.onDone(param => {
-    assertExactType<typeof param, FetchResult<ExampleUpdateMutation> | undefined>(param);
+    assertExactType<typeof param, FetchResult<ExampleUpdateMutation> | undefined>(param)
     assertExactType<typeof param.data.exampleUpdate, ExampleUpdatePayload>(
-      param.data.exampleUpdate
-    );
-  });
+      param.data.exampleUpdate,
+    )
+  })
 }
 
 {
-  const useMutationAllTyped = useMutation<ExampleUpdateMutation, ExampleUpdateMutationVariables>(ExampleDocument);
+  const useMutationAllTyped = useMutation<ExampleUpdateMutation, ExampleUpdateMutationVariables>(ExampleDocument)
 
-  useMutationAllTyped.mutate({ id: "2", example: { name: "remix" } }, {});
+  useMutationAllTyped.mutate({ id: '2', example: { name: 'remix' } }, {})
 
   useMutationAllTyped.onDone(param => {
-    assertExactType<typeof param, FetchResult<ExampleUpdateMutation> | undefined>(param);
+    assertExactType<typeof param, FetchResult<ExampleUpdateMutation> | undefined>(param)
     assertExactType<typeof param.data.exampleUpdate, ExampleUpdatePayload>(
-      param.data.exampleUpdate
-    );
-  });
+      param.data.exampleUpdate,
+    )
+  })
 }
 
 // =============================================================================
@@ -175,42 +175,42 @@ import { assertExactType } from "./assertions";
 // - mutate should have an optional variables parameter
 // =============================================================================
 {
-  const withVariablesInOptionsVariables = { id: "1", example: { name: "new" } };
+  const withVariablesInOptionsVariables = { id: '1', example: { name: 'new' } }
   const withVariablesInOptions = useMutation<ExampleUpdateMutation, ExampleUpdateMutationVariables>(
     ExampleDocument,
     {
       awaitRefetchQueries: true,
-      clientId: "37Hn7m",
-      context: "any",
-      errorPolicy: "all",
-      fetchPolicy: "cache-first",
+      clientId: '37Hn7m',
+      context: 'any',
+      errorPolicy: 'all',
+      fetchPolicy: 'cache-first',
       optimisticResponse: (vars: ExampleUpdateMutationVariables) => ({
-        exampleUpdate: { example: { id: "" } }
+        exampleUpdate: { example: { id: '' } },
       }),
-      refetchQueries: ["firstQuery", "secondQuery"],
+      refetchQueries: ['firstQuery', 'secondQuery'],
       update: (proxy, mutationResult: FetchResult<ExampleUpdateMutation>) => {
-        mutationResult.data?.exampleUpdate;
+        mutationResult.data?.exampleUpdate
       },
       updateQueries: {
         query: (result, options) => {
-          options.mutationResult.data?.exampleUpdate;
-          return {};
-        }
+          options.mutationResult.data?.exampleUpdate
+          return {}
+        },
       },
-      variables: withVariablesInOptionsVariables
-    }
-  );
+      variables: withVariablesInOptionsVariables,
+    },
+  )
 
   assertExactType<typeof withVariablesInOptions.mutate, MutateFunction<ExampleUpdateMutation, ExampleUpdateMutationVariables>>(
-    withVariablesInOptions.mutate
+    withVariablesInOptions.mutate,
   )
 
   withVariablesInOptions.onDone(param => {
-    assertExactType<typeof param, FetchResult<ExampleUpdateMutation> | undefined>(param);
+    assertExactType<typeof param, FetchResult<ExampleUpdateMutation> | undefined>(param)
     assertExactType<typeof param.data.exampleUpdate, ExampleUpdatePayload>(
-      param.data.exampleUpdate
-    );
-  });
+      param.data.exampleUpdate,
+    )
+  })
 }
 
 // =============================================================================
@@ -221,19 +221,19 @@ import { assertExactType } from "./assertions";
 // =============================================================================
 {
   const withNoOptions = useMutation<ExampleUpdateMutation, ExampleUpdateMutationVariables>(
-    ExampleDocument
-  );
+    ExampleDocument,
+  )
 
   assertExactType<typeof withNoOptions.mutate, MutateFunction<ExampleUpdateMutation, ExampleUpdateMutationVariables>>(
-    withNoOptions.mutate
+    withNoOptions.mutate,
   )
 
   withNoOptions.onDone(param => {
-    assertExactType<typeof param, FetchResult<ExampleUpdateMutation> | undefined>(param);
+    assertExactType<typeof param, FetchResult<ExampleUpdateMutation> | undefined>(param)
     assertExactType<typeof param.data.exampleUpdate, ExampleUpdatePayload>(
-      param.data.exampleUpdate
-    );
-  });
+      param.data.exampleUpdate,
+    )
+  })
 }
 
 // =============================================================================
@@ -247,36 +247,36 @@ import { assertExactType } from "./assertions";
     ExampleDocument,
     {
       awaitRefetchQueries: true,
-      clientId: "37Hn7m",
-      context: "any",
-      errorPolicy: "all",
-      fetchPolicy: "cache-first",
+      clientId: '37Hn7m',
+      context: 'any',
+      errorPolicy: 'all',
+      fetchPolicy: 'cache-first',
       optimisticResponse: (vars: ExampleUpdateMutationVariables) => ({
-        exampleUpdate: { example: { id: "" } }
+        exampleUpdate: { example: { id: '' } },
       }),
-      refetchQueries: ["firstQuery", "secondQuery"],
+      refetchQueries: ['firstQuery', 'secondQuery'],
       update: (proxy, mutationResult: FetchResult<ExampleUpdateMutation>) => {
-        mutationResult.data?.exampleUpdate;
+        mutationResult.data?.exampleUpdate
       },
       updateQueries: {
         query: (result, options) => {
-          options.mutationResult.data?.exampleUpdate;
-          return {};
-        }
-      }
-    }
-  );
+          options.mutationResult.data?.exampleUpdate
+          return {}
+        },
+      },
+    },
+  )
 
   assertExactType<typeof withNoVariablesInOptions.mutate, MutateFunction<ExampleUpdateMutation, ExampleUpdateMutationVariables>>(
-    withNoVariablesInOptions.mutate
+    withNoVariablesInOptions.mutate,
   )
 
   withNoVariablesInOptions.onDone(param => {
-    assertExactType<typeof param, FetchResult<ExampleUpdateMutation> | undefined>(param);
+    assertExactType<typeof param, FetchResult<ExampleUpdateMutation> | undefined>(param)
     assertExactType<typeof param.data.exampleUpdate, ExampleUpdatePayload>(
-      param.data.exampleUpdate
-    );
-  });
+      param.data.exampleUpdate,
+    )
+  })
 }
 
 // ====== Expected failures, uncomment to test ======

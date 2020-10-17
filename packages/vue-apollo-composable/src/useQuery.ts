@@ -4,7 +4,7 @@ import {
   isRef,
   computed,
   watch,
-  // @ts-ignore
+  // @ts-expect-error
   onServerPrefetch,
   getCurrentInstance,
   onBeforeUnmount,
@@ -30,6 +30,7 @@ import { useEventHook } from './util/useEventHook'
 import { trackQuery } from './util/loadingTracking'
 
 export interface UseQueryOptions<
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
   TResult = any,
   TVariables = OperationVariables
 > extends Omit<WatchQueryOptions<TVariables>, 'query' | 'variables'> {
@@ -61,31 +62,31 @@ export interface UseQueryReturn<TResult, TVariables> {
   fetchMore: <K extends keyof TVariables>(options: FetchMoreQueryOptions<TVariables, K> & FetchMoreOptions<TResult, TVariables>) => Promise<ApolloQueryResult<TResult>>
   subscribeToMore: <TSubscriptionVariables = OperationVariables, TSubscriptionData = TResult>(options: SubscribeToMoreOptions<TResult, TSubscriptionVariables, TSubscriptionData> | Ref<SubscribeToMoreOptions<TResult, TSubscriptionVariables, TSubscriptionData>> | ReactiveFunction<SubscribeToMoreOptions<TResult, TSubscriptionVariables, TSubscriptionData>>) => void
   onResult: (fn: (param: ApolloQueryResult<TResult>) => void) => {
-      off: () => void
+    off: () => void
   }
   onError: (fn: (param: Error) => void) => {
-      off: () => void
+    off: () => void
   }
 }
 
 /**
  * Use a query that does not require variables or options.
  * */
-export function useQuery<TResult = any>(
+export function useQuery<TResult = any> (
   document: DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>
 ): UseQueryReturn<TResult, undefined>
 
 /**
  * Use a query that has optional variables but not options
  */
-export function useQuery<TResult = any, TVariables extends OperationVariables = OperationVariables>(
+export function useQuery<TResult = any, TVariables extends OperationVariables = OperationVariables> (
   document: DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>
 ): UseQueryReturn<TResult, TVariables>
 
 /**
  * Use a query that has required variables but not options
  */
-export function useQuery<TResult = any, TVariables extends OperationVariables = OperationVariables>(
+export function useQuery<TResult = any, TVariables extends OperationVariables = OperationVariables> (
   document: DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>,
   variables: TVariables
 ): UseQueryReturn<TResult, TVariables>
@@ -93,7 +94,7 @@ export function useQuery<TResult = any, TVariables extends OperationVariables = 
 /**
  * Use a query that requires options but not variables.
  */
-export function useQuery<TResult = any, TVariables extends undefined = undefined>(
+export function useQuery<TResult = any, TVariables extends undefined = undefined> (
   document: DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>,
   variables: TVariables,
   options: UseQueryOptions<TResult, TVariables> | Ref<UseQueryOptions<TResult, TVariables>> | ReactiveFunction<UseQueryOptions<TResult, TVariables>>
@@ -102,7 +103,7 @@ export function useQuery<TResult = any, TVariables extends undefined = undefined
 /**
  * Use a query that requires variables and options.
  */
-export function useQuery<TResult = any, TVariables extends OperationVariables = OperationVariables>(
+export function useQuery<TResult = any, TVariables extends OperationVariables = OperationVariables> (
   document: DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>,
   variables: TVariables | Ref<TVariables> | ReactiveFunction<TVariables>,
   options: UseQueryOptions<TResult, TVariables> | Ref<UseQueryOptions<TResult, TVariables>> | ReactiveFunction<UseQueryOptions<TResult, TVariables>>
@@ -147,19 +148,19 @@ export function useQuery<
   // SSR
   let firstResolve: Function | undefined
   let firstReject: Function | undefined
-  onServerPrefetch && onServerPrefetch(async () => {
-    if (!isEnabled.value || (isServer && currentOptions.value.prefetch === false)) return;
+  onServerPrefetch?.(async () => {
+    if (!isEnabled.value || (isServer && !currentOptions.value.prefetch)) return
 
-    return new Promise((resolve, reject) => {
+    return await new Promise((resolve, reject) => {
       firstResolve = () => {
-        resolve();
-        firstResolve = undefined;
-        firstReject = undefined;
+        resolve()
+        firstResolve = undefined
+        firstReject = undefined
       }
-      firstReject = () => {
-        reject();
-        firstResolve = undefined;
-        firstReject = undefined;
+      firstReject = (error: Error) => {
+        reject(error)
+        firstResolve = undefined
+        firstReject = undefined
       }
     }).then(stop).catch(stop)
   })
@@ -179,9 +180,9 @@ export function useQuery<
   function start () {
     if (
       started || !isEnabled.value ||
-      (isServer && currentOptions.value.prefetch === false)
+      (isServer && !currentOptions.value.prefetch)
     ) {
-      if (firstResolve) firstResolve();
+      if (firstResolve) firstResolve()
       return
     }
 
@@ -195,8 +196,8 @@ export function useQuery<
       variables: currentVariables,
       ...currentOptions.value,
       ...isServer ? {
-        fetchPolicy: 'network-only'
-      } : {}
+        fetchPolicy: 'network-only',
+      } : {},
     })
 
     startQuerySubscription()
@@ -205,7 +206,7 @@ export function useQuery<
       const currentResult = query.value.getCurrentResult()
 
       if (!currentResult.loading || currentOptions.value.notifyOnNetworkStatusChange) {
-        onNextResult(currentResult as ApolloQueryResult<TResult>)
+        onNextResult(currentResult)
       }
     }
 
@@ -232,7 +233,7 @@ export function useQuery<
 
     // Result errors
     // This is set when `errorPolicy` is `all`
-    if (queryResult.errors && queryResult.errors.length) {
+    if (queryResult.errors?.length) {
       const e = new Error(`GraphQL error: ${queryResult.errors.map(e => e.message).join(' | ')}`)
       Object.assign(e, {
         graphQLErrors: queryResult.errors,
@@ -255,7 +256,7 @@ export function useQuery<
   }
 
   function onError (queryError: any) {
-    processNextResult(query.value.getCurrentResult() as ApolloQueryResult<TResult>)
+    processNextResult(query.value.getCurrentResult())
     processError(queryError)
     if (firstReject) {
       firstReject(queryError)
@@ -281,13 +282,13 @@ export function useQuery<
     Object.assign(query.value, { lastError, lastResult })
   }
 
-  let onStopHandlers: (() => void)[] = []
+  let onStopHandlers: Array<() => void> = []
 
   /**
    * Stop watching the query
    */
   function stop () {
-    if (firstResolve) firstResolve();
+    if (firstResolve) firstResolve()
     if (!started) return
     started = false
     loading.value = false
@@ -314,6 +315,7 @@ export function useQuery<
   function baseRestart () {
     if (!started || restarting) return
     restarting = true
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     nextTick(() => {
       if (started) {
         stop()
@@ -353,7 +355,7 @@ export function useQuery<
     currentDocument = value
     restart()
   }, {
-    immediate: true
+    immediate: true,
   })
 
   // Applying variables
@@ -368,7 +370,7 @@ export function useQuery<
     currentVariablesSerialized = serialized
   }, {
     deep: true,
-    immediate: true
+    immediate: true,
   })
 
   // Applying options
@@ -384,7 +386,7 @@ export function useQuery<
     restart()
   }, {
     deep: true,
-    immediate: true
+    immediate: true,
   })
 
   // Fefetch
@@ -415,8 +417,8 @@ export function useQuery<
     TSubscriptionData = TResult
   > (
     options: SubscribeToMoreOptions<TResult, TSubscriptionVariables, TSubscriptionData> |
-      Ref<SubscribeToMoreOptions<TResult, TSubscriptionVariables, TSubscriptionData>> |
-      ReactiveFunction<SubscribeToMoreOptions<TResult, TSubscriptionVariables, TSubscriptionData>>
+    Ref<SubscribeToMoreOptions<TResult, TSubscriptionVariables, TSubscriptionData>> |
+    ReactiveFunction<SubscribeToMoreOptions<TResult, TSubscriptionVariables, TSubscriptionData>>,
   ) {
     if (isServer) return
     const optionsRef = paramToRef(options)
@@ -438,7 +440,7 @@ export function useQuery<
         item.unsubscribeFns = []
       })
     }, {
-      immediate: true
+      immediate: true,
     })
   }
 
@@ -470,7 +472,7 @@ export function useQuery<
       stop()
     }
   }, {
-    immediate: true
+    immediate: true,
   })
 
   // Teardown

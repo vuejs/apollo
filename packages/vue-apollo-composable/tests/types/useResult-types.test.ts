@@ -1,56 +1,56 @@
-import { useQuery, useResult, UseResultReturn } from "../../src";
+import { useQuery, useResult, UseResultReturn } from '../../src'
 import {
   ExampleDocument,
   ExampleQueryVariables,
   MultiKeyExampleQuery,
-  SingleKeyExampleQuery
-} from "../fixtures/graphql-example-types";
-import { assertExactType } from "./assertions";
+  SingleKeyExampleQuery,
+} from '../fixtures/graphql-example-types'
+import { assertExactType } from './assertions'
 
 const singleKeyQuery = useQuery<SingleKeyExampleQuery, ExampleQueryVariables>(ExampleDocument, {
-  id: "j37rV7"
-});
-const { result: singleKeyResult } = singleKeyQuery;
+  id: 'j37rV7',
+})
+const { result: singleKeyResult } = singleKeyQuery
 
 const multiKeyQuery = useQuery<MultiKeyExampleQuery, ExampleQueryVariables>(ExampleDocument, {
-  id: "j37rV7"
-});
-const { result: multiKeyResult } = multiKeyQuery;
+  id: 'j37rV7',
+})
+const { result: multiKeyResult } = multiKeyQuery
 
 // =============================================================================
 // With just a document, no types, and a single key
 // - the result should extract the single key type
-// - the default return value should be `void`
+// - the default return value should be `undefined`
 // =============================================================================
 {
-  const useResult_JustDocument_SingleKey = useResult(singleKeyResult);
+  const useResult_JustDocument_SingleKey = useResult(singleKeyResult)
 
   assertExactType<
     typeof useResult_JustDocument_SingleKey,
-    UseResultReturn<SingleKeyExampleQuery["example"] | void>
-  >(useResult_JustDocument_SingleKey);
+  UseResultReturn<SingleKeyExampleQuery['example'] | undefined>
+  >(useResult_JustDocument_SingleKey)
 
   if (useResult_JustDocument_SingleKey.value) {
-    useResult_JustDocument_SingleKey.value.__typename;
+    useResult_JustDocument_SingleKey.value.__typename
   }
 }
 
 // =============================================================================
 // With just a document, no types, and multiple keys
 // - the result should be the full result type
-// - the default return value should be `void`
+// - the default return value should be `undefined`
 // =============================================================================
 {
-  const useResult_JustDocument_MultiKey = useResult(multiKeyResult);
+  const useResult_JustDocument_MultiKey = useResult(multiKeyResult)
 
   assertExactType<
     typeof useResult_JustDocument_MultiKey,
-    UseResultReturn<MultiKeyExampleQuery | void>
-  >(useResult_JustDocument_MultiKey);
+  UseResultReturn<MultiKeyExampleQuery | undefined>
+  >(useResult_JustDocument_MultiKey)
 
   if (useResult_JustDocument_MultiKey.value) {
-    useResult_JustDocument_MultiKey.value.example?.__typename;
-    useResult_JustDocument_MultiKey.value.otherExample?.__typename;
+    useResult_JustDocument_MultiKey.value.example?.__typename
+    useResult_JustDocument_MultiKey.value.otherExample?.__typename
   }
 }
 
@@ -60,19 +60,19 @@ const { result: multiKeyResult } = multiKeyQuery;
 // - the result should be either the default value or the expected extracted single key type
 // =============================================================================
 {
-  const useResult_WithDefaultValue_SingleKey = useResult(singleKeyResult, "secret" as const);
+  const useResult_WithDefaultValue_SingleKey = useResult(singleKeyResult, 'secret' as const)
 
   assertExactType<
     typeof useResult_WithDefaultValue_SingleKey,
-    UseResultReturn<SingleKeyExampleQuery["example"] | "secret">
-  >(useResult_WithDefaultValue_SingleKey);
+  UseResultReturn<SingleKeyExampleQuery['example'] | 'secret'>
+  >(useResult_WithDefaultValue_SingleKey)
 
-  if (typeof useResult_WithDefaultValue_SingleKey.value === "string") {
-    const result = useResult_WithDefaultValue_SingleKey.value;
-    assertExactType<typeof result, "secret">(result);
-    useResult_WithDefaultValue_SingleKey.value;
+  if (typeof useResult_WithDefaultValue_SingleKey.value === 'string') {
+    const result = useResult_WithDefaultValue_SingleKey.value
+    assertExactType<typeof result, 'secret'>(result)
+    useResult_WithDefaultValue_SingleKey.value
   } else {
-    useResult_WithDefaultValue_SingleKey.value?.__typename;
+    useResult_WithDefaultValue_SingleKey.value?.__typename
   }
 }
 
@@ -82,20 +82,20 @@ const { result: multiKeyResult } = multiKeyQuery;
 // - the result should be either the default value or full expected key type
 // =============================================================================
 {
-  const useResult_WithDefaultValue_MultiKey = useResult(multiKeyResult, "secret" as const);
+  const useResult_WithDefaultValue_MultiKey = useResult(multiKeyResult, 'secret' as const)
 
   assertExactType<
     typeof useResult_WithDefaultValue_MultiKey,
-    UseResultReturn<MultiKeyExampleQuery | "secret">
-  >(useResult_WithDefaultValue_MultiKey);
+  UseResultReturn<MultiKeyExampleQuery | 'secret'>
+  >(useResult_WithDefaultValue_MultiKey)
 
-  if (typeof useResult_WithDefaultValue_MultiKey.value === "string") {
-    const result = useResult_WithDefaultValue_MultiKey.value;
-    assertExactType<typeof result, "secret">(result);
-    useResult_WithDefaultValue_MultiKey.value;
+  if (typeof useResult_WithDefaultValue_MultiKey.value === 'string') {
+    const result = useResult_WithDefaultValue_MultiKey.value
+    assertExactType<typeof result, 'secret'>(result)
+    useResult_WithDefaultValue_MultiKey.value
   } else {
-    useResult_WithDefaultValue_MultiKey.value.example?.__typename;
-    useResult_WithDefaultValue_MultiKey.value.otherExample?.__typename;
+    useResult_WithDefaultValue_MultiKey.value.example?.__typename
+    useResult_WithDefaultValue_MultiKey.value.otherExample?.__typename
   }
 }
 
@@ -107,18 +107,18 @@ const { result: multiKeyResult } = multiKeyQuery;
   const useResult_WithPickFunction = useResult(
     multiKeyResult,
     [] as const,
-    data => data.otherExample?.__typename
-  );
+    data => data.otherExample?.__typename,
+  )
 
   assertExactType<
     typeof useResult_WithPickFunction,
-    UseResultReturn<"OtherExample" | [] | undefined>
-  >(useResult_WithPickFunction);
+  UseResultReturn<'OtherExample' | [] | undefined>
+  >(useResult_WithPickFunction)
 
-  if (typeof useResult_WithPickFunction.value === "string") {
-    useResult_WithPickFunction.value.toLowerCase();
+  if (typeof useResult_WithPickFunction.value === 'string') {
+    useResult_WithPickFunction.value.toLowerCase()
   } else if (useResult_WithPickFunction.value) {
-    useResult_WithPickFunction.value.some(() => {});
+    useResult_WithPickFunction.value.some(() => {})
   }
 }
 

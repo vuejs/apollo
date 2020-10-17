@@ -1,11 +1,11 @@
-import { OperationVariables } from "@apollo/client/core";
-import { useSubscription } from "../../src";
+import { OperationVariables } from '@apollo/client/core'
+import { useSubscription } from '../../src'
 import {
   ExampleDocument,
   ExampleUpdatedSubscription,
-  ExampleUpdatedSubscriptionVariables
-} from "../fixtures/graphql-example-types";
-import { assertExactType } from "./assertions";
+  ExampleUpdatedSubscriptionVariables,
+} from '../fixtures/graphql-example-types'
+import { assertExactType } from './assertions'
 
 // =============================================================================
 // With no types:
@@ -13,20 +13,20 @@ import { assertExactType } from "./assertions";
 // - TVariables should be `undefined`
 // =============================================================================
 {
-  const useSubscription_NoTypes = useSubscription(ExampleDocument);
+  const useSubscription_NoTypes = useSubscription(ExampleDocument)
 
   // Result type should match the passed in subscription type
-  const useSubscription_NoTypesResult = useSubscription_NoTypes.result.value;
-  useSubscription_NoTypesResult.type.is.any;
+  const useSubscription_NoTypesResult = useSubscription_NoTypes.result.value
+  useSubscription_NoTypesResult.type.is.any
 
   // Variables type should be `undefined`
-  const useSubscription_NoTypesVariables = useSubscription_NoTypes.variables.value;
+  const useSubscription_NoTypesVariables = useSubscription_NoTypes.variables.value
   assertExactType<typeof useSubscription_NoTypesVariables, undefined>(
-    useSubscription_NoTypesVariables
-  );
+    useSubscription_NoTypesVariables,
+  )
 
   // Result data type should be any
-  useSubscription_NoTypes.onResult(result => result?.data.type.is.any);
+  useSubscription_NoTypes.onResult(result => result?.data.type.is.any)
 }
 
 // =============================================================================
@@ -36,25 +36,25 @@ import { assertExactType } from "./assertions";
 // =============================================================================
 {
   const useSubscription_OnlySubscriptionType = useSubscription<ExampleUpdatedSubscription>(
-    ExampleDocument
-  );
+    ExampleDocument,
+  )
 
   // Result type should match the passed in subscription type
   const useSubscription_OnlySubscriptionTypeResult =
-    useSubscription_OnlySubscriptionType.result.value;
+    useSubscription_OnlySubscriptionType.result.value
   assertExactType<typeof useSubscription_OnlySubscriptionTypeResult, ExampleUpdatedSubscription>(
-    useSubscription_OnlySubscriptionTypeResult
-  );
+    useSubscription_OnlySubscriptionTypeResult,
+  )
 
   // Variables type should be `undefined`
   const useSubscription_OnlySubscriptionTypeVariables =
-    useSubscription_OnlySubscriptionType.variables.value;
+    useSubscription_OnlySubscriptionType.variables.value
   assertExactType<typeof useSubscription_OnlySubscriptionTypeVariables, undefined>(
-    useSubscription_OnlySubscriptionTypeVariables
-  );
+    useSubscription_OnlySubscriptionTypeVariables,
+  )
 
   // Result data type should be the passed in result
-  useSubscription_OnlySubscriptionType.onResult(result => result?.data?.exampleUpdated.name);
+  useSubscription_OnlySubscriptionType.onResult(result => result?.data?.exampleUpdated.name)
 }
 
 // =============================================================================
@@ -64,23 +64,23 @@ import { assertExactType } from "./assertions";
 // =============================================================================
 {
   const useSubscription_WithVars = useSubscription<ExampleUpdatedSubscription>(ExampleDocument, {
-    id: "asdf"
-  });
+    id: 'asdf',
+  })
 
   // Result type should match the passed in subscription type
-  const useSubscription_WithVarsResult = useSubscription_WithVars.result.value;
+  const useSubscription_WithVarsResult = useSubscription_WithVars.result.value
   assertExactType<typeof useSubscription_WithVarsResult, ExampleUpdatedSubscription>(
-    useSubscription_WithVarsResult
-  );
+    useSubscription_WithVarsResult,
+  )
 
   // Variables type should match the passed in variables type
-  const useSubscription_WithVarsVariables = useSubscription_WithVars.variables.value;
+  const useSubscription_WithVarsVariables = useSubscription_WithVars.variables.value
   assertExactType<typeof useSubscription_WithVarsVariables, OperationVariables>(
-    useSubscription_WithVarsVariables
-  );
+    useSubscription_WithVarsVariables,
+  )
 
   // Result data type should be the passed in result
-  useSubscription_WithVars.onResult(result => result?.data?.exampleUpdated.name);
+  useSubscription_WithVars.onResult(result => result?.data?.exampleUpdated.name)
 }
 
 // =============================================================================
@@ -90,24 +90,24 @@ import { assertExactType } from "./assertions";
 // =============================================================================
 {
   const useSubscription_AllTyped = useSubscription<
-    ExampleUpdatedSubscription,
-    ExampleUpdatedSubscriptionVariables
-  >(ExampleDocument, { id: "k3x47b" });
+  ExampleUpdatedSubscription,
+  ExampleUpdatedSubscriptionVariables
+  >(ExampleDocument, { id: 'k3x47b' })
 
   // Result type should match the passed in subscription type
-  const useSubscription_AllTypedResult = useSubscription_AllTyped.result.value;
+  const useSubscription_AllTypedResult = useSubscription_AllTyped.result.value
   assertExactType<typeof useSubscription_AllTypedResult, ExampleUpdatedSubscription>(
-    useSubscription_AllTypedResult
-  );
+    useSubscription_AllTypedResult,
+  )
 
   // Variables type should match the passed in variables type
-  const useSubscription_AllTypedVariables = useSubscription_AllTyped.variables.value;
+  const useSubscription_AllTypedVariables = useSubscription_AllTyped.variables.value
   assertExactType<typeof useSubscription_AllTypedVariables, ExampleUpdatedSubscriptionVariables>(
-    useSubscription_AllTypedVariables
-  );
+    useSubscription_AllTypedVariables,
+  )
 
   // Result data type should be the passed in result
-  useSubscription_AllTyped.onResult(result => result?.data?.exampleUpdated.name);
+  useSubscription_AllTyped.onResult(result => result?.data?.exampleUpdated.name)
 }
 
 // =============================================================================
@@ -117,24 +117,24 @@ import { assertExactType } from "./assertions";
 // =============================================================================
 {
   const useSubscription_AllTyped = useSubscription<
-    ExampleUpdatedSubscription,
-    ExampleUpdatedSubscriptionVariables
-  >(ExampleDocument);
+  ExampleUpdatedSubscription,
+  ExampleUpdatedSubscriptionVariables
+  >(ExampleDocument)
 
   // Result type should match the passed in subscription type
-  const useSubscription_AllTypedResult = useSubscription_AllTyped.result.value;
+  const useSubscription_AllTypedResult = useSubscription_AllTyped.result.value
   assertExactType<typeof useSubscription_AllTypedResult, ExampleUpdatedSubscription>(
-    useSubscription_AllTypedResult
-  );
+    useSubscription_AllTypedResult,
+  )
 
   // Variables type should match the passed in variables type
-  const useSubscription_AllTypedVariables = useSubscription_AllTyped.variables.value;
+  const useSubscription_AllTypedVariables = useSubscription_AllTyped.variables.value
   assertExactType<typeof useSubscription_AllTypedVariables, ExampleUpdatedSubscriptionVariables>(
-    useSubscription_AllTypedVariables
-  );
+    useSubscription_AllTypedVariables,
+  )
 
   // Result data type should be the passed in result
-  useSubscription_AllTyped.onResult(result => result?.data?.exampleUpdated.name);
+  useSubscription_AllTyped.onResult(result => result?.data?.exampleUpdated.name)
 }
 
 // =============================================================================
@@ -144,31 +144,31 @@ import { assertExactType } from "./assertions";
 // =============================================================================
 {
   const useSubscription_OnlySubscriptionType_NoVarsWithOptions = useSubscription<
-    ExampleUpdatedSubscription
+  ExampleUpdatedSubscription
   >(ExampleDocument, undefined, {
-    clientId: "89E3Yh"
-  });
+    clientId: '89E3Yh',
+  })
 
   // Result type should match the passed in subscription type
   const useSubscription_OnlySubscriptionType_NoVarsWithOptionsResult =
-    useSubscription_OnlySubscriptionType_NoVarsWithOptions.result.value;
+    useSubscription_OnlySubscriptionType_NoVarsWithOptions.result.value
   assertExactType<
     typeof useSubscription_OnlySubscriptionType_NoVarsWithOptionsResult,
-    ExampleUpdatedSubscription
-  >(useSubscription_OnlySubscriptionType_NoVarsWithOptionsResult);
+  ExampleUpdatedSubscription
+  >(useSubscription_OnlySubscriptionType_NoVarsWithOptionsResult)
 
   // Variables type should be `undefined`
   const useSubscription_OnlySubscriptionType_NoVarsWithOptionsVariables =
-    useSubscription_OnlySubscriptionType_NoVarsWithOptions.variables.value;
+    useSubscription_OnlySubscriptionType_NoVarsWithOptions.variables.value
   assertExactType<
     typeof useSubscription_OnlySubscriptionType_NoVarsWithOptionsVariables,
-    undefined
-  >(useSubscription_OnlySubscriptionType_NoVarsWithOptionsVariables);
+  undefined
+  >(useSubscription_OnlySubscriptionType_NoVarsWithOptionsVariables)
 
   // Result data type should be the passed in result
   useSubscription_OnlySubscriptionType_NoVarsWithOptions.onResult(
-    result => result?.data?.exampleUpdated.name
-  );
+    result => result?.data?.exampleUpdated.name,
+  )
 }
 
 // =============================================================================
@@ -178,32 +178,32 @@ import { assertExactType } from "./assertions";
 // =============================================================================
 {
   const useSubscription_WithOptions = useSubscription<
-    ExampleUpdatedSubscription,
-    ExampleUpdatedSubscriptionVariables
+  ExampleUpdatedSubscription,
+  ExampleUpdatedSubscriptionVariables
   >(
     ExampleDocument,
-    { id: "4E79Lq" },
+    { id: '4E79Lq' },
     {
-      clientId: "8nf38r",
+      clientId: '8nf38r',
       debounce: 1500,
       enabled: true,
-      fetchPolicy: "cache-first",
-      throttle: 1500
-    }
-  );
+      fetchPolicy: 'cache-first',
+      throttle: 1500,
+    },
+  )
 
-  const useSubscription_WithOptionsResult = useSubscription_WithOptions.result.value;
+  const useSubscription_WithOptionsResult = useSubscription_WithOptions.result.value
   assertExactType<typeof useSubscription_WithOptionsResult, ExampleUpdatedSubscription>(
-    useSubscription_WithOptionsResult
-  );
+    useSubscription_WithOptionsResult,
+  )
 
-  const useSubscription_WithOptionsVariables = useSubscription_WithOptions.variables.value;
+  const useSubscription_WithOptionsVariables = useSubscription_WithOptions.variables.value
   assertExactType<typeof useSubscription_WithOptionsVariables, ExampleUpdatedSubscriptionVariables>(
-    useSubscription_WithOptionsVariables
-  );
+    useSubscription_WithOptionsVariables,
+  )
 
   // Result data type should be the passed in result
-  useSubscription_WithOptions.onResult(result => result?.data?.exampleUpdated.name);
+  useSubscription_WithOptions.onResult(result => result?.data?.exampleUpdated.name)
 }
 
 // // ====== Expected failures, uncomment to test ======

@@ -12,9 +12,9 @@ export interface UseApolloClientReturn<TCacheShape> {
   readonly client: ApolloClient<TCacheShape>
 }
 
-function resolveDefaultClient<T>(providedApolloClients: ClientDict<T>, providedApolloClient: ApolloClient<T>): ApolloClient<T> {
-  const resolvedClient = providedApolloClients ?
-    providedApolloClients.default
+function resolveDefaultClient<T> (providedApolloClients: ClientDict<T>, providedApolloClient: ApolloClient<T>): ApolloClient<T> {
+  const resolvedClient = providedApolloClients
+    ? providedApolloClients.default
     : providedApolloClient
   if (!resolvedClient) {
     throw new Error('Apollo Client with id default not found')
@@ -22,7 +22,7 @@ function resolveDefaultClient<T>(providedApolloClients: ClientDict<T>, providedA
   return resolvedClient
 }
 
-function resolveClientWithId<T>(providedApolloClients: ClientDict<T>, clientId: ClientId): ApolloClient<T> {
+function resolveClientWithId<T> (providedApolloClients: ClientDict<T>, clientId: ClientId): ApolloClient<T> {
   if (!providedApolloClients) {
     throw new Error(`No apolloClients injection found, tried to resolve '${clientId}' clientId`)
   }
@@ -33,18 +33,18 @@ function resolveClientWithId<T>(providedApolloClients: ClientDict<T>, clientId: 
   return resolvedClient
 }
 
-export function useApolloClient<TCacheShape = any>(clientId?: ClientId): UseApolloClientReturn<TCacheShape> {
+export function useApolloClient<TCacheShape = any> (clientId?: ClientId): UseApolloClientReturn<TCacheShape> {
   if (!getCurrentInstance()) {
     return {
       resolveClient: () => currentApolloClient,
-      get client () { return currentApolloClient }
+      get client () { return currentApolloClient },
     }
   }
 
   const providedApolloClients: ClientDict<TCacheShape> = inject(ApolloClients, null)
   const providedApolloClient: ApolloClient<TCacheShape> = inject(DefaultApolloClient, null)
 
-  function resolveClient(id: ClientId = clientId) {
+  function resolveClient (id: ClientId = clientId) {
     if (currentApolloClient) {
       return currentApolloClient
     } else if (id) {
@@ -57,13 +57,13 @@ export function useApolloClient<TCacheShape = any>(clientId?: ClientId): UseApol
     resolveClient,
     get client () {
       return resolveClient()
-    }
+    },
   }
 }
 
 let currentApolloClient: ApolloClient<any>
 
-export function provideApolloClient<TCacheShape = any>(client: ApolloClient<TCacheShape>) {
+export function provideApolloClient<TCacheShape = any> (client: ApolloClient<TCacheShape>) {
   currentApolloClient = client
   return function <TFnResult = any> (fn: () => TFnResult) {
     const result = fn()

@@ -1,5 +1,5 @@
 export function useEventHook<TParam = any> () {
-  const fns: ((param: TParam) => void)[] = []
+  const fns: Array<(param: TParam) => void> = []
 
   function on (fn: (param: TParam) => void) {
     fns.push(fn)

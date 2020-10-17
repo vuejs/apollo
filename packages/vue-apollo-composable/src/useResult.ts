@@ -3,7 +3,7 @@ import { ExtractSingleKey } from './util/ExtractSingleKey'
 
 export type UseResultReturn<T> = Readonly<Ref<Readonly<T>>>
 
-  /**
+/**
  * Resolve a `result`, returning either the first key of the `result` if there
  * is only one, or the `result` itself. The `value` of the ref will be
  * `undefined` until it is resolved.
@@ -11,14 +11,14 @@ export type UseResultReturn<T> = Readonly<Ref<Readonly<T>>>
  * @example
  * const { result } = useQuery(...)
  * const user = useResult(result)
- * // user is `void` until the query resolves
+ * // user is `undefined` until the query resolves
  *
  * @param  {Ref<TResult>} result A `result` returned from `useQuery` to resolve.
- * @returns Readonly ref with `void` or the resolved `result`.
+ * @returns Readonly ref with `undefined` or the resolved `result`.
  */
-export function useResult<TResult, TResultKey extends keyof TResult = keyof TResult>(
+export function useResult<TResult, TResultKey extends keyof TResult = keyof TResult> (
   result: Ref<TResult>
-): UseResultReturn<void | ExtractSingleKey<TResult, TResultKey>>
+): UseResultReturn<undefined | ExtractSingleKey<TResult, TResultKey>>
 
 /**
  * Resolve a `result`, returning either the first key of the `result` if there
@@ -34,7 +34,7 @@ export function useResult<TResult, TResultKey extends keyof TResult = keyof TRes
  * @param  {TDefaultValue} defaultValue The default return value before `result` is resolved.
  * @returns Readonly ref with the `defaultValue` or the resolved `result`.
  */
-export function useResult<TResult, TDefaultValue, TResultKey extends keyof TResult = keyof TResult>(
+export function useResult<TResult, TDefaultValue, TResultKey extends keyof TResult = keyof TResult> (
   result: Ref<TResult>,
   defaultValue: TDefaultValue
 ): UseResultReturn<TDefaultValue | ExtractSingleKey<TResult, TResultKey>>
@@ -57,8 +57,7 @@ export function useResult<
   TResult,
   TDefaultValue,
   TReturnValue,
-  TResultKey extends keyof TResult = keyof TResult,
->(
+> (
   result: Ref<TResult>,
   defaultValue: TDefaultValue | undefined,
   pick: (data: TResult) => TReturnValue

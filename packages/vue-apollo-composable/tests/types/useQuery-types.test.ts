@@ -1,11 +1,11 @@
-import { OperationVariables } from "@apollo/client/core";
-import { useQuery } from "../../src";
+import { OperationVariables } from '@apollo/client/core'
+import { useQuery } from '../../src'
 import {
   ExampleDocument,
   ExampleQuery,
-  ExampleQueryVariables
-} from "../fixtures/graphql-example-types";
-import { assertExactType } from "./assertions";
+  ExampleQueryVariables,
+} from '../fixtures/graphql-example-types'
+import { assertExactType } from './assertions'
 
 // =============================================================================
 // With no types:
@@ -13,13 +13,13 @@ import { assertExactType } from "./assertions";
 // - TVariables should be `undefined`
 // =============================================================================
 {
-  const useQueryNoTypes = useQuery(ExampleDocument);
+  const useQueryNoTypes = useQuery(ExampleDocument)
 
-  const useQueryNoTypesResult = useQueryNoTypes.result.value;
-  useQueryNoTypesResult.type.is.any;
+  const useQueryNoTypesResult = useQueryNoTypes.result.value
+  useQueryNoTypesResult.type.is.any
 
-  const useQueryNoTypesVariables = useQueryNoTypes.variables.value;
-  assertExactType<typeof useQueryNoTypesVariables, undefined>(useQueryNoTypesVariables);
+  const useQueryNoTypesVariables = useQueryNoTypes.variables.value
+  assertExactType<typeof useQueryNoTypesVariables, undefined>(useQueryNoTypesVariables)
 }
 
 // =============================================================================
@@ -28,13 +28,13 @@ import { assertExactType } from "./assertions";
 // - TVariables should be `undefined`
 // =============================================================================
 {
-  const useQueryOnlyQueryType = useQuery<ExampleQuery>(ExampleDocument);
+  const useQueryOnlyQueryType = useQuery<ExampleQuery>(ExampleDocument)
 
-  const useQueryOnlyQueryTypeResult = useQueryOnlyQueryType.result.value;
-  assertExactType<typeof useQueryOnlyQueryTypeResult, ExampleQuery>(useQueryOnlyQueryTypeResult);
+  const useQueryOnlyQueryTypeResult = useQueryOnlyQueryType.result.value
+  assertExactType<typeof useQueryOnlyQueryTypeResult, ExampleQuery>(useQueryOnlyQueryTypeResult)
 
-  const useQueryOnlyQueryTypeVariables = useQueryOnlyQueryType.variables.value;
-  assertExactType<typeof useQueryOnlyQueryTypeVariables, undefined>(useQueryOnlyQueryTypeVariables);
+  const useQueryOnlyQueryTypeVariables = useQueryOnlyQueryType.variables.value
+  assertExactType<typeof useQueryOnlyQueryTypeVariables, undefined>(useQueryOnlyQueryTypeVariables)
 }
 
 // =============================================================================
@@ -43,13 +43,13 @@ import { assertExactType } from "./assertions";
 // - TVariables should be OperationVariables
 // =============================================================================
 {
-  const useQueryWithVars = useQuery<ExampleQuery>(ExampleDocument, { id: "asdf" });
+  const useQueryWithVars = useQuery<ExampleQuery>(ExampleDocument, { id: 'asdf' })
 
-  const useQueryWithVarsResult = useQueryWithVars.result.value;
-  assertExactType<typeof useQueryWithVarsResult, ExampleQuery>(useQueryWithVarsResult);
+  const useQueryWithVarsResult = useQueryWithVars.result.value
+  assertExactType<typeof useQueryWithVarsResult, ExampleQuery>(useQueryWithVarsResult)
 
-  const useQueryWithVarsVariables = useQueryWithVars.variables.value;
-  assertExactType<typeof useQueryWithVarsVariables, OperationVariables>(useQueryWithVarsVariables);
+  const useQueryWithVarsVariables = useQueryWithVars.variables.value
+  assertExactType<typeof useQueryWithVarsVariables, OperationVariables>(useQueryWithVarsVariables)
 }
 
 // =============================================================================
@@ -59,16 +59,16 @@ import { assertExactType } from "./assertions";
 // =============================================================================
 {
   const useQueryAllTyped = useQuery<ExampleQuery, ExampleQueryVariables>(ExampleDocument, {
-    id: "k3x47b"
-  });
+    id: 'k3x47b',
+  })
 
-  const useQueryAllTypedResult = useQueryAllTyped.result.value;
-  assertExactType<typeof useQueryAllTypedResult, ExampleQuery>(useQueryAllTypedResult);
+  const useQueryAllTypedResult = useQueryAllTyped.result.value
+  assertExactType<typeof useQueryAllTypedResult, ExampleQuery>(useQueryAllTypedResult)
 
-  const useQueryAllTypedVariables = useQueryAllTyped.variables.value;
+  const useQueryAllTypedVariables = useQueryAllTyped.variables.value
   assertExactType<typeof useQueryAllTypedVariables, ExampleQueryVariables>(
-    useQueryAllTypedVariables
-  );
+    useQueryAllTypedVariables,
+  )
 }
 
 // =============================================================================
@@ -77,15 +77,15 @@ import { assertExactType } from "./assertions";
 // - TVariables should be the variables type
 // =============================================================================
 {
-  const useQueryAllTyped = useQuery<ExampleQuery, ExampleQueryVariables>(ExampleDocument);
+  const useQueryAllTyped = useQuery<ExampleQuery, ExampleQueryVariables>(ExampleDocument)
 
-  const useQueryAllTypedResult = useQueryAllTyped.result.value;
-  assertExactType<typeof useQueryAllTypedResult, ExampleQuery>(useQueryAllTypedResult);
+  const useQueryAllTypedResult = useQueryAllTyped.result.value
+  assertExactType<typeof useQueryAllTypedResult, ExampleQuery>(useQueryAllTypedResult)
 
-  const useQueryAllTypedVariables = useQueryAllTyped.variables.value;
+  const useQueryAllTypedVariables = useQueryAllTyped.variables.value
   assertExactType<typeof useQueryAllTypedVariables, ExampleQueryVariables>(
-    useQueryAllTypedVariables
-  );
+    useQueryAllTypedVariables,
+  )
 }
 
 // =============================================================================
@@ -98,21 +98,21 @@ import { assertExactType } from "./assertions";
     ExampleDocument,
     undefined,
     {
-      clientId: "89E3Yh"
-    }
-  );
+      clientId: '89E3Yh',
+    },
+  )
 
   const useQueryOnlyQueryTypeNoVarsWithOptionsResult =
-    useQueryOnlyQueryTypeNoVarsWithOptions.result.value;
+    useQueryOnlyQueryTypeNoVarsWithOptions.result.value
   assertExactType<typeof useQueryOnlyQueryTypeNoVarsWithOptionsResult, ExampleQuery>(
-    useQueryOnlyQueryTypeNoVarsWithOptionsResult
-  );
+    useQueryOnlyQueryTypeNoVarsWithOptionsResult,
+  )
 
   const useQueryOnlyQueryTypeNoVarsWithOptionsVariables =
-    useQueryOnlyQueryTypeNoVarsWithOptions.variables.value;
+    useQueryOnlyQueryTypeNoVarsWithOptions.variables.value
   assertExactType<typeof useQueryOnlyQueryTypeNoVarsWithOptionsVariables, undefined>(
-    useQueryOnlyQueryTypeNoVarsWithOptionsVariables
-  );
+    useQueryOnlyQueryTypeNoVarsWithOptionsVariables,
+  )
 }
 
 // =============================================================================
@@ -123,31 +123,31 @@ import { assertExactType } from "./assertions";
 {
   const useQueryWithOptions = useQuery<ExampleQuery, ExampleQueryVariables>(
     ExampleDocument,
-    { id: "4E79Lq" },
+    { id: '4E79Lq' },
     {
-      clientId: "any",
-      context: "any",
+      clientId: 'any',
+      context: 'any',
       debounce: 500,
       enabled: true,
-      errorPolicy: "all",
-      fetchPolicy: "cache-and-network",
+      errorPolicy: 'all',
+      fetchPolicy: 'cache-and-network',
       fetchResults: true,
-      metadata: "any",
+      metadata: 'any',
       notifyOnNetworkStatusChange: true,
       pollInterval: 500,
       prefetch: true,
       returnPartialData: true,
-      throttle: 1000
-    }
-  );
+      throttle: 1000,
+    },
+  )
 
-  const useQueryWithOptionsResult = useQueryWithOptions.result.value;
-  assertExactType<typeof useQueryWithOptionsResult, ExampleQuery>(useQueryWithOptionsResult);
+  const useQueryWithOptionsResult = useQueryWithOptions.result.value
+  assertExactType<typeof useQueryWithOptionsResult, ExampleQuery>(useQueryWithOptionsResult)
 
-  const useQueryWithOptionsVariables = useQueryWithOptions.variables.value;
+  const useQueryWithOptionsVariables = useQueryWithOptions.variables.value
   assertExactType<typeof useQueryWithOptionsVariables, ExampleQueryVariables>(
-    useQueryWithOptionsVariables
-  );
+    useQueryWithOptionsVariables,
+  )
 }
 
 // ====== Expected failures, uncomment to test ======

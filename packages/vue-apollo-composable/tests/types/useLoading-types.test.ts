@@ -1,50 +1,50 @@
-import { Ref } from "@vue/composition-api";
+import { Ref } from '@vue/composition-api'
 import {
   useGlobalMutationLoading,
   useGlobalQueryLoading,
   useGlobalSubscriptionLoading,
   useMutationLoading,
   useQueryLoading,
-  useSubscriptionLoading
-} from "../../src/useLoading";
-import { assertExactType } from "./assertions";
+  useSubscriptionLoading,
+} from '../../src/useLoading'
+import { assertExactType } from './assertions'
 
 {
-  const useQueryLoadingReturn = useQueryLoading();
-  assertExactType<typeof useQueryLoadingReturn, Readonly<Ref<boolean>>>(useQueryLoadingReturn);
+  const useQueryLoadingReturn = useQueryLoading()
+  assertExactType<typeof useQueryLoadingReturn, Readonly<Ref<boolean>>>(useQueryLoadingReturn)
 }
 
 {
-  const useMutationLoadingReturn = useMutationLoading();
+  const useMutationLoadingReturn = useMutationLoading()
   assertExactType<typeof useMutationLoadingReturn, Readonly<Ref<boolean>>>(
-    useMutationLoadingReturn
-  );
+    useMutationLoadingReturn,
+  )
 }
 
 {
-  const useSubscriptionLoadingReturn = useSubscriptionLoading();
+  const useSubscriptionLoadingReturn = useSubscriptionLoading()
   assertExactType<typeof useSubscriptionLoadingReturn, Readonly<Ref<boolean>>>(
-    useSubscriptionLoadingReturn
-  );
+    useSubscriptionLoadingReturn,
+  )
 }
 
 {
-  const useGlobalQueryLoadingReturn = useGlobalQueryLoading();
+  const useGlobalQueryLoadingReturn = useGlobalQueryLoading()
   assertExactType<typeof useGlobalQueryLoadingReturn, Readonly<Ref<boolean>>>(
-    useGlobalQueryLoadingReturn
-  );
+    useGlobalQueryLoadingReturn,
+  )
 }
 
 {
-  const useGlobalMutationLoadingReturn = useGlobalMutationLoading();
+  const useGlobalMutationLoadingReturn = useGlobalMutationLoading()
   assertExactType<typeof useGlobalMutationLoadingReturn, Readonly<Ref<boolean>>>(
-    useGlobalMutationLoadingReturn
-  );
+    useGlobalMutationLoadingReturn,
+  )
 }
 
 {
-  const useGlobalSubscriptionLoadingReturn = useGlobalSubscriptionLoading();
+  const useGlobalSubscriptionLoadingReturn = useGlobalSubscriptionLoading()
   assertExactType<typeof useGlobalSubscriptionLoadingReturn, Readonly<Ref<boolean>>>(
-    useGlobalSubscriptionLoadingReturn
-  );
+    useGlobalSubscriptionLoadingReturn,
+  )
 }
