@@ -1,6 +1,6 @@
-/* eslint-disable */
-
-const { gql, ApolloServer, ApolloError, PubSub, withFilter } = require('apollo-server')
+const express = require('express')
+const cors = require('cors')
+const { gql, ApolloServer, ApolloError, PubSub, withFilter } = require('apollo-server-express')
 const shortid = require('shortid')
 
 const typeDefs = gql`
@@ -45,18 +45,24 @@ type Subscription {
 
 const pubsub = new PubSub()
 
-const channels = [
-  {
-    id: 'general',
-    label: 'General',
-    messages: [],
-  },
-  {
-    id: 'random',
-    label: 'Random',
-    messages: [],
-  },
-]
+let channels = []
+
+function resetDatabase () {
+  channels = [
+    {
+      id: 'general',
+      label: 'General',
+      messages: [],
+    },
+    {
+      id: 'random',
+      label: 'Random',
+      messages: [],
+    },
+  ]
+}
+
+resetDatabase()
 
 const resolvers = {
   Query: {
@@ -111,13 +117,24 @@ const resolvers = {
   },
 }
 
+const app = express()
+
+app.use(cors('*'))
+
+app.get('/_reset', (req, res) => {
+  resetDatabase()
+  res.status(200).end()
+})
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
 })
 
-server.listen({
+server.applyMiddleware({ app })
+
+app.listen({
   port: 4042,
-}).then(({ url }) => {
-  console.log(`🚀  Server ready at ${url}`)
+}, () => {
+  console.log('🚀  Server ready at http://localhost:4042')
 })
