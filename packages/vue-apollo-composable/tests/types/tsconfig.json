@@ -3,6 +3,7 @@
     "target": "es5",
     "module": "commonjs",
     "noEmit": true,
+    "esModuleInterop": true
     // "strict": true // TODO: this should be enabled, but src is broken with strict
   },
   "include": [

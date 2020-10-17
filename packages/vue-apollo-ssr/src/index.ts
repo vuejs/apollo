@@ -1,5 +1,5 @@
 import * as serializeJs from 'serialize-javascript'
-import ApolloClient from 'apollo-client'
+import { ApolloClient } from '@apollo/client/core'
 
 export type ApolloClients = { [key: string]: ApolloClient<any> }
 

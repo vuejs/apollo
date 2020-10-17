@@ -23,5 +23,5 @@ export default {
       VERSION: JSON.stringify(config.version),
     }),
   ],
-  external: ['apollo-client', 'apollo-link', 'graphql-tag'],
+  external: ['@apollo/client', 'graphql-tag'],
 }

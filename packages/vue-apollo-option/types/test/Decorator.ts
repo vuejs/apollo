@@ -1,6 +1,6 @@
 import { Component, Vue } from 'vue-property-decorator'
 import gql from 'graphql-tag'
-import { OperationVariables } from 'apollo-client'
+import { OperationVariables } from '@apollo/client/core'
 import { VueApolloComponentOptions } from '../options'
 
 @Component({

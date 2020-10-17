@@ -1,4 +1,4 @@
-import { OperationVariables } from "apollo-client";
+import { OperationVariables } from "@apollo/client/core";
 import { useSubscription } from "../../src";
 import {
   ExampleDocument,
