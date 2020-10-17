@@ -19,8 +19,8 @@ import {
   SubscribeToMoreOptions,
   FetchMoreQueryOptions,
   FetchMoreOptions,
+  ObservableSubscription,
 } from '@apollo/client/core'
-import { ObservableSubscription as Subscription } from '@apollo/client/utilities/observables/Observable'
 import { throttle, debounce } from 'throttle-debounce'
 import { useApolloClient } from './useApolloClient'
 import { ReactiveFunction } from './util/ReactiveFunction'
@@ -170,7 +170,7 @@ export function useQuery<
   // Query
 
   const query: Ref<ObservableQuery<TResult, TVariables>> = ref()
-  let observer: Subscription
+  let observer: ObservableSubscription
   let started = false
 
   /**
