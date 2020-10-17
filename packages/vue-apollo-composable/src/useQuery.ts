@@ -148,10 +148,10 @@ export function useQuery<
   // SSR
   let firstResolve: Function | undefined
   let firstReject: Function | undefined
-  onServerPrefetch?.(async () => {
-    if (!isEnabled.value || (isServer && !currentOptions.value.prefetch)) return
+  onServerPrefetch?.(() => {
+    if (!isEnabled.value || (isServer && currentOptions.value.prefetch === false)) return
 
-    return await new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       firstResolve = () => {
         resolve()
         firstResolve = undefined
@@ -180,7 +180,7 @@ export function useQuery<
   function start () {
     if (
       started || !isEnabled.value ||
-      (isServer && !currentOptions.value.prefetch)
+      (isServer && currentOptions.value.prefetch === false)
     ) {
       if (firstResolve) firstResolve()
       return
