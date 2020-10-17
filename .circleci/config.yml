@@ -48,6 +48,8 @@ jobs:
       - run: cd packages/vue-apollo-option && yarn test:types
       - run: cd packages/vue-apollo-option && yarn test:unit
       - run: cd packages/vue-apollo-components && yarn test:eslint
+      - run: cd packages/vue-apollo-composable && yarn test:lint
+      - run: cd packages/vue-apollo-composable && yarn test:types
       - run: cd packages/test-e2e && yarn test:e2e
       - run: cd packages/test-e2e-composition && yarn test:e2e
       - run: cd packages/test-e2e-composable-vue3 && yarn test:e2e
@@ -62,6 +64,10 @@ jobs:
           path: packages/test-e2e-composition/tests/e2e/videos
       - store_artifacts:
           path: packages/test-e2e-composition/tests/e2e/screenshots
+      - store_artifacts:
+          path: packages/test-e2e-composable-vue3/tests/e2e/videos
+      - store_artifacts:
+          path: packages/test-e2e-composable-vue3/tests/e2e/screenshots
       - store_artifacts:
           path: packages/test-ssr/tests/e2e/videos
       - store_artifacts:
