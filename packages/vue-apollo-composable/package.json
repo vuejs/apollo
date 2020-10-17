@@ -28,8 +28,8 @@
     "dist"
   ],
   "scripts": {
-    "dev": "tsc --watch --outFile dist/vue-apollo-composable.js",
-    "build": "tsc --outFile dist/vue-apollo-composable.js && tsc -m es2015 ",
+    "dev": "tsc --watch -m es2015",
+    "build": "tsc --outFile dist/vue-apollo-composable.js && tsc -m es2015",
     "prepublishOnly": "yarn test && yarn build",
     "test": "yarn test:lint && yarn test:types",
     "test:lint": "eslint . --ext .js,.ts",
