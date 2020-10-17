@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Welcome from './components/Welcome.vue'
 import ChannelView from './components/ChannelView.vue'
+import NoSetupQuery from './components/NoSetupQuery.vue'
 
 export const router = createRouter({
   history: createWebHistory(),
@@ -15,6 +16,10 @@ export const router = createRouter({
       name: 'channel',
       component: ChannelView,
       props: true,
+    },
+    {
+      path: '/no-setup-query',
+      component: NoSetupQuery,
     },
   ],
 })

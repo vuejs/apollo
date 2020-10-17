@@ -17,6 +17,7 @@ type Message {
 }
 
 type Query {
+  hello: String!
   channels: [Channel!]!
   channel (id: ID!): Channel
 }
@@ -66,6 +67,7 @@ resetDatabase()
 
 const resolvers = {
   Query: {
+    hello: () => 'Hello world!',
     channels: () => channels,
     channel: (root, { id }) => channels.find(c => c.id === id),
   },

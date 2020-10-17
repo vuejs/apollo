@@ -141,7 +141,7 @@ export function useQuery<
    * Indicates if a network request is pending
    */
   const loading = ref(false)
-  trackQuery(loading)
+  vm && trackQuery(loading)
   const networkStatus = ref<number>()
 
   // SSR
@@ -474,7 +474,7 @@ export function useQuery<
   })
 
   // Teardown
-  onBeforeUnmount(() => {
+  vm && onBeforeUnmount(() => {
     stop()
     subscribeToMoreItems.length = 0
   })

@@ -51,4 +51,9 @@ describe('Vue 3 + Apollo Composable', () => {
     cy.contains('.message', 'Message 2')
     cy.contains('.message', 'Message 3')
   })
+
+  it('supports queries outside of setup', () => {
+    cy.visit('/no-setup-query')
+    cy.contains('.no-setup-query', 'Hello world!')
+  })
 })
