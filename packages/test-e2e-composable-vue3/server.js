@@ -20,6 +20,7 @@ type Query {
   hello: String!
   channels: [Channel!]!
   channel (id: ID!): Channel
+  list: [String!]!
 }
 
 type Mutation {
@@ -70,6 +71,7 @@ const resolvers = {
     hello: () => 'Hello world!',
     channels: () => channels,
     channel: (root, { id }) => channels.find(c => c.id === id),
+    list: () => ['a', 'b', 'c'],
   },
 
   Mutation: {

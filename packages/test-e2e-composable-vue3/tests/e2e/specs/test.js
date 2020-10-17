@@ -56,4 +56,14 @@ describe('Vue 3 + Apollo Composable', () => {
     cy.visit('/no-setup-query')
     cy.contains('.no-setup-query', 'Hello world!')
   })
+
+  it('useLazyQuery', () => {
+    cy.visit('/lazy-query')
+    cy.get('.list-disc').should('have.length', 0)
+    cy.get('button').click()
+    cy.get('.list-disc').should('have.length', 3)
+    cy.get('.list-disc').should('contain', 'a')
+    cy.get('.list-disc').should('contain', 'b')
+    cy.get('.list-disc').should('contain', 'c')
+  })
 })

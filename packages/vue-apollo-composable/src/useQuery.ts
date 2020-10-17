@@ -47,9 +47,9 @@ interface SubscribeToMoreItem {
 }
 
 // Parameters
-type DocumentParameter = DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>
-type VariablesParameter<TVariables> = TVariables | Ref<TVariables> | ReactiveFunction<TVariables>
-type OptionsParameter<TResult, TVariables> = UseQueryOptions<TResult, TVariables> | Ref<UseQueryOptions<TResult, TVariables>> | ReactiveFunction<UseQueryOptions<TResult, TVariables>>
+export type DocumentParameter = DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>
+export type VariablesParameter<TVariables> = TVariables | Ref<TVariables> | ReactiveFunction<TVariables>
+export type OptionsParameter<TResult, TVariables> = UseQueryOptions<TResult, TVariables> | Ref<UseQueryOptions<TResult, TVariables>> | ReactiveFunction<UseQueryOptions<TResult, TVariables>>
 
 // Return
 export interface UseQueryReturn<TResult, TVariables> {
@@ -60,6 +60,7 @@ export interface UseQueryReturn<TResult, TVariables> {
   start: () => void
   stop: () => void
   restart: () => void
+  forceDisabled: Ref<boolean>
   document: Ref<DocumentNode>
   variables: Ref<TVariables>
   options: UseQueryOptions<TResult, TVariables> | Ref<UseQueryOptions<TResult, TVariables>>
@@ -122,6 +123,18 @@ export function useQuery<
   document: DocumentParameter,
   variables?: VariablesParameter<TVariables>,
   options?: OptionsParameter<TResult, TVariables>,
+): UseQueryReturn<TResult, TVariables> {
+  return useQueryImpl<TResult, TVariables>(document, variables, options)
+}
+
+export function useQueryImpl<
+  TResult,
+  TVariables extends OperationVariables
+> (
+  document: DocumentParameter,
+  variables?: VariablesParameter<TVariables>,
+  options?: OptionsParameter<TResult, TVariables>,
+  lazy: boolean = false,
 ): UseQueryReturn<TResult, TVariables> {
   // Is on server?
   const vm: any = getCurrentInstance()
@@ -457,18 +470,11 @@ export function useQuery<
     item.unsubscribeFns.push(unsubscribe)
   }
 
-  // Internal enabled returned to user
-  // @TODO Doesn't fully work yet, need to initialize with option
-  // const enabled = ref<boolean>()
-  const enabledOption = computed(() => !currentOptions.value || currentOptions.value.enabled == null || currentOptions.value.enabled)
-  // const isEnabled = computed(() => !!((typeof enabled.value !== 'boolean' || enabled.value) && enabledOption.value))
-  const isEnabled = enabledOption
+  // Enabled state
 
-  // watch(enabled, value => {
-  //   if (value == null) {
-  //     enabled.value = enabledOption.value
-  //   }
-  // })
+  const forceDisabled = ref(lazy)
+  const enabledOption = computed(() => !currentOptions.value || currentOptions.value.enabled == null || currentOptions.value.enabled)
+  const isEnabled = computed(() => enabledOption.value && !forceDisabled.value)
 
   // Auto start & stop
   watch(isEnabled, value => {
@@ -492,11 +498,10 @@ export function useQuery<
     loading,
     networkStatus,
     error,
-    // @TODO doesn't fully work yet
-    // enabled,
     start,
     stop,
     restart,
+    forceDisabled,
     document: documentRef,
     variables: variablesRef,
     options: optionsRef,
