@@ -16,6 +16,9 @@ export interface UseMutationOptions<
   clientId?: string
 }
 
+type DocumentParameter = DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>
+type OptionsParameter<TResult, TVariables> = UseMutationOptions<TResult, TVariables> | Ref<UseMutationOptions<TResult, TVariables>> | ReactiveFunction<UseMutationOptions<TResult, TVariables>>
+
 export type MutateOverrideOptions = Pick<UseMutationOptions<any, OperationVariables>, 'update' | 'optimisticResponse' | 'context' | 'updateQueries' | 'refetchQueries' | 'awaitRefetchQueries' | 'errorPolicy' | 'fetchPolicy' | 'clientId'>
 export type MutateResult<TResult> = Promise<FetchResult<TResult, Record<string, any>, Record<string, any>>>
 export type MutateFunction<TResult, TVariables> = (variables?: TVariables, overrideOptions?: MutateOverrideOptions) => MutateResult<TResult>
@@ -33,28 +36,12 @@ export interface UseMutationReturn<TResult, TVariables> {
   }
 };
 
-/**
- * Use a mutation with variables.
- */
-export function useMutation<TResult = any, TVariables extends OperationVariables = OperationVariables> (
-  document: DocumentNode | ReactiveFunction<DocumentNode>,
-  options?: UseMutationOptions<TResult, TVariables> | ReactiveFunction<UseMutationOptions<TResult, TVariables>>
-): UseMutationReturn<TResult, TVariables>
-
-/**
- * Use a mutation with variables, but without a default.
- */
-export function useMutation<TResult = any, TVariables extends OperationVariables = OperationVariables> (
-  document: DocumentNode | ReactiveFunction<DocumentNode>,
-  options?: UseMutationOptions<TResult, undefined> | ReactiveFunction<UseMutationOptions<TResult, undefined>>
-): UseMutationReturn<TResult, TVariables>
-
 export function useMutation<
-  TResult,
-  TVariables extends OperationVariables
+  TResult = any,
+  TVariables extends OperationVariables = OperationVariables
 > (
-  document: DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>,
-  options?: UseMutationOptions<TResult, TVariables> | Ref<UseMutationOptions<TResult, TVariables>> | ReactiveFunction<UseMutationOptions<TResult, TVariables>>,
+  document: DocumentParameter,
+  options?: OptionsParameter<TResult, TVariables>,
 ): UseMutationReturn<TResult, TVariables> {
   if (!options) options = {}
 

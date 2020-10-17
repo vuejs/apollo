@@ -162,7 +162,7 @@ import { assertExactType } from './assertions'
     useSubscription_OnlySubscriptionType_NoVarsWithOptions.variables.value
   assertExactType<
     typeof useSubscription_OnlySubscriptionType_NoVarsWithOptionsVariables,
-  undefined
+  null
   >(useSubscription_OnlySubscriptionType_NoVarsWithOptionsVariables)
 
   // Result data type should be the passed in result

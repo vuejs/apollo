@@ -110,7 +110,28 @@ import { assertExactType } from './assertions'
 
   const useQueryOnlyQueryTypeNoVarsWithOptionsVariables =
     useQueryOnlyQueryTypeNoVarsWithOptions.variables.value
-  assertExactType<typeof useQueryOnlyQueryTypeNoVarsWithOptionsVariables, undefined>(
+  assertExactType<typeof useQueryOnlyQueryTypeNoVarsWithOptionsVariables, null>(
+    useQueryOnlyQueryTypeNoVarsWithOptionsVariables,
+  )
+}
+{
+  const useQueryOnlyQueryTypeNoVarsWithOptions = useQuery<ExampleQuery>(
+    ExampleDocument,
+    null,
+    {
+      clientId: '89E3Yh',
+    },
+  )
+
+  const useQueryOnlyQueryTypeNoVarsWithOptionsResult =
+    useQueryOnlyQueryTypeNoVarsWithOptions.result.value
+  assertExactType<typeof useQueryOnlyQueryTypeNoVarsWithOptionsResult, ExampleQuery>(
+    useQueryOnlyQueryTypeNoVarsWithOptionsResult,
+  )
+
+  const useQueryOnlyQueryTypeNoVarsWithOptionsVariables =
+    useQueryOnlyQueryTypeNoVarsWithOptions.variables.value
+  assertExactType<typeof useQueryOnlyQueryTypeNoVarsWithOptionsVariables, null>(
     useQueryOnlyQueryTypeNoVarsWithOptionsVariables,
   )
 }

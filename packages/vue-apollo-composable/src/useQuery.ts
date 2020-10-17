@@ -30,7 +30,7 @@ import { useEventHook } from './util/useEventHook'
 import { trackQuery } from './util/loadingTracking'
 
 export interface UseQueryOptions<
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   TResult = any,
   TVariables = OperationVariables
 > extends Omit<WatchQueryOptions<TVariables>, 'query' | 'variables'> {
@@ -46,6 +46,12 @@ interface SubscribeToMoreItem {
   unsubscribeFns: Function[]
 }
 
+// Parameters
+type DocumentParameter = DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>
+type VariablesParameter<TVariables> = TVariables | Ref<TVariables> | ReactiveFunction<TVariables>
+type OptionsParameter<TResult, TVariables> = UseQueryOptions<TResult, TVariables> | Ref<UseQueryOptions<TResult, TVariables>> | ReactiveFunction<UseQueryOptions<TResult, TVariables>>
+
+// Return
 export interface UseQueryReturn<TResult, TVariables> {
   result: Ref<TResult>
   loading: Ref<boolean>
@@ -73,49 +79,49 @@ export interface UseQueryReturn<TResult, TVariables> {
  * Use a query that does not require variables or options.
  * */
 export function useQuery<TResult = any> (
-  document: DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>
+  document: DocumentParameter
 ): UseQueryReturn<TResult, undefined>
 
 /**
  * Use a query that has optional variables but not options
  */
 export function useQuery<TResult = any, TVariables extends OperationVariables = OperationVariables> (
-  document: DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>
+  document: DocumentParameter
 ): UseQueryReturn<TResult, TVariables>
 
 /**
  * Use a query that has required variables but not options
  */
 export function useQuery<TResult = any, TVariables extends OperationVariables = OperationVariables> (
-  document: DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>,
-  variables: TVariables
+  document: DocumentParameter,
+  variables: VariablesParameter<TVariables>
 ): UseQueryReturn<TResult, TVariables>
 
 /**
  * Use a query that requires options but not variables.
  */
-export function useQuery<TResult = any, TVariables extends undefined = undefined> (
-  document: DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>,
-  variables: TVariables,
-  options: UseQueryOptions<TResult, TVariables> | Ref<UseQueryOptions<TResult, TVariables>> | ReactiveFunction<UseQueryOptions<TResult, TVariables>>
-): UseQueryReturn<TResult, TVariables>
+export function useQuery<TResult = any> (
+  document: DocumentParameter,
+  variables: undefined | null,
+  options: OptionsParameter<TResult, null>,
+): UseQueryReturn<TResult, null>
 
 /**
  * Use a query that requires variables and options.
  */
 export function useQuery<TResult = any, TVariables extends OperationVariables = OperationVariables> (
-  document: DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>,
-  variables: TVariables | Ref<TVariables> | ReactiveFunction<TVariables>,
-  options: UseQueryOptions<TResult, TVariables> | Ref<UseQueryOptions<TResult, TVariables>> | ReactiveFunction<UseQueryOptions<TResult, TVariables>>
+  document: DocumentParameter,
+  variables: VariablesParameter<TVariables>,
+  options: OptionsParameter<TResult, TVariables>,
 ): UseQueryReturn<TResult, TVariables>
 
 export function useQuery<
   TResult,
   TVariables extends OperationVariables
 > (
-  document: DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>,
-  variables?: TVariables | Ref<TVariables> | ReactiveFunction<TVariables>,
-  options?: UseQueryOptions<TResult, TVariables> | Ref<UseQueryOptions<TResult, TVariables>> | ReactiveFunction<UseQueryOptions<TResult, TVariables>>,
+  document: DocumentParameter,
+  variables?: VariablesParameter<TVariables>,
+  options?: OptionsParameter<TResult, TVariables>,
 ): UseQueryReturn<TResult, TVariables> {
   // Is on server?
   const vm: any = getCurrentInstance()

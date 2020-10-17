@@ -35,6 +35,10 @@ export interface UseSubscriptionOptions <
   debounce?: number
 }
 
+type DocumentParameter = DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>
+type VariablesParameter<TVariables> = TVariables | Ref<TVariables> | ReactiveFunction<TVariables>
+type OptionsParameter<TResult, TVariables> = UseSubscriptionOptions<TResult, TVariables> | Ref<UseSubscriptionOptions<TResult, TVariables>> | ReactiveFunction<UseSubscriptionOptions<TResult, TVariables>>
+
 export interface UseSubscriptionReturn<TResult, TVariables> {
   result: Ref<TResult>
   loading: Ref<boolean>
@@ -58,49 +62,49 @@ export interface UseSubscriptionReturn<TResult, TVariables> {
  * Use a subscription that does not require variables or options.
  * */
 export function useSubscription<TResult = any> (
-  document: DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>
+  document: DocumentParameter
 ): UseSubscriptionReturn<TResult, undefined>
 
 /**
  * Use a subscription that requires options but not variables.
  */
-export function useSubscription<TResult = any, TVariables extends undefined = undefined> (
-  document: DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>,
-  variables: TVariables,
-  options: UseSubscriptionOptions<TResult, TVariables> | Ref<UseSubscriptionOptions<TResult, TVariables>> | ReactiveFunction<UseSubscriptionOptions<TResult, TVariables>>
-): UseSubscriptionReturn<TResult, TVariables>
+export function useSubscription<TResult = any> (
+  document: DocumentParameter,
+  variables: undefined | null,
+  options: OptionsParameter<TResult, null>
+): UseSubscriptionReturn<TResult, null>
 
 /**
  * Use a subscription that requires variables.
  */
 export function useSubscription<TResult = any, TVariables extends OperationVariables = OperationVariables> (
-  document: DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>,
-  variables: TVariables | Ref<TVariables> | ReactiveFunction<TVariables>
+  document: DocumentParameter,
+  variables: VariablesParameter<TVariables>
 ): UseSubscriptionReturn<TResult, TVariables>
 
 /**
  * Use a subscription that has optional variables.
  */
 export function useSubscription<TResult = any, TVariables extends OperationVariables = OperationVariables> (
-  document: DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>
+  document: DocumentParameter
 ): UseSubscriptionReturn<TResult, TVariables>
 
 /**
  * Use a subscription that requires variables and options.
  */
 export function useSubscription<TResult = any, TVariables extends OperationVariables = OperationVariables> (
-  document: DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>,
-  variables: TVariables | Ref<TVariables> | ReactiveFunction<TVariables>,
-  options: UseSubscriptionOptions<TResult, TVariables> | Ref<UseSubscriptionOptions<TResult, TVariables>> | ReactiveFunction<UseSubscriptionOptions<TResult, TVariables>>
+  document: DocumentParameter,
+  variables: VariablesParameter<TVariables>,
+  options: OptionsParameter<TResult, TVariables>
 ): UseSubscriptionReturn<TResult, TVariables>
 
 export function useSubscription <
   TResult,
   TVariables
 > (
-  document: DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>,
-  variables: TVariables | Ref<TVariables> | ReactiveFunction<TVariables> = null,
-  options: UseSubscriptionOptions<TResult, TVariables> | Ref<UseSubscriptionOptions<TResult, TVariables>> | ReactiveFunction<UseSubscriptionOptions<TResult, TVariables>> = null,
+  document: DocumentParameter,
+  variables: VariablesParameter<TVariables> = null,
+  options: OptionsParameter<TResult, TVariables> = null,
 ): UseSubscriptionReturn<TResult, TVariables> {
   // Is on server?
   const vm: any = getCurrentInstance()
