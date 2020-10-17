@@ -20,9 +20,9 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v9-dependencies-{{ checksum "yarn.lock" }}
+          - v10-dependencies-{{ checksum "yarn.lock" }}
           # fallback to using the latest cache if no exact match is found
-          - v9-dependencies-
+          - v10-dependencies-
 
       - run: yarn install
 
@@ -41,7 +41,7 @@ jobs:
             - packages/vue-apollo-ssr/node_modules
             - packages/vue-apollo-util/node_modules
             - ~/.cache
-          key: v9-dependencies-{{ checksum "yarn.lock" }}
+          key: v10-dependencies-{{ checksum "yarn.lock" }}
         
       # run tests!
       - run: yarn build
