@@ -9,13 +9,13 @@
 之前：
 
 ```
-npm install --save vue-apollo apollo-client
+npm install --save vue-apollo@next graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
 ```
 
 之后：
 
 ```
-npm install --save vue-apollo@next graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
+npm install --save vue-apollo@next @apollo/client
 ```
 
 ### 导入
@@ -24,7 +24,9 @@ npm install --save vue-apollo@next graphql apollo-client apollo-link apollo-link
 
 ```js
 import Vue from 'vue'
-import { ApolloClient, createBatchingNetworkInterface } from 'apollo-client'
+import { ApolloClient } from 'apollo-client'
+import { HttpLink } from 'apollo-link-http'
+import { InMemoryCache } from 'apollo-cache-inmemory'
 import VueApollo from '@vue/apollo-option'
 ```
 
@@ -32,9 +34,7 @@ import VueApollo from '@vue/apollo-option'
 
 ```js
 import Vue from 'vue'
-import { ApolloClient } from 'apollo-client'
-import { HttpLink } from 'apollo-link-http'
-import { InMemoryCache } from 'apollo-cache-inmemory'
+import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client/core'
 import VueApollo from '@vue/apollo-option'
 ```
 
@@ -111,7 +111,7 @@ const apolloClient = new ApolloClient({
 ```js
 // 创建 apollo 客户端
 const apolloClient = new ApolloClient({
-  networkInterface: createBatchingNetworkInterface({
+  link: createHttpLink({
     uri: 'http://localhost:3020/graphql',
   }),
   connectToDevTools: true,
@@ -174,7 +174,7 @@ npm install --save subscriptions-transport-ws
 之后：
 
 ```
-npm install --save apollo-link-ws apollo-utilities
+npm install --save @apollo/client
 ```
 
 ### 导入
@@ -182,15 +182,17 @@ npm install --save apollo-link-ws apollo-utilities
 之前：
 
 ```js
-import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws'
+import { split } from 'apollo-link'
+import { WebSocketLink } from 'apollo-link-ws'
+import { getMainDefinition } from 'apollo-utilities'
 ```
 
 之后：
 
 ```js
-import { split } from 'apollo-link'
-import { WebSocketLink } from 'apollo-link-ws'
-import { getMainDefinition } from 'apollo-utilities'
+import { split } from '@apollo/client/core'
+import { WebSocketLink } from '@apollo/client/link/ws'
+import { getMainDefinition } from '@apollo/client/utilities'
 ```
 
 了解更多请查看 [apollo 官方文档](https://www.apollographql.com/docs/react/2.0-migration.html)。

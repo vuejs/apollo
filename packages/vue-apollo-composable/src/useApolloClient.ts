@@ -15,14 +15,14 @@ export interface UseApolloClientReturn<TCacheShape> {
   readonly client: ApolloClient<TCacheShape>
 }
 
-function resolveDefaultClient<T> (providedApolloClients: ClientDict<T>, providedApolloClient: ApolloClient<T>): NullableApolloClient<T> {
+function resolveDefaultClient<T> (providedApolloClients: ClientDict<T> | null, providedApolloClient: ApolloClient<T> | null): NullableApolloClient<T> {
   const resolvedClient = providedApolloClients
     ? providedApolloClients.default
-    : providedApolloClient
+    : (providedApolloClient ?? undefined)
   return resolvedClient
 }
 
-function resolveClientWithId<T> (providedApolloClients: ClientDict<T>, clientId: ClientId): NullableApolloClient<T> {
+function resolveClientWithId<T> (providedApolloClients: ClientDict<T> | null, clientId: ClientId): NullableApolloClient<T> {
   if (!providedApolloClients) {
     throw new Error(`No apolloClients injection found, tried to resolve '${clientId}' clientId`)
   }
@@ -35,10 +35,10 @@ export function useApolloClient<TCacheShape = any> (clientId?: ClientId): UseApo
   if (!getCurrentInstance()) {
     resolveImpl = () => currentApolloClient
   } else {
-    const providedApolloClients: ClientDict<TCacheShape> = inject(ApolloClients, null)
-    const providedApolloClient: ApolloClient<TCacheShape> = inject(DefaultApolloClient, null)
+    const providedApolloClients: ClientDict<TCacheShape> | null = inject(ApolloClients, null)
+    const providedApolloClient: ApolloClient<TCacheShape> | null = inject(DefaultApolloClient, null)
 
-    resolveImpl = (id: ClientId) => {
+    resolveImpl = (id?: ClientId) => {
       if (currentApolloClient) {
         return currentApolloClient
       } else if (id) {
@@ -48,10 +48,10 @@ export function useApolloClient<TCacheShape = any> (clientId?: ClientId): UseApo
     }
   }
 
-  function resolveClient (id: ClientId = clientId) {
+  function resolveClient (id: ClientId | undefined = clientId) {
     const client = resolveImpl(id)
     if (!client) {
-      throw new Error(`Apollo client with id ${id || 'default'} not found. Use provideApolloClient() if you are outside of a component setup.`)
+      throw new Error(`Apollo client with id ${id ?? 'default'} not found. Use provideApolloClient() if you are outside of a component setup.`)
     }
     return client
   }
@@ -70,7 +70,7 @@ export function provideApolloClient<TCacheShape = any> (client: ApolloClient<TCa
   currentApolloClient = client
   return function <TFnResult = any> (fn: () => TFnResult) {
     const result = fn()
-    currentApolloClient = null
+    currentApolloClient = undefined
     return result
   }
 }

@@ -1,4 +1,4 @@
-# From vue-apollo 2 and Apollo 1
+# From vue-apollo 3
 
 The main changes are related to the apollo client setup. Your components code shouldn't be affected. Apollo now uses a more flexible [apollo-link](https://github.com/apollographql/apollo-link) system that allows compositing multiple links together to add more features (like batching, offline support and more).
 
@@ -9,13 +9,13 @@ The main changes are related to the apollo client setup. Your components code sh
 Before:
 
 ```
-npm install --save vue-apollo apollo-client
+npm install --save vue-apollo@next graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
 ```
 
 After:
 
 ```
-npm install --save vue-apollo@next graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
+npm install --save vue-apollo@next @apollo/client
 ```
 
 ### Imports
@@ -24,7 +24,9 @@ Before:
 
 ```js
 import Vue from 'vue'
-import { ApolloClient, createBatchingNetworkInterface } from 'apollo-client'
+import { ApolloClient } from 'apollo-client'
+import { HttpLink } from 'apollo-link-http'
+import { InMemoryCache } from 'apollo-cache-inmemory'
 import VueApollo from '@vue/apollo-option'
 ```
 
@@ -32,9 +34,7 @@ After:
 
 ```js
 import Vue from 'vue'
-import { ApolloClient } from 'apollo-client'
-import { HttpLink } from 'apollo-link-http'
-import { InMemoryCache } from 'apollo-cache-inmemory'
+import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client/core'
 import VueApollo from '@vue/apollo-option'
 ```
 
@@ -168,13 +168,13 @@ Query reducers have been removed. Use the `update` API to update the cache now.
 Before:
 
 ```
-npm install --save subscriptions-transport-ws
+npm install --save apollo-link-ws apollo-utilities
 ```
 
 After:
 
 ```
-npm install --save apollo-link-ws apollo-utilities
+npm install --save @apollo/client
 ```
 
 ### Imports
@@ -182,15 +182,17 @@ npm install --save apollo-link-ws apollo-utilities
 Before:
 
 ```js
-import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws'
+import { split } from 'apollo-link'
+import { WebSocketLink } from 'apollo-link-ws'
+import { getMainDefinition } from 'apollo-utilities'
 ```
 
 After:
 
 ```js
-import { split } from 'apollo-link'
-import { WebSocketLink } from 'apollo-link-ws'
-import { getMainDefinition } from 'apollo-utilities'
+import { split } from '@apollo/client/core'
+import { WebSocketLink } from '@apollo/client/link/ws'
+import { getMainDefinition } from '@apollo/client/utilities'
 ```
 
 Learn more at the [official apollo documentation](https://www.apollographql.com/docs/react/2.0-migration.html).

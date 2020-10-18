@@ -23,7 +23,7 @@ export function getStates (apolloClients: ApolloClients, options: GetStatesOptio
   const finalOptions = Object.assign({}, {
     exportNamespace: '',
   }, options)
-  const states = {}
+  const states: Record<string, any> = {}
   for (const key in apolloClients) {
     const client = apolloClients[key]
     const state = client.cache.extract()

@@ -16,55 +16,20 @@ Then you can skip to next section: [Basic Usage](./apollo/).
 
 ## Manual installation
 
-You can either use [Apollo Boost](#apollo-boost) or [Apollo Client directly](#apollo-client-full-configuration) (more configuration work).
-
-### Apollo Boost
-
-Apollo Boost is a zero-config way to start using Apollo Client. It includes some sensible defaults, such as our recommended `InMemoryCache` and `HttpLink`, which come configured for you with our recommended settings and it's perfect for starting to develop fast.
-
-Install it alongside `vue-apollo` and `graphql`: 
-
 ```shell
-npm install --save graphql apollo-boost
+npm install --save graphql graphql-tag @apollo/client
 ```
 
 Or:
 
 ```shell
-yarn add graphql apollo-boost
+yarn add graphql graphql-tag @apollo/client
 ```
 
 In your app, create an `ApolloClient` instance:
 
 ```js
-import ApolloClient from 'apollo-boost'
-
-const apolloClient = new ApolloClient({
-  // You should use an absolute URL here
-  uri: 'https://api.graphcms.com/simple/v1/awesomeTalksClone'
-})
-```
-
-### Apollo client full configuration
-
-If you want some more fine grained control install these packages instead of apollo-boost:
-
-```shell
-npm install --save graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
-```
-
-Or:
-
-```shell
-yarn add graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
-```
-
-In your app, create an `ApolloClient` instance:
-
-```js
-import { ApolloClient } from 'apollo-client'
-import { createHttpLink } from 'apollo-link-http'
-import { InMemoryCache } from 'apollo-cache-inmemory'
+import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client/core'
 
 // HTTP connection to the API
 const httpLink = createHttpLink({

@@ -1,4 +1,5 @@
 import gql from 'graphql-tag'
+import { TypedDocumentNode } from '@apollo/client/core'
 
 export type ID = string
 
@@ -83,3 +84,9 @@ export interface MultiKeyExampleQuery {
     __typename?: 'OtherExample'
   }
 }
+
+export const ExampleTypedQueryDocument: TypedDocumentNode<ExampleQuery, ExampleQueryVariables> = ExampleDocument
+
+export const ExampleTypedMutationDocument: TypedDocumentNode<ExampleUpdateMutation, ExampleUpdateMutationVariables> = ExampleDocument
+
+export const ExampleTypedSubscriptionDocument: TypedDocumentNode<ExampleUpdatedSubscription, ExampleUpdatedSubscriptionVariables> = ExampleDocument

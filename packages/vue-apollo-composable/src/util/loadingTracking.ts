@@ -1,4 +1,5 @@
 import { Ref, watch, onUnmounted, ref, getCurrentInstance, onBeforeUnmount } from 'vue-demi'
+import type { CurrentInstance } from './types'
 
 export interface LoadingTracking {
   queries: Ref<number>
@@ -11,8 +12,12 @@ export interface AppLoadingTracking extends LoadingTracking {
 }
 
 export function getAppTracking () {
-  const vm: any = getCurrentInstance()
-  const root: any = vm.$root || vm.root
+  const vm = getCurrentInstance() as CurrentInstance | null
+  const root = vm?.$root ?? vm?.root
+  if (!root) {
+    throw new Error('Instance $root not found')
+  }
+
   let appTracking: AppLoadingTracking
 
   if (!root._apolloAppTracking) {
@@ -54,7 +59,7 @@ export function getCurrentTracking () {
       appTracking.components.delete(vm)
     })
   } else {
-    tracking = appTracking.components.get(vm)
+    tracking = appTracking.components.get(vm) as LoadingTracking
   }
 
   return {

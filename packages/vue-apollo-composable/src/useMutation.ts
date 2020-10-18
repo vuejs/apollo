@@ -1,5 +1,5 @@
 import { DocumentNode } from 'graphql'
-import { MutationOptions, OperationVariables, FetchResult } from '@apollo/client/core'
+import { MutationOptions, OperationVariables, FetchResult, TypedDocumentNode } from '@apollo/client/core'
 import { ref, onBeforeUnmount, isRef, Ref } from 'vue-demi'
 import { useApolloClient } from './useApolloClient'
 import { ReactiveFunction } from './util/ReactiveFunction'
@@ -16,17 +16,17 @@ export interface UseMutationOptions<
   clientId?: string
 }
 
-type DocumentParameter = DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode>
+type DocumentParameter<TResult, TVariables> = DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode> | TypedDocumentNode<TResult, TVariables> | Ref<TypedDocumentNode<TResult, TVariables>> | ReactiveFunction<TypedDocumentNode<TResult, TVariables>>
 type OptionsParameter<TResult, TVariables> = UseMutationOptions<TResult, TVariables> | Ref<UseMutationOptions<TResult, TVariables>> | ReactiveFunction<UseMutationOptions<TResult, TVariables>>
 
 export type MutateOverrideOptions = Pick<UseMutationOptions<any, OperationVariables>, 'update' | 'optimisticResponse' | 'context' | 'updateQueries' | 'refetchQueries' | 'awaitRefetchQueries' | 'errorPolicy' | 'fetchPolicy' | 'clientId'>
 export type MutateResult<TResult> = Promise<FetchResult<TResult, Record<string, any>, Record<string, any>>>
-export type MutateFunction<TResult, TVariables> = (variables?: TVariables, overrideOptions?: MutateOverrideOptions) => MutateResult<TResult>
+export type MutateFunction<TResult, TVariables> = (variables?: TVariables | null, overrideOptions?: MutateOverrideOptions) => MutateResult<TResult>
 
 export interface UseMutationReturn<TResult, TVariables> {
   mutate: MutateFunction<TResult, TVariables>
   loading: Ref<boolean>
-  error: Ref<Error>
+  error: Ref<Error | null>
   called: Ref<boolean>
   onDone: (fn: (param: FetchResult<TResult, Record<string, any>, Record<string, any>>) => void) => {
     off: () => void
@@ -40,14 +40,12 @@ export function useMutation<
   TResult = any,
   TVariables extends OperationVariables = OperationVariables
 > (
-  document: DocumentParameter,
-  options?: OptionsParameter<TResult, TVariables>,
+  document: DocumentParameter<TResult, TVariables>,
+  options: OptionsParameter<TResult, TVariables> = {},
 ): UseMutationReturn<TResult, TVariables> {
-  if (!options) options = {}
-
   const loading = ref<boolean>(false)
   trackMutation(loading)
-  const error = ref<Error>(null)
+  const error = ref<Error | null>(null)
   const called = ref<boolean>(false)
 
   const doneEvent = useEventHook<FetchResult<TResult, Record<string, any>, Record<string, any>>>()
@@ -56,7 +54,7 @@ export function useMutation<
   // Apollo Client
   const { resolveClient } = useApolloClient()
 
-  async function mutate (variables?: TVariables, overrideOptions: Omit<UseMutationOptions<TResult, TVariables>, 'variables'> = {}) {
+  async function mutate (variables?: TVariables | null, overrideOptions: Omit<UseMutationOptions<TResult, TVariables>, 'variables'> = {}) {
     let currentDocument: DocumentNode
     if (typeof document === 'function') {
       currentDocument = document()
@@ -79,14 +77,16 @@ export function useMutation<
     loading.value = true
     called.value = true
     try {
-      const result = await client.mutate<TResult>({
+      const result = await client.mutate<TResult, TVariables>({
         mutation: currentDocument,
         ...currentOptions,
         ...overrideOptions,
-        variables: {
-          ...currentOptions.variables || {},
-          ...variables || {},
-        },
+        variables: (variables ?? currentOptions.variables)
+          ? {
+            ...(currentOptions.variables as TVariables),
+            ...(variables as TVariables),
+          }
+          : undefined,
       })
       loading.value = false
       doneEvent.trigger(result)

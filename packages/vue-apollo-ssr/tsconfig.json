@@ -3,9 +3,10 @@
     "target": "es5",
     "module": "commonjs",
     "sourceMap": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "strict": true
   },
   "include": [
-    "src/**/*",
-  ],
+    "src/**/*"
+  ]
 }

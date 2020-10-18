@@ -1,7 +1,7 @@
 import { createApolloClient, restartWebsockets } from 'vue-cli-plugin-apollo/graphql-client'
 import { logErrorMessages } from '@vue/apollo-util'
 // import { print } from 'graphql'
-import { onError } from 'apollo-link-error'
+import { onError } from '@apollo/client/link/error'
 
 // Name of the localStorage item
 const AUTH_TOKEN = 'apollo-token'

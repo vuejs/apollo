@@ -125,9 +125,7 @@ export default {
 // apollo.js
 
 import Vue from 'vue'
-import { ApolloClient } from 'apollo-client'
-import { HttpLink } from 'apollo-link-http'
-import { InMemoryCache } from 'apollo-cache-inmemory'
+import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client/core'
 import VueApollo from '@vue/apollo-option'
 
 // 安装 vue 插件
