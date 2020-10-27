@@ -4,7 +4,9 @@
 本文档关联的版本仅支持 Apollo 2.x。查看支持 Apollo 1.x 的旧版本，请点击 [这里](https://github.com/Akryum/vue-apollo/tree/apollo-1).
 :::
 
-这个库通过声明式查询将 [apollo](https://www.apollographql.com/) 集成到你的 [Vue](http://vuejs.org) 组件中。兼容 Vue 1.0+ 和 2.0+。
+这个库通过声明式查询将 [apollo](https://www.apollographql.com/) 集成到你的 [Vue](http://vuejs.org) 组件中。兼容 Vue 2.0+。
+
+正在开发中的 Vue Apollo 4 将支持 Vue 3，查看 [文档](https://v4.apollo.vuejs.org/).
 
 [➡️ 安装](./installation.md)
 
@@ -12,30 +14,11 @@
 
 [![sponsors logos](https://guillaume-chau.info/sponsors.png)](https://guillaume-chau.info/sponsors)
 
-## Become a sponsor
+## 成为赞助商
 
-你的公司是否使用了 `vue-apollo` 或 vue-cli-plugin-apollo 来构建出色的应用程序？加入资助者并成为赞助商，在此文档中添加你的 logo！在 Patreon 上支持我，将节省我用于谋生的工作时间，从而能够在如 vue-apollo 一样的免费开源软件上工作更多！谢谢！
+你的公司是否使用了 `vue-apollo` 或 `vue-cli-plugin-apollo` 来构建出色的应用程序？成为赞助商并在此文档中添加你的 logo 吧！在 GitHub 上支持我将节省我用于谋生的工作时间，从而能够在如 `vue-apollo` 一样的免费开源软件上工作更多！谢谢！
 
-<p style="text-align: center;">
-  <a href="https://www.patreon.com/akryum" target="_blank">
-    <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Become a Patreon">
-  </a>
-</p>
-
-## 幻灯片
-
-如果你从未听说过 GraphQL 或 Apollo，在这里先睹为快：
-
-<iframe
-  src="//slides.com/akryum/vue-apollo-graphql/embed?style=light"
-  width="100%"
-  height="500"
-  scrolling="no"
-  frameborder="0"
-  webkitallowfullscreen
-  mozallowfullscreen
-  allowfullscreen
-/>
+<sponsor-button/>
 
 ## 什么是 GraphQL？
 
@@ -43,7 +26,7 @@
 
 ## 什么是 Apollo?
 
-[Apollo](https://www.apollographql.com/) 是通过社区力量帮助你在应用中使用 GraphQL 的一套工具。它的 [客户端](https://www.apollographql.com/client) 和 [服务端](https://www.apollographql.com/server) 都非常有名。Apollo 由 [Meteor 开发团队](https://www.meteor.io/) 开发和支持。
+[Apollo](https://www.apollographql.com/) 是通过社区力量帮助你在应用中使用 GraphQL 的一套工具。它的 [客户端](https://www.apollographql.com/client) 和 [服务端](https://www.apollographql.com/server) 都非常有名。
 
 ## 链接
 

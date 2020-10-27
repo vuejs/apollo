@@ -242,7 +242,7 @@ Eventual error for the last mutation call.
 
 ```vue
 <ApolloMutation>
-  <template v-slot="{error }">
+  <template v-slot="{ error }">
     <p v-if="error">An error occurred: {{ error }}</p>
   </template>
 </ApolloMutation>
@@ -254,7 +254,7 @@ First GraphQL error if any.
 
 ```vue
 <ApolloMutation>
-  <template v-slot="{gqlError }">
+  <template v-slot="{ gqlError }">
     <p v-if="gqlError">An error occurred: {{ gqlError.message }}</p>
   </template>
 </ApolloMutation>
