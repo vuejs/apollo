@@ -10,7 +10,7 @@ This library integrates [apollo](https://www.apollographql.com/) in your [Vue](h
 
 ## Become a sponsor
 
-Is your company using vue-apollo or vue-cli-plugin-apollo to build awesome apps? Join the other sponsors and add your logo on this documentation! Supporting me on GitHub allows me to work less for a job and to work more on Free Open Source Software such as vue-apollo! Thank you!
+Is your company using `vue-apollo` or `vue-cli-plugin-apollo` to build awesome apps? Join the other sponsors and add your logo on this documentation! Supporting me on GitHub allows me to work less for a job and to work more on Free Open Source Software such as `vue-apollo`! Thank you!
 
 <sponsor-button/>
 
@@ -20,7 +20,7 @@ Is your company using vue-apollo or vue-cli-plugin-apollo to build awesome apps?
 
 ## What is Apollo?
 
-[Apollo](https://www.apollographql.com/) is a set of tools and community effort to help you use GraphQL in your apps. It's well known for its [client](https://www.apollographql.com/client) and its [server](https://www.apollographql.com/server). Apollo is developed and supported by the [Meteor Development Group](https://www.meteor.io/).
+[Apollo](https://www.apollographql.com/) is a set of tools and community effort to help you use GraphQL in your apps. It's well known for its [client](https://www.apollographql.com/client) and its [server](https://www.apollographql.com/server).
 
 ## Links
 

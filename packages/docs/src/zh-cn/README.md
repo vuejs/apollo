@@ -13,16 +13,12 @@ features:
 footer: LICENCE MIT - Created by Guillaume CHAU (@Akryum)
 ---
 
-<p style="text-align: center;">
-  <a href="https://www.patreon.com/akryum" target="_blank">
-    <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Become a Patreon">
-  </a>
-</p>
+<sponsor-button/>
 
 ## 赞助商
 
 [![sponsors logos](https://guillaume-chau.info/sponsors.png)](https://guillaume-chau.info/sponsors)
 
 ::: tip 当前版本
-中文文档现在同步至 v3.0.0
+中文文档现在同步至 v4.0.0-alpha.12
 :::

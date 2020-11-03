@@ -1,12 +1,12 @@
-# Queries
+# 查询
 
-Fetching data involves executing **query** operations using standard GraphQL documents. You can learn more about queries and GraphQL documents [here](https://graphql.org/learn/queries/) and [practice running queries in the playground](https://www.apollographql.com/docs/react/development-testing/developer-tooling/#features).
+获取数据涉及使用标准 GraphQL 文档执行 **query** 操作。你可以在[这里](https://graphql.org/learn/queries/)和[在 playground 上实践查询的运行](https://www.apollographql.com/docs/react/development-testing/developer-tooling/#features)上了解有关查询和 GraphQL 文档的更多信息。
 
-## Executing a query
+## 执行一个查询
 
-### GraphQL document
+### GraphQL 文档
 
-Let's take this example GraphQL document throughout this section:
+在本节中，我们以这个 GraphQL 文档为例：
 
 ```graphql
 query getUsers {
@@ -20,10 +20,10 @@ query getUsers {
 ```
 
 ::: tip
-It is recommended to give a name to your GraphQL operations (here `getUsers`), so it is easier to find them in the Apollo Client devtools.
+建议为 GraphQL 操作命名（此处为 `getUsers`），这样在 Apollo Client 开发工具中能更容易找到它们。
 :::
 
-This query would return a `data` object with an array of `users` with their `id`, `firstname`, `lastname` and `email`. It could look like this:
+该查询将返回包含一个 `users` 数组的一个 `data` 对象，数组中包括 `id`、`firstname`、`lastname` 和`email`。它可能看起来像这样：
 
 ```json
 {
@@ -46,9 +46,9 @@ This query would return a `data` object with an array of `users` with their `id`
 }
 ```
 
-You may ask: why is there a nested `users` property on `data`? Why isn't the array directly on `data`?
+你可能会问：为什么在 `data` 上有一个嵌套的 `users` 属性？为什么数组不直接放在 `data` 上？
 
-This is because you can select multiple root fields in a GraphQL operation:
+这是因为你可以在 GraphQL 操作中选择多个根字段：
 
 ```graphql
 query getCatsAndDogs {
@@ -62,7 +62,7 @@ query getCatsAndDogs {
 }
 ```
 
-In this case, the result could look like this:
+在这种情况下，结果可能如下所示：
 
 ```json
 {
@@ -79,13 +79,13 @@ In this case, the result could look like this:
 }
 ```
 
-There can also be other optional properties on the result alongside `data`:
-- `errors` : an array of errors returned by the server
-- `extensions` : additional informations such as execution timings
+结果中除了 `data` 以外，还会存在以下可选属性：
+- `errors`：服务器返回的一系列错误
+- `extensions`：附加信息，例如执行时间
 
 ### useQuery
 
-The main composition function used to execute queries is `useQuery`. In your component, start by importing it:
+用于执行查询的主要组合函数是 `useQuery`。首先在组件中导入它：
 
 ```vue
 <script>
@@ -93,13 +93,13 @@ import { useQuery } from '@vue/apollo-composable'
 
 export default {
   setup () {
-    // Your data & logic here...
+    // 你的数据和逻辑在这里……
   },
 }
 </script>
 ```
 
-You can use `useQuery` in your `setup` option and pass it a GraphQL document as the first parameter. Then retrieve the query `result`:
+你可以在 `setup` 选项中使用 `useQuery`，并将 GraphQL 文档作为第一个参数传递给它。然后取回查询 `result`：
 
 ```vue{3,7-16}
 <script>
@@ -123,9 +123,9 @@ export default {
 </script>
 ```
 
-Note that `result` here is a `Ref` holding the data from the result returned by Apollo.
+注意这里的 `result` 是一个 `Ref`，用于保存 Apollo 返回结果中的数据。
 
-If you want to directly access the data object, use `result.value`:
+如果要直接访问数据对象，请使用 `result.value`：
 
 ```vue{2,19-21}
 <script>
@@ -154,7 +154,7 @@ export default {
 </script>
 ```
 
-In this example, you could also watch the `Ref` directly:
+在当前示例中，你还可以直接侦听 `Ref`：
 
 ```vue{19-20}
 <script>
@@ -183,7 +183,7 @@ export default {
 </script>
 ```
 
-Let's expose our result in the template:
+让我们将结果暴露给模板：
 
 ```vue{18-20,25-31}
 <script>
@@ -219,7 +219,7 @@ export default {
 </template>
 ```
 
-Beware that `result` may not contain your data at all time! It will initially be `undefined` until the query successfully completes. So it's a good idea to add a conditional before rendering the data:
+注意 `result` 可能不会一直包含你的数据！初始值将是 `undefined`，直到查询成功完成。因此最好在渲染数据之前添加条件代码：
 
 ```vue{2}
 <template>
@@ -231,11 +231,11 @@ Beware that `result` may not contain your data at all time! It will initially be
 </template>
 ```
 
-## Query status
+## 查询状态
 
-### Loading state
+### 加载状态
 
-Alongside `result`, `useQuery` returns `loading`, a boolean `Ref` tracking the loading state of the query:
+`useQuery` 在 `result` 旁边还会返回 `loading`，一个布尔值 `Ref` 来跟踪查询的加载状态：
 
 ```vue{7,20,27,29}
 <script>
@@ -274,9 +274,9 @@ export default {
 </template>
 ```
 
-### Error
+### 错误
 
-There is also an `error` `Ref` that holds any error that may occur during the request:
+还有一个 `error` `Ref` 包含在请求期间可能发生的任何错误：
 
 ```vue{7,21,30}
 <script>
@@ -320,11 +320,11 @@ export default {
 
 ## useResult
 
-The sister composition function `useResult` is available alongside `useQuery` to facilitate usage of the query `result`.
+除了 `useQuery` 之外，还有姐妹组合函数 `useResult`，以方便对查询 `result` 的使用。
 
-### Result picking
+### 结果挑选
 
-The first useful feature of `useResult` is picking one object from the result data. To do so, pass the `result` data as the first parameter, and a picking function as the third parameter:
+`useResult` 的第一个有用功能是从结果数据中挑选出一个对象。为此，将 `result` 数据作为第一个参数，并将挑选函数作为第三个参数：
 
 ```vue{2,18,21,34,35}
 <script>
@@ -368,7 +368,7 @@ export default {
 </template>
 ```
 
-This is very useful if the data relevant to your component is nested in the query:
+如果与组件相关的数据嵌套在查询中，这将非常有用：
 
 ```js
 const { result } = useQuery(gql`
@@ -385,21 +385,21 @@ const { result } = useQuery(gql`
 const messages = useResult(result, null, data => data.currentUser.messages)
 ```
 
-Another perk of `useResult` is that the picking function will silence errors inside the picking function. For example, if `result.value` is `undefined`, you don't have to add additional checks:
+`useResult` 的另一个好处是，挑选函数会让其内部的错误静音。例如，如果 `result.value` 是 `undefined`，你不必添加额外的检查：
 
 ```js
-// You don't need to do this!
+// 你不需要这样做！
 const messages = useResult(result, null, data => data && data.currentUser && data.currentUser.messages)
 
-// Instead do this:
+// 而是这样做：
 const messages = useResult(result, null, data => data.currentUser.messages)
 ```
 
 ::: tip
-Don't forget that `messages.value` can still be `null` until the query successfully completes!
+不要忘记，在查询成功完成之前，`messages.value` 仍然可以是 `null`！
 :::
 
-Another use case where `useResult` proves to be very useful is when you have multiple objects on the result data:
+证明 `useResult` 非常有用的另外一个用例是当结果数据上有多个对象时：
 
 ```js
 const { result } = useQuery(gql`
@@ -421,11 +421,11 @@ const users = useResult(result, null, data => data.users)
 const posts = useResult(result, null, data => data.posts)
 ```
 
-Look how we cleanly separated the result data into two different `Ref`!
+看看我们是怎样将结果数据干净地分成两个不同的 `Ref`！
 
-### Automatic picking
+### 自动挑选
 
-If there is only one object in the data, `useResult` will automatically try to pick the object:
+如果在数据中只有一个对象，`useResult` 将尝试自动挑选该对象：
 
 ```js{12}
 const { result, loading } = useQuery(gql`
@@ -442,11 +442,11 @@ const { result, loading } = useQuery(gql`
 const users = useResult(result)
 ```
 
-Here `users.value` will be the `users` array retrieved from our server.
+这里的 `users.value` 将是从服务器中检索到的 `users` 数组。
 
-### Default value
+### 默认值
 
-Let's say we want to sort our users on their last names:
+假设我们想根据用户的姓氏进行排序：
 
 ```vue{2,19-21,24,34,35}
 <script>
@@ -490,9 +490,9 @@ export default {
 </template>
 ```
 
-Here we will run into an error because `result.value` can be `undefined` (and potentially `result.value.users` can also be `undefined`). So the `sort` method will throw an error when called in our `computed` property.
+在这里我们会遇到一个错误，因为 `result.value` 可能是 `undefined`（并且 `result.value.users` 也可能是 `undefined`）。因此当我们在 `computed` 属性中调用 `sort` 方法时将引发错误。
 
-We could add checks, but it can rapidly become tedious:
+我们可以添加检查，但这很快就会变得乏味：
 
 ```js
 const sortedUsers = computed(() => result.value && result.value.users ? result.value.users.sort(
@@ -500,31 +500,31 @@ const sortedUsers = computed(() => result.value && result.value.users ? result.v
 ) : [])
 ```
 
-We can further simplify this with `useResult`:
+我们可以通过 `useResult` 进一步简化它：
 
 ```js{1,3,5}
-const users = useResult(result) // Automatically picked
+const users = useResult(result) // 自动挑选
 
 const sortedUsers = computed(() => users.value ? users.value.sort(
   (a, b) => a.lastname.localeCompare(b.lastname)
 ) : [])
 ```
 
-But we can eliminate the conditional entirely if we pass a default value as the 2nd parameter of `useResult`:
+但如果我们传递一个默认值作为 `useResult` 的第二个参数，则可以完全取消条件代码：
 
 ```js{1,3,5}
-const users = useResult(result, []) // Defaults to an empty array
+const users = useResult(result, []) // 默认为空数组
 
 const sortedUsers = computed(() => users.value.sort(
   (a, b) => a.lastname.localeCompare(b.lastname)
 ))
 ```
 
-This is even more useful if we want to use the `users` array `Ref` in multiple places in our `setup` function!
+如果我们想在 `setup` 函数中的多个地方使用 `users` 数组 `Ref` 时，这将更加有用！
 
-## Variables
+## 变量
 
-You can pass a `variables` object to the 2nd parameter of `useQuery`:
+你可以把一个变量对象作为第二个参数传递给 `useQuery`：
 
 ```js
 const { result } = useQuery(gql`
@@ -539,9 +539,9 @@ const { result } = useQuery(gql`
 })
 ```
 
-### Variables Ref
+### 变量 Ref
 
-You can change them later by retrieving their `variables` `Ref`:
+之后你可以通过检索它们的 `variables` `Ref` 来更改它们：
 
 ```js{1,12-16}
 const { result, variables } = useQuery(gql`
@@ -563,10 +563,10 @@ function selectUser (id) {
 ```
 
 ::: tip
-This will re-fetch the query each time a property from the `variables` object changes.
+每次 `variables` 对象的属性更改时，都会重新获取查询。
 :::
 
-Alternatively, you can pass a `Ref` directly:
+另外，你可以直接传递 `Ref`：
 
 ```js
 import { ref } from '@vue/composition-api'
@@ -593,9 +593,9 @@ function selectUser (id) {
 }
 ```
 
-### Reactive object
+### 响应式对象
 
-You can also pass a reactive object:
+你也可以传递一个响应式对象：
 
 ```js
 import { reactive } from '@vue/composition-api'
@@ -620,7 +620,7 @@ function selectUser (id) {
 }
 ```
 
-This also means you can pass `props` from `setup` directly, since `props` is already a reactive object:
+这也意味着你可以直接传递 `setup` 里的 `props`，因为 `props` 已经是一个响应式对象：
 
 ```js
 export default {
@@ -643,11 +643,11 @@ export default {
 }
 ```
 
-But beware if you add new props that aren't used in the GraphQL document, you will run into GraphQL validation errors!
+但是请注意，如果你添加了 GraphQL 文档中未使用的新属性，就会遇到 GraphQL 验证错误！
 
-### Variables function
+### 变量函数
 
-Finally, you can pass variables as a function returning an object:
+最后，你可以将传递一个返回对象的函数作为变量：
 
 ```js{12-14}
 export default {
@@ -672,9 +672,9 @@ export default {
 }
 ```
 
-This variables function will be made reactive automatically, so whenever `props.id` changes, the `variables` object of the query will be updated.
+该变量函数将自动成为响应式的，因此每当 `props.id` 更改时，查询的 `variables` 对象也将被更新。
 
-This syntax is also useful if you want to use some `Ref`s in the `variables`:
+如果你想要在 `variables` 中使用一些 `Ref`，此语法也很有用：
 
 ```js
 const id = ref('abc-abc-abc')
@@ -695,13 +695,13 @@ function selectUser (id) {
 }
 ```
 
-## Options
+## 选项
 
-The third parameter of `useQuery` is an options object, used to configure your query.
+`useQuery` 的第三个参数是一个选项对象，用于配置你的查询。
 
-Like `variables`, you can pass a `Ref`, a reactive object or a function that will automatically be reactive.
+像 `variables` 一样，你可以传递一个 `Ref`，一个响应式对象或一个自动响应式的函数。
 
-Using a `Ref`:
+使用 `Ref`：
 
 ```js
 const options = ref({
@@ -718,7 +718,7 @@ const { result } = useQuery(gql`
 `, null, options)
 ```
 
-Using a reactive object:
+使用响应式对象：
 
 ```js
 const options = reactive({
@@ -735,7 +735,7 @@ const { result } = useQuery(gql`
 `, null, options)
 ```
 
-Using a function that will automatically be reactive:
+使用自动响应式的函数：
 
 ```js
 const fetchPolicy = ref('cache-first')
@@ -752,11 +752,11 @@ const { result } = useQuery(gql`
 }))
 ```
 
-See the [API Reference](../api/use-query) for all the possible options.
+在 [API 参考](../api/use-query) 查看所有可用的选项。
 
-### Disable a query
+### 禁用查询
 
-You can disable and re-enable a query with the `enabled` option:
+你可以使用 `enabled` 选项来禁用和重新启用查询：
 
 ```js
 const enabled = ref(false)
@@ -772,9 +772,9 @@ function enableQuery () {
 }
 ```
 
-### Fetch Policy
+### 获取策略
 
-The `fetchPolicy` option allows you to customize how the query will use the Apollo Client cache.
+`fetchPolicy` 选项可以让你自定义如何使用 Apollo Client 来缓存查询。
 
 ```js
 const { result } = useQuery(gql`
@@ -784,27 +784,27 @@ const { result } = useQuery(gql`
 })
 ```
 
-Available values are:
+可用值为：
 
-- `cache-first` (default): return result from cache. Only fetch from network if cached result is not available.
-- `cache-and-network`: return result from cache first (if it exists), then return network result once it's available.
-- `cache-only`: return result from cache if available, fail otherwise.
-- `network-only`: return result from network, fail if network call doesn't succeed, save to cache.
-- `no-cache`: return result from network, fail if network call doesn't succeed, don't save to cache.
+- `cache-first`（默认）：从缓存返回结果。仅当无法获得缓存结果时才从网络获取。
+- `cache-and-network`：首先从缓存中返回结果（如果存在），然后在网络可用时返回网络结果。
+- `cache-only`：从缓存返回结果（如果可用），否则失败。
+- `network-only`：从网络返回结果并保存到缓存，如果网络调用未成功则失败。
+- `no-cache`：从网络返回结果但不保存到缓存，如果网络调用未成功则失败。
 
-## Updating cached results
+## 更新缓存结果
 
-When a query is completed, it will update the cache with the result data (depending on the [fetch policy](#fetch-policy)). This improves performance the next time the data needs to be rendered in your application and ensures that all components relying on a piece of data is always consistent.
+查询完成后，它将使用结果数据来更新缓存（取决于[获取策略](#获取策略)）。这将提升下一次需要在应用中渲染数据时的性能，并确保所有依赖同一条数据的组件始终保持一致。
 
-However, you sometimes want to make sure that this data is up-to-date compared to the server.
+但是，有时你需要确保此数据与服务器相比是最新的。
 
-### Polling
+### 轮询
 
-Polling means repeatedly calling the server to automatically update the query data.
+轮询是指反复调用服务器以自动更新查询数据。
 
-You can enable polling with the `pollInterval` which will be the interval in ms between each requests repeatedly made to the server.
+你可以使用 `pollInterval` 来启用轮询，它将是每次重复向服务器发出请求的间隔，以毫秒为单位。
 
-In this example, we will poll the server every second:
+在此示例中，我们将每秒轮询一次服务器：
 
 ```js
 const { result } = useQuery(gql`
@@ -814,11 +814,11 @@ const { result } = useQuery(gql`
 })
 ```
 
-### Refetching
+### 重新获取
 
-The other way is manually executing the query again in response to an event, as opposed to using a fixed interval.
+另一种方法是响应事件来再次手动执行查询，而非使用固定的时间间隔。
 
-This is done using the `refetch` function:
+这是通过 `refetch` 函数完成的：
 
 ```vue{7,24,40}
 <script>
@@ -865,13 +865,13 @@ export default {
 </template>
 ```
 
-## Event hooks
+## 事件钩子
 
-`useQuery` returns event hooks allowing you to execute code when a specific event occurs.
+`useQuery` 返回事件钩子，允许你在特定事件发生时执行代码。
 
 ### onResult
 
-This is called whenever a new result is available.
+将在有新结果可用时调用。
 
 ```js
 const { onResult } = useQuery(...)
@@ -884,7 +884,7 @@ onResult(queryResult => {
 })
 ```
 
-You can pass the `notifyOnNetworkStatusChange` option to force the query to trigger a new result when the network status or error is updated:
+你可以传递 `notifyOnNetworkStatusChange` 选项，以强制查询在网络状态或错误更新时触发新结果：
 
 ```js
 useQuery(gql`
@@ -896,7 +896,7 @@ useQuery(gql`
 
 ### onError
 
-It is triggered when an error occurs:
+发生错误时触发：
 
 ```js
 const { onError } = useQuery(...)
@@ -907,7 +907,7 @@ onError(error => {
 })
 ```
 
-You can use the `logErrorMessages` function from the `@vue/apollo-util` package to format the error in the browser console:
+你可以使用 `@vue/apollo-util` 包中的 `logErrorMessages` 函数在浏览器控制台中对错误进行格式化：
 
 ```js
 import { logErrorMessages } from '@vue/apollo-util'
@@ -919,11 +919,11 @@ onError(error => {
 })
 ```
 
-Example error:
+错误示例：
 
-![Error log screenshot](/error-log.jpeg)
+![错误日志截图](/error-log.jpeg)
 
-If you are using Webpack or Vue CLI, it's a good idea to only use it in development:
+如果你使用的是 Webpack 或 Vue CLI，则最好仅在开发环境中使用它：
 
 ```js
 import { logErrorMessages } from '@vue/apollo-util'
@@ -937,4 +937,4 @@ onError(error => {
 })
 ```
 
-That way it will be dropped when compiling the project for production.
+这样就会在编译项目到生产环境时将其删除。

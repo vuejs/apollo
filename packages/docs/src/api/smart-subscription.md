@@ -14,7 +14,7 @@ Each subscription declared in the `apollo.$subscribe` option in a component resu
 
 ## Properties
 
-### Skip
+### skip
 
 You can pause or unpause with `skip`:
 

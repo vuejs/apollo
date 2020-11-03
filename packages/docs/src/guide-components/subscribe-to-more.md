@@ -56,7 +56,7 @@ export default {
 
 See [ApolloQuery](./query.md) to learn how to write GraphQL queries in the template.
 
-See [API Reference](../../api/apollo-subscribe-to-more.md) for all the available options.
+See [API Reference](../api/apollo-subscribe-to-more.md) for all the available options.
 
 ## Examples of `updateQuery`
 

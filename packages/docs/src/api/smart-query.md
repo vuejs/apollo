@@ -19,7 +19,7 @@ Each query declared in the `apollo` definition (that is, which doesn't start wit
 - `skip` is a boolean or a (reactive) function that returns a boolean. The function gets the current component and smart query key as arguments, so it can be used in `$query` and in `ApolloProvider`'s `defaultOptions`.
 - `subscribeToMore`: an object or an array of object which are [subscribeToMore options](../guide-option/subscriptions.md#subscribetomore).
 - `prefetch` is either a boolean or a function to determine if the query should be prefetched. See [Server-Side Rendering](../guide-advanced/ssr.md).
-- You can also use any other `watchQuery` options (see [Apollo docs](https://www.apollographql.com/docs/react/api/apollo-client.html#ApolloClient.watchQuery)).
+- You can also use any other `watchQuery` options (see [Apollo docs](https://www.apollographql.com/docs/react/api/core/ApolloClient.html#ApolloClient.watchQuery)).
 
 Example:
 
@@ -38,6 +38,12 @@ apollo: {
       return {
         message: this.pingInput,
       }
+    },
+    // Polling interval in milliseconds
+    pollInterval: 10000,
+    // Or, set polling interval as a vue reactive property
+    pollInterval() {
+      return this.pollInterval;
     },
     // Variables: deep object watch
     deep: false,
@@ -97,7 +103,7 @@ Manual mode example:
 
 ## Properties
 
-### Skip
+### skip
 
 You can pause or unpause with `skip`:
 
@@ -229,7 +235,7 @@ this.$apollo.queries.users.setVariables({
 
 ### setOptions
 
-Update the Apollo [watchQuery](https://www.apollographql.com/docs/react/api/apollo-client.html#ApolloClient.watchQuery) options and refetch:
+Update the Apollo [watchQuery](https://www.apollographql.com/docs/react/api/core/ApolloClient/#ApolloClient.watchQuery) options and refetch:
 
 ```js
 this.$apollo.queries.users.setOptions({

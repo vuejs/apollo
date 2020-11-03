@@ -17,9 +17,9 @@
 - `manual` 是一个禁用自动属性更新的布尔值。如果使用它，你需要指定一个 `result` 回调函数（参见下面的示例）。
 - `deep` 是一个在 Vue 侦听器上使用 `deep: true` 的布尔值。
 - `skip` 是一个布尔值或一个返回布尔值的（响应式）函数。该函数的参数一个是当前组件，另一个是智能查询的键名，因此可以在 `$query` 或是 `ApolloProvider` 的 `defaultOptions` 中使用。
-- `subscribeToMore`：一个或一组 [subscribeToMore 选项](../guide/apollo/subscriptions.md#subscribetomore) 对象。
-- `prefetch` 是一个布尔值或函数来确定是否应该预取查询。详见 [服务端渲染](../guide/ssr.md)。
-- 你还可以使用任意 `watchQuery` 的选项（参见 [Apollo 文档](https://www.apollographql.com/docs/react/api/apollo-client.html#ApolloClient.watchQuery)）。
+- `subscribeToMore`：一个或一组 [subscribeToMore 选项](../guide-option/subscriptions.md#subscribetomore) 对象。
+- `prefetch` 是一个布尔值或函数来确定是否应该预取查询。详见 [服务端渲染](../guide-advanced/ssr.md)。
+- 你还可以使用任意 `watchQuery` 的选项（参见 [Apollo 文档](https://www.apollographql.com/docs/react/api/core/ApolloClient.html#ApolloClient.watchQuery)）。
 
 示例：
 
@@ -38,6 +38,12 @@ apollo: {
       return {
         message: this.pingInput,
       }
+    },
+    // 轮询间隔，以毫秒为单位
+    pollInterval: 10000,
+    // 也可以通过 vue 响应式属性设置轮询间隔
+    pollInterval() {
+      return this.pollInterval;
     },
     // 变量：深度对象侦听
     deep: false,
@@ -92,7 +98,7 @@ update: data => data.ping
 
 ## 属性
 
-### Skip
+### skip
 
 你可以使用 `skip` 来暂停或停止暂停：
 
@@ -224,7 +230,7 @@ this.$apollo.queries.users.setVariables({
 
 ### setOptions
 
-更新 Apollo [watchQuery](https://www.apollographql.com/docs/react/api/apollo-client.html#ApolloClient.watchQuery) 选项并重新获取：
+更新 Apollo [watchQuery](https://www.apollographql.com/docs/react/api/core/ApolloClient/#ApolloClient.watchQuery) 选项并重新获取：
 
 ```js
 this.$apollo.queries.users.setOptions({

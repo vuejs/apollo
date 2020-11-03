@@ -1,4 +1,6 @@
-# 什么是 Apollo 组件？
+# 简介
+
+## 什么是 Apollo 组件？
 
 这些组件就像其他组件一样。它们在 prop 中使用 GraphQL 文档，并使用 [作用域插槽功能](https://vuejs.org/v2/guide/components-slots.html#Scoped-Slots) 来传递结果。
 
@@ -25,5 +27,3 @@
 
 <!-- 不需要脚本 -->
 ```
-
-在 [ApolloQuery](./query.md) 查看如何在模板中编写 GraphQL 查询。

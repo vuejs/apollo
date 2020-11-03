@@ -28,7 +28,7 @@
 
 在 [ApolloQuery](./query.md) 查看如何在模板中编写 GraphQL 查询。
 
-在 [API 参考](../../api/apollo-mutation.md) 查看所有可用的选项。
+在 [API 参考](../api/apollo-mutation.md) 查看所有可用的选项。
 
 ## 更新缓存
 

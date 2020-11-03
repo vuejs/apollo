@@ -15,9 +15,9 @@
 
 ## 方法
 
-- `query`：执行一个查询（详见 [查询](../guide/apollo/queries.md)）。
-- `mutate`：执行一个变更（详见 [变更](../guide/apollo/mutations.md)）。
-- `subscribe`：标准的 Apollo 订阅方法（详见 [订阅](../guide/apollo/subscriptions.md)）。
+- `query`：执行一个查询（详见 [查询](../guide-option/queries.md)）。
+- `mutate`：执行一个变更（详见 [变更](../guide-option/mutations.md)）。
+- `subscribe`：标准的 Apollo 订阅方法（详见 [订阅](../guide-option/subscriptions.md)）。
 - `addSmartQuery`：手动添加一个智能查询（不推荐使用）。
-- `addSmartSubscription`：添加一个智能订阅（详见 [订阅](../guide/apollo/subscriptions.md)）。
+- `addSmartSubscription`：添加一个智能订阅（详见 [订阅](../guide-option/subscriptions.md)）。
 - `getClient`：返回底层的 ApolloClient。

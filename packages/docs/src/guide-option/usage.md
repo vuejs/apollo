@@ -42,4 +42,4 @@ All the components under the one which has the `apolloProvider` option have an `
 
 You can access the [apollo-client](https://www.apollographql.com/docs/react/) instances with `this.$apollo.provider.defaultClient` or `this.$apollo.provider.clients.<key>` (for [Multiple clients](../multiple-clients.md)) in all your vue components.
 
-If you are curious, see [$apollo API](../../api/dollar-apollo.md).
+If you are curious, see [$apollo API](../api/dollar-apollo.md).

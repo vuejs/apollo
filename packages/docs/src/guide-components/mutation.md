@@ -28,7 +28,7 @@ Here is an example:
 
 See [ApolloQuery](./query.md) to learn how to write GraphQL queries in the template.
 
-See [API Reference](../../api/apollo-mutation.md) for all the available options.
+See [API Reference](../api/apollo-mutation.md) for all the available options.
 
 ## Updating the cache
 

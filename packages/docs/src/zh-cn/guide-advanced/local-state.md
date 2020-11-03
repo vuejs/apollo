@@ -142,7 +142,7 @@ cache.writeData({
 
 ## 查询本地数据
 
-查询本地缓存与 [将 GraphQL 查询发送到远程服务器](apollo/queries.md) 非常相似。首先，我们需要创建一个查询：
+查询本地缓存与 [将 GraphQL 查询发送到远程服务器](../guide-option/queries.md) 非常相似。首先，我们需要创建一个查询：
 
 ```js
 // App.vue
@@ -178,10 +178,10 @@ apollo: {
 
 我们有两种不同的方法来修改本地数据：
 
-- 使用 `writeData` 方法直接写入，就像我们在 [缓存初始化](#initializing-an-apollo-cache) 时所做的那样；
+- 使用 `writeData` 方法直接写入，就像我们在 [缓存初始化](#初始化-apollo-缓存) 时所做的那样；
 - 调用一个 GraphQL 变更。
 
-让我们在 [本地 GraphQL schema](#creating-a-local-schema) 中添加一些变更：
+让我们在 [本地 GraphQL schema](#创建一个本地-schema) 中添加一些变更：
 
 ```js{10-14}
 // main.js
@@ -264,7 +264,7 @@ const apolloClient = new ApolloClient({
 });
 ```
 
-现在，我们可以在 Vue 组件中像普通的 Apollo [变更](apollo/mutations.md) 一样使用此变更：
+现在，我们可以在 Vue 组件中像普通的 Apollo [变更](../guide-option/mutations.md) 一样使用此变更：
 
 ```js
 // App.vue
