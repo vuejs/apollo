@@ -4,7 +4,7 @@ Mutations are queries that change your data state on your apollo server.
 
 Use `this.$apollo.mutate()` to send a GraphQL mutation.
 
-For more info, visit the [apollo doc](https://www.apollographql.com/docs/react/api/apollo-client.html#ApolloClient.mutate). There is a mutation-focused [example app](https://github.com/Akryum/vue-apollo-todos) you can look at.
+For more info, visit the [apollo doc](https://www.apollographql.com/docs/react/api/core/ApolloClient.html#ApolloClient.mutate). There is a mutation-focused [example app](https://github.com/Akryum/vue-apollo-todos) you can look at.
 
 ::: warning
 You shouldn't send the `__typename` fields in the variables, so it is not recommended to send an Apollo result object directly.

@@ -51,7 +51,7 @@ Vue.use(VueApollo)
 
 ## 订阅更多
 
-如果你需要更新一个来自订阅的智能查询结果，最好的方式是使用 `subscribeToMore` 查询方法。它将创建链接到智能查询的 [智能订阅](../../api/smart-subscription.md)。你只需要将 `subscribeToMore` 添加到智能查询中：
+如果你需要更新一个来自订阅的智能查询结果，最好的方式是使用 `subscribeToMore` 查询方法。它将创建链接到智能查询的 [智能订阅](../api/smart-subscription.md)。你只需要将 `subscribeToMore` 添加到智能查询中：
 
 ```js
 apollo: {
@@ -164,10 +164,10 @@ this.$watch(() => this.type, (type, oldType) => {
 
 ::: danger
 如果要使用订阅的结果更新查询，请使用 `subscribeToMore`。
-以下的方法适用于 'notify' 用例
+以下的方法适用于 'notify' 用例。
 :::
 
-你可以在 `apollo` 选项中使用 `$subscribe` 关键字来声明 [智能订阅](../../api/smart-subscription.md)：
+你可以在 `apollo` 选项中使用 `$subscribe` 关键字来声明 [智能订阅](../api/smart-subscription.md)：
 
 ```js
 apollo: {
@@ -203,8 +203,34 @@ apollo: {
 你可以使用 `this.$apollo.subscriptions.<name>` 访问这个订阅。
 
 :::tip
-和查询一样，你可以 [使用函数](./queries.md#option-function) 声明订阅，并且可以 [使用响应式函数](./queries.md#reactive-query-definition) 声明 `query` 选项。
+和查询一样，你可以 [使用函数](./queries.md#用函数作为选项) 声明订阅，并且可以 [使用响应式函数](./queries.md#响应式查询定义) 声明 `query` 选项。
 :::
+
+当服务端支持实时查询并使用订阅更新它们时，例如 [Hasura](https://hasura.io/)，你可以使用简单订阅来实现响应式查询：
+
+```js
+data () {
+  return {
+    tags: [],
+  };
+},
+apollo: {
+  $subscribe: {
+    tags: {
+      query: gql`subscription {
+        tags {
+          id
+          label
+          type
+        }
+      }`,
+      result ({ data }) {
+        this.tags = data.tags;
+      },
+    },
+  },
+},
+```
 
 ## 跳过订阅
 

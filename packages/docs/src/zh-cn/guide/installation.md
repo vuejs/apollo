@@ -10,13 +10,11 @@
 vue add apollo
 ```
 
-然后你可以跳到下一部分：[基本用法](./apollo/)。
+然后你可以跳到下一部分：[基本用法](../guide-option/usage.md)。
 
 [更多信息](https://github.com/Akryum/vue-cli-plugin-apollo)
 
 ## 手动安装
-
-### 1. Apollo Client
 
 ```
 npm install --save graphql graphql-tag @apollo/client
@@ -48,38 +46,6 @@ const apolloClient = new ApolloClient({
   cache,
 })
 ```
-
-### 2. 安装插件到 Vue
-
-```js
-import Vue from 'vue'
-import VueApollo from '@vue/apollo-option'
-
-Vue.use(VueApollo)
-```
-
-### 3. Apollo provider
-
-Provider 保存了可以在接下来被所有子组件使用的 Apollo 客户端实例。
-
-```js
-const apolloProvider = new VueApollo({
-  defaultClient: apolloClient,
-})
-```
-
-使用 `apolloProvider` 选项将它添加到你的应用程序：
-
-```js
-new Vue({
-  el: '#app',
-  // 像 vue-router 或 vuex 一样注入 apolloProvider
-  apolloProvider,
-  render: h => h(App),
-})
-```
-
-现在你已经完成了在组件中使用 Apollo 的所有准备了！
 
 ## IDE 集成
 
@@ -130,3 +96,12 @@ module.exports = {
   }
 }
 ```
+
+## 下一步
+
+继续阅读以下指南：
+
+- [选项（经典）API](../guide-option/setup.md)
+- [组合（进阶）API](../guide-composable/setup.md)
+- [组件 API](../guide-components/setup.md)
+- [进阶主题](../guide-advanced)

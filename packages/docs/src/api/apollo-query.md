@@ -35,10 +35,10 @@ To enable support of `gql` string tag in Vue templates, see the necessary setup 
 
 - `query`: GraphQL query (transformed by `graphql-tag`) or a function that receives the `gql` tag as argument and should return the transformed query
 - `variables`: Object of GraphQL variables
-- `fetchPolicy`: See [apollo fetchPolicy](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-fetchPolicy)
-- `pollInterval`: See [apollo pollInterval](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-pollInterval)
-- `notifyOnNetworkStatusChange`: See [apollo notifyOnNetworkStatusChange](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-notifyOnNetworkStatusChange)
-- `context`: See [apollo context](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-context)
+- `fetchPolicy`: See [apollo fetchPolicy](https://www.apollographql.com/docs/react/data/queries/#supported-fetch-policies)
+- `pollInterval`: Number of milliseconds. Polling provides near-real-time synchronization with your server by causing a query to execute periodically at a specified interval.
+- `notifyOnNetworkStatusChange`: See [Inspecting loading states](https://www.apollographql.com/docs/react/data/queries/#inspecting-loading-states)
+- `context`: See [apollo context](https://www.apollographql.com/docs/react/api/link/apollo-link-context/)
 - `update`: Function to transform the result `data`, useful for picking a specific part of the response. Example: `:update="data => data.user.messages"`
 - `skip`: Boolean disabling query fetching
 - `clientId`: id of the Apollo Client used by the query (defined in ApolloProvider `clients` option)
@@ -56,7 +56,7 @@ To enable support of `gql` string tag in Vue templates, see the necessary setup 
   - `result.fullData`: Raw data returned by the query (not transformed by the `update` prop)
   - `result.loading`: Boolean indicating that a request is in flight (you may need to set `notifyOnNetworkStatusChange` prop for it to change)
   - `result.error`: Eventual error for the current result
-  - `result.networkStatus`: See [apollo networkStatus](https://www.apollographql.com/docs/react/basics/queries.html#graphql-query-data-networkStatus)
+  - `result.networkStatus`: See [apollo networkStatus](https://www.apollographql.com/docs/react/data/queries/#inspecting-loading-states)
 - `query`: Smart Query associated with the component. It's useful to do some operations like `query.refetch()` or `query.fetchMore()`.
 - `isLoading`: Smart Query loading state
 - `gqlError`: first GraphQL error if any

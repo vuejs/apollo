@@ -213,12 +213,32 @@ module.exports = {
       '/zh-cn/': {
         selectText: '选择语言',
         label: '简体中文',
-        editLinks: true,
         lastUpdated: '上次更新时间',
         nav: [
           {
             text: '指南',
-            link: '/zh-cn/guide/',
+            items: [
+              {
+                text: '由此起步',
+                link: '/zh-cn/guide/',
+              },
+              {
+                text: '选项 API',
+                link: '/zh-cn/guide-option/',
+              },
+              {
+                text: '组合 API',
+                link: '/zh-cn/guide-composable/',
+              },
+              {
+                text: '组件 API',
+                link: '/zh-cn/guide-components/',
+              },
+              {
+                text: '进阶主题',
+                link: '/zh-cn/guide-advanced/',
+              },
+            ],
           },
           {
             text: 'API 参考',
@@ -234,7 +254,7 @@ module.exports = {
           },
           {
             text: '赞助作者',
-            link: 'https://www.patreon.com/akryum',
+            link: 'https://github.com/sponsors/Akryum',
           },
         ],
         sidebarDepth: 3,
@@ -242,64 +262,126 @@ module.exports = {
           '/zh-cn/guide/': [
             '',
             'installation',
+          ],
+          '/zh-cn/guide-option/': [
             {
-              title: '基本使用',
+              title: '选项 API 指南',
               collapsable: false,
               children: [
-                'apollo/',
-                'apollo/queries',
-                'apollo/mutations',
-                'apollo/subscriptions',
-                'apollo/pagination',
-                'apollo/special-options',
+                '',
+                'setup',
               ],
             },
             {
-              title: '组件',
+              title: '基础',
               collapsable: false,
               children: [
-                'components/',
-                'components/query',
-                'components/mutation',
-                'components/subscribe-to-more',
+                'usage',
+                'queries',
+                'mutations',
+                'subscriptions',
               ],
             },
             {
               title: '进阶',
               collapsable: false,
               children: [
+                'special-options',
+                'pagination',
                 'multiple-clients',
-                'ssr',
+              ],
+            },
+          ],
+          '/zh-cn/guide-composable/': [
+            {
+              title: '组合 API 指南',
+              collapsable: false,
+              children: [
+                '',
+                'setup',
+              ],
+            },
+            {
+              title: '获取数据',
+              collapsable: false,
+              children: [
+                'query',
+                'mutation',
+                'subscription',
+                'pagination',
+                'fragments',
+                'error-handling',
+              ],
+            },
+          ],
+          '/zh-cn/guide-components/': [
+            {
+              title: '组件指南',
+              collapsable: false,
+              children: [
+                '',
+                'setup',
+              ],
+            },
+            {
+              title: '用法',
+              collapsable: false,
+              children: [
+                'query',
+                'mutation',
+                'subscribe-to-more',
+              ],
+            },
+          ],
+          '/zh-cn/guide-advanced/': [
+            {
+              title: '进阶主题',
+              collapsable: false,
+              children: [
+                '',
                 'local-state',
+                'ssr',
                 'testing',
               ],
             },
           ],
           '/zh-cn/api/': [
             {
-              title: 'Vue Apollo',
+              title: '选项 API',
               collapsable: false,
               children: [
                 'apollo-provider',
                 'dollar-apollo',
-                'ssr',
-              ],
-            },
-            {
-              title: 'Smart Apollo',
-              collapsable: false,
-              children: [
                 'smart-query',
                 'smart-subscription',
               ],
             },
             {
-              title: 'Apollo 组件',
+              title: '组合 API',
+              collapsable: false,
+              children: [
+                'use-query',
+                'use-mutation',
+                'use-subscription',
+                'use-result',
+                'use-loading',
+                'use-apollo-client',
+              ],
+            },
+            {
+              title: '组件',
               collapsable: false,
               children: [
                 'apollo-query',
                 'apollo-mutation',
                 'apollo-subscribe-to-more',
+              ],
+            },
+            {
+              title: '进阶',
+              collapsable: false,
+              children: [
+                'ssr',
               ],
             },
           ],

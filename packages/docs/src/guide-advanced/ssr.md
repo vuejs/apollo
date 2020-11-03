@@ -6,7 +6,7 @@
 
 ## Vue CLI plugin
 
-I made a plugin for [vue-cli](http://cli.vuejs.org) so you can transform your vue-apollo app into an isomorphic SSR app in literary two minutes! ✨🚀
+I made a plugin for [vue-cli](http://cli.vuejs.org) so you can transform your `vue-apollo` app into an isomorphic SSR app in literary two minutes! ✨🚀
 
 In your vue-cli 3 project:
 

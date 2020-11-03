@@ -142,7 +142,7 @@ We've just added an array of `todoItems` to our cache data and we defined that e
 
 ## Query local data
 
-Querying local cache is very similar to [sending GraphQL queries to remote server](apollo/queries.md). First, we need to create a query:
+Querying local cache is very similar to [sending GraphQL queries to remote server](../guide-option/queries.md). First, we need to create a query:
 
 ```js
 // App.vue
@@ -264,7 +264,7 @@ const apolloClient = new ApolloClient({
 });
 ```
 
-After this, we can use the mutation in our Vue component like normal [mutations](apollo/mutations.md):
+After this, we can use the mutation in our Vue component like normal [mutations](../guide-option/mutations.md):
 
 ```js
 // App.vue

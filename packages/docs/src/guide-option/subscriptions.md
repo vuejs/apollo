@@ -51,7 +51,7 @@ Vue.use(VueApollo)
 
 ## Subscribe To More
 
-If you need to update a smart query result from a subscription, the best way is using the `subscribeToMore` smart query method. It will create [Smart Subscriptions](../../api/smart-subscription.md) that are linked to the smart query. Just add a `subscribeToMore` to your smart query:
+If you need to update a smart query result from a subscription, the best way is using the `subscribeToMore` smart query method. It will create [Smart Subscriptions](../api/smart-subscription.md) that are linked to the smart query. Just add a `subscribeToMore` to your smart query:
 
 ```js
 apollo: {
@@ -167,7 +167,7 @@ If you want to update a query with the result of the subscription, use `subscrib
 The methods below are suitable for a 'notify' use case.
 :::
 
-You can declare [Smart Subscriptions](../../api/smart-subscription.md) in the `apollo` option with the `$subscribe` keyword:
+You can declare [Smart Subscriptions](../api/smart-subscription.md) in the `apollo` option with the `$subscribe` keyword:
 
 ```js
 apollo: {

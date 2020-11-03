@@ -2,7 +2,7 @@
 
 你可以使用 `ApolloQuery`（或 `apollo-query`）组件直接在模板中侦听 Apollo 查询。
 
-阅读完本页后，在 [API 参考](../../api/apollo-query.md) 查看所有可用的选项。
+阅读完本页后，在 [API 参考](../api/apollo-query.md) 查看所有可用的选项。
 
 ## 使用 gql 标签的查询
 
@@ -219,7 +219,7 @@ export default {
 </script>
 ```
 
-在 [API 参考](../../api/smart-query.md#methods) 查看所有可用的智能查询方法。
+在 [API 参考](../api/smart-query.md#methods) 查看所有可用的智能查询方法。
 
 ## 使用片段
 

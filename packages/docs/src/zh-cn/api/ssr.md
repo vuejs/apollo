@@ -2,7 +2,7 @@
 
 ## 用法
 
-详见 [SSR 指南](../guide/ssr.md)。
+详见 [SSR 指南](../guide-advanced/ssr.md)。
 
 ## 方法
 

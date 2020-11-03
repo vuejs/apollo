@@ -8,7 +8,9 @@ query myHelloQueryName {
 }
 ```
 
-为每个你需要通过 Apollo 的查询结果提供数据的 Vue 属性，在 `apollo` 对象中添加一个对应属性。每一个属性都将创建一个智能查询。
+为每个你需要通过 Apollo 的查询结果提供数据的 Vue 属性，在 `apollo` 对象中添加一个对应属性。每一个属性都将创建一个**智能查询**。
+
+智能查询是对 GraphQL 查询的包装，添加了自动响应式等功能。
 
 ## 简单查询
 
@@ -89,7 +91,7 @@ apollo: {
 }
 ```
 
-注意 `world` 与 `hello` 的不同之处：vue-apollo 不会去猜测你想要将哪些数据从查询结果中放入组件中。默认情况下，它只会尝试你在组件中使用的数据名称（即 `apollo` 对象中的键），在本例中为 `world`。如果名称不匹配，你可以使用 `update` 选项来告诉 vue-apollo 在结果中使用什么样的数据：
+注意 `world` 与 `hello` 的不同之处：`vue-apollo` 不会去猜测你想要将哪些数据从查询结果中放入组件中。默认情况下，它只会尝试你在组件中使用的数据名称（即 `apollo` 对象中的键），在本例中为 `world`。如果名称不匹配，你可以使用 `update` 选项来告诉 `vue-apollo` 在结果中使用什么样的数据：
 
 ```js
 apollo: {
@@ -112,7 +114,7 @@ apollo: {
 }
 ```
 
-在本例中，我们将 `hello` 字段重命名为 `world`，以便 vue-apollo 来自动推断应该从结果中取回什么。
+在本例中，我们将 `hello` 字段重命名为 `world`，以便 `vue-apollo` 来自动推断应该从结果中取回什么。
 
 ## 带参数的查询
 
@@ -140,7 +142,7 @@ apollo: {
  - `pollInterval`
  - ...
 
-更多细节请查看 [apollo 文档](https://www.apollographql.com/docs/react/api/apollo-client.html#ApolloClient.watchQuery)。
+更多细节请查看 [apollo 文档](https://www.apollographql.com/docs/react/api/core/apolloClient.html#ApolloClient.watchQuery)。
 
 例如，你可以像这样添加 `fetchPolicy` apollo 选项：
 
@@ -445,4 +447,4 @@ created () {
 
 ## 高级选项
 
-还有更多专用于 vue-apollo 的选项，请查看 [API 参考](../../api/smart-query.md)。
+还有更多专用于 vue-apollo 的选项，请查看 [API 参考](../api/smart-query.md)。

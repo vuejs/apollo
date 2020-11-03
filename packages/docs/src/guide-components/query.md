@@ -1,7 +1,7 @@
 # ApolloQuery
 
 You can use the `ApolloQuery` (or `apollo-query`) component to have watched Apollo queries directly in your template. 
-After reading this page, see the [API Reference](../../api/apollo-query.md) for all the possible options.
+After reading this page, see the [API Reference](../api/apollo-query.md) for all the possible options.
 
 ## Query gql tag
 
@@ -218,7 +218,7 @@ export default {
 </script>
 ```
 
-See the [API reference](../../api/smart-query.md#methods) for all possible smart query methods.
+See the [API reference](../api/smart-query.md#methods) for all possible smart query methods.
 
 ## Using fragments
 

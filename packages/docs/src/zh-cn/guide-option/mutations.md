@@ -4,7 +4,7 @@
 
 使用 `this.$apollo.mutate()` 来发送一个 GraphQL 变更。
 
-想要了解更多信息，请访问 [apollo 文档](https://www.apollographql.com/docs/react/api/apollo-client.html#ApolloClient.mutate)。有一个以变更为重点的 [示例应用](https://github.com/Akryum/vue-apollo-todos)，你可以看看。
+想要了解更多信息，请访问 [apollo 文档](https://www.apollographql.com/docs/react/api/core/ApolloClient.html#ApolloClient.mutate)。有一个以变更为重点的 [示例应用](https://github.com/Akryum/vue-apollo-todos)，你可以看看。
 
 ::: warning
 你不应当在 variables 中发送 `__typename` 字段，因此不建议直接发送 Apollo 结果对象。

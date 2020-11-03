@@ -10,7 +10,7 @@ In your vue-cli 3 project:
 vue add apollo
 ```
 
-Then you can skip to next section: [Basic Usage](./apollo/).
+Then you can skip to next section: [Basic Usage](../guide-option/usage.md).
 
 [More info](https://github.com/Akryum/vue-cli-plugin-apollo)
 
