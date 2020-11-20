@@ -31,17 +31,20 @@ interface SmartApollo<V> {
   stop(): void
 }
 
-type PickedObservableQuery = Pick<ObservableQuery, 
-  'fetchMore' |
-  'subscribeToMore' |
-  'refetch' |
-  'setVariables' |
-  'setOptions' |
-  'startPolling' |
-  'stopPolling'
->
+type PickedObservableQuery<TData, TVariables> = Pick<
+  ObservableQuery<TData, TVariables>,
+  | 'fetchMore'
+  | 'subscribeToMore'
+  | 'refetch'
+  | 'setVariables'
+  | 'setOptions'
+  | 'startPolling'
+  | 'stopPolling'
+>;
 
-export interface SmartQuery<V> extends SmartApollo<V>, PickedObservableQuery {
+export interface SmartQuery<V, TData = {}, TVariables = {}>
+  extends SmartApollo<V>,
+    PickedObservableQuery<TData, TVariables> {
   loading: boolean
 }
 
