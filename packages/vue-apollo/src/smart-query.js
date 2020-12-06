@@ -115,7 +115,7 @@ export default class SmartQuery extends SmartApollo {
     if (this.options.fetchPolicy !== 'no-cache' || this.options.notifyOnNetworkStatusChange) {
       const currentResult = this.maySetLoading()
 
-      if (!currentResult.loading || this.options.notifyOnNetworkStatusChange) {
+      if (this.options.notifyOnNetworkStatusChange) {
         this.nextResult(currentResult)
       }
     }
