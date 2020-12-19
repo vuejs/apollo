@@ -250,7 +250,7 @@ export function useQueryImpl<
   function onNextResult (queryResult: ApolloQueryResult<TResult>) {
     // Remove any previous error that may still be present from the last fetch (so result handlers
     // don't receive old errors that may not even be applicable anymore).
-    error.value = null;
+    error.value = null
 
     processNextResult(queryResult)
 
