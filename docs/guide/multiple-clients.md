@@ -47,9 +47,10 @@ export function createProvider (options = {}) {
     clients: {
       a,
       b
-    }
+    },
     defaultClient: a,
-})
+  });
+}
 ```
 
 In the component `apollo` option, you can define the client for all the queries, subscriptions and mutations with `$client` (only for this component):
