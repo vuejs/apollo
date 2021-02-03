@@ -18,37 +18,37 @@ const defaultOptions = {
   ssr: false,
 }
 
-const clientAOptions = {
+const optionsClientA = {
     // You can use `https` for secure connection (recommended in production)
     httpEndpoint: 'http://localhost:4000/graphql',
 }
 
-const clientBOptions = {
+const optionsClientB = {
   httpEndpoint: 'http://example.org/graphql',
 }
 
 // Call this in the Vue app file
 export function createProvider (options = {}) {
-  const createA= createApolloClient({
+  const createClientA= createApolloClient({
     ...defaultOptions,
-    ...clientAOptions,
+    ...optionsClientA,
   });
 
-  const createB = createApolloClient({
+  const createClientB = createApolloClient({
     ...defaultOptions,
-    ...clientBptions,
+    ...optionsClientB,
   });
 
-  const a = createA.apolloClient;
-  const b = createB.apolloClient;
+  const clientA = createClientA.apolloClient;
+  const clientB = createClientB.apolloClient;
 
   // Create vue apollo provider
   const apolloProvider = new VueApollo({
     clients: {
-      a,
-      b
+      clientA,
+      clientB
     },
-    defaultClient: a,
+    defaultClient: clientA,
   });
 }
 ```
