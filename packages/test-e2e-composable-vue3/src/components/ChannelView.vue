@@ -60,14 +60,22 @@ export default defineComponent({
 </script>
 
 <template>
-  <div v-if="loading">Loading channel...</div>
+  <div v-if="loading">
+    Loading channel...
+  </div>
 
-  <div v-else class="flex flex-col">
+  <div
+    v-else
+    class="flex flex-col"
+  >
     <div class="flex-none p-6 border-b border-gray-200 bg-white">
       Currently viewing # {{ channel.label }}
     </div>
 
-    <div ref="messagesEl" class="flex-1 overflow-y-auto">
+    <div
+      ref="messagesEl"
+      class="flex-1 overflow-y-auto"
+    >
       <MessageItem
         v-for="message of channel.messages"
         :key="message.id"
@@ -77,7 +85,7 @@ export default defineComponent({
     </div>
 
     <MessageForm
-      :channelId="channel.id"
+      :channel-id="channel.id"
       class="flex-none m-2 mt-0"
     />
   </div>

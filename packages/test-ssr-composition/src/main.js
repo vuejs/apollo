@@ -11,17 +11,17 @@ Vue.config.productionTip = false
 
 export async function createApp ({
   beforeApp = () => {},
-  afterApp = () => {}
+  afterApp = () => {},
 } = {}) {
   const router = createRouter()
 
   const apolloClient = createClient({
-    ssr: process.server
+    ssr: process.server,
   })
 
   await beforeApp({
     router,
-    apolloClient
+    apolloClient,
   })
 
   const app = new Vue({
@@ -31,13 +31,13 @@ export async function createApp ({
       provide(DefaultApolloClient, apolloClient)
     },
 
-    render: h => h(App)
+    render: h => h(App),
   })
 
   const result = {
     app,
     router,
-    apolloClient
+    apolloClient,
   }
 
   await afterApp(result)

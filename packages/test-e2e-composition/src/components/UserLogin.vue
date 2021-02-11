@@ -25,15 +25,17 @@ export default {
     const { mutate, loading, error, onDone } = useMutation(
       () => showRegister.value ? USER_REGISTER : USER_LOGIN,
       () => ({
-        variables: showRegister.value ? {
-          input: {
-            ...formData,
+        variables: showRegister.value
+          ? {
+            input: {
+              ...formData,
+            },
+          }
+          : {
+            email: formData.email,
+            password: formData.password,
           },
-        } : {
-          email: formData.email,
-          password: formData.password,
-        },
-      })
+      }),
     )
 
     onDone(async result => {

@@ -1,8 +1,8 @@
 module.exports = {
-  'presets': [
-    [require('@babel/preset-env'), { 'modules': false }],
+  presets: [
+    [require('@babel/preset-env'), { modules: false }],
   ],
-  'plugins': [
+  plugins: [
     require('@babel/plugin-proposal-class-properties'),
     [require('@babel/plugin-transform-for-of'), { assumeArray: true }],
   ],

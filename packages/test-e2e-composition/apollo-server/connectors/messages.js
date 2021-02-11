@@ -7,8 +7,8 @@ const messages = [
     userId: '__bot',
     channelId: 'general',
     content: 'Welcome to the chat!',
-    dateAdded: Date.now()
-  }
+    dateAdded: Date.now(),
+  },
 ]
 
 function publishChange ({ type, message }, context) {

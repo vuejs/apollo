@@ -34,7 +34,7 @@ export interface UseMutationReturn<TResult, TVariables> {
   onError: (fn: (param: Error) => void) => {
     off: () => void
   }
-};
+}
 
 export function useMutation<
   TResult = any,

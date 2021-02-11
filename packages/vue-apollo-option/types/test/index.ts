@@ -8,19 +8,19 @@ import App from './App'
 import Decorator from './Decorator'
 
 const httpLink = new HttpLink({ uri: 'https://dummy.test.com' })
-const cache: any = 'dummy cache';
+const cache: any = 'dummy cache'
 const apolloClient = new ApolloClient({
   link: httpLink,
   cache,
-  connectToDevTools: true
+  connectToDevTools: true,
 })
 const apolloProvider = new VueApollo({
   defaultClient: apolloClient,
   defaultOptions: {
     $query: {
-      fetchPolicy: 'cache-and-network'
-    }
-  }
+      fetchPolicy: 'cache-and-network',
+    },
+  },
 })
 
 Vue.use(VueApollo)
@@ -29,10 +29,10 @@ new Vue({
   el: '#app',
   provide: apolloProvider.provide(),
   render: h => h(App, [
-    h(Decorator)
-  ])
+    h(Decorator),
+  ]),
 })
 
 // test to able to call below methods
 console.log(apolloProvider.defaultClient.query)
-console.log(apolloProvider.clients['key'].query)
+console.log(apolloProvider.clients.key.query)

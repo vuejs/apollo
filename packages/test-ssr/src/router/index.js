@@ -9,22 +9,22 @@ export function createRouter () {
     {
       path: '/',
       name: 'home',
-      component: Home
+      component: Home,
     },
     {
       path: '/apollo',
       name: 'apollo',
-      component: () => import(/* webpackChunkName: "apollo" */ '../components/ApolloExample.vue')
+      component: () => import(/* webpackChunkName: "apollo" */ '../components/ApolloExample.vue'),
     },
     {
       path: '/apollo-loading',
       name: 'apollo-loading',
-      component: () => import(/* webpackChunkName: "apollo-loading" */ '../components/ApolloLoading.vue')
+      component: () => import(/* webpackChunkName: "apollo-loading" */ '../components/ApolloLoading.vue'),
     },
     {
       path: '/hello',
       name: 'hello',
-      component: () => import(/* webpackChunkName: "hello" */ '../components/HelloWorld.vue')
+      component: () => import(/* webpackChunkName: "hello" */ '../components/HelloWorld.vue'),
     },
     {
       path: '/about',
@@ -32,14 +32,14 @@ export function createRouter () {
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-    }
+      component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    },
   ]
 
   const router = new VueRouter({
     mode: 'history',
     base: process.env.BASE_URL,
-    routes
+    routes,
   })
 
   return router

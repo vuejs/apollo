@@ -44,12 +44,10 @@ jobs:
           key: v10-dependencies-{{ checksum "yarn.lock" }}
         
       # run tests!
+      - run: yarn lint
       - run: yarn build
-      - run: cd packages/vue-apollo-option && yarn lint
       - run: cd packages/vue-apollo-option && yarn test:types
       - run: cd packages/vue-apollo-option && yarn test:unit
-      - run: cd packages/vue-apollo-components && yarn lint
-      - run: cd packages/vue-apollo-composable && yarn lint
       - run: cd packages/vue-apollo-composable && yarn test:types
       - run: cd packages/test-e2e && yarn test:e2e
       - run: cd packages/test-e2e-composition && yarn test:e2e

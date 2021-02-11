@@ -4,7 +4,7 @@ import {
   isRef,
   computed,
   watch,
-  // @ts-expect-error
+  // @ts-expect-error No implemented on Vue 3 yet, see https://github.com/vuejs/vue-next/pull/3070
   onServerPrefetch,
   getCurrentInstance,
   onBeforeUnmount,
@@ -46,7 +46,7 @@ export interface UseQueryOptions<
 
 interface SubscribeToMoreItem {
   options: any
-  unsubscribeFns: Function[]
+  unsubscribeFns: (() => void)[]
 }
 
 // Parameters
@@ -137,7 +137,7 @@ export function useQueryImpl<
   document: DocumentParameter<TResult, TVariables>,
   variables?: VariablesParameter<TVariables>,
   options: OptionsParameter<TResult, TVariables> = {},
-  lazy: boolean = false,
+  lazy = false,
 ): UseQueryReturn<TResult, TVariables> {
   // Is on server?
   const vm = getCurrentInstance() as CurrentInstance | null
@@ -166,8 +166,8 @@ export function useQueryImpl<
   const networkStatus = ref<number>()
 
   // SSR
-  let firstResolve: Function | undefined
-  let firstReject: Function | undefined
+  let firstResolve: (() => void) | undefined
+  let firstReject: ((error: Error) => void) | undefined
   onServerPrefetch?.(() => {
     if (!isEnabled.value || (isServer && currentOptions.value?.prefetch === false)) return
 
@@ -215,9 +215,11 @@ export function useQueryImpl<
       query: currentDocument,
       variables: currentVariables,
       ...currentOptions.value,
-      ...isServer ? {
-        fetchPolicy: 'network-only',
-      } : {},
+      ...isServer
+        ? {
+          fetchPolicy: 'network-only',
+        }
+        : {},
     })
 
     startQuerySubscription()
@@ -345,7 +347,7 @@ export function useQueryImpl<
     })
   }
 
-  let debouncedRestart: Function
+  let debouncedRestart: typeof baseRestart
   let isRestartDebounceSetup = false
   function updateRestartFn () {
     // On server, will be called before currentOptions is initialized

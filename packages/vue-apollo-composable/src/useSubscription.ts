@@ -196,7 +196,7 @@ export function useSubscription <
     })
   }
 
-  let debouncedRestart: Function
+  let debouncedRestart: typeof baseRestart
   function updateRestartFn () {
     if (currentOptions.value?.throttle) {
       debouncedRestart = throttle(currentOptions.value.throttle, baseRestart)

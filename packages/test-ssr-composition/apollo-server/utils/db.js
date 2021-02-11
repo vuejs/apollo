@@ -25,5 +25,5 @@ db.defaults({
       text: 'Message 3',
     },
   ],
-  uploads: []
+  uploads: [],
 }).write()

@@ -1,6 +1,11 @@
 <template>
   <p class="sponsor-button">
-    <github-button href="https://github.com/sponsors/Akryum" data-icon="octicon-heart" data-size="large" aria-label="Sponsor @Akryum on GitHub">
+    <github-button
+      href="https://github.com/sponsors/Akryum"
+      data-icon="octicon-heart"
+      data-size="large"
+      aria-label="Sponsor @Akryum on GitHub"
+    >
       Sponsor on GitHub
     </github-button>
   </p>
@@ -11,8 +16,8 @@ import GithubButton from 'vue-github-button'
 
 export default {
   components: {
-    GithubButton
-  }
+    GithubButton,
+  },
 }
 </script>
 

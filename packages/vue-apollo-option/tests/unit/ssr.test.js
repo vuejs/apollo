@@ -12,11 +12,11 @@ describe('ssr states', () => {
   }
 
   const defaultClient = buildClient({
-    'foo': '<alert>hiya!</alert>',
+    foo: '<alert>hiya!</alert>',
   })
 
   const otherClient = buildClient({
-    'foo': 'bar',
+    foo: 'bar',
   })
 
   const clients = {

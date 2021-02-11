@@ -5,9 +5,9 @@ import { ErrorResponse } from '@apollo/client/link/error'
 export function getErrorMessages (error: ErrorResponse | ApolloError) {
   const messages: string[] = []
   const { graphQLErrors, networkError } = error
-  const operation = 'operation' in error ? error.operation : undefined;
-  const stack = 'stack' in error ? error.stack : undefined;
-  let printedQuery: string;
+  const operation = 'operation' in error ? error.operation : undefined
+  const stack = 'stack' in error ? error.stack : undefined
+  let printedQuery: string
 
   if (operation) {
     printedQuery = print(operation.query)
@@ -33,7 +33,7 @@ export function getErrorMessages (error: ErrorResponse | ApolloError) {
 }
 
 export function logErrorMessages (error: ApolloError | ErrorResponse, printStack = true) {
-  getErrorMessages(error).map(message => {
+  getErrorMessages(error).forEach(message => {
     const result = /\[([\w ]*)](.*)/.exec(message)
     if (result) {
       const [, tag, msg] = result

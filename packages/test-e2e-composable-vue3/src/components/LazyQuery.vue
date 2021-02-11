@@ -22,12 +22,19 @@ export default defineComponent({
 
 <template>
   <div class="m-6">
-    <button class="bg-green-200 rounded-lg p-4" @click="load()">
+    <button
+      class="bg-green-200 rounded-lg p-4"
+      @click="load()"
+    >
       Load list
     </button>
 
     <ul class="my-4">
-      <li v-for="(item, index) of list" :key="index" class="list-disc ml-6">
+      <li
+        v-for="(item, index) of list"
+        :key="index"
+        class="list-disc ml-6"
+      >
         {{ item }}
       </li>
     </ul>

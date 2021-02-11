@@ -3,19 +3,19 @@ module.exports = {
   pluginOptions: {
     apollo: {
       enableMocks: false,
-      enableEngine: false
-    }
+      enableEngine: false,
+    },
   },
 
   chainWebpack (config) {
     config.resolve.symlinks(false)
     config.externals([
       'utf-8-validate',
-      'bufferutil'
+      'bufferutil',
     ])
     config.module.noParse([
-      /iconv-loader/
+      /iconv-loader/,
     ])
     config.resolve.alias.set('vue-demi', '@vue/composition-api')
-  }
+  },
 }

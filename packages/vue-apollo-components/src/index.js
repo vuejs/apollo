@@ -8,11 +8,11 @@ export function install (Vue, options) {
   if (install.installed) return
   install.installed = true
 
-  Vue.component('apollo-query', CApolloQuery)
   Vue.component('ApolloQuery', CApolloQuery)
-  Vue.component('apollo-subscribe-to-more', CApolloSubscribeToMore)
+  Vue.component('ApolloQuery', CApolloQuery)
   Vue.component('ApolloSubscribeToMore', CApolloSubscribeToMore)
-  Vue.component('apollo-mutation', CApolloMutation)
+  Vue.component('ApolloSubscribeToMore', CApolloSubscribeToMore)
+  Vue.component('ApolloMutation', CApolloMutation)
   Vue.component('ApolloMutation', CApolloMutation)
 }
 

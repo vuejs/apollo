@@ -4,8 +4,8 @@ import { useQuery, useResult } from '@vue/apollo-composable'
 import { defineComponent } from 'vue'
 
 interface Channel {
-  id: string;
-  label: string;
+  id: string
+  label: string
 }
 
 export default defineComponent({
@@ -29,14 +29,21 @@ export default defineComponent({
 </script>
 
 <template>
-  <div v-if="loading" class="p-12 text-gray-500">
+  <div
+    v-if="loading"
+    class="p-12 text-gray-500"
+  >
     Loading channels...
   </div>
 
-  <div v-else class="flex flex-col bg-white">
+  <div
+    v-else
+    class="flex flex-col bg-white"
+  >
     <router-link
       v-for="channel of channels"
       :key="channel.id"
+      v-slot="{ href, navigate, isActive }"
       :to="{
         name: 'channel',
         params: {
@@ -44,7 +51,6 @@ export default defineComponent({
         },
       }"
       custom
-      #default="{ href, navigate, isActive }"
     >
       <a
         :href="href"

@@ -10,10 +10,10 @@ declare module 'vue/types/options' {
   interface ComponentOptions<V extends Vue, Data, Methods, Computed, PropsDef, Props> {
     apolloProvider?: ApolloProvider
     apollo?: VueApolloComponentOptions<
-      Data extends DataDef<infer D, any, any>
-        ? CombinedVueInstance<V, D, Methods, Computed, Props>
-        : CombinedVueInstance<V, Data, Methods, Computed, Props>
-      >
+    Data extends DataDef<infer D, any, any>
+      ? CombinedVueInstance<V, D, Methods, Computed, Props>
+      : CombinedVueInstance<V, Data, Methods, Computed, Props>
+    >
   }
 }
 

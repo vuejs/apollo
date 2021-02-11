@@ -4,7 +4,7 @@ import {
   SubscriptionOptions,
   SubscribeToMoreOptions,
   ApolloQueryResult,
-  ApolloError
+  ApolloError,
 } from '@apollo/client/core'
 import { DocumentNode } from 'graphql'
 // import { DeepApplyThisType } from './utils'
@@ -29,7 +29,7 @@ export type VueApolloComponentSpecialOptions =
 
 interface PrivateVueApolloComponentOptions extends VueApolloComponentSpecialOptions {
   [key: string] : VueApolloQueryProperty |
-    VueApolloComponentSpecialOptions[keyof VueApolloComponentSpecialOptions]
+  VueApolloComponentSpecialOptions[keyof VueApolloComponentSpecialOptions]
 }
 
 // DeepApplyThisType is buggy: https://github.com/microsoft/TypeScript/issues/33392

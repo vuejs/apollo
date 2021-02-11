@@ -8,14 +8,25 @@
   "scripts": {
     "build": "lerna run build --concurrency 1 --scope \"{vue-apollo,@vue/apollo}*\"",
     "test": "lerna run test --concurrency 1",
-    "lint": "lerna run lint",
+    "lint": "eslint . --ext js,vue,ts",
     "release": "lerna publish"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.2.0",
+    "@typescript-eslint/parser": "^4.2.0",
+    "@vue/eslint-config-standard": "^6.0.0",
+    "@vue/eslint-config-typescript": "^7.0.0",
     "core-js": "^3.4.1",
     "esbuild": "^0.8.44",
     "esbuild-node-externals": "^1.0.2",
-    "lerna": "^3.18.4"
+    "eslint": "^7.19.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^5.0.0",
+    "eslint-plugin-vue": "^7.5.0",
+    "lerna": "^3.18.4",
+    "typescript": "^4.1.5"
   },
   "resolutions": {
     "eslint-scope": "^5.0.0",

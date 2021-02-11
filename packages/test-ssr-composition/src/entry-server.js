@@ -14,7 +14,7 @@ export default context => {
     const {
       app,
       router,
-      apolloClient
+      apolloClient,
     } = await createApp()
 
     router.push(prepareUrlForRouting(context.url))
@@ -23,7 +23,7 @@ export default context => {
       context.rendered = () => {
         // Same for Apollo client cache
         context.apolloState = ApolloSSR.getStates({
-          defaultClient: apolloClient
+          defaultClient: apolloClient,
         })
       }
       resolve(app)

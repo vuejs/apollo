@@ -5,11 +5,10 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "test": "yarn run lint --no-fix && yarn run test:e2e",
+    "test": "yarn run test:e2e",
     "test:e2e": "start-server-and-test api http://localhost:4042/.well-known/apollo/server-health test:e2e:client",
     "test:e2e:client": "vue-cli-service test:e2e --mode production --headless",
     "test:e2e:dev": "vue-cli-service test:e2e",
-    "lint": "vue-cli-service lint",
     "api": "node server.js"
   },
   "dependencies": {
@@ -27,25 +26,13 @@
   },
   "devDependencies": {
     "@types/shortid": "^0.0.29",
-    "@typescript-eslint/eslint-plugin": "^2.33.0",
-    "@typescript-eslint/parser": "^2.33.0",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-e2e-cypress": "~4.5.0",
-    "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-typescript": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
-    "@vue/eslint-config-standard": "^5.1.2",
-    "@vue/eslint-config-typescript": "^5.0.2",
     "axios": "^0.20.0",
-    "eslint": "^6.7.2",
-    "eslint-plugin-import": "^2.20.2",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.0",
-    "eslint-plugin-vue": "^7.0.0-0",
     "start-server-and-test": "^1.10.6",
-    "tailwindcss": "^1.0.1",
-    "typescript": "^4.0.3"
+    "tailwindcss": "^1.0.1"
   }
 }

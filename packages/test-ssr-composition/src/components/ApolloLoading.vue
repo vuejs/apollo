@@ -1,6 +1,11 @@
 <template>
-  <div v-if="loading">Loading...</div>
-  <div v-else class="messages">
+  <div v-if="loading">
+    Loading...
+  </div>
+  <div
+    v-else
+    class="messages"
+  >
     {{ messages.length }} messages
   </div>
 </template>
@@ -15,8 +20,8 @@ export default {
     const messages = useResult(result, [])
     return {
       messages,
-      loading: useQueryLoading()
+      loading: useQueryLoading(),
     }
-  }
+  },
 }
 </script>

@@ -14,7 +14,7 @@ export default context => {
     const {
       app,
       router,
-      apolloProvider
+      apolloProvider,
     } = await createApp()
 
     router.push(prepareUrlForRouting(context.url))

@@ -51,14 +51,14 @@ module.exports = {
     messageChanged: {
       subscribe: withFilter(
         (parent, args, { pubsub }) => pubsub.asyncIterator(triggers.MESSAGE_CHANGED),
-        (payload, vars) => payload.messageChanged.message.channelId === vars.channelId
+        (payload, vars) => payload.messageChanged.message.channelId === vars.channelId,
       ),
     },
 
     counterUpdated: {
       subscribe: withFilter(
         (parent, args, { pubsub }) => pubsub.asyncIterator('counter'),
-        (payload, vars) => payload.type === vars.type
+        (payload, vars) => payload.type === vars.type,
       ),
     },
   },

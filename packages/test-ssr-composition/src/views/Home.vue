@@ -1,6 +1,9 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
+    <img
+      alt="Vue logo"
+      src="../assets/logo.png"
+    >
 
     <div>{{ meow }}</div>
     <div>{{ kui.hi }}</div>
@@ -13,17 +16,17 @@
 import { ref, reactive } from '@vue/composition-api'
 import Vue from 'vue'
 export default {
-  name: 'home',
+  name: 'Home',
 
   setup (props, { isServer }) {
     const meow = ref('waf')
     meow.value = 'meow'
     const kui = reactive({
-      hi: 'waf'
+      hi: 'waf',
     })
     kui.hi = 'kui'
     const meuh = Vue.observable({
-      hi: 'waf'
+      hi: 'waf',
     })
     meuh.hi = 'meuh'
     console.log(kui)
@@ -31,8 +34,8 @@ export default {
       meow,
       kui,
       meuh,
-      isServer
+      isServer,
     }
-  }
+  },
 }
 </script>

@@ -14,16 +14,16 @@ export default {
         return {
           messages: [
             ...previousResult.messages,
-            subscriptionData.data.messageAdded
-          ]
+            subscriptionData.data.messageAdded,
+          ],
         }
-      }
+      },
     })
 
     return {
-      messages
+      messages,
     }
-  }
+  },
 }
 </script>
 

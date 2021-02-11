@@ -9,9 +9,9 @@ import { VueApolloComponentOptions } from '../options'
       query: gql``,
       variables (): OperationVariables {
         return {
-          foo: this.foo
+          foo: this.foo,
         }
-      }
+      },
     },
   } as VueApolloComponentOptions<Decorator>,
 })

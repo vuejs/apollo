@@ -1,13 +1,24 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/apollo">Apollo</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/">
+        Home
+      </router-link> |
+      <router-link to="/apollo">
+        Apollo
+      </router-link> |
+      <router-link to="/about">
+        About
+      </router-link>
     </div>
-    <router-view/>
+    <router-view />
 
-    <div v-if="apolloState" class="apollo-state">{{ apolloState }}</div>
+    <div
+      v-if="apolloState"
+      class="apollo-state"
+    >
+      {{ apolloState }}
+    </div>
   </div>
 </template>
 
@@ -23,9 +34,9 @@ export default {
     })
 
     return {
-      apolloState
+      apolloState,
     }
-  }
+  },
 }
 </script>
 

@@ -29,12 +29,12 @@ function initProvider () {
 function proxyData () {
   this.$_apolloInitData = {}
 
-  let apollo = this.$options.apollo
+  const apollo = this.$options.apollo
   if (apollo) {
     // watchQuery
-    for (let key in apollo) {
+    for (const key in apollo) {
       if (key.charAt(0) !== '$') {
-        let options = apollo[key]
+        const options = apollo[key]
         // Property proxy
         if (!options.manual && !hasProperty(this.$options.props, key) && !hasProperty(this.$options.computed, key) && !hasProperty(this.$options.methods, key)) {
           Object.defineProperty(this, key, {
@@ -87,7 +87,7 @@ function launch () {
     })
 
     // watchQuery
-    for (let key in apollo) {
+    for (const key in apollo) {
       if (key.charAt(0) !== '$') {
         let options = apollo[key]
         const smart = this.$apollo.addSmartQuery(key, options)
@@ -105,7 +105,7 @@ function launch () {
     }
 
     if (apollo.$subscribe) {
-      for (let key in apollo.$subscribe) {
+      for (const key in apollo.$subscribe) {
         this.$apollo.addSmartSubscription(key, apollo.$subscribe[key])
       }
     }
@@ -131,14 +131,16 @@ function destroy () {
 
 export function installMixin (Vue, vueVersion) {
   Vue.mixin({
-    ...vueVersion === '1' ? {
-      init: initProvider,
-    } : {},
+    ...vueVersion === '1'
+      ? {
+        init: initProvider,
+      }
+      : {},
 
     ...vueVersion === '2' ? {
       data () {
         return {
-          '$apolloData': {
+          $apolloData: {
             queries: {},
             loading: 0,
             data: this.$_apolloInitData,

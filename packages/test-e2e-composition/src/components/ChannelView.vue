@@ -74,7 +74,7 @@ export default {
     }))
 
     async function scrollToBottom (force = false) {
-      let el = body.value
+      const el = body.value
 
       // No body element yet
       if (!el) {

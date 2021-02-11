@@ -14,15 +14,15 @@ module.exports = {
       lang: 'zh-CN',
       title: 'Vue Apollo',
       description: '🚀 在你的 Vue.js 应用中集成 GraphQL！',
-    }
+    },
   },
   plugins: {
     '@vuepress/pwa': {
       serviceWorker: true,
       updatePopup: {
         '/': {
-          message: "New content is available.",
-          buttonText: "Refresh"
+          message: 'New content is available.',
+          buttonText: 'Refresh',
         },
       },
     },

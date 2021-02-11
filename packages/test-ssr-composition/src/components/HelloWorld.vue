@@ -1,7 +1,12 @@
 <template>
   <div class="hello">
-    <input v-model="name" class="input">
-    <div class="hello">{{ hello }}</div>
+    <input
+      v-model="name"
+      class="input"
+    >
+    <div class="hello">
+      {{ hello }}
+    </div>
   </div>
 </template>
 
@@ -14,13 +19,13 @@ export default {
   setup () {
     const name = ref('')
     const { result } = useQuery(HELLO_WORLD, () => ({
-      name: name.value
+      name: name.value,
     }))
     const hello = useResult(result)
     return {
       name,
-      hello
+      hello,
     }
-  }
+  },
 }
 </script>

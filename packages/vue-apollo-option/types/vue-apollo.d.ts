@@ -9,7 +9,7 @@ import {
   SubscriptionOptions,
   OperationVariables,
   FetchResult,
-  Observable
+  Observable,
 } from '@apollo/client/core'
 import { ApolloProvider } from './apollo-provider'
 import {
@@ -17,11 +17,11 @@ import {
   VueApolloSubscriptionDefinition,
 } from './options'
 
-export class VueApollo extends ApolloProvider implements PluginObject<{}>{
+export class VueApollo extends ApolloProvider implements PluginObject<Record<string, never>> {
   [key: string]: any
-  install: PluginFunction<{}>
+  install: PluginFunction<Record<string, never>>
 
-  static install(pVue: typeof Vue, options?:{} | undefined): void
+  static install(pVue: typeof Vue, options?:Record<string, never> | undefined): void
 }
 
 interface SmartApollo<V> {
@@ -31,22 +31,21 @@ interface SmartApollo<V> {
   stop(): void
 }
 
-type PickedObservableQuery = Pick<ObservableQuery, 
-  'fetchMore' |
-  'subscribeToMore' |
-  'refetch' |
-  'setVariables' |
-  'setOptions' |
-  'startPolling' |
-  'stopPolling'
+type PickedObservableQuery = Pick<ObservableQuery,
+'fetchMore' |
+'subscribeToMore' |
+'refetch' |
+'setVariables' |
+'setOptions' |
+'startPolling' |
+'stopPolling'
 >
 
 export interface SmartQuery<V> extends SmartApollo<V>, PickedObservableQuery {
   loading: boolean
 }
 
-export interface SmartSubscription<V> extends SmartApollo<V> {
-}
+export type SmartSubscription<V> = SmartApollo<V>
 
 interface ClientOptions {
   client?: string
