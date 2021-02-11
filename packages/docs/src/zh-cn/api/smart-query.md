@@ -39,6 +39,12 @@ apollo: {
         message: this.pingInput,
       }
     },
+    // 轮询间隔，以毫秒为单位
+    pollInterval: 10000,
+    // 也可以通过 vue 响应式属性设置轮询间隔
+    pollInterval() {
+      return this.pollInterval;
+    },
     // 变量：深度对象侦听
     deep: false,
     // 我们使用自定义的 update 回调函数，因为字段名称不匹配
@@ -92,7 +98,7 @@ update: data => data.ping
 
 ## 属性
 
-### Skip
+### skip
 
 你可以使用 `skip` 来暂停或停止暂停：
 
@@ -224,7 +230,7 @@ this.$apollo.queries.users.setVariables({
 
 ### setOptions
 
-更新 Apollo [watchQuery](https://www.apollographql.com/docs/react/api/apollo-client/#ApolloClient.watchQuery) 选项并重新获取：
+更新 Apollo [watchQuery](https://www.apollographql.com/docs/react/api/core/ApolloClient/#ApolloClient.watchQuery) 选项并重新获取：
 
 ```js
 this.$apollo.queries.users.setOptions({

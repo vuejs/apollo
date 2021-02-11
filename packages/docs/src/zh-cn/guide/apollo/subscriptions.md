@@ -174,7 +174,7 @@ this.$watch(() => this.type, (type, oldType) => {
 
 ::: danger
 如果要使用订阅的结果更新查询，请使用 `subscribeToMore`。
-以下的方法适用于 'notify' 用例
+以下的方法适用于 'notify' 用例。
 :::
 
 你可以在 `apollo` 选项中使用 `$subscribe` 关键字来声明 [智能订阅](../../api/smart-subscription.md)：
@@ -215,6 +215,32 @@ apollo: {
 :::tip
 和查询一样，你可以 [使用函数](./queries.md#option-function) 声明订阅，并且可以 [使用响应式函数](./queries.md#reactive-query-definition) 声明 `query` 选项。
 :::
+
+当服务端支持实时查询并使用订阅更新它们时，例如 [Hasura](https://hasura.io/)，你可以使用简单订阅来实现响应式查询：
+
+```js
+data () {
+  return {
+    tags: [],
+  };
+},
+apollo: {
+  $subscribe: {
+    tags: {
+      query: gql`subscription {
+        tags {
+          id
+          label
+          type
+        }
+      }`,
+      result ({ data }) {
+        this.tags = data.tags;
+      },
+    },
+  },
+},
+```
 
 ## 跳过订阅
 

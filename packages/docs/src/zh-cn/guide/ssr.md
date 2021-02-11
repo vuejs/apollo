@@ -6,7 +6,7 @@
 
 ## Vue CLI 插件
 
-我为 [vue-cli](http://cli.vuejs.org) 制作了一个插件，因此仅用两分钟你就可以将你的 vue-apollo 应用转换为同构 SSR 应用！✨🚀
+我为 [vue-cli](http://cli.vuejs.org) 制作了一个插件，因此仅用两分钟你就可以将你的 `vue-apollo` 应用转换为同构 SSR 应用！✨🚀
 
 在你的 vue-cli 3 项目中：
 
