@@ -113,9 +113,11 @@ export default class SmartQuery extends SmartApollo {
     this.startQuerySubscription()
 
     if (this.options.fetchPolicy !== 'no-cache' || this.options.notifyOnNetworkStatusChange) {
-      const currentResult = this.maySetLoading()
+      const currentResult = this.retrieveCurrentResult()
 
-      if (this.options.notifyOnNetworkStatusChange) {
+      if (this.options.notifyOnNetworkStatusChange ||
+        // Initial call of next result when it's not loading (for Apollo Client 3)
+        (this.observer.getCurrentResult && !currentResult.loading)) {
         this.nextResult(currentResult)
       }
     }
@@ -138,7 +140,10 @@ export default class SmartQuery extends SmartApollo {
     })
   }
 
-  maySetLoading (force = false) {
+  /**
+   * May update loading state
+   */
+  retrieveCurrentResult (force = false) {
     const currentResult = this.observer.getCurrentResult ? this.observer.getCurrentResult() : this.observer.currentResult()
     if (force || currentResult.loading) {
       if (!this.loading) {
@@ -259,7 +264,7 @@ export default class SmartQuery extends SmartApollo {
 
   fetchMore (...args) {
     if (this.observer) {
-      this.maySetLoading(true)
+      this.retrieveCurrentResult(true)
       return this.observer.fetchMore(...args).then(result => {
         if (!result.loading) {
           this.loadingDone()
@@ -286,7 +291,7 @@ export default class SmartQuery extends SmartApollo {
         }
         return result
       })
-      this.maySetLoading()
+      this.retrieveCurrentResult()
       return result
     }
   }
@@ -295,7 +300,7 @@ export default class SmartQuery extends SmartApollo {
     this.options.variables = variables
     if (this.observer) {
       const result = this.observer.setVariables(variables, tryFetch)
-      this.maySetLoading()
+      this.retrieveCurrentResult()
       return result
     }
   }
@@ -304,7 +309,7 @@ export default class SmartQuery extends SmartApollo {
     Object.assign(this.options, options)
     if (this.observer) {
       const result = this.observer.setOptions(options)
-      this.maySetLoading()
+      this.retrieveCurrentResult()
       return result
     }
   }
