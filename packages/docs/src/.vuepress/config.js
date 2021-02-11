@@ -14,6 +14,11 @@ module.exports = {
       lang: 'zh-CN',
       title: 'Vue Apollo',
       description: '🚀 在你的 Vue.js 应用中集成 GraphQL！',
+    },
+    '/fr/': {
+      lang: 'fr-FR',
+      title: 'Vue Apollo',
+      description: '🚀 Intégrez GraphQL dans vos apps Vue.js !',
     }
   },
   plugins: {
@@ -23,6 +28,10 @@ module.exports = {
         '/': {
           message: "New content is available.",
           buttonText: "Refresh"
+        },
+        '/fr/': {
+          message: "Du nouveau contenu est disponible.",
+          buttonText: "Rafraîchir"
         },
       },
     },
@@ -221,6 +230,101 @@ module.exports = {
             },
           ],
           '/zh-cn/migration/': [''],
+        },
+      },
+      '/fr/': {
+        selectText: 'Langages',
+        label: 'Français',
+        lastUpdated: 'Dernière mise à jour',
+        nav: [
+          {
+            text: 'Guide',
+            link: '/fr/guide/',
+          },
+          {
+            text: 'API',
+            link: '/fr/api/',
+          },
+          {
+            text: 'Migration',
+            link: '/fr/migration/',
+          },
+          {
+            text: 'Plugin CLI',
+            link: 'https://github.com/Akryum/vue-cli-plugin-apollo',
+          },
+          {
+            text: 'Sponsor',
+            link: 'https://github.com/sponsors/Akryum',
+          },
+        ],
+        sidebarDepth: 2,
+        sidebar: {
+          '/fr/guide/': [
+            '',
+            'installation',
+            {
+              title: 'Premiers pas',
+              collapsable: false,
+              children: [
+                'apollo/',
+                'apollo/queries',
+                'apollo/mutations',
+                'apollo/subscriptions',
+                'apollo/pagination',
+                'apollo/special-options',
+              ],
+            },
+            {
+              title: 'Composants',
+              collapsable: false,
+              children: [
+                'components/',
+                'components/query',
+                'components/mutation',
+                'components/subscribe-to-more',
+              ],
+            },
+            {
+              title: 'Utilisation avancée',
+              collapsable: false,
+              children: [
+                'multiple-clients',
+                'ssr',
+                'local-state',
+                'testing',
+              ],
+            },
+          ],
+          '/fr/api/': [
+            {
+              title: 'Vue Apollo',
+              collapsable: false,
+              children: [
+                'apollo-provider',
+                'dollar-apollo',
+                'ssr',
+              ],
+            },
+            {
+              title: 'Smart Apollo',
+              collapsable: false,
+              children: [
+                'smart-query',
+                'smart-subscription',
+              ],
+            },
+            {
+              title: 'Apollo Components',
+              collapsable: false,
+              children: [
+                'apollo-query',
+                'apollo-mutation',
+                'apollo-subscribe-to-more',
+              ],
+            },
+          ],
+          '/fr/migration/': [''],
         },
       },
     },
