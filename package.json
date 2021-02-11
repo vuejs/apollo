@@ -8,6 +8,7 @@
   "scripts": {
     "build": "lerna run build --concurrency 1 --scope \"{vue-apollo,@vue/apollo}*\"",
     "test": "lerna run test --concurrency 1",
+    "lint": "lerna run lint",
     "release": "lerna publish"
   },
   "devDependencies": {

@@ -13,8 +13,8 @@
     "build:umd": "rollup --config build/rollup.config.umd.js",
     "prepublishOnly": "yarn test && yarn build",
     "dev": "nodemon --exec 'yarn build:es && yarn build:umd' --watch src --watch lib",
-    "test": "yarn build && yarn test:eslint && yarn test:types && yarn run test:unit",
-    "test:eslint": "eslint --ext .js {src,ssr,lib,build}/**/*.js",
+    "test": "yarn build && yarn lint && yarn test:types && yarn run test:unit",
+    "lint": "eslint --ext .js {src,ssr,lib,build}/**/*.js",
     "test:types": "tsc -p types/test",
     "test:unit": "yarn run jest"
   },
