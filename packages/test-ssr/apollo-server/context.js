@@ -8,7 +8,7 @@ import { processUpload } from './utils/upload'
 export default ({ req, connection }) => {
   return {
     db,
-    processUpload
+    processUpload,
 
   }
 }

@@ -5,17 +5,17 @@ import { createApp } from './main'
 
 createApp({
   async beforeApp ({
-    router
+    router,
   }) {
     await loadAsyncComponents({ router })
   },
 
   afterApp ({
     app,
-    router
+    router,
   }) {
     router.onReady(() => {
       app.$mount('#app')
     })
-  }
+  },
 })

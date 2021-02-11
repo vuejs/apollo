@@ -10,11 +10,12 @@ const prepareUrlForRouting = url => {
 }
 
 export default context => {
+  // eslint-disable-next-line no-async-promise-executor
   return new Promise(async (resolve, reject) => {
     const {
       app,
       router,
-      apolloProvider
+      apolloProvider,
     } = await createApp()
 
     router.push(prepareUrlForRouting(context.url))

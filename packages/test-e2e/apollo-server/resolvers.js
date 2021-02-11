@@ -45,7 +45,7 @@ module.exports = {
     messageChanged: {
       subscribe: withFilter(
         (parent, args, { pubsub }) => pubsub.asyncIterator(triggers.MESSAGE_CHANGED),
-        (payload, vars) => payload.messageChanged.message.channelId === vars.channelId
+        (payload, vars) => payload.messageChanged.message.channelId === vars.channelId,
       ),
     },
   },

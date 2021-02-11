@@ -6,8 +6,8 @@ const users = [
     email: 'bot@bot.com',
     password: 'bot',
     nickname: 'The Bot',
-    tokens: []
-  }
+    tokens: [],
+  },
 ]
 
 exports.register = (input, context) => {
@@ -24,7 +24,7 @@ exports.register = (input, context) => {
         nickname: input.nickname,
         tokens: [],
       })
-    
+
       resolve(true)
     }, 100)
   })
@@ -32,7 +32,7 @@ exports.register = (input, context) => {
 
 exports.login = ({ email, password }, context) => {
   const user = users.find(
-    u => u.email === email && u.password === password
+    u => u.email === email && u.password === password,
   )
   if (!user) throw new Error('User not found')
   const token = {

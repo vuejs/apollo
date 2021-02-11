@@ -1,6 +1,11 @@
 <template>
-  <div v-if="$apollo.queries.messages.loading">Loading...</div>
-  <div v-else class="messages">
+  <div v-if="$apollo.queries.messages.loading">
+    Loading...
+  </div>
+  <div
+    v-else
+    class="messages"
+  >
     {{ messages.length }} messages
   </div>
 </template>
@@ -10,7 +15,7 @@ import MESSAGES from '../graphql/Messages.gql'
 
 export default {
   apollo: {
-    messages: MESSAGES
-  }
+    messages: MESSAGES,
+  },
 }
 </script>

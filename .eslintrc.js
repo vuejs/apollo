@@ -51,7 +51,14 @@ module.exports = {
       },
     },
     {
-      files: ['tests/unit/*.js', 'ssr/*', 'build/*', 'lib/*'],
+      files: [
+        '**/tests/unit/*.js',
+        '**/ssr/*',
+        '**/build/*',
+        '**/lib/*',
+        'apollo.config.js',
+        '**/apollo-server/**/*',
+      ],
       rules: {
         '@typescript-eslint/no-var-requires': 'off',
       },
@@ -62,6 +69,6 @@ module.exports = {
     'dist/',
     '!.*',
     'schema.graphql',
-    'types/test/*.js',
+    '**/types/test/*.js',
   ],
 }

@@ -52,7 +52,7 @@ export default {
     },
 
     async scrollToBottom (force = false) {
-      let el = this.$refs.body
+      const el = this.$refs.body
 
       // No body element yet
       if (!el) {

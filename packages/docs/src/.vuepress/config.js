@@ -19,19 +19,19 @@ module.exports = {
       lang: 'fr-FR',
       title: 'Vue Apollo',
       description: '🚀 Intégrez GraphQL dans vos apps Vue.js !',
-    }
+    },
   },
   plugins: {
     '@vuepress/pwa': {
       serviceWorker: true,
       updatePopup: {
         '/': {
-          message: "New content is available.",
-          buttonText: "Refresh"
+          message: 'New content is available.',
+          buttonText: 'Refresh',
         },
         '/fr/': {
-          message: "Du nouveau contenu est disponible.",
-          buttonText: "Rafraîchir"
+          message: 'Du nouveau contenu est disponible.',
+          buttonText: 'Rafraîchir',
         },
       },
     },

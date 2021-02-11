@@ -19,7 +19,7 @@ const storeUpload = async ({ stream, filename }) => {
     stream
       .pipe(createWriteStream(path))
       .on('finish', () => resolve({ id, path: urlPath }))
-      .on('error', reject)
+      .on('error', reject),
   )
 }
 
