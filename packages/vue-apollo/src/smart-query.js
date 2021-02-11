@@ -29,7 +29,7 @@ export default class SmartQuery extends SmartApollo {
     }
 
     if (!options.manual) {
-      this.hasDataField = this.vm.$data.hasOwnProperty(key)
+      this.hasDataField = Object.prototype.hasOwnProperty.call(this.vm.$data, key)
       if (this.hasDataField) {
         Object.defineProperty(this.vm.$data.$apolloData.data, key, {
           get: () => this.vm.$data[key],

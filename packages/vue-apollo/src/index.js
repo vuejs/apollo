@@ -38,7 +38,7 @@ export function install (Vue, options) {
   }
 
   // Lazy creation
-  if (!Vue.prototype.hasOwnProperty('$apollo')) {
+  if (!Object.prototype.hasOwnProperty.call(Vue, '$apollo')) {
     Object.defineProperty(Vue.prototype, '$apollo', {
       get () {
         if (!this.$_apollo) {
