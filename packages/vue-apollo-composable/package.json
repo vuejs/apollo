@@ -21,15 +21,15 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "dist/vue-apollo-composable.js",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "module": "dist/index.js",
+  "module": "dist/index.esm.js",
   "files": [
     "dist"
   ],
   "scripts": {
-    "dev": "tsc --watch -m es2015",
-    "build": "tsc --outFile dist/vue-apollo-composable.js && tsc -m es2015",
+    "dev": "tsc -d -w --sourceMap",
+    "build": "rimraf dist && node esbuild.mjs && tsc -d --emitDeclarationOnly",
     "prepublishOnly": "yarn test && yarn build",
     "test": "yarn lint && yarn test:types",
     "lint": "eslint . --ext .js,.ts",

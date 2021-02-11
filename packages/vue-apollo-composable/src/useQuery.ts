@@ -171,7 +171,7 @@ export function useQueryImpl<
   onServerPrefetch?.(() => {
     if (!isEnabled.value || (isServer && currentOptions.value?.prefetch === false)) return
 
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       firstResolve = () => {
         resolve()
         firstResolve = undefined

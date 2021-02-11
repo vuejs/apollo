@@ -13,6 +13,8 @@
   },
   "devDependencies": {
     "core-js": "^3.4.1",
+    "esbuild": "^0.8.44",
+    "esbuild-node-externals": "^1.0.2",
     "lerna": "^3.18.4"
   },
   "resolutions": {
