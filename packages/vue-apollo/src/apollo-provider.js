@@ -14,7 +14,7 @@ export class ApolloProvider {
   }
 
   provide (key = '$apolloProvider') {
-    console.warn(`<ApolloProvider>.provide() is deprecated. Use the 'apolloProvider' option instead with the provider object directly.`)
+    console.warn('<ApolloProvider>.provide() is deprecated. Use the \'apolloProvider\' option instead with the provider object directly.')
     return {
       [key]: this,
     }

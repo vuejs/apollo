@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 export default {
   data () {
     return {
-      hey: 'hey'
+      hey: 'hey',
     }
   },
 
@@ -21,10 +21,10 @@ export default {
           document: gql``,
           variables () {
             return {
-              var1: this.hey
+              var1: this.hey,
             }
-          }
-        }
+          },
+        },
       ],
     },
   },

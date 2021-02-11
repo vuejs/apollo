@@ -1,30 +1,67 @@
 module.exports = {
   root: true,
-  parser: 'babel-eslint',
-  parserOptions: {
-    sourceType: 'module'
-  },
-  // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
-  extends: 'standard',
-  // required to lint *.vue files
-  /* plugins: [
-    'html'
-  ], */
   env: {
     browser: true,
   },
-  // add your custom rules here
-  'rules': {
-    // allow paren-less arrow functions
-    'arrow-parens': 0,
-    // allow async-await
-    'generator-star-spacing': 0,
-    // allow debugger during development
-    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
-    // trailing comma
+  extends: [
+    'plugin:vue/recommended',
+    '@vue/standard',
+    '@vue/typescript/recommended',
+  ],
+  parserOptions: {
+    ecmaVersion: 2020,
+  },
+  globals: {
+    name: 'off',
+  },
+  rules: {
+    'vue/html-closing-bracket-newline': [
+      'error',
+      {
+        singleline: 'never',
+        multiline: 'always',
+      },
+    ],
+    'no-var': ['error'],
+    '@typescript-eslint/member-delimiter-style': [
+      'error',
+      {
+        multiline: {
+          delimiter: 'none',
+        },
+        singleline: {
+          delimiter: 'comma',
+        },
+      },
+    ],
+    '@typescript-eslint/no-use-before-define': 'off',
     'comma-dangle': ['error', 'always-multiline'],
-    // beware of returning assignement
+    'vue/no-multiple-template-root': 'off',
+    indent: 'off',
+    '@typescript-eslint/indent': ['error', 2],
+    quotes: ['error', 'single', { allowTemplateLiterals: true }],
+    'no-use-before-define': 'warn',
     'no-return-assign': 'off',
-    'no-extend-native': 'warn',
-  }
+  },
+  overrides: [
+    {
+      files: ['*.vue'],
+      rules: {
+        '@typescript-eslint/no-unused-vars': 'off',
+      },
+    },
+    {
+      files: ['tests/unit/*.js', 'ssr/*', 'build/*', 'lib/*'],
+      rules: {
+        '@typescript-eslint/no-var-requires': 'off',
+      },
+    },
+  ],
+  ignorePatterns: [
+    'node_modules/',
+    'dist/',
+    '!.*',
+    'schema.graphql',
+    'types/test/*.js',
+  ],
 }

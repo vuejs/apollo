@@ -26,7 +26,7 @@ export class DollarApollo {
       }
       if (this.client) {
         if (!this.provider.clients) {
-          throw new Error(`[vue-apollo] Missing 'clients' options in 'apolloProvider'`)
+          throw new Error('[vue-apollo] Missing \'clients\' options in \'apolloProvider\'')
         } else {
           const client = this.provider.clients[this.client]
           if (!client) {
@@ -52,7 +52,7 @@ export class DollarApollo {
     const observable = this.getClient(options).watchQuery(options)
     const _subscribe = observable.subscribe.bind(observable)
     observable.subscribe = (options) => {
-      let sub = _subscribe(options)
+      const sub = _subscribe(options)
       this._apolloSubscriptions.push(sub)
       return sub
     }
@@ -68,7 +68,7 @@ export class DollarApollo {
       const observable = this.getClient(options).subscribe(options)
       const _subscribe = observable.subscribe.bind(observable)
       observable.subscribe = (options) => {
-        let sub = _subscribe(options)
+        const sub = _subscribe(options)
         this._apolloSubscriptions.push(sub)
         return sub
       }
@@ -167,18 +167,21 @@ export class DollarApollo {
     }))
   }
 
+  // eslint-disable-next-line accessor-pairs
   set skipAllQueries (value) {
-    for (let key in this.queries) {
+    for (const key in this.queries) {
       this.queries[key].skip = value
     }
   }
 
+  // eslint-disable-next-line accessor-pairs
   set skipAllSubscriptions (value) {
-    for (let key in this.subscriptions) {
+    for (const key in this.subscriptions) {
       this.subscriptions[key].skip = value
     }
   }
 
+  // eslint-disable-next-line accessor-pairs
   set skipAll (value) {
     this.skipAllQueries = value
     this.skipAllSubscriptions = value
@@ -188,10 +191,10 @@ export class DollarApollo {
     for (const unwatch of this._watchers) {
       unwatch()
     }
-    for (let key in this.queries) {
+    for (const key in this.queries) {
       this.queries[key].destroy()
     }
-    for (let key in this.subscriptions) {
+    for (const key in this.subscriptions) {
       this.subscriptions[key].destroy()
     }
     this._apolloSubscriptions.forEach((sub) => {
