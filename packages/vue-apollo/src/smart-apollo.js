@@ -153,7 +153,7 @@ export default class SmartApollo {
     for (const handler of handlers) {
       if (handler) {
         catched = true
-        let result = handler.apply(this.vm, args)
+        const result = handler.apply(this.vm, args)
         if (typeof result !== 'undefined' && !result) {
           break
         }
@@ -179,7 +179,7 @@ export default class SmartApollo {
 
     if (error.graphQLErrors && error.graphQLErrors.length !== 0) {
       console.error(`GraphQL execution errors for ${this.type} '${this.key}'`)
-      for (let e of error.graphQLErrors) {
+      for (const e of error.graphQLErrors) {
         console.error(e)
       }
     } else if (error.networkError) {

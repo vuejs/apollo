@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 function isDataFilled (data) {
-  return Object.keys(data).length > 0
+  return data && Object.keys(data).length > 0
 }
 
 export default {

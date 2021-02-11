@@ -1,8 +1,11 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable vue/one-component-per-file */
+
 // this example src is https://github.com/Akryum/vue-apollo-example
 import gql from 'graphql-tag'
 import Vue from 'vue'
-import { OperationVariables, ApolloQueryResult, ApolloError } from 'apollo-client'
-import { VueApolloQueryDefinition, VueApolloSubscribeToMoreOptions } from '../options'
+import { OperationVariables, ApolloQueryResult } from 'apollo-client'
+import { VueApolloQueryDefinition } from '../options'
 import { DocumentNode } from 'graphql'
 
 const pageSize = 10
@@ -37,14 +40,14 @@ export const hey = Vue.extend({
   data () {
     return {
       waf: 'waf',
-      loading: 0
+      loading: 0,
     }
   },
 
   apollo: {
     $client: 'foo',
     $query: {
-      fetchPolicy: 'cache-only'
+      fetchPolicy: 'cache-only',
     },
     foo: gql`query`,
     message: {
@@ -54,7 +57,7 @@ export const hey = Vue.extend({
         this.hello.toUpperCase()
         this.meow
         return {
-          hello: this.hello.toUpperCase()
+          hello: this.hello.toUpperCase(),
         }
       },
       update: (data: FooResult) => data.foo.bar,
@@ -98,10 +101,10 @@ export const hey = Vue.extend({
         updateQuery (previousResult, options) {
           return {
             ...previousResult,
-            foo: options.subscriptionData.data.foo
+            foo: options.subscriptionData.data.foo,
           }
-        }
-      }
+        },
+      },
     },
 
     testMultiSubs: {
@@ -115,14 +118,14 @@ export const hey = Vue.extend({
         {
           document: gql`subscription`,
           variables: {
-            foo: 'bar'
+            foo: 'bar',
           },
           updateQuery (previousResult, options) {
             return {
               ...previousResult,
-              foo: options.subscriptionData.data.foo
+              foo: options.subscriptionData.data.foo,
             }
-          }
+          },
         },
         {
           document: gql`subscription`,
@@ -130,6 +133,7 @@ export const hey = Vue.extend({
           variables (): HelloVars {
             return {
               // Typescript Bug: https://github.com/microsoft/TypeScript/issues/33392
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               hello: this.hello,
             }
@@ -137,10 +141,10 @@ export const hey = Vue.extend({
           updateQuery (previousResult, options) {
             return {
               ...previousResult,
-              foo: options.subscriptionData.data.foo
+              foo: options.subscriptionData.data.foo,
             }
-          }
-        }
+          },
+        },
       ],
     },
 
@@ -154,7 +158,7 @@ export const hey = Vue.extend({
           this.hello.toUpperCase()
           this.meow
           return {
-            hello: this.hello.toUpperCase()
+            hello: this.hello.toUpperCase(),
           }
         },
         result: (result) => {
@@ -165,7 +169,7 @@ export const hey = Vue.extend({
           {
             document: gql``,
             variables: () => ({
-              hello: this.hello.toUpperCase()
+              hello: this.hello.toUpperCase(),
             }),
           },
         ],
@@ -177,26 +181,26 @@ export const hey = Vue.extend({
         query: gql`subscription`,
         variables (): OperationVariables {
           return {
-            foo: this.meow
+            foo: this.meow,
           }
         },
-        client: 'foo'
-      }
-    }
+        client: 'foo',
+      },
+    },
   },
 
   computed: {
     // https://vuejs.org/v2/guide/typescript.html#Annotating-Return-Types
     hello (): string {
       return this.waf === 'waf' ? 'waf waf' : 'hello'
-    }
+    },
   },
 
   async created () {
     const { data } = await this.$apollo.mutate<Foo, HelloVars>({
       mutation: gql`mutation {}`,
       variables: {
-        hello: this.hello
+        hello: this.hello,
       },
     })
     if (data) {
@@ -204,7 +208,7 @@ export const hey = Vue.extend({
     }
     this.hello.toUpperCase()
     this.$apollo.vm.hello.toUpperCase()
-  }
+  },
 })
 
 export default Vue.extend({
@@ -220,7 +224,7 @@ export default Vue.extend({
       showTag: 'random',
       showMoreEnabled: true,
       page: 0,
-      _type: ''
+      // _type: '',
     }
   },
   apollo: {
@@ -229,7 +233,7 @@ export default Vue.extend({
       loadingKey: 'loading',
       fetchPolicy: 'cache-first',
     },
-    tags(): VueApolloQueryDefinition {
+    tags (): VueApolloQueryDefinition {
       return {
         query: gql`query tagList ($type: String!) {
           tags(type: $type) {
@@ -246,7 +250,7 @@ export default Vue.extend({
         manual: true,
         pollInterval: 300,
         result: (result) => {
-          this.updateCount ++
+          this.updateCount++
         },
         skip: (): boolean => {
           return this.skipQuery
@@ -318,8 +322,24 @@ export default Vue.extend({
       },
     },
   },
+  mounted () {
+    const observer = this.$apollo.subscribe({
+      query: SUB_QUERY,
+      variables: {
+        type: 'Companies',
+      },
+    })
+    observer.subscribe({
+      next (data: any) {
+        console.log('this.$apollo.subscribe', data)
+      },
+    })
+
+    // enable to specify client when execute request
+    this.$apollo.query({ query: gql`query mockQuery { id }`, client: 'test' })
+  },
   methods: {
-    addTag() {
+    addTag () {
       const newTag = this.newTag
       this.$apollo.mutate({
         mutation: gql`mutation ($type: String!, $label: String!) {
@@ -328,7 +348,7 @@ export default Vue.extend({
             label
           }
         }`,
-        variables: { type: this.type, label: newTag, },
+        variables: { type: this.type, label: newTag },
         updateQueries: {
           tagList: (previousResult, { mutationResult }) => {
             const { data } = mutationResult
@@ -336,7 +356,7 @@ export default Vue.extend({
             if (previousResult.tags.find((tag: any) => tag.id === data.addTag.id)) {
               return previousResult
             }
-            return { tags: [ ...previousResult.tags, data.addTag ] }
+            return { tags: [...previousResult.tags, data.addTag] }
           },
         },
         optimisticResponse: {
@@ -355,8 +375,8 @@ export default Vue.extend({
         this.newTag = newTag
       })
     },
-    showMore() {
-      this.page ++
+    showMore () {
+      this.page++
       this.$apollo.queries.tagsPage.fetchMore({
         variables: {
           page: this.page,
@@ -386,20 +406,4 @@ export default Vue.extend({
       this.$apollo.queries.tags.refetch()
     },
   },
-  mounted() {
-    const observer = this.$apollo.subscribe({
-      query: SUB_QUERY,
-      variables: {
-        type: 'Companies',
-      },
-    })
-    observer.subscribe({
-      next(data: any) {
-        console.log('this.$apollo.subscribe', data)
-      },
-    })
-
-    // enable to specify client when execute request
-    this.$apollo.query({ query: gql`query mockQuery { id }`, client: 'test' })
-  }, 
 })

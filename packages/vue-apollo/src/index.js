@@ -38,7 +38,7 @@ export function install (Vue, options) {
   }
 
   // Lazy creation
-  if (!Vue.prototype.hasOwnProperty('$apollo')) {
+  if (!Object.prototype.hasOwnProperty.call(Vue, '$apollo')) {
     Object.defineProperty(Vue.prototype, '$apollo', {
       get () {
         if (!this.$_apollo) {
@@ -52,11 +52,11 @@ export function install (Vue, options) {
   installMixin(Vue, vueVersion)
 
   if (vueVersion === '2') {
-    Vue.component('apollo-query', CApolloQuery)
     Vue.component('ApolloQuery', CApolloQuery)
-    Vue.component('apollo-subscribe-to-more', CApolloSubscribeToMore)
+    Vue.component('ApolloQuery', CApolloQuery)
     Vue.component('ApolloSubscribeToMore', CApolloSubscribeToMore)
-    Vue.component('apollo-mutation', CApolloMutation)
+    Vue.component('ApolloSubscribeToMore', CApolloSubscribeToMore)
+    Vue.component('ApolloMutation', CApolloMutation)
     Vue.component('ApolloMutation', CApolloMutation)
   }
 }
