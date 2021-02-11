@@ -1,8 +1,10 @@
+const { join } = require('path')
+
 module.exports = {
   root: true,
   extends: 'standard-with-typescript',
   parserOptions: {
-    project: './tsconfig.lint.json',
+    project: join(__dirname, './tsconfig.lint.json'),
   },
   rules: {
     // trailing comma
