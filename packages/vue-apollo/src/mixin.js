@@ -132,38 +132,38 @@ export function installMixin (Vue, vueVersion) {
   Vue.mixin({
     ...vueVersion === '1'
       ? {
-          init: initProvider,
-        }
+        init: initProvider,
+      }
       : {},
 
     ...vueVersion === '2'
       ? {
-          data () {
-            return {
-              $apolloData: {
-                queries: {},
-                loading: 0,
-                data: this.$_apolloInitData,
-              },
-            }
-          },
+        data () {
+          return {
+            $apolloData: {
+              queries: {},
+              loading: 0,
+              data: this.$_apolloInitData,
+            },
+          }
+        },
 
-          beforeCreate () {
-            initProvider.call(this)
-            proxyData.call(this)
-          },
+        beforeCreate () {
+          initProvider.call(this)
+          proxyData.call(this)
+        },
 
-          serverPrefetch () {
-            if (this.$_apolloPromises) {
-              return Promise.all(this.$_apolloPromises).then(() => {
-                destroy.call(this)
-              }).catch(e => {
-                destroy.call(this)
-                return Promise.reject(e)
-              })
-            }
-          },
-        }
+        serverPrefetch () {
+          if (this.$_apolloPromises) {
+            return Promise.all(this.$_apolloPromises).then(() => {
+              destroy.call(this)
+            }).catch(e => {
+              destroy.call(this)
+              return Promise.reject(e)
+            })
+          }
+        },
+      }
       : {},
 
     created: launch,
