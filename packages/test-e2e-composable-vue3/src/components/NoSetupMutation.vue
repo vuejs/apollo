@@ -2,23 +2,25 @@
 import { apolloClient } from '@/apollo'
 import { gql } from '@apollo/client/core'
 import { provideApolloClient, useMutation, useResult } from '@vue/apollo-composable'
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 
 // Global mutation
 
-const { mutate } = provideApolloClient(apolloClient)(() => useMutation(gql`
-  mutation getPersonalizedHello ($name: String!) { 
-    greeting: personalizedHello (name: $name)
-  }
-`))
-
-const matation = mutate({ name: 'John' })
-const hello = useResult(matation.result, [])
+const greeting = ref('')
+provideApolloClient(apolloClient)(() => {
+  const { mutate } = useMutation(gql`
+    mutation getPersonalizedHello ($name: String!) { 
+        greeting: personalizedHello (name: $name)
+    }
+    `)
+  mutate({ name: 'John' }).then(result => greeting.value = result.data.greeting)
+},
+)
 
 export default defineComponent({
   setup () {
     return {
-      hello,
+      greeting,
     }
   },
 })
@@ -26,6 +28,6 @@ export default defineComponent({
 
 <template>
   <div class="no-setup-mutation">
-    {{ hello }}
+    {{ greeting }}
   </div>
 </template>
