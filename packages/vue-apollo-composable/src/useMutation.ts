@@ -1,10 +1,11 @@
 import { DocumentNode } from 'graphql'
 import { MutationOptions, OperationVariables, FetchResult, TypedDocumentNode } from '@apollo/client/core'
-import { ref, onBeforeUnmount, isRef, Ref } from 'vue-demi'
+import { ref, onBeforeUnmount, isRef, Ref, getCurrentInstance } from 'vue-demi'
 import { useApolloClient } from './useApolloClient'
 import { ReactiveFunction } from './util/ReactiveFunction'
 import { useEventHook } from './util/useEventHook'
 import { trackMutation } from './util/loadingTracking'
+import { CurrentInstance } from './util/types'
 
 /**
  * `useMutation` options for mutations that don't require `variables`.
@@ -43,8 +44,10 @@ export function useMutation<
   document: DocumentParameter<TResult, TVariables>,
   options: OptionsParameter<TResult, TVariables> = {},
 ): UseMutationReturn<TResult, TVariables> {
+  const vm = getCurrentInstance() as CurrentInstance | null
+
   const loading = ref<boolean>(false)
-  trackMutation(loading)
+  vm && trackMutation(loading)
   const error = ref<Error | null>(null)
   const called = ref<boolean>(false)
 
@@ -99,7 +102,7 @@ export function useMutation<
     }
   }
 
-  onBeforeUnmount(() => {
+  vm && onBeforeUnmount(() => {
     loading.value = false
   })
 

@@ -57,6 +57,11 @@ describe('Vue 3 + Apollo Composable', () => {
     cy.contains('.no-setup-query', 'Hello world!')
   })
 
+  it('supports mutations outside of setup', () => {
+    cy.visit('/no-setup-mutation')
+    cy.contains('.no-setup-mutation', 'Hello John!')
+  })
+
   it('useLazyQuery', () => {
     cy.visit('/lazy-query')
     cy.get('.list-disc').should('have.length', 0)

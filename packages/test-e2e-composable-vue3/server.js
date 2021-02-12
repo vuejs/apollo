@@ -24,6 +24,7 @@ type Query {
 }
 
 type Mutation {
+  personalizedHello (name: String!): String
   addMessage (input: AddMessageInput!): Message
   updateMessage (input: UpdateMessageInput!): Message
 }
@@ -75,6 +76,7 @@ const resolvers = {
   },
 
   Mutation: {
+    personalizedHello: (root, { name }) => `Hello ${name}!`,
     addMessage: (root, { input }) => {
       const channel = channels.find(c => c.id === input.channelId)
       if (!channel) {

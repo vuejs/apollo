@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Welcome from './components/Welcome.vue'
 import ChannelView from './components/ChannelView.vue'
 import NoSetupQuery from './components/NoSetupQuery.vue'
+import NoSetupMutation from './components/NoSetupMutation.vue'
 import LazyQuery from './components/LazyQuery.vue'
 
 export const router = createRouter({
@@ -21,6 +22,10 @@ export const router = createRouter({
     {
       path: '/no-setup-query',
       component: NoSetupQuery,
+    },
+    {
+      path: '/no-setup-mutation',
+      component: NoSetupMutation,
     },
     {
       path: '/lazy-query',
