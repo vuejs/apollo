@@ -6,13 +6,13 @@ import { defineComponent } from 'vue'
 
 // Global mutation
 
-const {mutate} = provideApolloClient(apolloClient)(() => useMutation(gql`
-  mutation getPersonalizedHello ($name: String!) {
+const { mutate } = provideApolloClient(apolloClient)(() => useMutation(gql`
+  mutation getPersonalizedHello ($name: String!) { 
     greeting: personalizedHello (name: $name)
   }
 `))
 
-const matation = mutate({name: "John"})
+const matation = mutate({ name: 'John' })
 const hello = useResult(matation.result, [])
 
 export default defineComponent({
