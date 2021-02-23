@@ -14,15 +14,6 @@ function initProvider () {
       : optionValue
   } else if (options.parent && options.parent.$apolloProvider) {
     this.$apolloProvider = options.parent.$apolloProvider
-  } else if (options.provide) {
-    // TODO remove
-    // Temporary retro-compatibility
-    const provided = typeof options.provide === 'function'
-      ? options.provide.call(this)
-      : options.provide
-    if (provided && provided.$apolloProvider) {
-      this.$apolloProvider = provided.$apolloProvider
-    }
   }
 }
 
