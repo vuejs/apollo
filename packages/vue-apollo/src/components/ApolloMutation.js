@@ -79,6 +79,7 @@ export default {
       }).then(result => {
         this.$emit('done', result)
         this.loading = false
+        return result
       }).catch(e => {
         addGqlError(e)
         this.error = e
