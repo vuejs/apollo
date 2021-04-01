@@ -95,7 +95,6 @@ export function useMutation<
       error.value = e
       loading.value = false
       errorEvent.trigger(e)
-      throw e
     }
   }
 
