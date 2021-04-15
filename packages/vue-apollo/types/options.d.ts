@@ -63,7 +63,7 @@ export interface VueApolloQueryDefinition<Result = any, Variables = OperationVar
   loadingKey?: string
   watchLoading?: WatchLoading
   skip?: (() => boolean) | boolean
-  prefetch?: ((context: any) => any) | boolean
+  prefetch?: boolean
   client?: string
   deep?: boolean
   subscribeToMore?: VueApolloSubscribeToMoreOptions<Result, Variables> | VueApolloSubscribeToMoreOptions<Result, Variables>[]
