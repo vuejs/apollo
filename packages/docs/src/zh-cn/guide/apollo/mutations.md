@@ -34,11 +34,12 @@ methods: {
       // 查询将先通过乐观响应、然后再通过真正的变更结果更新
       update: (store, { data: { addTag } }) => {
         // 从缓存中读取这个查询的数据
-        const data = store.readQuery({ query: TAGS_QUERY })
+        const { tags } = store.readQuery({ query: TAGS_QUERY })
         // 将变更中的标签添加到最后
-        data.tags.push(addTag)
+        const tagsCopy = tags.slice()
+        tagsCopy.push(addTag)
         // 将数据写回缓存
-        store.writeQuery({ query: TAGS_QUERY, data })
+        store.writeQuery({ query: TAGS_QUERY, { tags: tagsCopy }})
       },
       // 乐观 UI
       // 将在请求产生时作为“假”结果，使用户界面能够快速更新
