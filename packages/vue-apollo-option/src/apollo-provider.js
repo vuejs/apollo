@@ -43,11 +43,4 @@ export class ApolloProvider {
 
     installMixin(app, this)
   }
-
-  provide (key = '$apolloProvider') {
-    console.warn(`<ApolloProvider>.provide() is deprecated. Use the 'apolloProvider' option instead with the provider object directly.`)
-    return {
-      [key]: this,
-    }
-  }
 }
