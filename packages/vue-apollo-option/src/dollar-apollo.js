@@ -3,20 +3,17 @@ import SmartSubscription from './smart-subscription'
 import { reapply } from '../lib/utils'
 
 export class DollarApollo {
-  constructor (vm) {
+  constructor (vm, provider) {
     this._apolloSubscriptions = []
     this._watchers = []
 
     this.vm = vm
+    this.provider = provider
     this.queries = {}
     this.subscriptions = {}
     this.client = undefined
     this.loadingKey = undefined
     this.error = undefined
-  }
-
-  get provider () {
-    return this.vm.$apolloProvider
   }
 
   getClient (options = null) {

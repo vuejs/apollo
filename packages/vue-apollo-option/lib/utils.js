@@ -1,7 +1,5 @@
 const TD = require('throttle-debounce')
 
-const Globals = exports.Globals = {}
-
 function factory (action) {
   return (cb, time) => action(time, cb)
 }
@@ -9,10 +7,6 @@ function factory (action) {
 exports.throttle = factory(TD.throttle)
 
 exports.debounce = factory(TD.debounce)
-
-exports.getMergedDefinition = function (def) {
-  return Globals.Vue.util.mergeOptions({}, def)
-}
 
 exports.reapply = function (options, context) {
   while (typeof options === 'function') {

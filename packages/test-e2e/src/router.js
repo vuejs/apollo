@@ -1,15 +1,12 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import UserLogin from './components/UserLogin.vue'
 import WelcomeView from './components/WelcomeView.vue'
 import ChannelView from './components/ChannelView.vue'
 import PartialError from './components/PartialError.vue'
 import ManualAddSmartQuery from './components/ManualAddSmartQuery.vue'
 
-Vue.use(Router)
-
-export default new Router({
-  mode: 'history',
+export default createRouter({
+  history: createWebHistory(),
   routes: [
     {
       path: '/',

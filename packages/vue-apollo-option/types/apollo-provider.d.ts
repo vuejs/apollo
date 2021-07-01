@@ -10,16 +10,17 @@ import {
 
 export type VueApolloComponent<V extends Vue = Vue> = VueApolloComponentOptions<V> | typeof Vue | AsyncComponent
 
+export interface ApolloProviderOptions {
+  defaultClient: ApolloClient<TCacheShape>
+  defaultOptions?: VueApolloComponentOptions<Vue>
+  clients?: { [key: string]: ApolloClient<TCacheShape> }
+  watchLoading?: WatchLoading
+  errorHandler?: ErrorHandler
+  prefetch?: boolean
+}
 export class ApolloProvider<TCacheShape=any> {
   provide: (key?: string) => this
-  constructor (options: {
-    defaultClient: ApolloClient<TCacheShape>
-    defaultOptions?: VueApolloComponentOptions<Vue>
-    clients?: { [key: string]: ApolloClient<TCacheShape> }
-    watchLoading?: WatchLoading
-    errorHandler?: ErrorHandler
-    prefetch?: boolean
-  })
+  constructor (options: ApolloProviderOptions)
 
   clients: { [key: string]: ApolloClient<TCacheShape> }
   defaultClient: ApolloClient<TCacheShape>

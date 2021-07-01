@@ -50,15 +50,16 @@ export default {
     class="message-form"
     @done="onDone"
   >
-    <input
-      ref="input"
-      v-model="newMessage"
-      slot-scope="{ mutate, loading }"
-      :disabled="loading"
-      class="form-input"
-      placeholder="Type a message"
-      @keyup.enter="newMessage && mutate()"
-    >
+    <template #default="{ mutate, loading }">
+      <input
+        ref="input"
+        v-model="newMessage"
+        :disabled="loading"
+        class="form-input"
+        placeholder="Type a message"
+        @keyup.enter="newMessage && mutate()"
+      >
+    </template>
   </ApolloMutation>
 </template>
 

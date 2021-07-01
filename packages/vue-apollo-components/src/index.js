@@ -4,16 +4,13 @@ import CApolloMutation from './ApolloMutation'
 
 const plugin = {}
 
-export function install (Vue, options) {
-  if (install.installed) return
-  install.installed = true
-
-  Vue.component('ApolloQuery', CApolloQuery)
-  Vue.component('ApolloQuery', CApolloQuery)
-  Vue.component('ApolloSubscribeToMore', CApolloSubscribeToMore)
-  Vue.component('ApolloSubscribeToMore', CApolloSubscribeToMore)
-  Vue.component('ApolloMutation', CApolloMutation)
-  Vue.component('ApolloMutation', CApolloMutation)
+export function install (app, options) {
+  app.component('ApolloQuery', CApolloQuery)
+  app.component('ApolloQuery', CApolloQuery)
+  app.component('ApolloSubscribeToMore', CApolloSubscribeToMore)
+  app.component('ApolloSubscribeToMore', CApolloSubscribeToMore)
+  app.component('ApolloMutation', CApolloMutation)
+  app.component('ApolloMutation', CApolloMutation)
 }
 
 plugin.install = install

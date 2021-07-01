@@ -15,7 +15,7 @@ export default {
 </script>
 
 <template>
-  <div id="app">
+  <div class="app">
     <ChannelList />
     <div class="content">
       <router-view />
@@ -28,7 +28,8 @@ export default {
 
 html,
 body,
-#app
+#app,
+.app
   height 100%
 
 body
@@ -37,7 +38,7 @@ body
   -webkit-font-smoothing antialiased
   -moz-osx-font-smoothing grayscale
 
-#app
+.app
   color #2c3e50
   display grid
   grid-template-columns 300px 1fr
