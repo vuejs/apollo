@@ -38,7 +38,8 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@apollo/client": "^3.2.1"
+    "@apollo/client": "^3.2.1",
+    "vue": "^3.1.0"
   },
   "dependencies": {
     "throttle-debounce": "^2.3.0"
@@ -53,7 +54,7 @@
     "@vue/test-utils": "^1.0.0-beta.25",
     "babel-core": "^7.0.0-bridge.0",
     "cross-env": "^6.0.0",
-    "graphql": "^14.0.2",
+    "graphql": "^15.3.0",
     "graphql-tag": "^2.5.0",
     "jest": "^24.8.0",
     "nodemon": "^1.18.4",

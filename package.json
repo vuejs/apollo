@@ -35,7 +35,7 @@
   },
   "resolutions": {
     "eslint-scope": "^5.0.0",
-    "subscriptions-transport-ws": "0.9.18",
-    "graphql": "15.3.0"
+    "subscriptions-transport-ws": "^0.9.18",
+    "graphql": "^15.3.0"
   }
 }

@@ -36,17 +36,15 @@
   },
   "dependencies": {
     "throttle-debounce": "^2.3.0",
-    "vue-demi": "^0.4.0"
+    "vue-demi": "^0.9.1"
   },
   "peerDependencies": {
     "@apollo/client": "^3.2.1",
-    "@vue/composition-api": "^1.0.0-beta.16",
-    "graphql": "^14.5.8",
-    "vue": "^2.6.10"
+    "graphql": "^15.3.0",
+    "vue": "^3.1.0"
   },
   "devDependencies": {
     "@apollo/client": "^3.0.0",
-    "@types/throttle-debounce": "^2.1.0",
-    "@vue/composition-api": "^1.0.0-beta.16"
+    "@types/throttle-debounce": "^2.1.0"
   }
 }
