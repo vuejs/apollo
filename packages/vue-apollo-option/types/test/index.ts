@@ -1,9 +1,9 @@
-import Vue from 'vue'
+import { createApp, h } from 'vue'
 
 import 'isomorphic-fetch'
 import { ApolloClient, HttpLink } from '@apollo/client/core'
 
-import VueApollo from '../index'
+import { createApolloProvider } from '../index'
 import App from './App'
 import Decorator from './Decorator'
 
@@ -14,7 +14,7 @@ const apolloClient = new ApolloClient({
   cache,
   connectToDevTools: true,
 })
-const apolloProvider = new VueApollo({
+const apolloProvider = createApolloProvider({
   defaultClient: apolloClient,
   defaultOptions: {
     $query: {
@@ -23,15 +23,14 @@ const apolloProvider = new VueApollo({
   },
 })
 
-Vue.use(VueApollo)
 /* eslint no-new: 0 */
-new Vue({
+const app = createApp({
   el: '#app',
-  provide: apolloProvider.provide(),
-  render: h => h(App, [
+  render: () => h(App, [
     h(Decorator),
   ]),
 })
+app.use(apolloProvider)
 
 // test to able to call below methods
 console.log(apolloProvider.defaultClient.query)

@@ -1,4 +1,3 @@
-import Vue, { PluginObject, PluginFunction } from 'vue'
 import {
   ApolloClient,
   ObservableQuery,
@@ -16,13 +15,6 @@ import {
   VueApolloQueryDefinition,
   VueApolloSubscriptionDefinition,
 } from './options'
-
-export class VueApollo extends ApolloProvider implements PluginObject<Record<string, never>> {
-  [key: string]: any
-  install: PluginFunction<Record<string, never>>
-
-  static install(pVue: typeof Vue, options?:Record<string, never> | undefined): void
-}
 
 interface SmartApollo<V> {
   skip: boolean
@@ -59,9 +51,9 @@ interface ApolloClientMethods {
 }
 
 export interface DollarApollo<V> extends ApolloClientMethods {
-  vm: V
-  queries: Record<string, SmartQuery<V>>
-  subscriptions: Record<string, SmartSubscription<V>>
+  readonly vm: V
+  readonly queries: Record<string, SmartQuery<V>>
+  readonly subscriptions: Record<string, SmartSubscription<V>>
   readonly provider: ApolloProvider
   readonly loading: boolean
 

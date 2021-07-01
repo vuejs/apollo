@@ -2,7 +2,7 @@
 
 // this example src is https://github.com/Akryum/vue-apollo-example
 import gql from 'graphql-tag'
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 import { OperationVariables, ApolloQueryResult } from '@apollo/client/core'
 import { VueApolloQueryDefinition } from '../options'
 import { DocumentNode } from 'graphql'
@@ -31,7 +31,7 @@ interface FooResult {
   }
 }
 
-export const hey = Vue.extend({
+export const hey = defineComponent({
   props: {
     meow: String,
   },
@@ -210,7 +210,7 @@ export const hey = Vue.extend({
   },
 })
 
-export default Vue.extend({
+export default defineComponent({
   data () {
     return {
       newTag: null,
