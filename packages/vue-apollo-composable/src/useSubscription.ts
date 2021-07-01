@@ -123,7 +123,7 @@ export function useSubscription <
   const errorEvent = useEventHook<Error>()
 
   const loading = ref(false)
-  trackSubscription(loading)
+  vm && trackSubscription(loading)
 
   // Apollo Client
   const { resolveClient } = useApolloClient()
