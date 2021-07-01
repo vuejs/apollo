@@ -22,7 +22,8 @@
     "strict": true,
     "noImplicitAny": true,
     "allowJs": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true
   },
   "include": [
     "*.ts",

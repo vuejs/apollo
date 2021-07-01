@@ -7,6 +7,7 @@ export default class SmartQuery extends SmartApollo {
   _loading = false
   _linkedSubscriptions = []
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   constructor (vm, key, options, autostart = true) {
     // Add reactive data related to the query

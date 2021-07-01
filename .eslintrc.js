@@ -85,5 +85,7 @@ module.exports = {
     'generated/',
     '!.*',
     'schema.graphql',
+    '/test/',
+    '**/types/test/',
   ],
 }
