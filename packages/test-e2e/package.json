@@ -1,11 +1,11 @@
 {
-  "name": "private-vue-apollo-test-e2e",
+  "name": "test-e2e-options-components-vue3",
   "version": "4.0.0-alpha.11",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "test": "yarn run test:e2e",
+    "test": "yarn run test:e2e && kill-port 4042",
     "test:e2e": "start-server-and-test api http://localhost:4042/.well-known/apollo/server-health test:e2e:client",
     "test:e2e:client": "vue-cli-service test:e2e --mode production --headless",
     "test:e2e:dev": "start-server-and-test api http://localhost:4042/.well-known/apollo/server-health test:e2e:dev:client",
@@ -39,6 +39,7 @@
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-vue": "^7.5.0",
     "graphql-tag": "^2.5.0",
+    "kill-port": "^1.6.1",
     "start-server-and-test": "^1.10.6",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",

@@ -1,11 +1,11 @@
 {
-  "name": "test-e2e-global-composable-vue3",
+  "name": "test-e2e-composable-vue3",
   "version": "4.0.0-alpha.12",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "test": "yarn run test:e2e",
+    "test": "yarn run test:e2e && kill-port 4042",
     "test:e2e": "start-server-and-test api http://localhost:4042/.well-known/apollo/server-health test:e2e:client",
     "test:e2e:client": "vue-cli-service test:e2e --mode production --headless",
     "test:e2e:dev": "vue-cli-service test:e2e",
@@ -32,6 +32,7 @@
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
     "axios": "^0.20.0",
+    "kill-port": "^1.6.1",
     "start-server-and-test": "^1.10.6",
     "tailwindcss": "^1.0.1"
   }
