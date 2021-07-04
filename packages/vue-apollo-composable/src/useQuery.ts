@@ -227,7 +227,7 @@ export function useQueryImpl<
     if (!isServer && (currentOptions.value?.fetchPolicy !== 'no-cache' || currentOptions.value.notifyOnNetworkStatusChange)) {
       const currentResult = query.value.getCurrentResult()
 
-      if (!currentResult.loading || currentOptions.value?.notifyOnNetworkStatusChange) {
+      if (!currentResult.loading || currentResult.partial || currentOptions.value?.notifyOnNetworkStatusChange) {
         onNextResult(currentResult)
       }
     }
