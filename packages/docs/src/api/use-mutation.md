@@ -38,6 +38,8 @@
 
   - `updateQueries`: A `MutationQueryReducersMap`, which is map from query names to mutation query reducers. Briefly, this map defines how to incorporate the results of the mutation into the results of queries that are currently being watched by your application.
 
+  - `throws: 'auto' | 'always' | 'never'`: By default (`'auto'`), `mutate` will throw errors if you don't register an `onError` callback.
+
 ## Return
 
 - `mutate(variables, overrideOptions)`: call the mutation with this function.
