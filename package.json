@@ -6,7 +6,7 @@
       "packages/*"
     ],
     "nohoist": [
-      "**vue-template-compiler**"
+      "**vue**"
     ]
   },
   "private": true,
