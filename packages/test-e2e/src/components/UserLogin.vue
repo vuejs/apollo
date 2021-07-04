@@ -82,72 +82,73 @@ export default {
       class="wrapper"
       @done="onDone"
     >
-      <form
-        :key="showRegister"
-        slot-scope="{ mutate, loading, gqlError: error }"
-        class="form"
-        @submit.prevent="mutate()"
-      >
-        <input
-          v-model="email"
-          class="form-input"
-          type="email"
-          name="email"
-          placeholder="Email"
-          required
+      <template #default="{ mutate, loading, gqlError: error }">
+        <form
+          :key="showRegister"
+          class="form"
+          @submit.prevent="mutate()"
         >
-        <input
-          v-model="password"
-          class="form-input"
-          type="password"
-          name="password"
-          placeholder="Password"
-          required
-        >
-        <input
-          v-if="showRegister"
-          v-model="nickname"
-          class="form-input"
-          name="nickname"
-          placeholder="Nickname"
-          required
-        >
-        <div
-          v-if="error"
-          class="error"
-        >
-          {{ error.message }}
-        </div>
-        <template v-if="!showRegister">
-          <button
-            type="submit"
-            :disabled="loading"
-            class="button"
-            data-id="login"
+          <input
+            v-model="email"
+            class="form-input"
+            type="email"
+            name="email"
+            placeholder="Email"
+            required
           >
-            Login
-          </button>
-          <div class="actions">
-            <a
-              data-id="create-account"
-              @click="showRegister = true"
-            >Create an account</a>
-          </div>
-        </template>
-        <template v-else>
-          <button
-            type="submit"
-            :disabled="loading"
-            class="button"
-            data-id="submit-new-account"
+          <input
+            v-model="password"
+            class="form-input"
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
           >
-            Create new account
-          </button>
-          <div class="actions">
-            <a @click="showRegister = false">Go back</a>
+          <input
+            v-if="showRegister"
+            v-model="nickname"
+            class="form-input"
+            name="nickname"
+            placeholder="Nickname"
+            required
+          >
+          <div
+            v-if="error"
+            class="error"
+          >
+            {{ error.message }}
           </div>
-        </template>
-      </form>
+          <template v-if="!showRegister">
+            <button
+              type="submit"
+              :disabled="loading"
+              class="button"
+              data-id="login"
+            >
+              Login
+            </button>
+            <div class="actions">
+              <a
+                data-id="create-account"
+                @click="showRegister = true"
+              >Create an account</a>
+            </div>
+          </template>
+          <template v-else>
+            <button
+              type="submit"
+              :disabled="loading"
+              class="button"
+              data-id="submit-new-account"
+            >
+              Create new account
+            </button>
+            <div class="actions">
+              <a @click="showRegister = false">Go back</a>
+            </div>
+          </template>
+        </form>
+      </template>
     </ApolloMutation>
   </div>
 </template>

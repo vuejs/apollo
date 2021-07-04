@@ -85,7 +85,7 @@ export default {
       }"
       @result="onResult"
     >
-      <template slot-scope="{ result: { data, loading } }">
+      <template #default="{ result: { data, loading } }">
         <div
           v-if="!data && loading"
           class="loading"

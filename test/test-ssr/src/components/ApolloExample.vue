@@ -9,7 +9,7 @@
         :update-query="onMessageAdded"
       />
 
-      <div slot-scope="{ result: { data } }">
+      <template #default="{ result: { data } }">
         <template v-if="data">
           <div
             v-for="message of data.messages"
@@ -19,7 +19,7 @@
             {{ message.text }}
           </div>
         </template>
-      </div>
+      </template>
     </ApolloQuery>
   </div>
 </template>

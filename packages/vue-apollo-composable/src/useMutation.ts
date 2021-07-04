@@ -1,6 +1,6 @@
 import { DocumentNode } from 'graphql'
 import { MutationOptions, OperationVariables, FetchResult, TypedDocumentNode } from '@apollo/client/core'
-import { ref, onBeforeUnmount, isRef, Ref } from 'vue-demi'
+import { ref, onBeforeUnmount, isRef, Ref, getCurrentInstance } from 'vue-demi'
 import { useApolloClient } from './useApolloClient'
 import { ReactiveFunction } from './util/ReactiveFunction'
 import { useEventHook } from './util/useEventHook'
@@ -14,14 +14,15 @@ export interface UseMutationOptions<
   TVariables = OperationVariables
 > extends Omit<MutationOptions<TResult, TVariables>, 'mutation'> {
   clientId?: string
+  throws?: 'auto' | 'always' | 'never'
 }
 
 type DocumentParameter<TResult, TVariables> = DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode> | TypedDocumentNode<TResult, TVariables> | Ref<TypedDocumentNode<TResult, TVariables>> | ReactiveFunction<TypedDocumentNode<TResult, TVariables>>
 type OptionsParameter<TResult, TVariables> = UseMutationOptions<TResult, TVariables> | Ref<UseMutationOptions<TResult, TVariables>> | ReactiveFunction<UseMutationOptions<TResult, TVariables>>
 
-export type MutateOverrideOptions<TResult> = Pick<UseMutationOptions<TResult, OperationVariables>, 'update' | 'optimisticResponse' | 'context' | 'updateQueries' | 'refetchQueries' | 'awaitRefetchQueries' | 'errorPolicy' | 'fetchPolicy' | 'clientId'>
-export type MutateResult<TResult> = Promise<FetchResult<TResult, Record<string, any>, Record<string, any>>>
-export type MutateFunction<TResult, TVariables> = (variables?: TVariables | null, overrideOptions?: MutateOverrideOptions<TResult>) => MutateResult<TResult>
+export type MutateOverrideOptions = Pick<UseMutationOptions<any, OperationVariables>, 'update' | 'optimisticResponse' | 'context' | 'updateQueries' | 'refetchQueries' | 'awaitRefetchQueries' | 'errorPolicy' | 'fetchPolicy' | 'clientId'>
+export type MutateResult<TResult> = Promise<FetchResult<TResult, Record<string, any>, Record<string, any>> | null>
+export type MutateFunction<TResult, TVariables> = (variables?: TVariables | null, overrideOptions?: MutateOverrideOptions) => MutateResult<TResult>
 
 export interface UseMutationReturn<TResult, TVariables> {
   mutate: MutateFunction<TResult, TVariables>
@@ -43,8 +44,9 @@ export function useMutation<
   document: DocumentParameter<TResult, TVariables>,
   options: OptionsParameter<TResult, TVariables> = {},
 ): UseMutationReturn<TResult, TVariables> {
+  const vm = getCurrentInstance()
   const loading = ref<boolean>(false)
-  trackMutation(loading)
+  vm && trackMutation(loading)
   const error = ref<Error | null>(null)
   const called = ref<boolean>(false)
 
@@ -95,8 +97,11 @@ export function useMutation<
       error.value = e
       loading.value = false
       errorEvent.trigger(e)
-      throw e
+      if (currentOptions.throws === 'always' || (currentOptions.throws !== 'never' && !errorEvent.getCount())) {
+        throw e
+      }
     }
+    return null
   }
 
   onBeforeUnmount(() => {

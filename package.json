@@ -1,9 +1,14 @@
 {
   "name": "vue-apollo-monorepo",
   "version": "4.0.0",
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "**vue-template-compiler**"
+    ]
+  },
   "private": true,
   "scripts": {
     "build": "lerna run build --concurrency 1 --scope \"{vue-apollo,@vue/apollo}*\"",
@@ -30,7 +35,7 @@
   },
   "resolutions": {
     "eslint-scope": "^5.0.0",
-    "subscriptions-transport-ws": "0.9.18",
-    "graphql": "15.3.0"
+    "subscriptions-transport-ws": "^0.9.18",
+    "graphql": "^15.3.0"
   }
 }

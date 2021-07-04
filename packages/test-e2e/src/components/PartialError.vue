@@ -16,7 +16,7 @@ function query (errorPolicy) {
     },
     error (error) {
       console.log(error)
-      this.$set(this.errors, errorPolicy, error)
+      this.errors[errorPolicy] = error
     },
   }
 }

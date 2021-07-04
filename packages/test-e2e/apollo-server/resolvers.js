@@ -1,5 +1,5 @@
 const GraphQLJSON = require('graphql-type-json')
-const { withFilter } = require('graphql-subscriptions')
+const { withFilter } = require('apollo-server-express')
 // Subs
 const triggers = require('./triggers')
 // Connectors

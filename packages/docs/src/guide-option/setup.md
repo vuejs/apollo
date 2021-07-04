@@ -14,16 +14,25 @@ Or:
 yarn add @vue/apollo-option
 ```
 
-## 2. Install the plugin into Vue
+## 2. Create the Apollo client
 
 ```js
-import Vue from 'vue'
-import VueApollo from '@vue/apollo-option'
+import { ApolloClient, InMemoryCache } from '@apollo/client/core'
 
-Vue.use(VueApollo)
+const cache = new InMemoryCache()
+
+const apolloClient = new ApolloClient({
+  cache,
+  uri: 'http://localhost:4042/graphql',
+})
+
 ```
 
-## 3. Inject the Apollo provider
+::: warning
+Use the `@apollo/client/core` import path otherwise you will also import React.
+:::
+
+## 3. Create the Apollo provider
 
 The provider holds the Apollo client instances that can then be used by all the child components.
 
@@ -33,15 +42,18 @@ const apolloProvider = new VueApollo({
 })
 ```
 
-Add it to your app with the `apolloProvider` option:
+## 4. Add the provider to your app
+
+Add it to your app with the `app.use` function:
 
 ```js
-new Vue({
-  el: '#app',
-  // inject apolloProvider here like vue-router or vuex
-  apolloProvider,
-  render: h => h(App),
+import { createApp, h } from 'vue'
+
+const app = createApp({
+  render: () => h(App),
 })
+
+app.use(apolloProvider)
 ```
 
 You are now ready to use Apollo in your components!

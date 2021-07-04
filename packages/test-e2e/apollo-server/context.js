@@ -12,7 +12,7 @@ module.exports = ({ req, connection }) => {
   // HTTP
   if (req) rawToken = req.get('Authorization')
   // Websocket
-  if (connection) rawToken = connection.authorization
+  if (connection) rawToken = connection.Authorization
 
   // Token
   const token = rawToken ? JSON.parse(rawToken) : null
@@ -23,6 +23,14 @@ module.exports = ({ req, connection }) => {
     userId = token.userId
   }
 
+  // return new Promise(resolve => {
+  //   setTimeout(() => {
+  //     resolve({
+  //       token,
+  //       userId,
+  //     })
+  //   }, 3000)
+  // })
   return {
     token,
     userId,

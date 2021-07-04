@@ -68,7 +68,7 @@ export default {
     },
   },
 
-  render (h) {
+  render () {
     return null
   },
 }

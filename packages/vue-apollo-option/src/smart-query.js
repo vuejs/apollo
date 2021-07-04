@@ -7,12 +7,14 @@ export default class SmartQuery extends SmartApollo {
   _loading = false
   _linkedSubscriptions = []
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   constructor (vm, key, options, autostart = true) {
     // Add reactive data related to the query
     if (vm.$data.$apolloData && !vm.$data.$apolloData.queries[key]) {
-      vm.$set(vm.$data.$apolloData.queries, key, {
+      vm.$data.$apolloData.queries[key] = {
         loading: false,
-      })
+      }
     }
 
     super(vm, key, options, false)
@@ -192,7 +194,8 @@ export default class SmartQuery extends SmartApollo {
   }
 
   setData (value) {
-    this.vm.$set(this.hasDataField ? this.vm.$data : this.vm.$data.$apolloData.data, this.key, value)
+    const target = this.hasDataField ? this.vm.$data : this.vm.$data.$apolloData.data
+    target[this.key] = value
   }
 
   catchError (error) {

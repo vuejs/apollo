@@ -36,7 +36,7 @@ export default {
       ${$options.fragments.channel}
     `"
     >
-      <template slot-scope="{ result: { data, loading } }">
+      <template #default="{ result: { data, loading } }">
         <div
           v-if="loading"
           class="loading"

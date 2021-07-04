@@ -1,29 +1,8 @@
-import { Globals, reapply } from '../lib/utils'
+import { reapply } from '../lib/utils'
+import { DollarApollo } from './dollar-apollo'
 
 function hasProperty (holder, key) {
   return typeof holder !== 'undefined' && Object.prototype.hasOwnProperty.call(holder, key)
-}
-
-function initProvider () {
-  const options = this.$options
-  // ApolloProvider injection
-  const optionValue = options.apolloProvider
-  if (optionValue) {
-    this.$apolloProvider = typeof optionValue === 'function'
-      ? optionValue()
-      : optionValue
-  } else if (options.parent && options.parent.$apolloProvider) {
-    this.$apolloProvider = options.parent.$apolloProvider
-  } else if (options.provide) {
-    // TODO remove
-    // Temporary retro-compatibility
-    const provided = typeof options.provide === 'function'
-      ? options.provide.call(this)
-      : options.provide
-    if (provided && provided.$apolloProvider) {
-      this.$apolloProvider = provided.$apolloProvider
-    }
-  }
 }
 
 function proxyData () {
@@ -101,7 +80,7 @@ function launch () {
     }
 
     if (apollo.subscribe) {
-      Globals.Vue.util.warn('vue-apollo -> `subscribe` option is deprecated. Use the `$subscribe` option instead.')
+      console.warn('vue-apollo -> `subscribe` option is deprecated. Use the `$subscribe` option instead.')
     }
 
     if (apollo.$subscribe) {
@@ -129,45 +108,37 @@ function destroy () {
   }
 }
 
-export function installMixin (Vue, vueVersion) {
-  Vue.mixin({
-    ...vueVersion === '1'
-      ? {
-        init: initProvider,
+export function installMixin (app, provider) {
+  app.mixin({
+    data () {
+      return {
+        $apolloData: {
+          queries: {},
+          loading: 0,
+          data: this.$_apolloInitData,
+        },
       }
-      : {},
+    },
 
-    ...vueVersion === '2' ? {
-      data () {
-        return {
-          $apolloData: {
-            queries: {},
-            loading: 0,
-            data: this.$_apolloInitData,
-          },
+    beforeCreate () {
+      this.$apollo = new DollarApollo(this, provider)
+      proxyData.call(this)
+      if (this.$isServer) {
+        // Patch render function to cleanup apollo
+        const render = this.$options.render
+        this.$options.render = (h) => {
+          const result = render.call(this, h)
+          destroy.call(this)
+          return result
         }
-      },
+      }
+    },
 
-      beforeCreate () {
-        initProvider.call(this)
-        proxyData.call(this)
-        if (this.$isServer) {
-          // Patch render function to cleanup apollo
-          const render = this.$options.render
-          this.$options.render = (h) => {
-            const result = render.call(this, h)
-            destroy.call(this)
-            return result
-          }
-        }
-      },
-
-      serverPrefetch () {
-        if (this.$_apolloPromises) {
-          return Promise.all(this.$_apolloPromises)
-        }
-      },
-    } : {},
+    serverPrefetch () {
+      if (this.$_apolloPromises) {
+        return Promise.all(this.$_apolloPromises)
+      }
+    },
 
     created: launch,
 

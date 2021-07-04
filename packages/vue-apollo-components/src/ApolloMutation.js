@@ -1,5 +1,6 @@
 import { addGqlError } from '@vue/apollo-option/lib/utils'
 import gql from 'graphql-tag'
+import { h } from 'vue'
 
 export default {
   props: {
@@ -82,18 +83,13 @@ export default {
     },
   },
 
-  render (h) {
-    let result = this.$scopedSlots.default({
+  render () {
+    const result = this.$slots.default({
       mutate: this.mutate,
       loading: this.loading,
       error: this.error,
       gqlError: this.error && this.error.gqlError,
     })
-    if (Array.isArray(result)) {
-      result = result.concat(this.$slots.default)
-    } else {
-      result = [result].concat(this.$slots.default)
-    }
-    return this.tag ? h(this.tag, result) : result[0]
+    return this.tag ? h(this.tag, result) : result
   },
 }

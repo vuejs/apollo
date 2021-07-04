@@ -17,11 +17,12 @@ export default {
     :mutation="SEND"
     class="mock-send-message"
   >
-    <a
-      slot-scope="{ mutate }"
-      type="button"
-      @click="mutate"
-    >Send bot message</a>
+    <template #default="{ mutate }">
+      <a
+        type="button"
+        @click="mutate"
+      >Send bot message</a>
+    </template>
   </ApolloMutation>
 </template>
 

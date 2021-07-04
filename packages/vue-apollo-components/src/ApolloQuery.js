@@ -1,4 +1,5 @@
 import gql from 'graphql-tag'
+import { h } from 'vue'
 
 function isDataFilled (data) {
   return Object.keys(data).length > 0
@@ -153,6 +154,7 @@ export default {
         ...this.options,
         manual: true,
         result (result) {
+          console.log(result)
           const { errors, loading, networkStatus } = result
           let { error } = result
           result = Object.assign({}, result)
@@ -210,19 +212,14 @@ export default {
     },
   },
 
-  render (h) {
-    let result = this.$scopedSlots.default({
+  render () {
+    const result = this.$slots.default({
       result: this.result,
       times: this.times,
       query: this.$apollo.queries.query,
       isLoading: this.$apolloData.loading,
       gqlError: this.result && this.result.error && this.result.error.gqlError,
     })
-    if (Array.isArray(result)) {
-      result = result.concat(this.$slots.default)
-    } else {
-      result = [result].concat(this.$slots.default)
-    }
-    return this.tag ? h(this.tag, result) : result[0]
+    return this.tag ? h(this.tag, result) : result
   },
 }
