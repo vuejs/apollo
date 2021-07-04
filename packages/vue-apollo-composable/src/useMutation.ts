@@ -14,6 +14,7 @@ export interface UseMutationOptions<
   TVariables = OperationVariables
 > extends Omit<MutationOptions<TResult, TVariables>, 'mutation'> {
   clientId?: string
+  throws?: 'auto' | 'always' | 'never'
 }
 
 type DocumentParameter<TResult, TVariables> = DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode> | TypedDocumentNode<TResult, TVariables> | Ref<TypedDocumentNode<TResult, TVariables>> | ReactiveFunction<TypedDocumentNode<TResult, TVariables>>
@@ -96,7 +97,9 @@ export function useMutation<
       error.value = e
       loading.value = false
       errorEvent.trigger(e)
-      throw e
+      if (currentOptions.throws === 'always' || (currentOptions.throws !== 'never' && !errorEvent.getCount())) {
+        throw e
+      }
     }
   }
 

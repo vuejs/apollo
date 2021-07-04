@@ -21,9 +21,14 @@ export function useEventHook<TParam = any> () {
     }
   }
 
+  function getCount () {
+    return fns.length
+  }
+
   return {
     on,
     off,
     trigger,
+    getCount,
   }
 }
