@@ -133,6 +133,9 @@ app.get('/_reset', (req, res) => {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  context: () => new Promise(resolve => {
+    setTimeout(() => resolve({}), 50)
+  }),
 })
 
 server.applyMiddleware({ app })

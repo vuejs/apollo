@@ -19,7 +19,7 @@ export default defineComponent({
   },
 
   setup (props) {
-    const { result, loading } = useQuery(gql`
+    const { result, loading, refetch } = useQuery(gql`
       query channel ($id: ID!) {
         channel (id: $id) {
           id
@@ -32,7 +32,9 @@ export default defineComponent({
       }
     `, () => ({
       id: props.id,
-    }))
+    }), {
+      notifyOnNetworkStatusChange: true,
+    })
     const channel = useResult(result)
 
     const messagesEl = ref()
@@ -52,6 +54,7 @@ export default defineComponent({
 
     return {
       loading,
+      refetch,
       channel,
       messagesEl,
     }
@@ -60,7 +63,10 @@ export default defineComponent({
 </script>
 
 <template>
-  <div v-if="loading">
+  <div
+    v-if="loading"
+    class="loading-channel"
+  >
     Loading channel...
   </div>
 
@@ -70,6 +76,12 @@ export default defineComponent({
   >
     <div class="flex-none p-6 border-b border-gray-200 bg-white">
       Currently viewing # {{ channel.label }}
+
+      <a
+        class="text-green-500 cursor-pointer"
+        data-test-id="refetch"
+        @click="refetch()"
+      >Refetch</a>
     </div>
 
     <div
