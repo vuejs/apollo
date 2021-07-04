@@ -28,8 +28,9 @@
     "dist"
   ],
   "scripts": {
-    "dev": "tsc -d -w --sourceMap",
-    "build": "rimraf dist && node esbuild.mjs && tsc -d --emitDeclarationOnly",
+    "dev": "rimraf dist && nodemon --exec 'yarn build:code' --watch src --ext js,ts",
+    "build": "rimraf dist && yarn run build:code",
+    "build:code": "node esbuild.mjs && tsc -d --emitDeclarationOnly",
     "prepublishOnly": "yarn test && yarn build",
     "test": "yarn test:types",
     "test:types": "tsc -p tests/types/"
@@ -45,6 +46,7 @@
   },
   "devDependencies": {
     "@apollo/client": "^3.0.0",
-    "@types/throttle-debounce": "^2.1.0"
+    "@types/throttle-debounce": "^2.1.0",
+    "nodemon": "^1.18.4"
   }
 }
