@@ -4,7 +4,6 @@ import {
   isRef,
   computed,
   watch,
-  // @ts-expect-error No implemented on Vue 3 yet, see https://github.com/vuejs/vue-next/pull/3070
   onServerPrefetch,
   getCurrentInstance,
   onBeforeUnmount,
