@@ -2,7 +2,16 @@ import esbuild from 'esbuild'
 import path from 'path'
 import { nodeExternalsPlugin } from 'esbuild-node-externals'
 
+/** @typedef {import('esbuild').BuildOptions} BuildOptions */
+
+/**
+ * @typedef Build
+ * @prop {BuildOptions['format']} format
+ * @prop {string} file
+ */
+
 (async () => {
+  /** @type {Build[]} */
   const builds = [
     { format: 'esm', file: 'index.esm.js' },
     { format: 'cjs', file: 'index.js' },
