@@ -16,7 +16,8 @@ yarn add @vue/apollo-composable
 
 ## 2. Connect Apollo Client to Vue
 
-### Vue 2 + composition API instructions
+### Vue 2
+
 In your root instance, you need to provide a default Apollo Client instance:
 
 ```js
@@ -32,7 +33,8 @@ const app = new Vue({
 })
 ```
 
-### Vue 3 instructions
+### Vue 3
+
 ```js
 import { createApp, provide, h } from "vue";
 import { DefaultApolloClient } from '@vue/apollo-composable'
