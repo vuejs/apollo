@@ -8,6 +8,6 @@ import { apolloProvider } from './vue-apollo'
 const app = createApp(App)
 app.use(router)
 app.use(store)
-app.use(VueApolloComponents)
 app.use(apolloProvider)
+app.use(VueApolloComponents)
 app.mount('#app')
