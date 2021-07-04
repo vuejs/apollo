@@ -6,4 +6,4 @@ export type IsUnion<T, U = T> = U extends any ? ([T] extends [U] ? false : true)
 /**
  * Extracts an inner type if T has a single key K, otherwise it returns T.
  */
-export type ExtractSingleKey<T, K extends keyof T = keyof T> = IsUnion<K> extends true ? T : T[K]
+export type ExtractSingleKey<T, K extends keyof T = keyof T, KWithoutTypename extends K = Exclude<K, '__typename'>> = IsUnion<KWithoutTypename> extends true ? T : T[KWithoutTypename]
