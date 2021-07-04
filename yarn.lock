@@ -15600,7 +15600,7 @@ vue@^2.6.10:
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.14.tgz#e51aa5250250d569a3fbad3a8a5a687d6036e235"
   integrity sha512-x2284lgYvjOMj3Za7kqzRcUSxBboHqtgRE2zlos1qWaOye5yUmHn42LB1250NJBLRwEcdrB0JRwyPTEPhfQjiQ==
 
-vue@^3.0.0:
+vue@^3.0.0, vue@^3.1.0:
   version "3.1.4"
   resolved "https://registry.yarnpkg.com/vue/-/vue-3.1.4.tgz#120d6818c51eaa35d0879e5bc1cff60135bc69fd"
   integrity sha512-p8dcdyeCgmaAiZsbLyDkmOLcFGZb/jEVdCLW65V68LRCXTNX8jKsgah2F7OZ/v/Ai2V0Fb1MNO0vz/GFqsPVMA==
