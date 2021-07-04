@@ -71,12 +71,14 @@ export interface ExampleUpdatedSubscriptionVariables {
 }
 
 export interface SingleKeyExampleQuery {
+  __typename?: 'Root'
   example?: {
     __typename?: 'Example'
   }
 }
 
 export interface MultiKeyExampleQuery {
+  __typename?: 'Root'
   example?: {
     __typename?: 'Example'
   }
