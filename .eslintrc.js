@@ -85,7 +85,7 @@ module.exports = {
     'generated/',
     '!.*',
     'schema.graphql',
-    '/test/',
+    '/.test-todo/',
     '**/types/test/',
   ],
 }
