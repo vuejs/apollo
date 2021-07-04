@@ -54,12 +54,26 @@ describe('Vue 3 + Apollo Composable', () => {
     cy.contains('.message', 'Message 1')
     cy.contains('.message', 'Message 2')
     cy.contains('.message', 'Message 3')
+  })
+
+  it('refetch', () => {
+    cy.get('.channel-link').eq(0).click()
+    cy.get('input').type('Message 1{enter}')
+    cy.get('input').should('have.value', '')
+    cy.get('input').type('Message 2{enter}')
+    cy.get('input').should('have.value', '')
+    cy.get('input').type('Message 3{enter}')
+    cy.get('input').should('have.value', '')
     cy.get('[data-test-id="refetch"]').click()
     cy.contains('.loading-channel', 'Loading channel...')
     cy.get('.message').should('have.lengthOf', 3)
     cy.contains('.message', 'Message 1')
     cy.contains('.message', 'Message 2')
     cy.contains('.message', 'Message 3')
+    cy.task('db:reset')
+    cy.get('[data-test-id="refetch"]').click()
+    cy.contains('.loading-channel', 'Loading channel...')
+    cy.get('.message').should('have.lengthOf', 0)
   })
 
   it('supports queries outside of setup', () => {
