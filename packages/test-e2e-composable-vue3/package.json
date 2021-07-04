@@ -1,6 +1,6 @@
 {
   "name": "test-e2e-composable-vue3",
-  "version": "4.0.0-alpha.12",
+  "version": "4.0.0-alpha.13",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.2.1",
-    "@vue/apollo-composable": "^4.0.0-alpha.12",
+    "@vue/apollo-composable": "^4.0.0-alpha.13",
     "apollo-server-express": "^2.18.2",
     "core-js": "^3.6.5",
     "cors": "^2.8.5",
