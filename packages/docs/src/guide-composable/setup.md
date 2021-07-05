@@ -36,7 +36,7 @@ const app = new Vue({
 ### Vue 3
 
 ```js
-import { createApp, provide, h } from "vue";
+import { createApp, provide, h } from 'vue'
 import { DefaultApolloClient } from '@vue/apollo-composable'
 
 const app = createApp({
@@ -44,7 +44,7 @@ const app = createApp({
     provide(DefaultApolloClient, apolloClient)
   },
 
-  render: h => h(App),
+  render: () => h(App),
 })
 ```
 
