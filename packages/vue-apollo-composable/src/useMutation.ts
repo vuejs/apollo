@@ -1,10 +1,11 @@
 import { DocumentNode } from 'graphql'
-import { MutationOptions, OperationVariables, FetchResult, TypedDocumentNode } from '@apollo/client/core'
+import { MutationOptions, OperationVariables, FetchResult, TypedDocumentNode, ApolloError } from '@apollo/client/core'
 import { ref, onBeforeUnmount, isRef, Ref, getCurrentInstance } from 'vue-demi'
 import { useApolloClient } from './useApolloClient'
 import { ReactiveFunction } from './util/ReactiveFunction'
 import { useEventHook } from './util/useEventHook'
 import { trackMutation } from './util/loadingTracking'
+import { toApolloError } from './util/toApolloError'
 
 /**
  * `useMutation` options for mutations that don't require `variables`.
@@ -27,12 +28,12 @@ export type MutateFunction<TResult, TVariables> = (variables?: TVariables | null
 export interface UseMutationReturn<TResult, TVariables> {
   mutate: MutateFunction<TResult, TVariables>
   loading: Ref<boolean>
-  error: Ref<Error | null>
+  error: Ref<ApolloError | null>
   called: Ref<boolean>
   onDone: (fn: (param: FetchResult<TResult, Record<string, any>, Record<string, any>>) => void) => {
     off: () => void
   }
-  onError: (fn: (param: Error) => void) => {
+  onError: (fn: (param: ApolloError) => void) => {
     off: () => void
   }
 }
@@ -47,11 +48,11 @@ export function useMutation<
   const vm = getCurrentInstance()
   const loading = ref<boolean>(false)
   vm && trackMutation(loading)
-  const error = ref<Error | null>(null)
+  const error = ref<ApolloError | null>(null)
   const called = ref<boolean>(false)
 
   const doneEvent = useEventHook<FetchResult<TResult, Record<string, any>, Record<string, any>>>()
-  const errorEvent = useEventHook<Error>()
+  const errorEvent = useEventHook<ApolloError>()
 
   // Apollo Client
   const { resolveClient } = useApolloClient()
@@ -94,11 +95,12 @@ export function useMutation<
       doneEvent.trigger(result)
       return result
     } catch (e) {
-      error.value = e
+      const apolloError = toApolloError(e)
+      error.value = apolloError
       loading.value = false
-      errorEvent.trigger(e)
+      errorEvent.trigger(apolloError)
       if (currentOptions.throws === 'always' || (currentOptions.throws !== 'never' && !errorEvent.getCount())) {
-        throw e
+        throw apolloError
       }
     }
     return null

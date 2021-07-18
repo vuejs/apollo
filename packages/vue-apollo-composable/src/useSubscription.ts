@@ -16,6 +16,7 @@ import {
   Observable,
   ObservableSubscription,
   TypedDocumentNode,
+  ApolloError,
 } from '@apollo/client/core'
 import { throttle, debounce } from 'throttle-debounce'
 import { ReactiveFunction } from './util/ReactiveFunction'
@@ -26,6 +27,7 @@ import { useEventHook } from './util/useEventHook'
 import { trackSubscription } from './util/loadingTracking'
 
 import type { CurrentInstance } from './util/types'
+import { toApolloError } from './util/toApolloError'
 
 export interface UseSubscriptionOptions <
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -45,7 +47,7 @@ type OptionsParameter<TResult, TVariables> = UseSubscriptionOptions<TResult, TVa
 export interface UseSubscriptionReturn<TResult, TVariables> {
   result: Ref<TResult | null | undefined>
   loading: Ref<boolean>
-  error: Ref<Error | null>
+  error: Ref<ApolloError | null>
   start: () => void
   stop: () => void
   restart: () => void
@@ -56,7 +58,7 @@ export interface UseSubscriptionReturn<TResult, TVariables> {
   onResult: (fn: (param: FetchResult<TResult, Record<string, any>, Record<string, any>>) => void) => {
     off: () => void
   }
-  onError: (fn: (param: Error) => void) => {
+  onError: (fn: (param: ApolloError) => void) => {
     off: () => void
   }
 }
@@ -119,8 +121,8 @@ export function useSubscription <
 
   const result = ref<TResult | null | undefined>()
   const resultEvent = useEventHook<FetchResult<TResult>>()
-  const error = ref<Error | null>(null)
-  const errorEvent = useEventHook<Error>()
+  const error = ref<ApolloError | null>(null)
+  const errorEvent = useEventHook<ApolloError>()
 
   const loading = ref(false)
   vm && trackSubscription(loading)
@@ -157,10 +159,12 @@ export function useSubscription <
     resultEvent.trigger(fetchResult)
   }
 
-  function onError (fetchError: any) {
-    error.value = fetchError
+  function onError (fetchError: unknown) {
+    const apolloError = toApolloError(fetchError)
+
+    error.value = apolloError
     loading.value = false
-    errorEvent.trigger(fetchError)
+    errorEvent.trigger(apolloError)
   }
 
   function stop () {
