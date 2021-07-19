@@ -20,6 +20,7 @@ import {
   FetchMoreOptions,
   ObservableSubscription,
   TypedDocumentNode,
+  ApolloError,
 } from '@apollo/client/core'
 import { throttle, debounce } from 'throttle-debounce'
 import { useApolloClient } from './useApolloClient'
@@ -28,6 +29,7 @@ import { paramToRef } from './util/paramToRef'
 import { paramToReactive } from './util/paramToReactive'
 import { useEventHook } from './util/useEventHook'
 import { trackQuery } from './util/loadingTracking'
+import { toApolloError } from './util/toApolloError'
 
 import type { CurrentInstance } from './util/types'
 
@@ -58,7 +60,7 @@ export interface UseQueryReturn<TResult, TVariables> {
   result: Ref<TResult | undefined>
   loading: Ref<boolean>
   networkStatus: Ref<number | undefined>
-  error: Ref<Error | null>
+  error: Ref<ApolloError | null>
   start: () => void
   stop: () => void
   restart: () => void
@@ -73,7 +75,7 @@ export interface UseQueryReturn<TResult, TVariables> {
   onResult: (fn: (param: ApolloQueryResult<TResult>) => void) => {
     off: () => void
   }
-  onError: (fn: (param: Error) => void) => {
+  onError: (fn: (param: ApolloError) => void) => {
     off: () => void
   }
 }
@@ -154,8 +156,8 @@ export function useQueryImpl<
    */
   const result = ref<TResult | undefined>()
   const resultEvent = useEventHook<ApolloQueryResult<TResult>>()
-  const error = ref<Error | null>(null)
-  const errorEvent = useEventHook<Error>()
+  const error = ref<ApolloError | null>(null)
+  const errorEvent = useEventHook<ApolloError>()
 
   // Loading
 
@@ -168,7 +170,7 @@ export function useQueryImpl<
 
   // SSR
   let firstResolve: (() => void) | undefined
-  let firstReject: ((error: Error) => void) | undefined
+  let firstReject: ((apolloError: ApolloError) => void) | undefined
   onServerPrefetch?.(() => {
     if (!isEnabled.value || (isServer && currentOptions.value?.prefetch === false)) return
 
@@ -178,8 +180,8 @@ export function useQueryImpl<
         firstResolve = undefined
         firstReject = undefined
       }
-      firstReject = (error: Error) => {
-        reject(error)
+      firstReject = (apolloError: ApolloError) => {
+        reject(apolloError)
         firstResolve = undefined
         firstReject = undefined
       }
@@ -258,15 +260,10 @@ export function useQueryImpl<
 
     processNextResult(queryResult)
 
-    // Result errors
-    // This is set when `errorPolicy` is `all`
-    if (queryResult.errors?.length) {
-      const e = new Error(`GraphQL error: ${queryResult.errors.map(e => e.message).join(' | ')}`)
-      Object.assign(e, {
-        graphQLErrors: queryResult.errors,
-        networkError: null,
-      })
-      processError(e)
+    // ApolloQueryResult.error may be set at the same time as we get a result
+    // when `errorPolicy` is `all`
+    if (queryResult.error !== undefined) {
+      processError(queryResult.error)
     } else {
       if (firstResolve) {
         firstResolve()
@@ -282,22 +279,25 @@ export function useQueryImpl<
     resultEvent.trigger(queryResult)
   }
 
-  function onError (queryError: any) {
+  function onError (queryError: unknown) {
+    // any error should already be an ApolloError, but we make sure
+    const apolloError = toApolloError(queryError)
+
     processNextResult((query.value as ObservableQuery<TResult, TVariables>).getCurrentResult())
-    processError(queryError)
+    processError(apolloError)
     if (firstReject) {
-      firstReject(queryError)
+      firstReject(apolloError)
       stop()
     }
     // The observable closes the sub if an error occurs
     resubscribeToQuery()
   }
 
-  function processError (queryError: any) {
-    error.value = queryError
+  function processError (apolloError: ApolloError) {
+    error.value = apolloError
     loading.value = false
     networkStatus.value = 8
-    errorEvent.trigger(queryError)
+    errorEvent.trigger(apolloError)
   }
 
   function resubscribeToQuery () {

@@ -4,5 +4,6 @@
     "javascriptreact",
     "vue"
   ],
-  "eslint.enable": true
+  "eslint.enable": true,
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
