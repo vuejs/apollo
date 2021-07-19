@@ -16,7 +16,7 @@
 
 <br>
 
-**[Documentation](http://apollo.vuejs.org)**
+**[Documentation](http://v4.apollo.vuejs.org)**
 
 <br>
 
