@@ -136,12 +136,7 @@ Here is an example:
 ```js{21-30}
 // apollo.js
 
-import Vue from 'vue'
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client/core'
-import VueApollo from '@vue/apollo-option'
-
-// Install the vue plugin
-Vue.use(VueApollo)
 
 // Create the apollo client
 export function createApolloClient (ssr = false) {
@@ -190,10 +185,9 @@ Example for common `createApp` method:
 ```js{9,37}
 // app.js
 
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Vuex from 'vuex'
-import { sync } from 'vuex-router-sync'
+import { createApp } from 'vue'
+import { createRouter, createWebHistory } from 'vue-router'
+import { createStore } from 'vuex'
 
 import VueApollo from '@vue/apollo-option'
 import { createApolloClient } from './apollo'
@@ -202,20 +196,13 @@ import App from './ui/App.vue'
 import routes from './routes'
 import storeOptions from './store'
 
-Vue.use(VueRouter)
-Vue.use(Vuex)
-
-function createApp (context) {
-  const router = new VueRouter({
-    mode: 'history',
+function createMyApp (context) {
+  const router = createRouter({
+    history: createWebHistory(),
     routes,
   })
 
-  const store = new Vuex.Store(storeOptions)
-
-  // sync the router with the vuex store.
-  // this registers `store.state.route`
-  sync(store, router)
+  const store = createStore(storeOptions)
 
   // Vuex state restoration
   if (!context.ssr && window.__INITIAL_STATE__) {
@@ -225,25 +212,24 @@ function createApp (context) {
 
   // Apollo
   const apolloClient = createApolloClient(context.ssr)
-  const apolloProvider = new VueApollo({
+  const apolloProvider = createApolloProvider({
     defaultClient: apolloClient,
   })
 
+  const app = createApp(App)
+  app.use(router)
+  app.use(store)
+  app.use(apolloProvider)
+
   return {
-    app: new Vue({
-      el: '#app',
-      router,
-      store,
-      apolloProvider,
-      ...App,
-    }),
+    app,
     router,
     store,
     apolloProvider,
   }
 }
 
-export default createApp
+export default createMyApp
 ```
 
 ## Client entry
@@ -257,7 +243,7 @@ import createApp from './app'
 
 createApp({
   ssr: false,
-})
+}).mount('#app')
 ```
 
 ## Server entry

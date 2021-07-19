@@ -34,7 +34,7 @@ export default {
 You can define in the apollo provider a default set of options to apply to the `apollo` definitions. For example:
 
 ```js
-const apolloProvider = new VueApollo({
+const apolloProvider = createApolloProvider({
   defaultClient: apolloClient,
   defaultOptions: {
     // apollo options applied to all queries in components

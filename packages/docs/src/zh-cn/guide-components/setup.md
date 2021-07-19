@@ -14,36 +14,55 @@ npm install --save @vue/apollo-option @vue/apollo-components
 yarn add @vue/apollo-option @vue/apollo-components
 ```
 
-## 2. 安装插件到 Vue
+## 2. Create the Apollo client
 
 ```js
-import Vue from 'vue'
-import VueApollo from '@vue/apollo-option'
+import { ApolloClient, InMemoryCache } from '@apollo/client/core'
+
+const cache = new InMemoryCache()
+
+const apolloClient = new ApolloClient({
+  cache,
+  uri: 'http://localhost:4042/graphql',
+})
+
+```
+
+::: warning
+Use the `@apollo/client/core` import path otherwise you will also import React.
+:::
+
+## 3. Create the Apollo provider
+
+The provider holds the Apollo client instances that can then be used by all the child components.
+
+```js
+const apolloProvider = createApolloProvider({
+  defaultClient: apolloClient,
+})
+```
+## 4. Add the provider to your app
+
+Add it to your app with the `app.use` function:
+
+```js
+import { createApp, h } from 'vue'
+
+const app = createApp({
+  render: () => h(App),
+})
+
+app.use(apolloProvider)
+```
+
+## 5. Add the components to your app
+
+```js
 import VueApolloComponents from '@vue/apollo-components'
 
-Vue.use(VueApollo)
-Vue.use(VueApolloComponents)
-```
+// ...
 
-## 3. 注入 Apollo provider
-
-Provider 保存了可以在接下来被所有子组件使用的 Apollo 客户端实例。
-
-```js
-const apolloProvider = new VueApollo({
-  defaultClient: apolloClient
-})
-```
-
-使用 `apolloProvider` 选项将它添加到你的应用程序：
-
-```js
-new Vue({
-  el: '#app',
-  // 像 vue-router 或 vuex 一样注入 apolloProvider
-  apolloProvider,
-  render: h => h(App)
-})
+app.use(VueApolloComponents)
 ```
 
 现在你已经完成了在组件中使用 Apollo 的所有准备了！

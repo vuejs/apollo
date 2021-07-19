@@ -3,7 +3,7 @@
 ## Constructor
 
 ```js
-const apolloProvider = new VueApollo({
+const apolloProvider = createApolloProvider({
   // Multiple clients support
   // Use the 'client' option inside queries
   // or '$client' on the apollo definition

@@ -33,7 +33,7 @@ export default {
 你可以在 apollo provider 中为 `apollo` 定义一套默认选项。例如：
 
 ```js
-const apolloProvider = new VueApollo({
+const apolloProvider = createApolloProvider({
   defaultClient: apolloClient,
   defaultOptions: {
     // 将应用于组件中的所有查询的 apollo 选项

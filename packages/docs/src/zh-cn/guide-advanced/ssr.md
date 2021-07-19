@@ -138,10 +138,6 @@ export default {
 
 import Vue from 'vue'
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client/core'
-import VueApollo from '@vue/apollo-option'
-
-// 安装 vue 插件
-Vue.use(VueApollo)
 
 // 创建 apollo 客户端
 export function createApolloClient (ssr = false) {
@@ -190,10 +186,9 @@ export function createApolloClient (ssr = false) {
 ```js{9,37}
 // app.js
 
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Vuex from 'vuex'
-import { sync } from 'vuex-router-sync'
+import { createApp } from 'vue'
+import { createRouter, createWebHistory } from 'vue-router'
+import { createStore } from 'vuex'
 
 import VueApollo from '@vue/apollo-option'
 import { createApolloClient } from './apollo'
@@ -202,20 +197,13 @@ import App from './ui/App.vue'
 import routes from './routes'
 import storeOptions from './store'
 
-Vue.use(VueRouter)
-Vue.use(Vuex)
-
-function createApp (context) {
-  const router = new VueRouter({
-    mode: 'history',
+function createMyApp (context) {
+  const router = createRouter({
+    history: createWebHistory(),
     routes,
   })
 
-  const store = new Vuex.Store(storeOptions)
-
-  // 同步路由到 vuex store
-  // 将注册 `store.state.route`
-  sync(store, router)
+  const store = createStore(storeOptions)
 
   // Vuex 状态恢复
   if (!context.ssr && window.__INITIAL_STATE__) {
@@ -225,25 +213,24 @@ function createApp (context) {
 
   // Apollo
   const apolloClient = createApolloClient(context.ssr)
-  const apolloProvider = new VueApollo({
+  const apolloProvider = createApolloProvider({
     defaultClient: apolloClient,
   })
 
+  const app = createApp(App)
+  app.use(router)
+  app.use(store)
+  app.use(apolloProvider)
+
   return {
-    app: new Vue({
-      el: '#app',
-      router,
-      store,
-      apolloProvider,
-      ...App,
-    }),
+    app,
     router,
     store,
     apolloProvider,
   }
 }
 
-export default createApp
+export default createMyApp
 ```
 
 ## 客户端入口
@@ -257,7 +244,7 @@ import createApp from './app'
 
 createApp({
   ssr: false,
-})
+}).mount('#app')
 ```
 
 ## 服务端入口

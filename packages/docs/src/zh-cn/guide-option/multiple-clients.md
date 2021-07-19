@@ -43,7 +43,7 @@ export function createProvider (options = {}) {
   const b = createB.apolloClient;
 
   // 创建 vue apollo provider
-  const apolloProvider = new VueApollo({
+  const apolloProvider = createApolloProvider({
     clients: {
       a,
       b

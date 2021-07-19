@@ -9,13 +9,13 @@ The main changes are related to the apollo client setup. Your components code sh
 Before:
 
 ```
-npm install --save vue-apollo@next graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
+npm install --save vue-apollo graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
 ```
 
 After:
 
 ```
-npm install --save vue-apollo@next @apollo/client
+npm install --save @vue/apollo-option @apollo/client
 ```
 
 ### Imports
@@ -27,7 +27,7 @@ import Vue from 'vue'
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-import VueApollo from '@vue/apollo-option'
+import VueApollo from 'vue-apollo'
 ```
 
 After:
@@ -35,7 +35,7 @@ After:
 ```js
 import Vue from 'vue'
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client/core'
-import VueApollo from '@vue/apollo-option'
+import { createApolloProvider } from '@vue/apollo-option'
 ```
 
 ### Apollo Setup
@@ -142,19 +142,14 @@ const apolloClient = new ApolloClient({
   connectToDevTools: true,
 })
 
-// Install the vue plugin
-Vue.use(VueApollo)
-
 // Create a provider
-const apolloProvider = new VueApollo({
+const apolloProvider = createApolloProvider({
   defaultClient: apolloClient,
 })
 
 // Use the provider
-new Vue({
-  apolloProvider,
-  // ...
-})
+const app = createApp(/* ... */)
+app.use(apolloProvider)
 ```
 
 ## Mutations

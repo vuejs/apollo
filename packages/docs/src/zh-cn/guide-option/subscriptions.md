@@ -5,12 +5,9 @@
 *关于服务端实现，你可以看看 [这个简单的示例](https://github.com/Akryum/apollo-server-example)。*
 
 ```js
-import Vue from 'vue'
 import { ApolloClient, HttpLink, InMemoryCache, split } from '@apollo/client/core'
 import { WebSocketLink } from '@apollo/client/link/ws'
 import { getMainDefinition } from '@apollo/client/utilities'
-
-import VueApollo from '@vue/apollo-option'
 
 const httpLink = new HttpLink({
   // 你需要在这里使用绝对路径
@@ -44,9 +41,6 @@ const apolloClient = new ApolloClient({
   cache: new InMemoryCache(),
   connectToDevTools: true,
 })
-
-// 像之前一样安装 vue 插件
-Vue.use(VueApollo)
 ```
 
 ## 订阅更多

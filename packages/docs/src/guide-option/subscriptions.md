@@ -5,12 +5,9 @@
 *For the server implementation, you can take a look at [this simple example](https://github.com/Akryum/apollo-server-example).*
 
 ```js
-import Vue from 'vue'
 import { ApolloClient, HttpLink, InMemoryCache, split } from '@apollo/client/core'
 import { WebSocketLink } from '@apollo/client/link/ws'
 import { getMainDefinition } from '@apollo/client/utilities'
-
-import VueApollo from '@vue/apollo-option'
 
 const httpLink = new HttpLink({
   // You should use an absolute URL here
@@ -44,9 +41,6 @@ const apolloClient = new ApolloClient({
   cache: new InMemoryCache(),
   connectToDevTools: true,
 })
-
-// Install the vue plugin like before
-Vue.use(VueApollo)
 ```
 
 ## Subscribe To More

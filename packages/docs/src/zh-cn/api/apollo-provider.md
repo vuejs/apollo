@@ -3,7 +3,7 @@
 ## 构造函数
 
 ```js
-const apolloProvider = new VueApollo({
+const apolloProvider = createApolloProvider({
   // 支持多客户端
   // 在查询中使用 'client' 选项
   // 或在 apollo 定义中使用 '$client'

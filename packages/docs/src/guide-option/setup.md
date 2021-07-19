@@ -37,7 +37,9 @@ Use the `@apollo/client/core` import path otherwise you will also import React.
 The provider holds the Apollo client instances that can then be used by all the child components.
 
 ```js
-const apolloProvider = new VueApollo({
+import { createApolloProvider } from '@vue/apollo-option'
+
+const apolloProvider = new createApolloProvider({
   defaultClient: apolloClient,
 })
 ```
