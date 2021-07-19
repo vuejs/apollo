@@ -24,6 +24,7 @@ import { nodeExternalsPlugin } from 'esbuild-node-externals'
       format,
       outfile: path.join('dist', file),
       sourcemap: true,
+      target: 'es2018',
       plugins: [
         nodeExternalsPlugin(),
       ],
