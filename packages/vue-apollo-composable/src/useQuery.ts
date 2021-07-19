@@ -142,6 +142,8 @@ export function useQueryImpl<
   const vm = getCurrentInstance() as CurrentInstance | null
   const isServer = vm?.$isServer ?? false
 
+  const currentOptions = ref<UseQueryOptions<TResult, TVariables>>()
+
   const documentRef = paramToRef(document)
   const variablesRef = paramToRef(variables)
   const optionsRef = paramToReactive(options)
@@ -399,7 +401,6 @@ export function useQueryImpl<
   })
 
   // Applying options
-  const currentOptions = ref<UseQueryOptions<TResult, TVariables>>()
   watch(() => isRef(optionsRef) ? optionsRef.value : optionsRef, value => {
     if (currentOptions.value && (
       currentOptions.value.throttle !== value.throttle ||
