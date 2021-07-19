@@ -1,4 +1,4 @@
-import { ApolloError, isApolloError } from '@apollo/client'
+import { ApolloError, isApolloError } from '@apollo/client/core'
 
 export function toApolloError (error: unknown): ApolloError {
   if (!(error instanceof Error)) {
