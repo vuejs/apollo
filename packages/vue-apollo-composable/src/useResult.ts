@@ -60,7 +60,7 @@ export function useResult<
 > (
   result: Ref<TResult>,
   defaultValue: TDefaultValue | undefined,
-  pick: (data: TResult) => TReturnValue
+  pick: (data: Exclude<TResult, undefined>) => TReturnValue
 ): UseResultReturn<TDefaultValue | TReturnValue>
 
 export function useResult<
@@ -70,7 +70,7 @@ export function useResult<
 > (
   result: Ref<TResult>,
   defaultValue?: TDefaultValue,
-  pick?: (data: TResult) => TReturnValue,
+  pick?: (data: Exclude<TResult, undefined>) => TReturnValue,
 ): UseResultReturn<TResult | TResult[keyof TResult] | TDefaultValue | TReturnValue | undefined> {
   return computed(() => {
     const value = result.value
