@@ -39,7 +39,7 @@ The provider holds the Apollo client instances that can then be used by all the 
 ```js
 import { createApolloProvider } from '@vue/apollo-option'
 
-const apolloProvider = new createApolloProvider({
+const apolloProvider = createApolloProvider({
   defaultClient: apolloClient,
 })
 ```
