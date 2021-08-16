@@ -113,7 +113,7 @@ export function useSubscription <
 ): UseSubscriptionReturn<TResult, TVariables> {
   // Is on server?
   const vm = getCurrentInstance() as CurrentInstance | null
-  const isServer = vm?.$isServer ?? false
+  const isServer = vm?.$isServer ?? (vm?.proxy as CurrentInstance | null)?.$isServer ?? false
 
   const documentRef = paramToRef(document)
   const variablesRef = paramToRef(variables)
