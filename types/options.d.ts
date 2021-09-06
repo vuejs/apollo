@@ -69,6 +69,8 @@ export interface VueApolloQueryDefinition<Instance = Vue, R = any> extends Watch
   client?: string
   deep?: boolean
   subscribeToMore?: VueApolloSubscribeToMoreOptions | (VueApolloSubscribeToMoreOptions & ThisType<Instance>)[]
+  throttle?: number
+  debounce?: number
 }
 
 /* Subscriptions */
