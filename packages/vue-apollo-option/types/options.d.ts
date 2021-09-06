@@ -67,6 +67,8 @@ export interface VueApolloQueryDefinition<Result = any, Variables = OperationVar
   client?: string
   deep?: boolean
   subscribeToMore?: VueApolloSubscribeToMoreOptions<Result, Variables> | VueApolloSubscribeToMoreOptions<Result, Variables>[]
+  throttle?: number
+  debounce?: number
 }
 
 /* Subscriptions */
