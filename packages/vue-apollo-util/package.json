@@ -4,7 +4,8 @@
   "description": "Apollo GraphQL for Vue - Utilities",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Akryum/vue-apollo.git"
+    "url": "https://github.com/vuejs/vue-apollo.git",
+    "directory": "packages/vue-apollo-util"
   },
   "keywords": [
     "vue",
@@ -15,9 +16,9 @@
   "author": "Guillaume Chau <guillaume.b.chau@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Akryum/vue-apollo/issues"
+    "url": "https://github.com/vuejs/vue-apollo/issues"
   },
-  "homepage": "https://github.com/Akryum/vue-apollo#readme",
+  "homepage": "https://apollo.vuejs.org/",
   "publishConfig": {
     "access": "public"
   },
