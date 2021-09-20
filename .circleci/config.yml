@@ -18,12 +18,15 @@ jobs:
       - checkout
 
       - run: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-      - run: |
-        export NVM_DIR="$HOME/.nvm"
-        [-s "$NVM_DIR/nvm.sh"] && \. "$NVM_DIR/nvm.sh"
+      - run: 
+          command: |
+            export NVM_DIR="$HOME/.nvm"
+            [-s "$NVM_DIR/nvm.sh"] && \. "$NVM_DIR/nvm.sh"
 
-      - run: nvm install 16
-      - run: nvm use 16
+      - run: 
+          command: |
+            nvm install 16
+            nvm use 16
 
       # Download and cache dependencies
       - restore_cache:
