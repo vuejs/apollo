@@ -213,7 +213,7 @@ sendMessage()
 
 ```vue{2,8,16-20,23,32,34}
 <script>
-import { ref } from '@vue/composition-api'
+import { ref } from 'vue'
 import { useMutation } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 

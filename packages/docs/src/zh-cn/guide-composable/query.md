@@ -129,7 +129,7 @@ export default {
 
 ```vue{2,19-21}
 <script>
-import { watch } from '@vue/composition-api'
+import { watch } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 
@@ -158,7 +158,7 @@ export default {
 
 ```vue{19-20}
 <script>
-import { watch } from '@vue/composition-api'
+import { watch } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 
@@ -450,7 +450,7 @@ const users = useResult(result)
 
 ```vue{2,19-21,24,34,35}
 <script>
-import { computed } from '@vue/composition-api'
+import { computed } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 
@@ -569,7 +569,7 @@ function selectUser (id) {
 另外，你可以直接传递 `Ref`：
 
 ```js
-import { ref } from '@vue/composition-api'
+import { ref } from 'vue'
 ```
 
 ```js{1-3,12}
@@ -598,7 +598,7 @@ function selectUser (id) {
 你也可以传递一个响应式对象：
 
 ```js
-import { reactive } from '@vue/composition-api'
+import { reactive } from 'vue'
 ```
 
 ```js{1,15}

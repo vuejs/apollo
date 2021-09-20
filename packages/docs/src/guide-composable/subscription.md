@@ -151,7 +151,7 @@ We can then `watch` the result as new data is received:
 
 ```vue{2,16-20}
 <script>
-import { watch } from "@vue/composition-api";
+import { watch } from "vue";
 import { useSubscription } from "@vue/apollo-composable";
 
 export default {
@@ -183,7 +183,7 @@ For example, we could display the list of messages as we receive them:
 
 ```vue{2,7,19,24-26,31-39}
 <script>
-import { watch, ref } from "@vue/composition-api";
+import { watch, ref } from "vue";
 import { useSubscription } from "@vue/apollo-composable";
 
 export default {

@@ -19,7 +19,7 @@ yarn add @vue/apollo-composable
 你需要在根实例中提供一个默认的 Apollo Client 实例：
 
 ```js
-import { provide } from '@vue/composition-api'
+import { provide } from 'vue'
 import { DefaultApolloClient } from '@vue/apollo-composable'
 
 const app = new Vue({
@@ -36,7 +36,7 @@ const app = new Vue({
 你也可以提供为应用提供多个可用的 Apollo Client 实例。在这种情况下，建议提供一个 `default` 值：
 
 ```js
-import { provide } from '@vue/composition-api'
+import { provide } from 'vue'
 import { ApolloClients } from '@vue/apollo-composable'
 
 const app = new Vue({

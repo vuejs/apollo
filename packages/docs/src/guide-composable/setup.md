@@ -14,8 +14,6 @@ Or:
 yarn add @vue/apollo-composable
 ```
 
-Note: `@vue/apollo-composable` supports Vue 2 thanks to [Vue Demi](https://github.com/vueuse/vue-demi).
-
 ## 2. Connect Apollo Client to Vue
 
 ### Vue 2
@@ -34,6 +32,10 @@ const app = new Vue({
   render: h => h(App),
 })
 ```
+
+::: warning
+In the rest of the guide, we will show code examples with Vue 3. If you need Vue 2, you might want to import the Composition API functions from `'@vue/composition-api'` instead of `'vue'`.
+:::
 
 ### Vue 3
 
@@ -55,7 +57,7 @@ const app = createApp({
 You can also provide multiple Apollo Client instances to be used in your application. In this case, it's recommended to provide a `default` one:
 
 ```js
-import { provide } from '@vue/composition-api'
+import { provide } from 'vue'
 import { ApolloClients } from '@vue/apollo-composable'
 
 const app = new Vue({
