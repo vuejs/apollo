@@ -14,6 +14,8 @@ Or:
 yarn add @vue/apollo-composable
 ```
 
+Note: `@vue/apollo-composable` supports Vue 2 thanks to [Vue Demi](https://github.com/vueuse/vue-demi).
+
 ## 2. Connect Apollo Client to Vue
 
 ### Vue 2
