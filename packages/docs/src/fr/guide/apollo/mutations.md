@@ -35,11 +35,12 @@ methods: {
       // puis avec le résultat de la mutation
       update: (store, { data: { addTag } }) => {
         // Lecture de la donnée depuis le cache pour cette requête
-        const data = store.readQuery({ query: TAGS_QUERY })
+        const { tags } = store.readQuery({ query: TAGS_QUERY })
         // Ajout du libellé de la mutation en fin de tableau
-        data.tags.push(addTag)
+        const tagsCopy = tags.slice()
+        tagsCopy.push(addTag)
         // Réécriture en cache
-        store.writeQuery({ query: TAGS_QUERY, data })
+        store.writeQuery({ query: TAGS_QUERY, { tags: tagsCopy }})
       },
       // Interface utilisateur optimiste
       // Utilisé comme "fausse" donnée dès qu'une requête est réalisée afin que

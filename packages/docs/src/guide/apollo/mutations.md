@@ -35,11 +35,14 @@ methods: {
       // and then with the real result of the mutation
       update: (store, { data: { addTag } }) => {
         // Read the data from our cache for this query.
-        const data = store.readQuery({ query: TAGS_QUERY })
+        const { tags } = store.readQuery({ query: TAGS_QUERY })
         // Add our tag from the mutation to the end
-        data.tags.push(addTag)
+        // We don't want to modify the object returned by readQuery directly:
+        // https://www.apollographql.com/docs/react/caching/cache-interaction/
+        const tagsCopy = tags.slice()
+        tagsCopy.push(addTag)
         // Write our data back to the cache.
-        store.writeQuery({ query: TAGS_QUERY, data })
+        store.writeQuery({ query: TAGS_QUERY, { tags: tagsCopy }})
       },
       // Optimistic UI
       // Will be treated as a 'fake' result as soon as the request is made
