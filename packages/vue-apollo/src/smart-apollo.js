@@ -122,8 +122,8 @@ export default class SmartApollo {
           {
             immediate: true,
             deep: this.options.deep,
-          }
-        )
+          },
+        ),
       )
     } else {
       this.executeApollo(this.options.variables)
