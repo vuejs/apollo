@@ -197,7 +197,7 @@ import { assertExactType } from './assertions'
     {
       awaitRefetchQueries: true,
       clientId: '37Hn7m',
-      context: 'any',
+      context: { any: true },
       errorPolicy: 'all',
       fetchPolicy: 'no-cache',
       optimisticResponse: (vars: ExampleUpdateMutationVariables) => ({
@@ -270,7 +270,7 @@ import { assertExactType } from './assertions'
     {
       awaitRefetchQueries: true,
       clientId: '37Hn7m',
-      context: 'any',
+      context: { any: true },
       errorPolicy: 'all',
       fetchPolicy: 'no-cache',
       optimisticResponse: (vars: ExampleUpdateMutationVariables) => ({
