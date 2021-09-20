@@ -36,9 +36,9 @@
     "test:types": "tsc -p tests/types/"
   },
   "dependencies": {
-    "throttle-debounce": "^2.3.0",
+    "throttle-debounce": "^3.0.1",
     "ts-essentials": "^8.1.0",
-    "vue-demi": "^0.9.1"
+    "vue-demi": "^0.11.4"
   },
   "peerDependencies": {
     "@apollo/client": "^3.4.13",
