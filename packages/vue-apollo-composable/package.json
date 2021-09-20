@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "throttle-debounce": "^2.3.0",
+    "ts-essentials": "^8.1.0",
     "vue-demi": "^0.9.1"
   },
   "peerDependencies": {

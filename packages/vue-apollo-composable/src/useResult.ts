@@ -1,5 +1,6 @@
 import { Ref, computed } from 'vue-demi'
 import { ExtractSingleKey } from './util/ExtractSingleKey'
+import type { DeepNonNullable, DeepRequired } from 'ts-essentials'
 
 export type UseResultReturn<T> = Readonly<Ref<Readonly<T>>>
 
@@ -60,7 +61,7 @@ export function useResult<
 > (
   result: Ref<TResult>,
   defaultValue: TDefaultValue | undefined,
-  pick: (data: TResult) => TReturnValue
+  pick: (data: DeepRequired<DeepNonNullable<TResult>>) => TReturnValue
 ): UseResultReturn<TDefaultValue | TReturnValue>
 
 export function useResult<
@@ -70,14 +71,14 @@ export function useResult<
 > (
   result: Ref<TResult>,
   defaultValue?: TDefaultValue,
-  pick?: (data: TResult) => TReturnValue,
+  pick?: (data: DeepRequired<DeepNonNullable<TResult>>) => TReturnValue,
 ): UseResultReturn<TResult | TResult[keyof TResult] | TDefaultValue | TReturnValue | undefined> {
   return computed(() => {
     const value = result.value
     if (value) {
       if (pick) {
         try {
-          return pick(value)
+          return pick(value as DeepRequired<DeepNonNullable<TResult>>)
         } catch (e) {
           // Silent error
         }

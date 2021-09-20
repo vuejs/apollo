@@ -107,12 +107,12 @@ const { result: multiKeyResult } = multiKeyQuery
   const useResult_WithPickFunction = useResult(
     multiKeyResult,
     [] as const,
-    data => data?.otherExample?.__typename,
+    data => data.otherExample.__typename,
   )
 
   assertExactType<
     typeof useResult_WithPickFunction,
-  UseResultReturn<'OtherExample' | [] | undefined>
+  UseResultReturn<'OtherExample' | []>
   >(useResult_WithPickFunction)
 
   if (typeof useResult_WithPickFunction.value === 'string') {
