@@ -9,6 +9,11 @@ Note: `@vue/apollo-composable` supports Vue 2 thanks to [Vue Demi](https://githu
 
 ## Vue CLI Plugin
 
+:warning: The plugin is not updated to support the new packages yet.
+
+<!--
+## Vue CLI Plugin
+
 I made a plugin for [vue-cli](http://cli.vuejs.org) so you can add Apollo (with an optional GraphQL server!) in literally two minutes! ✨🚀
 
 In your vue-cli 3 project:
@@ -20,6 +25,7 @@ vue add apollo
 Then you can skip to next section: [Basic Usage](../guide-option/usage.md).
 
 [More info](https://github.com/Akryum/vue-cli-plugin-apollo)
+-->
 
 ## Manual installation
 
@@ -53,6 +59,8 @@ const apolloClient = new ApolloClient({
   cache,
 })
 ```
+
+Continue installation in [Next Steps](#next-steps).
 
 ## IDE integration
 
