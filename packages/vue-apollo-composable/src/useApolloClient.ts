@@ -32,15 +32,18 @@ function resolveClientWithId<T> (providedApolloClients: ClientDict<T> | null, cl
 export function useApolloClient<TCacheShape = any> (clientId?: ClientId): UseApolloClientReturn<TCacheShape> {
   let resolveImpl: ResolveClient<TCacheShape, NullableApolloClient<TCacheShape>>
 
+  // Save current client in current closure scope
+  const savedCurrentClient = currentApolloClient
+
   if (!getCurrentInstance()) {
-    resolveImpl = () => currentApolloClient
+    resolveImpl = () => savedCurrentClient
   } else {
     const providedApolloClients: ClientDict<TCacheShape> | null = inject(ApolloClients, null)
     const providedApolloClient: ApolloClient<TCacheShape> | null = inject(DefaultApolloClient, null)
 
     resolveImpl = (id?: ClientId) => {
-      if (currentApolloClient) {
-        return currentApolloClient
+      if (savedCurrentClient) {
+        return savedCurrentClient
       } else if (id) {
         return resolveClientWithId(providedApolloClients, id)
       }
