@@ -1,9 +1,10 @@
 module.exports = {
   base: '/',
-  serviceWorker: true,
+
   head: [
     ['link', { rel: 'icon', href: '/favicon.png' }],
   ],
+
   locales: {
     '/': {
       lang: 'en-US',
@@ -16,20 +17,11 @@ module.exports = {
       description: '🚀 在你的 Vue.js 应用中集成 GraphQL！',
     },
   },
-  plugins: {
-    '@vuepress/pwa': {
-      serviceWorker: true,
-      updatePopup: {
-        '/': {
-          message: 'New content is available.',
-          buttonText: 'Refresh',
-        },
-      },
-    },
-  },
+
   themeConfig: {
     repo: 'Akryum/vue-apollo',
     docsDir: 'docs',
+    docsBranch: 'v4',
     editLinks: true,
     locales: {
       '/': {
