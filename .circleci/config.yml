@@ -18,15 +18,14 @@ jobs:
       - checkout
 
       - run: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-      - run: 
-          command: |
-            export NVM_DIR="$HOME/.nvm"
-            [-s "$NVM_DIR/nvm.sh"] && \. "$NVM_DIR/nvm.sh"
+      - run: |
+          echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+          echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
 
-      - run: 
-          command: |
-            nvm install 16
-            nvm use 16
+      - run: |
+          nvm install 16
+          nvm use 16
+          nvm alias default 16
 
       # Download and cache dependencies
       - restore_cache:
