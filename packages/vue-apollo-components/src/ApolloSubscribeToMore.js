@@ -40,7 +40,7 @@ export default {
     this.refresh()
   },
 
-  beforeDestroy () {
+  beforeUnmount () {
     this.destroy()
   },
 
