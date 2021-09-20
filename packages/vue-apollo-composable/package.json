@@ -1,6 +1,6 @@
 {
   "name": "@vue/apollo-composable",
-  "version": "4.0.0-alpha.14",
+  "version": "4.0.0-alpha.15",
   "description": "Apollo GraphQL for Vue Composition API",
   "repository": {
     "type": "git",
