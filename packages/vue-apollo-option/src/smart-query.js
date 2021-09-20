@@ -1,5 +1,6 @@
 import SmartApollo from './smart-apollo'
 import { VUE_APOLLO_QUERY_KEYWORDS } from '../lib/consts'
+import { isServer } from './env'
 
 export default class SmartQuery extends SmartApollo {
   type = 'query'
@@ -19,14 +20,14 @@ export default class SmartQuery extends SmartApollo {
 
     super(vm, key, options, false)
 
-    if (vm.$isServer) {
+    if (isServer) {
       this.firstRun = new Promise((resolve, reject) => {
         this._firstRunResolve = resolve
         this._firstRunReject = reject
       })
     }
 
-    if (this.vm.$isServer) {
+    if (isServer) {
       this.options.fetchPolicy = 'network-only'
     }
 

@@ -25,9 +25,9 @@ import { paramToReactive } from './util/paramToReactive'
 import { useApolloClient } from './useApolloClient'
 import { useEventHook } from './util/useEventHook'
 import { trackSubscription } from './util/loadingTracking'
-
 import type { CurrentInstance } from './util/types'
 import { toApolloError } from './util/toApolloError'
+import { isServer } from './util/env'
 
 export interface UseSubscriptionOptions <
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -113,7 +113,6 @@ export function useSubscription <
 ): UseSubscriptionReturn<TResult, TVariables> {
   // Is on server?
   const vm = getCurrentInstance() as CurrentInstance | null
-  const isServer = vm?.$isServer ?? false
 
   const documentRef = paramToRef(document)
   const variablesRef = paramToRef(variables)

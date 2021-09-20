@@ -1,4 +1,5 @@
 import { throttle, debounce, omit, addGqlError } from '../lib/utils'
+import { isServer } from './env'
 
 export default class SmartApollo {
   type = null
@@ -95,7 +96,7 @@ export default class SmartApollo {
           this.options[prop] = query
           this.refresh()
         }
-        if (!this.vm.$isServer) {
+        if (!isServer) {
           cb = this.options.throttle ? throttle(cb, this.options.throttle) : cb
           cb = this.options.debounce ? debounce(cb, this.options.debounce) : cb
         }
@@ -108,7 +109,7 @@ export default class SmartApollo {
     // GraphQL Variables
     if (typeof this.options.variables === 'function') {
       let cb = this.executeApollo.bind(this)
-      if (!this.vm.$isServer) {
+      if (!isServer) {
         cb = this.options.throttle ? throttle(cb, this.options.throttle) : cb
         cb = this.options.debounce ? debounce(cb, this.options.debounce) : cb
       }

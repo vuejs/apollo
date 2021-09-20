@@ -30,6 +30,7 @@ import { paramToReactive } from './util/paramToReactive'
 import { useEventHook } from './util/useEventHook'
 import { trackQuery } from './util/loadingTracking'
 import { toApolloError } from './util/toApolloError'
+import { isServer } from './util/env'
 
 import type { CurrentInstance } from './util/types'
 
@@ -142,7 +143,6 @@ export function useQueryImpl<
 ): UseQueryReturn<TResult, TVariables> {
   // Is on server?
   const vm = getCurrentInstance() as CurrentInstance | null
-  const isServer = vm?.$isServer ?? false
 
   const currentOptions = ref<UseQueryOptions<TResult, TVariables>>()
 

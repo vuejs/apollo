@@ -1,7 +1,7 @@
 import SmartQuery from './smart-query'
 import SmartSubscription from './smart-subscription'
 import { reapply } from '../lib/utils'
-
+import { isServer } from './env'
 export class DollarApollo {
   constructor (vm, provider) {
     this._apolloSubscriptions = []
@@ -61,7 +61,7 @@ export class DollarApollo {
   }
 
   subscribe (options) {
-    if (!this.vm.$isServer) {
+    if (!isServer) {
       const observable = this.getClient(options).subscribe(options)
       const _subscribe = observable.subscribe.bind(observable)
       observable.subscribe = (options) => {
@@ -114,11 +114,11 @@ export class DollarApollo {
     }
 
     const smart = this.queries[key] = new SmartQuery(this.vm, key, finalOptions, false)
-    if (!this.vm.$isServer || finalOptions.prefetch !== false) {
+    if (!isServer || finalOptions.prefetch !== false) {
       smart.autostart()
     }
 
-    if (!this.vm.$isServer) {
+    if (!isServer) {
       const subs = finalOptions.subscribeToMore
       if (subs) {
         if (Array.isArray(subs)) {
@@ -141,7 +141,7 @@ export class DollarApollo {
   }
 
   addSmartSubscription (key, options) {
-    if (!this.vm.$isServer) {
+    if (!isServer) {
       options = reapply(options, this.vm)
 
       const smart = this.subscriptions[key] = new SmartSubscription(this.vm, key, options, false)

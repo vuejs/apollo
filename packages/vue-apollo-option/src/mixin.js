@@ -1,5 +1,6 @@
 import { reapply } from '../lib/utils'
 import { DollarApollo } from './dollar-apollo'
+import { isServer } from './env'
 
 function hasProperty (holder, key) {
   return typeof holder !== 'undefined' && Object.prototype.hasOwnProperty.call(holder, key)
@@ -70,7 +71,7 @@ function launch () {
       if (key.charAt(0) !== '$') {
         let options = apollo[key]
         const smart = this.$apollo.addSmartQuery(key, options)
-        if (this.$isServer) {
+        if (isServer) {
           options = reapply(options, this)
           if (apolloProvider.prefetch !== false && options.prefetch !== false && apollo.$prefetch !== false && !smart.skip) {
             this.$_apolloPromises.push(smart.firstRun)
@@ -123,7 +124,7 @@ export function installMixin (app, provider) {
     beforeCreate () {
       this.$apollo = new DollarApollo(this, provider)
       proxyData.call(this)
-      if (this.$isServer) {
+      if (isServer) {
         // Patch render function to cleanup apollo
         const render = this.$options.render
         this.$options.render = (h) => {

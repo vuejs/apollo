@@ -5,5 +5,4 @@ export interface CurrentInstance extends Omit<ComponentInternalInstance, 'root' 
   _apolloAppTracking?: AppLoadingTracking
   $root?: CurrentInstance
   root?: CurrentInstance
-  $isServer?: boolean
 }
