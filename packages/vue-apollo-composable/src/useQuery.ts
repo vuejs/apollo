@@ -210,6 +210,7 @@ export function useQueryImpl<
     }
 
     started = true
+    error.value = null
     loading.value = true
 
     const client = resolveClient(currentOptions.value?.clientId)
@@ -422,6 +423,7 @@ export function useQueryImpl<
       if (variables) {
         currentVariables = variables
       }
+      error.value = null
       return query.value.refetch(variables)
     }
   }
@@ -430,6 +432,7 @@ export function useQueryImpl<
 
   function fetchMore (options: FetchMoreQueryOptions<TVariables, TResult> & FetchMoreOptions<TResult, TVariables>) {
     if (query.value) {
+      error.value = null
       return query.value.fetchMore(options)
     }
   }
