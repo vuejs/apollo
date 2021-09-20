@@ -29,7 +29,8 @@ module.exports = {
   },
   themeConfig: {
     repo: 'Akryum/vue-apollo',
-    docsDir: 'docs',
+    docsBranch: 'v4',
+    docsDir: 'packages/docs/src',
     editLinks: true,
     locales: {
       '/': {
