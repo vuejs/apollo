@@ -6,7 +6,12 @@
       "packages/*"
     ],
     "nohoist": [
-      "**vue**"
+      "**/*vue*",
+      "**/*vuepress*",
+      "**/@vue/*",
+      "**/@vuepress/*",
+      "**/vue",
+      "**/vuepress"
     ]
   },
   "private": true,
