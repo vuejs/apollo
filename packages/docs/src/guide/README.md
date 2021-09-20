@@ -1,8 +1,15 @@
 # Introduction
 
-This library integrates [apollo](https://www.apollographql.com/) in your [Vue](http://vuejs.org) components with declarative queries. Compatible with Vue 2.0+ and 3.0+.
+This library integrates [apollo](https://www.apollographql.com/) in your [Vue](http://vuejs.org) components with declarative queries.
 
 [➡️ Go to Installation](./installation.md)
+
+## Compatibility
+
+- Vue 3
+- Apollo Client 3
+
+Note: `@vue/apollo-composable` supports Vue 2 thanks to [Vue Demi](https://github.com/vueuse/vue-demi).
 
 ## Sponsors
 
