@@ -22,7 +22,6 @@ export class ApolloProvider {
 
   install (app) {
     // Options merging
-    const merge = app.config.optionMergeStrategies.methods
     app.config.optionMergeStrategies.apollo = function (toVal, fromVal, vm) {
       if (!toVal) return fromVal
       if (!fromVal) return toVal
@@ -33,14 +32,18 @@ export class ApolloProvider {
       const map = {}
       for (let i = 0; i < keywords.length; i++) {
         const key = keywords[i]
-        map[key] = merge(toVal[key], fromVal[key])
+        map[key] = mergeObjectOptions(toVal[key], fromVal[key])
       }
 
-      return Object.assign(map, merge(toData, fromData))
+      return Object.assign(map, mergeObjectOptions(toData, fromData))
     }
 
     app.config.globalProperties.$apolloProvider = this
 
     installMixin(app, this)
   }
+}
+
+function mergeObjectOptions (to, from) {
+  return to ? Object.assign(Object.assign(Object.create(null), to), from) : from
 }
