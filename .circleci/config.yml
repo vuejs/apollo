@@ -7,7 +7,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: cypress/base:16
+      - image: cypress/base:14
         environment:
           ## this enables colors in the output
           TERM: xterm
@@ -16,6 +16,10 @@ jobs:
 
     steps:
       - checkout
+
+      - run: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+      - run: nvm install 16
+      - run: nvm use 16
 
       # Download and cache dependencies
       - restore_cache:
