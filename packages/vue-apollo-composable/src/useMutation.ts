@@ -106,7 +106,7 @@ export function useMutation<
     return null
   }
 
-  onBeforeUnmount(() => {
+  vm && onBeforeUnmount(() => {
     loading.value = false
   })
 
