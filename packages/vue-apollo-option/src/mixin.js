@@ -103,9 +103,9 @@ function defineReactiveSetter ($apollo, key, value, deep) {
 }
 
 function destroy () {
-  if (this.$_apollo) {
-    this.$_apollo.destroy()
-    this.$_apollo = null
+  if (this.$apollo) {
+    this.$apollo.destroy()
+    this.$apollo = null
   }
 }
 
