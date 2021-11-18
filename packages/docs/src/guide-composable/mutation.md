@@ -179,6 +179,7 @@ const { mutate: sendMessage } = useMutation(gql`
     }
   }
 `, {
+  // This will not work! See explanation below
   variables: {
     text: text.value,
   },
