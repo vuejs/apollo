@@ -15,7 +15,7 @@ export default class SmartQuery extends SmartApollo {
       })
     }
 
-    super(vm, key, options, false)
+    super(vm, key, options)
 
     if (vm.$isServer) {
       this.firstRun = new Promise((resolve, reject) => {

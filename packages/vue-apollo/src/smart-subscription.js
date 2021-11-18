@@ -11,6 +11,14 @@ export default class SmartSubscription extends SmartApollo {
     'linkedQuery',
   ]
 
+  constructor (vm, key, options, autostart = true) {
+    super(vm, key, options)
+
+    if (autostart) {
+      this.autostart()
+    }
+  }
+
   executeApollo (variables) {
     const variablesJson = JSON.stringify(variables)
     if (this.sub) {

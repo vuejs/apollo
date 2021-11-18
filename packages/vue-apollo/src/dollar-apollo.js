@@ -169,6 +169,7 @@ export class DollarApollo {
 
   // eslint-disable-next-line accessor-pairs
   set skipAllQueries (value) {
+    this._skipAllQueries = value
     for (const key in this.queries) {
       this.queries[key].skip = value
     }
@@ -176,6 +177,7 @@ export class DollarApollo {
 
   // eslint-disable-next-line accessor-pairs
   set skipAllSubscriptions (value) {
+    this._skipAllSubscriptions = value
     for (const key in this.subscriptions) {
       this.subscriptions[key].skip = value
     }

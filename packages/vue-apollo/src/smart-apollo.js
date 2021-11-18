@@ -1,10 +1,15 @@
 import { throttle, debounce, omit, addGqlError } from '../lib/utils'
 
+const skippAllKeys = {
+  query: '_skipAllQueries',
+  subscription: '_skipAllSubscriptions',
+}
+
 export default class SmartApollo {
   type = null
   vueApolloSpecialKeys = []
 
-  constructor (vm, key, options, autostart = true) {
+  constructor (vm, key, options) {
     this.vm = vm
     this.key = key
     this.initialOptions = options
@@ -14,10 +19,6 @@ export default class SmartApollo {
     this._watchers = []
     this._destroyed = false
     this.lastApolloOptions = null
-
-    if (autostart) {
-      this.autostart()
-    }
   }
 
   autostart () {
@@ -26,7 +27,7 @@ export default class SmartApollo {
         immediate: true,
         deep: this.options.deep,
       })
-    } else if (!this.options.skip) {
+    } else if (!this.options.skip && !this.allSkip) {
       this.start()
     } else {
       this._skip = true
@@ -68,12 +69,16 @@ export default class SmartApollo {
   }
 
   set skip (value) {
-    if (value) {
+    if (value || this.allSkip) {
       this.stop()
     } else {
       this.start()
     }
     this._skip = value
+  }
+
+  get allSkip () {
+    return this.vm.$apollo[skippAllKeys[this.type]]
   }
 
   refresh () {
