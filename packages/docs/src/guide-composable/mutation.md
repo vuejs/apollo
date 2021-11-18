@@ -169,7 +169,7 @@ sendMessage()
 
 Most of the time, our variables will be dynamic though. Let's say we have a `text` ref that will be updated by the user:
 
-```js{1,11}
+```js{1,11-12}
 const text = ref('')
 
 const { mutate: sendMessage } = useMutation(gql`
@@ -179,8 +179,8 @@ const { mutate: sendMessage } = useMutation(gql`
     }
   }
 `, {
-  // This will not work! See explanation below
   variables: {
+    // This will not work! See explanation below
     text: text.value,
   },
 })
