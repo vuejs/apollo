@@ -1,6 +1,6 @@
 {
   "name": "test-e2e-options-components-vue3",
-  "version": "4.0.0-alpha.15",
+  "version": "4.0.0-alpha.16",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -14,8 +14,8 @@
   },
   "dependencies": {
     "@apollo/client": "^3.2.1",
-    "@vue/apollo-components": "^4.0.0-alpha.15",
-    "@vue/apollo-option": "^4.0.0-alpha.15",
+    "@vue/apollo-components": "^4.0.0-alpha.16",
+    "@vue/apollo-option": "^4.0.0-alpha.16",
     "apollo-server-express": "^2.18.2",
     "core-js": "^3.4.1",
     "graphql": "^15.3.0",
