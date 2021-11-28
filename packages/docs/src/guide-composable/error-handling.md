@@ -102,6 +102,33 @@ const link = onError(error => {
 
 That way it will be dropped when compiling the project for production.
 
+Full example:
+
+```js
+import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client/core'
+import { onError } from '@apollo/client/link/error'
+import { logErrorMessages } from '@vue/apollo-util'
+
+const cache = new InMemoryCache()
+
+// HTTP connection to the API
+let httpLink = createHttpLink({
+  uri: 'http://localhost:4242/graphql',
+})
+
+// Handle errors
+const errorLink = onError(error => {
+  if (process.env.NODE_ENV !== 'production') {
+    logErrorMessages(error)
+  }
+})
+
+export const apolloClient = new ApolloClient({
+  cache,
+  link: errorLink.concat(httpLink),
+})
+```
+
 #### Options
 
 Error Link takes a function that is called in the event of an error. This function is called with an object containing the following keys:
