@@ -1,5 +1,5 @@
 <script>
-import { gql } from '@apollo/client/core'
+import gql from 'graphql-tag'
 import { defineComponent, onMounted, ref, watch } from 'vue'
 import { useQuery, useResult } from '@vue/apollo-composable'
 import MessageItem from './MessageItem.vue'

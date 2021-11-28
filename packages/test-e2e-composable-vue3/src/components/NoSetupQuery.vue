@@ -1,6 +1,6 @@
 <script lang="ts">
 import { apolloClient } from '@/apollo'
-import { gql } from '@apollo/client/core'
+import gql from 'graphql-tag'
 import { provideApolloClient, useQuery, useResult } from '@vue/apollo-composable'
 import { defineComponent } from 'vue'
 

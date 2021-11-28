@@ -284,7 +284,9 @@ export function useQueryImpl<
     // any error should already be an ApolloError, but we make sure
     const apolloError = toApolloError(queryError)
 
-    processNextResult((query.value as ObservableQuery<TResult, TVariables>).getCurrentResult())
+    if (currentOptions.value?.errorPolicy !== 'none') {
+      processNextResult((query.value as ObservableQuery<TResult, TVariables>).getCurrentResult())
+    }
     processError(apolloError)
     if (firstReject) {
       firstReject(apolloError)

@@ -1,8 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Welcome from './components/Welcome.vue'
-import ChannelView from './components/ChannelView.vue'
-import NoSetupQuery from './components/NoSetupQuery.vue'
-import LazyQuery from './components/LazyQuery.vue'
 
 export const router = createRouter({
   history: createWebHistory(),
@@ -10,21 +6,25 @@ export const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: Welcome,
+      component: () => import('./components/Welcome.vue'),
     },
     {
       path: '/channel/:id',
       name: 'channel',
-      component: ChannelView,
+      component: () => import('./components/ChannelView.vue'),
       props: true,
     },
     {
       path: '/no-setup-query',
-      component: NoSetupQuery,
+      component: () => import('./components/NoSetupQuery.vue'),
     },
     {
       path: '/lazy-query',
-      component: LazyQuery,
+      component: () => import('./components/LazyQuery.vue'),
+    },
+    {
+      path: '/partial-error',
+      component: () => import('./components/PartialError.vue'),
     },
   ],
 })

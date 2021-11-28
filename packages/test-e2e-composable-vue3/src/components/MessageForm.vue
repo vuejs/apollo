@@ -1,5 +1,5 @@
 <script lang="ts">
-import { gql } from '@apollo/client/core'
+import gql from 'graphql-tag'
 import { useMutation } from '@vue/apollo-composable'
 import { defineComponent, ref } from 'vue'
 

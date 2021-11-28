@@ -8,7 +8,8 @@
     "test": "yarn run test:e2e && kill-port 4042",
     "test:e2e": "start-server-and-test api http://localhost:4042/.well-known/apollo/server-health test:e2e:client",
     "test:e2e:client": "vue-cli-service test:e2e --mode production --headless",
-    "test:e2e:dev": "vue-cli-service test:e2e",
+    "test:e2e:dev": "start-server-and-test api http://localhost:4042/.well-known/apollo/server-health test:e2e:dev:client",
+    "test:e2e:dev:client": "vue-cli-service test:e2e --mode development",
     "api": "node server.js"
   },
   "dependencies": {
@@ -19,6 +20,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "graphql": "^15.3.0",
+    "graphql-tag": "^2.12.6",
     "shortid": "^2.2.15",
     "vue": "^3.0.0",
     "vue-demi": "^0.4.0",

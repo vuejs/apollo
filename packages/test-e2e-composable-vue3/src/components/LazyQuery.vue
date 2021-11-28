@@ -1,5 +1,5 @@
 <script lang="ts">
-import { gql } from '@apollo/client/core'
+import gql from 'graphql-tag'
 import { useLazyQuery, useResult } from '@vue/apollo-composable'
 import { defineComponent } from 'vue'
 

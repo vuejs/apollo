@@ -21,6 +21,8 @@ type Query {
   channels: [Channel!]!
   channel (id: ID!): Channel
   list: [String!]!
+  good: String
+  bad: String
 }
 
 type Mutation {
@@ -72,6 +74,10 @@ const resolvers = {
     channels: () => channels,
     channel: (root, { id }) => channels.find(c => c.id === id),
     list: () => ['a', 'b', 'c'],
+    good: () => 'good',
+    bad: () => {
+      throw new Error('An error')
+    },
   },
 
   Mutation: {
