@@ -38,12 +38,12 @@
   },
   "dependencies": {
     "throttle-debounce": "^3.0.1",
-    "ts-essentials": "^8.1.0",
-    "vue-demi": "^0.11.4"
+    "ts-essentials": "^9.0.0",
+    "vue-demi": "^0.12.1"
   },
   "peerDependencies": {
     "@apollo/client": "^3.4.13",
-    "graphql": "^15.3.0",
+    "graphql": ">=15",
     "vue": "^2.6.0 || ^3.1.0"
   },
   "devDependencies": {

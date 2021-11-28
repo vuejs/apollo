@@ -31,8 +31,5 @@
     "dev": "yarn build --watch",
     "build": "tsc --outDir dist -d",
     "prepublishOnly": "yarn build"
-  },
-  "devDependencies": {
-    "typescript": "^4"
   }
 }
