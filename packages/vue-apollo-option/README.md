@@ -1,9 +1,9 @@
-# Apollo and GraphQL for Vue.js
+# Apollo and GraphQL for Vue.js (Options API)
 
-[![npm](https://img.shields.io/npm/v/vue-apollo.svg) ![npm](https://img.shields.io/npm/dm/vue-apollo.svg)](https://www.npmjs.com/package/vue-apollo)
-[![vue1](https://img.shields.io/badge/apollo-2.x-blue.svg)](https://www.apollographql.com/)
-[![vue1](https://img.shields.io/badge/vue-1.x-brightgreen.svg) ![vue2](https://img.shields.io/badge/vue-2.2+-brightgreen.svg)](https://vuejs.org/)
-[![CircleCI branch](https://img.shields.io/circleci/project/github/vuejs/vue-apollo/dev.svg)](https://circleci.com/gh/vuejs/vue-apollo/tree/dev)
+[![npm](https://img.shields.io/npm/v/@vue/apollo-option.svg) ![npm](https://img.shields.io/npm/dm/@vue/apollo-option.svg)](https://www.npmjs.com/package/@vue/apollo-option)
+[![apollo3](https://img.shields.io/badge/apollo-3.x-blue.svg)](https://www.apollographql.com/)
+[![vue3](https://img.shields.io/badge/vue-3-brightgreen.svg)](https://vuejs.org/)
+[![CircleCI branch](https://img.shields.io/circleci/build/github/vuejs/vue-apollo/v4.svg)](https://circleci.com/gh/vuejs/vue-apollo/tree/v4)
 
 <p align="center">
   <img src="https://cdn-images-1.medium.com/max/800/1*H9AANoofLqjS10Xd5TwRYw.png">
@@ -16,46 +16,14 @@
 
 <br>
 
-**[Documentation](http://apollo.vuejs.org)**
+Documentation [**for Vue 3**](http://v4.apollo.vuejs.org) | [for Vue 2](https://apollo.vuejs.org/)
 
 <br>
 
-[Contributing guide](../../CONTRIBUTING.md)
+[Contributing guide](../CONTRIBUTING.md)
 
 <br>
 
 ## Sponsors
 
-### Gold
-
-<p align="center">
-  <a href="https://www.sumcumo.com/en/" target="_blank">
-    <img src="https://cdn.discordapp.com/attachments/258614093362102272/570728242399674380/logo-sumcumo.png" alt="sum.cumo logo" width="400px">
-  </a>
-</p>
-
-<p align="center">
-  <a href="https://www.vuemastery.com/" target="_blank">
-    <img src="https://cdn.discordapp.com/attachments/258614093362102272/557267759130607630/Vue-Mastery-Big.png" alt="Vue Mastery logo" width="200px">
-  </a>
-</p>
-
-### Silver
-
-<p align="center">
-  <a href="https://vueschool.io/" target="_blank">
-    <img src="https://vueschool.io/img/logo/vueschool_logo_multicolor.svg" alt="VueSchool logo" width="200px">
-  </a>
-</p>
-
-### Bronze
-
-<p align="center">
-  <a href="https://vuetifyjs.com" target="_blank">
-    <img src="https://cdn.discordapp.com/attachments/537832759985700914/537832771691872267/Horizontal_Logo_-_Dark.png" width="100">
-  </a>
-
-  <a href="https://www.frontenddeveloperlove.com/" target="_blank" title="Frontend Developer Love">
-    <img src="https://cdn.discordapp.com/attachments/258614093362102272/557267744249085953/frontend_love-logo.png" width="56">
-  </a>
-</p>
+[![sponsors logos](https://guillaume-chau.info/sponsors.png)](https://guillaume-chau.info/sponsors)
