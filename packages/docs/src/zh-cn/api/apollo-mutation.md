@@ -139,7 +139,7 @@ export default {
 </template>
 
 <script>
-import { gql } from '@apollo/client/core'
+import gql from 'graphql-tag'
 
 export default {
   computed: {
