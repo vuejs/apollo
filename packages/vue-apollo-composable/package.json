@@ -43,8 +43,14 @@
   },
   "peerDependencies": {
     "@apollo/client": "^3.4.13",
+    "@vue/composition-api": "^1.0.0",
     "graphql": ">=15",
     "vue": "^2.6.0 || ^3.1.0"
+  },
+  "peerDependenciesMeta": {
+    "@vue/composition-api": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@apollo/client": "^3.4.0",
