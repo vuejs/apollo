@@ -8,7 +8,7 @@ describe('errorPolicy', () => {
 
     // None
     cy.get('.none .result').should('not.contain', 'good').should('not.contain', 'bad')
-    cy.get('.none .error').should('contain', 'Error: GraphQL error: An error')
+    cy.get('.none .error').should('contain', 'Error: An error')
 
     // Ignore
     cy.get('.ignore .result').should('contain', '"good":"good"').should('contain', '"bad":null}')

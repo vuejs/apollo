@@ -15,7 +15,7 @@ function query (errorPolicy) {
       console.log(errorPolicy, result)
     },
     error (error) {
-      console.log(error)
+      console.log('Error', errorPolicy, error)
       this.errors[errorPolicy] = error
     },
   }

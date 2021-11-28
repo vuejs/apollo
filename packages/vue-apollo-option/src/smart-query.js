@@ -175,7 +175,7 @@ export default class SmartQuery extends SmartApollo {
     // If `errorPolicy` is set to `all`, an error won't be thrown
     // Instead result will have an `errors` array of GraphQL Errors
     // so we need to reconstruct an error object similar to the normal one
-    if (anyErrors) {
+    if (!error && anyErrors) {
       const e = new Error(`GraphQL error: ${errors.map(e => e.message).join(' | ')}`)
       Object.assign(e, {
         graphQLErrors: errors,
