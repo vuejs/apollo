@@ -18,7 +18,7 @@ export default class SmartQuery extends SmartApollo {
       }
     }
 
-    super(vm, key, options, false)
+    super(vm, key, options)
 
     if (isServer) {
       this.firstRun = new Promise((resolve, reject) => {
@@ -82,6 +82,17 @@ export default class SmartQuery extends SmartApollo {
     }
   }
 
+  generateApolloOptions (variables) {
+    const apolloOptions = super.generateApolloOptions(variables)
+
+    if (this.vm.$isServer) {
+      // Don't poll on the server, that would run indefinitely
+      delete apolloOptions.pollInterval
+    }
+
+    return apolloOptions
+  }
+
   executeApollo (variables) {
     const variablesJson = JSON.stringify(variables)
 
@@ -105,9 +116,11 @@ export default class SmartQuery extends SmartApollo {
     this.startQuerySubscription()
 
     if (this.options.fetchPolicy !== 'no-cache' || this.options.notifyOnNetworkStatusChange) {
-      const currentResult = this.maySetLoading()
+      const currentResult = this.retrieveCurrentResult()
 
-      if (!currentResult.loading || this.options.notifyOnNetworkStatusChange) {
+      if (this.options.notifyOnNetworkStatusChange ||
+        // Initial call of next result when it's not loading (for Apollo Client 3)
+        (this.observer.getCurrentResult && !currentResult.loading)) {
         this.nextResult(currentResult)
       }
     }
@@ -130,8 +143,11 @@ export default class SmartQuery extends SmartApollo {
     })
   }
 
-  maySetLoading (force = false) {
-    const currentResult = this.observer.getCurrentResult()
+  /**
+   * May update loading state
+   */
+  retrieveCurrentResult (force = false) {
+    const currentResult = this.observer.getCurrentResult ? this.observer.getCurrentResult() : this.observer.currentResult()
     if (force || currentResult.loading) {
       if (!this.loading) {
         this.applyLoadingModifier(1)
@@ -146,8 +162,10 @@ export default class SmartQuery extends SmartApollo {
 
     const { data, loading, error, errors } = result
 
-    if (error || errors) {
-      this.firstRunReject()
+    const anyErrors = errors && errors.length
+
+    if (error || anyErrors) {
+      this.firstRunReject(error)
     }
 
     if (!loading) {
@@ -157,7 +175,7 @@ export default class SmartQuery extends SmartApollo {
     // If `errorPolicy` is set to `all`, an error won't be thrown
     // Instead result will have an `errors` array of GraphQL Errors
     // so we need to reconstruct an error object similar to the normal one
-    if (errors && errors.length) {
+    if (anyErrors) {
       const e = new Error(`GraphQL error: ${errors.map(e => e.message).join(' | ')}`)
       Object.assign(e, {
         graphQLErrors: errors,
@@ -168,7 +186,7 @@ export default class SmartQuery extends SmartApollo {
       super.catchError(e)
     }
 
-    if (this.observer.options.errorPolicy === 'none' && (error || errors)) {
+    if (this.observer.options.errorPolicy === 'none' && (error || anyErrors)) {
       // Don't apply result
       return
     }
@@ -201,9 +219,9 @@ export default class SmartQuery extends SmartApollo {
 
   catchError (error) {
     super.catchError(error)
-    this.firstRunReject()
+    this.firstRunReject(error)
     this.loadingDone(error)
-    this.nextResult(this.observer.getCurrentResult())
+    this.nextResult(this.observer.getCurrentResult ? this.observer.getCurrentResult() : this.observer.currentResult())
     // The observable closes the sub if an error occurs
     this.resubscribeToQuery()
   }
@@ -250,7 +268,7 @@ export default class SmartQuery extends SmartApollo {
 
   fetchMore (...args) {
     if (this.observer) {
-      this.maySetLoading(true)
+      this.retrieveCurrentResult(true)
       return this.observer.fetchMore(...args).then(result => {
         if (!result.loading) {
           this.loadingDone()
@@ -277,7 +295,7 @@ export default class SmartQuery extends SmartApollo {
         }
         return result
       })
-      this.maySetLoading()
+      this.retrieveCurrentResult()
       return result
     }
   }
@@ -286,7 +304,7 @@ export default class SmartQuery extends SmartApollo {
     this.options.variables = variables
     if (this.observer) {
       const result = this.observer.setVariables(variables, tryFetch)
-      this.maySetLoading()
+      this.retrieveCurrentResult()
       return result
     }
   }
@@ -295,7 +313,7 @@ export default class SmartQuery extends SmartApollo {
     Object.assign(this.options, options)
     if (this.observer) {
       const result = this.observer.setOptions(options)
-      this.maySetLoading()
+      this.retrieveCurrentResult()
       return result
     }
   }

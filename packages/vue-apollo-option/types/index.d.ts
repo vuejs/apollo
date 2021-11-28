@@ -1,5 +1,4 @@
 import './vue'
-import './gql'
 import { ApolloProvider, ApolloProviderOptions } from './apollo-provider'
 
 export { ApolloProvider }

@@ -38,6 +38,11 @@ export default {
       type: String,
       default: 'div',
     },
+
+    context: {
+      type: Object,
+      default: undefined,
+    },
   },
 
   data () {
@@ -63,13 +68,14 @@ export default {
         mutation = mutation(gql)
       }
 
-      this.$apollo.mutate({
+      return this.$apollo.mutate({
         mutation,
         client: this.clientId,
         variables: this.variables,
         optimisticResponse: this.optimisticResponse,
         update: this.update,
         refetchQueries: this.refetchQueries,
+        context: this.context,
         ...options,
       }).then(result => {
         this.$emit('done', result)

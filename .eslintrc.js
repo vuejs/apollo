@@ -78,6 +78,14 @@ module.exports = {
         'array-callback-return': 'warn',
       },
     },
+    {
+      files: [
+        'packages/**/*.js',
+      ],
+      rules: {
+        '@typescript-eslint/explicit-module-boundary-types': 'off',
+      },
+    },
   ],
   ignorePatterns: [
     'node_modules/',

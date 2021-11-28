@@ -165,12 +165,14 @@ export class DollarApollo {
   }
 
   set skipAllQueries (value) {
+    this._skipAllQueries = value
     for (const key in this.queries) {
       this.queries[key].skip = value
     }
   }
 
   set skipAllSubscriptions (value) {
+    this._skipAllSubscriptions = value
     for (const key in this.subscriptions) {
       this.subscriptions[key].skip = value
     }

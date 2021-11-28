@@ -11,6 +11,22 @@ export default class SmartSubscription extends SmartApollo {
     'linkedQuery',
   ]
 
+  constructor (vm, key, options, autostart = true) {
+    super(vm, key, options)
+
+    if (autostart) {
+      this.autostart()
+    }
+  }
+
+  generateApolloOptions (variables) {
+    const apolloOptions = super.generateApolloOptions(variables)
+
+    apolloOptions.onError = this.catchError.bind(this)
+
+    return apolloOptions
+  }
+
   executeApollo (variables) {
     const variablesJson = JSON.stringify(variables)
     if (this.sub) {
@@ -57,6 +73,15 @@ export default class SmartSubscription extends SmartApollo {
 
     if (typeof this.options.result === 'function') {
       this.options.result.call(this.vm, data, this.key)
+    }
+  }
+
+  catchError (error) {
+    super.catchError(error)
+    // Restart the subscription
+    if (!this.skip) {
+      this.stop()
+      this.start()
     }
   }
 }

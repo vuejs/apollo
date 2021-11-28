@@ -137,7 +137,12 @@ export function installMixin (app, provider) {
 
     serverPrefetch () {
       if (this.$_apolloPromises) {
-        return Promise.all(this.$_apolloPromises)
+        return Promise.all(this.$_apolloPromises).then(() => {
+          destroy.call(this)
+        }).catch(e => {
+          destroy.call(this)
+          return Promise.reject(e)
+        })
       }
     },
 
