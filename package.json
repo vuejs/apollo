@@ -1,6 +1,6 @@
 {
   "name": "vue-apollo-monorepo",
-  "version": "4.0.0",
+  "version": "4.0.0-alpha.16",
   "workspaces": {
     "packages": [
       "packages/*"
