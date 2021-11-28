@@ -280,7 +280,7 @@ export function useSubscription <
   })
 
   // Teardown
-  onBeforeUnmount(stop)
+  vm && onBeforeUnmount(stop)
 
   return {
     result,
