@@ -1,4 +1,5 @@
 import { ApolloError, isApolloError } from '@apollo/client/core'
+import { GraphQLErrors } from '@apollo/client/errors'
 
 export function toApolloError (error: unknown): ApolloError {
   if (!(error instanceof Error)) {
@@ -13,4 +14,11 @@ export function toApolloError (error: unknown): ApolloError {
   }
 
   return new ApolloError({ networkError: error, errorMessage: error.message })
+}
+
+export function resultErrorsToApolloError (errors: GraphQLErrors): ApolloError {
+  return new ApolloError({
+    graphQLErrors: errors,
+    errorMessage: `GraphQL response contains errors: ${errors.map((e: any) => e.message).join(' | ')}`,
+  })
 }

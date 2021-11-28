@@ -29,7 +29,7 @@ import { paramToRef } from './util/paramToRef'
 import { paramToReactive } from './util/paramToReactive'
 import { useEventHook } from './util/useEventHook'
 import { trackQuery } from './util/loadingTracking'
-import { toApolloError } from './util/toApolloError'
+import { resultErrorsToApolloError, toApolloError } from './util/toApolloError'
 import { isServer } from './util/env'
 
 import type { CurrentInstance } from './util/types'
@@ -261,15 +261,15 @@ export function useQueryImpl<
 
     processNextResult(queryResult)
 
-    // ApolloQueryResult.error may be set at the same time as we get a result
-    // when `errorPolicy` is `all`
-    if (queryResult.error !== undefined) {
-      processError(queryResult.error)
-    } else {
-      if (firstResolve) {
-        firstResolve()
-        stop()
-      }
+    // When `errorPolicy` is `all`, `onError` will not get called and
+    // ApolloQueryResult.errors may be set at the same time as we get a result
+    if (!queryResult.error && queryResult.errors?.length) {
+      processError(resultErrorsToApolloError(queryResult.errors))
+    }
+
+    if (firstResolve) {
+      firstResolve()
+      stop()
     }
   }
 
