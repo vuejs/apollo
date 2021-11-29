@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@akryum/sheep@^0.2.2":
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/@akryum/sheep/-/sheep-0.2.2.tgz#506d76f2a3c8f6409d316b165e752919fe77f827"
-  integrity sha512-BYTU87b5JBzQP5bJ1UnOtdDLAybAgSH/jk/EGrjx7cJzHgpjdvu9m1WS7+mQZ4DixywRH2Ft0jgsKN5lJFQVvg==
+"@akryum/sheep@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@akryum/sheep/-/sheep-0.2.3.tgz#28ba838307f9f88198c22cd1ba2ec2458a46415a"
+  integrity sha512-7CShr2xoMyh0XdugHhkhQ7EoJ+oBoIybq0036lIjWdEQ4Xp8ZmASeIKdZ+RfPQMZeDPZAg1AqFIUePnXf3/nvg==
   dependencies:
     chalk "^4.0.0"
     conventional-changelog-cli "^2.1.1"
