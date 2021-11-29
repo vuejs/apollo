@@ -40,7 +40,8 @@
   },
   "resolutions": {
     "eslint-scope": "^5",
-    "subscriptions-transport-ws": "^0.9",
-    "graphql": "^15"
+    "graphql": "^15",
+    "serialize-javascript": "^6.0.0",
+    "subscriptions-transport-ws": "^0.9"
   }
 }

@@ -33,7 +33,7 @@
     "@vue/cli-plugin-typescript": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
-    "axios": "^0.20.0",
+    "axios": "^0.24.0",
     "kill-port": "^1.6.1",
     "start-server-and-test": "^1.10.6",
     "tailwindcss": "^1.0.1"
