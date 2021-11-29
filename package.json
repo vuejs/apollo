@@ -17,10 +17,10 @@
     "build": "lerna run build --concurrency 1 --scope \"{vue-apollo,@vue/apollo}*\"",
     "test": "lerna run test --concurrency 1",
     "lint": "eslint . --ext js,vue,ts",
-    "release": "yarn run build && yarn run test && lerna publish && changelog generate"
+    "release": "yarn run build && yarn run test && sheep release -b v4"
   },
   "devDependencies": {
-    "@akryum/gen-changelog": "^0.1.1",
+    "@akryum/sheep": "^0.2.1",
     "@typescript-eslint/eslint-plugin": "^4.2.0",
     "@typescript-eslint/parser": "^4.2.0",
     "@vue/eslint-config-standard": "^6.0.0",
