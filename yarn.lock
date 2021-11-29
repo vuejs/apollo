@@ -2,6 +2,13 @@
 # yarn lockfile v1
 
 
+"@akryum/gen-changelog@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@akryum/gen-changelog/-/gen-changelog-0.1.1.tgz#f0d907d1fe4b1e02a09777b31e6af556d5233a0c"
+  integrity sha512-Z1dTp50vZ/LhcbUJu+35pnMgPeS8n4L3CQCSYW0p5fyxOKDPnGUnPJhvzfHhWgBMp1xanZi2+P8jBxvIPJ5qnQ==
+  dependencies:
+    conventional-changelog-cli "^2.1.1"
+
 "@apollo/client@^3.2.1", "@apollo/client@^3.2.4", "@apollo/client@^3.4.0":
   version "3.5.5"
   resolved "https://registry.yarnpkg.com/@apollo/client/-/client-3.5.5.tgz#ce331403ee5f099e595430890f9b510c8435c932"
