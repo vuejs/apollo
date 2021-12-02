@@ -1,4 +1,4 @@
-import { throttle, debounce, omit, addGqlError } from '../lib/utils'
+import { throttle, debounce, omit, addGqlError, deepFreeze } from '../lib/utils'
 
 const skippAllKeys = {
   query: '_skipAllQueries',
@@ -160,6 +160,8 @@ export default class SmartApollo {
   nextResult (result) {
     const { error } = result
     if (error) addGqlError(error)
+
+    deepFreeze(result)
   }
 
   callHandlers (handlers, ...args) {

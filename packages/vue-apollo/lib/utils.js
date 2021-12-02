@@ -36,5 +36,30 @@ exports.addGqlError = function (error) {
   }
 }
 
+exports.deepFreeze = function deepFreeze (value) {
+  const valid = (val) => (val) && typeof val === 'object'
+  const work = new Set([value])
+
+  work.forEach(obj => {
+    if (!valid(obj)) {
+      return
+    }
+
+    if (!Object.isFrozen(obj)) {
+      try {
+        Object.freeze(obj)
+      } catch (e) {
+        return
+      }
+    }
+
+    Object.getOwnPropertyNames(obj).forEach(name => {
+      if (valid(obj[name])) {
+        work.add(obj[name])
+      }
+    })
+  })
+}
+
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 exports.noop = () => {}
