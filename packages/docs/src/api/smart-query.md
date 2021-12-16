@@ -8,7 +8,7 @@ Each query declared in the `apollo` definition (that is, which doesn't start wit
 - `variables`: Object or reactive function that returns an object. Each key will be mapped with a `'$'` in the GraphQL document, for example `foo` will become `$foo`.
 - `throttle`: throttle variables updates (in ms).
 - `debounce`: debounce variables updates (in ms).
-- `pollInterval`: auto update using polling (which means refetching every `x` ms). Default: `undefined`, `0` - stop polling.
+- `pollInterval`: auto update using polling (which means refetching every `x` ms). Default: `undefined`, `0` - stop polling. Alternatively this may be a reactive function that returns the polling interval. Return `null` to stop the polling.
 - `update(data) {return ...}` to customize the value that is set in the vue property, for example if the field names don't match.
 - `result(ApolloQueryResult, key)` is a hook called when a result is received (see documentation for [ApolloQueryResult](https://github.com/apollographql/apollo-client/blob/master/packages/apollo-client/src/core/types.ts)). `key` is the query key in the `apollo` option.
 - `error(error, vm, key, type, options)` is a hook called when there are errors. `error` is an Apollo error object with either a `graphQLErrors` property or a `networkError` property. `vm` is the related component instance. `key` is the smart query key. `type` is either `'query'` or `'subscription'`. `options` is the final `watchQuery` options object.
