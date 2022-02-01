@@ -426,6 +426,7 @@ export function useQueryImpl<
         currentVariables = variables
       }
       error.value = null
+      loading.value = true
       return query.value.refetch(variables)
     }
   }
