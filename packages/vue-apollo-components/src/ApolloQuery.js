@@ -154,7 +154,6 @@ export default {
         ...this.options,
         manual: true,
         result (result) {
-          console.log(result)
           const { errors, loading, networkStatus } = result
           let { error } = result
           result = Object.assign({}, result)
