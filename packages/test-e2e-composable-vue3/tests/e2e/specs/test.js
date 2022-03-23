@@ -81,6 +81,11 @@ describe('Vue 3 + Apollo Composable', () => {
     cy.contains('.no-setup-query', 'Hello world!')
   })
 
+  it('supports queries outside of setup with multiple clients', () => {
+    cy.visit('/no-setup-query-multi-client')
+    cy.contains('.no-setup-query', 'Hello world!')
+  })
+
   it('useLazyQuery', () => {
     cy.visit('/lazy-query')
     cy.get('.list-disc').should('have.length', 0)
