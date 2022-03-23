@@ -5,7 +5,7 @@ import { createApp } from './main'
 const prepareUrlForRouting = url => {
   const { BASE_URL } = process.env
   return url.startsWith(BASE_URL.replace(/\/$/, ''))
-    ? url.substr(BASE_URL.length)
+    ? url.slice(BASE_URL.length)
     : url
 }
 
