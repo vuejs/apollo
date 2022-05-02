@@ -231,6 +231,45 @@ Beware that `result` may not contain your data at all time! It will initially be
 </template>
 ```
 
+We can use a `computed` prop to simplify access to part of the result and to provide a default value:
+
+```vue{2,19,22,30}
+<script>
+import { computed } from 'vue'
+import { useQuery } from '@vue/apollo-composable'
+import gql from 'graphql-tag'
+
+export default {
+  setup () {
+    const { result } = useQuery(gql`
+      query getUsers {
+        users {
+          id
+          firstname
+          lastname
+          email
+        }
+      }
+    `)
+
+    const users = computed(() => result.value?.users ?? [])
+
+    return {
+      users,
+    }
+  },
+}
+</script>
+
+<template>
+  <ul>
+    <li v-for="user of users" :key="user.id">
+      {{ user.firstname }} {{ user.lastname }}
+    </li>
+  </ul>
+</template>
+```
+
 ## Query status
 
 ### Loading state
@@ -317,210 +356,6 @@ export default {
   </ul>
 </template>
 ```
-
-## useResult
-
-The sister composition function `useResult` is available alongside `useQuery` to facilitate usage of the query `result`.
-
-### Result picking
-
-The first useful feature of `useResult` is picking one object from the result data. To do so, pass the `result` data as the first parameter, and a picking function as the third parameter:
-
-```vue{2,18,21,34,35}
-<script>
-import { useQuery, useResult } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
-
-export default {
-  setup () {
-    const { result, loading, error } = useQuery(gql`
-      query getUsers {
-        users {
-          id
-          firstname
-          lastname
-          email
-        }
-      }
-    `)
-
-    const users = useResult(result, null, data => data.users)
-
-    return {
-      users,
-      loading,
-      error,
-    }
-  },
-}
-</script>
-
-<template>
-  <div v-if="loading">Loading...</div>
-
-  <div v-else-if="error">Error: {{ error.message }}</div>
-
-  <ul v-else-if="users">
-    <li v-for="user of users" :key="user.id">
-      {{ user.firstname }} {{ user.lastname }}
-    </li>
-  </ul>
-</template>
-```
-
-This is very useful if the data relevant to your component is nested in the query:
-
-```js
-const { result } = useQuery(gql`
-  query getMessages {
-    currentUser {
-      messages {
-        id
-        text
-      }
-    }
-  }
-`)
-
-const messages = useResult(result, null, data => data.currentUser.messages)
-```
-
-Another perk of `useResult` is that the picking function will silence errors inside the picking function. For example, if `result.value` is `undefined`, you don't have to add additional checks:
-
-```js
-// You don't need to do this!
-const messages = useResult(result, null, data => data && data.currentUser && data.currentUser.messages)
-
-// Instead do this:
-const messages = useResult(result, null, data => data.currentUser.messages)
-```
-
-::: tip
-Don't forget that `messages.value` can still be `null` until the query successfully completes!
-:::
-
-Another use case where `useResult` proves to be very useful is when you have multiple objects on the result data:
-
-```js
-const { result } = useQuery(gql`
-  query getUsersAndPosts {
-    users {
-      id
-      email
-    }
-
-    posts {
-      id
-      title
-    }
-  }
-`)
-
-const users = useResult(result, null, data => data.users)
-
-const posts = useResult(result, null, data => data.posts)
-```
-
-Look how we cleanly separated the result data into two different `Ref`!
-
-### Automatic picking
-
-If there is only one object in the data, `useResult` will automatically try to pick the object:
-
-```js{12}
-const { result, loading } = useQuery(gql`
-  query getUsers {
-    users {
-      id
-      firstname
-      lastname
-      email
-    }
-  }
-`)
-
-const users = useResult(result)
-```
-
-Here `users.value` will be the `users` array retrieved from our server.
-
-### Default value
-
-Let's say we want to sort our users on their last names:
-
-```vue{2,19-21,24,34,35}
-<script>
-import { computed } from 'vue'
-import { useQuery } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
-
-export default {
-  setup () {
-    const { result, loading } = useQuery(gql`
-      query users {
-        users {
-          id
-          firstname
-          lastname
-          email
-        }
-      }
-    `)
-
-    const sortedUsers = computed(() => result.value.users.sort(
-      (a, b) => a.lastname.localeCompare(b.lastname)
-    ))
-
-    return {
-      sortedUsers,
-      loading,
-    }
-  },
-}
-</script>
-
-<template>
-  <div v-if="loading">Loading...</div>
-
-  <ul v-else-if="sortedUsers">
-    <li v-for="user of sortedUsers" :key="user.id">
-      {{ user.firstname }} {{ user.lastname }}
-    </li>
-  </ul>
-</template>
-```
-
-Here we will run into an error because `result.value` can be `undefined` (and potentially `result.value.users` can also be `undefined`). So the `sort` method will throw an error when called in our `computed` property.
-
-We could add checks, but it can rapidly become tedious:
-
-```js
-const sortedUsers = computed(() => result.value && result.value.users ? result.value.users.sort(
-  (a, b) => a.lastname.localeCompare(b.lastname)
-) : [])
-```
-
-We can further simplify this with `useResult`:
-
-```js{1,3,5}
-const users = useResult(result) // Automatically picked
-
-const sortedUsers = computed(() => users.value ? users.value.sort(
-  (a, b) => a.lastname.localeCompare(b.lastname)
-) : [])
-```
-
-But we can eliminate the conditional entirely if we pass a default value as the 2nd parameter of `useResult`:
-
-```js{1,3,5}
-const users = useResult(result, []) // Defaults to an empty array
-
-const sortedUsers = computed(() => users.value.sort(
-  (a, b) => a.lastname.localeCompare(b.lastname)
-))
-```
-
-This is even more useful if we want to use the `users` array `Ref` in multiple places in our `setup` function!
 
 ## Variables
 

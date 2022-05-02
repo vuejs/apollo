@@ -16,6 +16,7 @@ export type UseResultReturn<T> = Readonly<Ref<Readonly<T>>>
  *
  * @param  {Ref<TResult>} result A `result` returned from `useQuery` to resolve.
  * @returns Readonly ref with `undefined` or the resolved `result`.
+ * @deprecated Use `computed` instead. Before: `const items = useResult(result, [], data => data.someField.myItems)` After: `const items = computed(() => result.value?.someField.myItems ?? [])`
  */
 export function useResult<TResult, TResultKey extends keyof NonNullable<TResult> = keyof NonNullable<TResult>> (
   result: Ref<TResult>
@@ -34,6 +35,7 @@ export function useResult<TResult, TResultKey extends keyof NonNullable<TResult>
  * @param  {Ref<TResult>} result A `result` returned from `useQuery` to resolve.
  * @param  {TDefaultValue} defaultValue The default return value before `result` is resolved.
  * @returns Readonly ref with the `defaultValue` or the resolved `result`.
+ * @deprecated Use `computed` instead. Before: `const items = useResult(result, [], data => data.someField.myItems)` After: `const items = computed(() => result.value?.someField.myItems ?? [])`
  */
 export function useResult<TResult, TDefaultValue, TResultKey extends keyof NonNullable<TResult> = keyof NonNullable<TResult>> (
   result: Ref<TResult>,
@@ -53,6 +55,7 @@ export function useResult<TResult, TDefaultValue, TResultKey extends keyof NonNu
  * @param  {TDefaultValue} defaultValue The default return value before `result` is resolved.
  * @param  {(data:TResult)=>TReturnValue} pick The function that receives `result` and maps a return value from it.
  * @returns Readonly ref with the `defaultValue` or the resolved and `pick`-mapped `result`
+ * @deprecated Use `computed` instead. Before: `const items = useResult(result, [], data => data.someField.myItems)` After: `const items = computed(() => result.value?.someField.myItems ?? [])`
  */
 export function useResult<
   TResult,
@@ -64,6 +67,9 @@ export function useResult<
   pick: (data: DeepRequired<DeepNonNullable<TResult>>) => TReturnValue
 ): UseResultReturn<TDefaultValue | TReturnValue>
 
+/**
+ * @deprecated Use `computed` instead. Before: `const items = useResult(result, [], data => data.someField.myItems)` After: `const items = computed(() => result.value?.someField.myItems ?? [])`
+ */
 export function useResult<
   TResult,
   TDefaultValue,
@@ -73,6 +79,11 @@ export function useResult<
   defaultValue?: TDefaultValue,
   pick?: (data: DeepRequired<DeepNonNullable<TResult>>) => TReturnValue,
 ): UseResultReturn<TResult | TResult[keyof TResult] | TDefaultValue | TReturnValue | undefined> {
+  console.warn(`'useResult' is deprecated and will be removed soon. Plase use a computed instead.
+Before:
+const items = useResult(result, [], data => data.someField.myItems)
+After:
+const items = computed(() => result.value?.someField.myItems ?? [])`)
   return computed(() => {
     const value = result.value
     if (value) {
