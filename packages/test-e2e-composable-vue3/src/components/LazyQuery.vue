@@ -1,7 +1,7 @@
 <script lang="ts">
 import gql from 'graphql-tag'
-import { useLazyQuery, useResult } from '@vue/apollo-composable'
-import { defineComponent } from 'vue'
+import { useLazyQuery } from '@vue/apollo-composable'
+import { defineComponent, computed } from 'vue'
 
 export default defineComponent({
   setup () {
@@ -10,7 +10,7 @@ export default defineComponent({
         list
       }
     `)
-    const list = useResult(result, [])
+    const list = computed(() => result.value?.list ?? [])
 
     return {
       load,

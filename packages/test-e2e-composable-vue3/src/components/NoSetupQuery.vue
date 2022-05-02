@@ -1,8 +1,8 @@
 <script lang="ts">
 import { apolloClient } from '@/apollo'
 import gql from 'graphql-tag'
-import { provideApolloClient, useQuery, useResult } from '@vue/apollo-composable'
-import { defineComponent } from 'vue'
+import { provideApolloClient, useQuery } from '@vue/apollo-composable'
+import { defineComponent, computed } from 'vue'
 
 // Global query
 
@@ -11,7 +11,7 @@ const query = provideApolloClient(apolloClient)(() => useQuery(gql`
     hello
   }
 `))
-const hello = useResult(query.result, [])
+const hello = computed(() => query.result.value?.hello ?? '')
 
 export default defineComponent({
   setup () {

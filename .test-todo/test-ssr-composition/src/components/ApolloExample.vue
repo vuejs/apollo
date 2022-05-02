@@ -1,12 +1,13 @@
 <script>
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { computed } from '@vue/composition-api'
+import { useQuery } from '@vue/apollo-composable'
 import MESSAGES from '../graphql/Messages.gql'
 import MESSAGE_ADDED from '../graphql/MessageAdded.gql'
 
 export default {
   setup () {
     const { result, subscribeToMore } = useQuery(MESSAGES)
-    const messages = useResult(result, [])
+    const messages = computed(() => result.value?.messages ?? [])
 
     subscribeToMore({
       document: MESSAGE_ADDED,

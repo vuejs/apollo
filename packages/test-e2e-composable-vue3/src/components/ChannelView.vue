@@ -1,7 +1,7 @@
 <script>
 import gql from 'graphql-tag'
-import { defineComponent, onMounted, ref, watch } from 'vue'
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { defineComponent, onMounted, ref, watch, computed } from 'vue'
+import { useQuery } from '@vue/apollo-composable'
 import MessageItem from './MessageItem.vue'
 import MessageForm from './MessageForm.vue'
 
@@ -35,7 +35,7 @@ export default defineComponent({
     }), {
       notifyOnNetworkStatusChange: true,
     })
-    const channel = useResult(result)
+    const channel = computed(() => result.value?.channel)
 
     const messagesEl = ref()
 

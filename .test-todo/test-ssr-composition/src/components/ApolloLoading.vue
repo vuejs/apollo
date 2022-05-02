@@ -11,13 +11,14 @@
 </template>
 
 <script>
-import { useQuery, useResult, useQueryLoading } from '@vue/apollo-composable'
+import { computed } from '@vue/composition-api'
+import { useQuery, useQueryLoading } from '@vue/apollo-composable'
 import MESSAGES from '../graphql/Messages.gql'
 
 export default {
   setup () {
     const { result } = useQuery(MESSAGES)
-    const messages = useResult(result, [])
+    const messages = computed(() => result.value?.messages ?? [])
     return {
       messages,
       loading: useQueryLoading(),

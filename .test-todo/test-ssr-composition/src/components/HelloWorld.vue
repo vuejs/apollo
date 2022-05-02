@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import { ref } from '@vue/composition-api'
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { ref, computed } from '@vue/composition-api'
+import { useQuery } from '@vue/apollo-composable'
 import HELLO_WORLD from '../graphql/HelloWorld.gql'
 
 export default {
@@ -21,7 +21,7 @@ export default {
     const { result } = useQuery(HELLO_WORLD, () => ({
       name: name.value,
     }))
-    const hello = useResult(result)
+    const hello = computed(() => result.value?.hello)
     return {
       name,
       hello,

@@ -1,7 +1,7 @@
 <script lang="ts">
 import gql from 'graphql-tag'
-import { useQuery, useResult } from '@vue/apollo-composable'
-import { defineComponent } from 'vue'
+import { useQuery } from '@vue/apollo-composable'
+import { defineComponent, computed } from 'vue'
 
 interface Channel {
   id: string
@@ -18,7 +18,7 @@ export default defineComponent({
         }
       }
     `)
-    const channels = useResult(result, [])
+    const channels = computed(() => result.value?.channels ?? [])
 
     return {
       loading,
