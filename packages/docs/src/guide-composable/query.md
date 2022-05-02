@@ -773,3 +773,54 @@ onError(error => {
 ```
 
 That way it will be dropped when compiling the project for production.
+
+## Lazy query
+
+If you need to wait before starting a query, you can use `useLazyQuery` instead of `useQuery`. It returns an additional `load` function to start querying your API.
+
+Example:
+
+```vue{4,8,16,27}
+<script>
+import { computed } from 'vue'
+import gql from 'graphql-tag'
+import { useLazyQuery } from '@vue/apollo-composable'
+
+export default {
+  setup () {
+    const { result, load } = useLazyQuery(gql`
+      query list {
+        list
+      }
+    `)
+    const list = computed(() => result.value?.list ?? [])
+
+    return {
+      load,
+      list,
+    }
+  },
+}
+</script>
+
+<template>
+  <div class="m-6">
+    <button
+      class="bg-green-200 rounded-lg p-4"
+      @click="load()"
+    >
+      Load list
+    </button>
+
+    <ul class="my-4">
+      <li
+        v-for="(item, index) of list"
+        :key="index"
+        class="list-disc ml-6"
+      >
+        {{ item }}
+      </li>
+    </ul>
+  </div>
+</template>
+```

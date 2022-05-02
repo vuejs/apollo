@@ -184,6 +184,7 @@ module.exports = {
               collapsable: false,
               children: [
                 'use-query',
+                'use-lazy-query',
                 'use-mutation',
                 'use-subscription',
                 'use-result',
