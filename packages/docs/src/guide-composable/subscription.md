@@ -60,27 +60,27 @@ Let's look at how to add support for this transport to Apollo Client.
 First, initialize a GraphQL web socket link:
 
 ```js
-import { WebSocketLink } from "@apollo/client/link/ws";
+import { WebSocketLink } from "@apollo/client/link/ws"
 
 const wsLink = new WebSocketLink({
   uri: `ws://localhost:5000/`,
   options: {
     reconnect: true
   }
-});
+})
 ```
 
 We need to either use the `WebSocketLink` or the `HttpLink` depending on the operation type:
 
 ```js
-import { HttpLink, split } from "@apollo/client/core";
-import { WebSocketLink } from "@apollo/client/link/ws";
-import { getMainDefinition } from "@apollo/client/utilities";
+import { HttpLink, split } from "@apollo/client/core"
+import { WebSocketLink } from "@apollo/client/link/ws"
+import { getMainDefinition } from "@apollo/client/utilities"
 
 // Create an http link:
 const httpLink = new HttpLink({
   uri: "http://localhost:3000/graphql"
-});
+})
 
 // Create a WebSocket link:
 const wsLink = new WebSocketLink({
@@ -88,22 +88,22 @@ const wsLink = new WebSocketLink({
   options: {
     reconnect: true
   }
-});
+})
 
 // using the ability to split links, you can send data to each link
 // depending on what kind of operation is being sent
 const link = split(
   // split based on operation type
   ({ query }) => {
-    const definition = getMainDefinition(query);
+    const definition = getMainDefinition(query)
     return (
       definition.kind === "OperationDefinition" &&
       definition.operation === "subscription"
-    );
+    )
   },
   wsLink,
   httpLink
-);
+)
 ```
 
 Now, queries and mutations will go over HTTP as normal, but subscriptions will be done over the websocket transport.
@@ -116,13 +116,13 @@ Start by importing `useSubscription` in your component:
 
 ```vue{2}
 <script>
-import { useSubscription } from "@vue/apollo-composable";
+import { useSubscription } from "@vue/apollo-composable"
 
 export default {
   setup() {
     // Data & Logic here...
   }
-};
+}
 </script>
 ```
 
@@ -130,7 +130,7 @@ We can then pass a GraphQL document as the first parameter and retrieve the `res
 
 ```vue{6-13}
 <script>
-import { useSubscription } from "@vue/apollo-composable";
+import { useSubscription } from "@vue/apollo-composable"
 
 export default {
   setup() {
@@ -141,9 +141,9 @@ export default {
           text
         }
       }
-    `);
+    `)
   }
-};
+}
 </script>
 ```
 
@@ -151,8 +151,8 @@ We can then `watch` the result as new data is received:
 
 ```vue{2,16-20}
 <script>
-import { watch } from "vue";
-import { useSubscription } from "@vue/apollo-composable";
+import { watch } from "vue"
+import { useSubscription } from "@vue/apollo-composable"
 
 export default {
   setup() {
@@ -163,19 +163,19 @@ export default {
           text
         }
       }
-    `);
+    `)
 
     watch(
       result,
       data => {
-        console.log("New message received:", data.messageAdded);
+        console.log("New message received:", data.messageAdded)
       },
       {
         lazy: true // Don't immediately execute handler
       }
-    );
+    )
   }
-};
+}
 </script>
 ```
 
@@ -183,12 +183,12 @@ For example, we could display the list of messages as we receive them:
 
 ```vue{2,7,19,24-26,31-39}
 <script>
-import { watch, ref } from "vue";
-import { useSubscription } from "@vue/apollo-composable";
+import { watch, ref } from "vue"
+import { useSubscription } from "@vue/apollo-composable"
 
 export default {
   setup() {
-    const messages = ref([]);
+    const messages = ref([])
 
     const { result } = useSubscription(gql`
       subscription onMessageAdded {
@@ -197,23 +197,23 @@ export default {
           text
         }
       }
-    `);
+    `)
 
     watch(
       result,
       data => {
-        messages.value.push(data.messageAdded);
+        messages.value.push(data.messageAdded)
       },
       {
         lazy: true // Don't immediately execute handler
       }
-    );
+    )
 
     return {
       messages
-    };
+    }
   }
-};
+}
 </script>
 
 <template>
@@ -236,7 +236,7 @@ With a ref:
 ```js
 const variables = ref({
   channelId: "abc"
-});
+})
 
 const { result } = useSubscription(
   gql`
@@ -248,7 +248,7 @@ const { result } = useSubscription(
     }
   `,
   variables
-);
+)
 ```
 
 With a reactive object:
@@ -256,7 +256,7 @@ With a reactive object:
 ```js
 const variables = reactive({
   channelId: "abc"
-});
+})
 
 const { result } = useSubscription(
   gql`
@@ -268,13 +268,13 @@ const { result } = useSubscription(
     }
   `,
   variables
-);
+)
 ```
 
 With a function (which will automatically be made reactive):
 
 ```js
-const channelId = ref("abc");
+const channelId = ref("abc")
 
 const { result } = useSubscription(
   gql`
@@ -288,7 +288,7 @@ const { result } = useSubscription(
   () => ({
     channelId: channelId.value
   })
-);
+)
 ```
 
 ### Options
@@ -309,7 +309,7 @@ const { result } = useSubscription(
   {
     fetchPolicy: "no-cache"
   }
-);
+)
 ```
 
 It can also be a reactive object, or a function that will automatically be made reactive:
@@ -328,7 +328,7 @@ const { result } = useSubscription(
   () => ({
     fetchPolicy: "no-cache"
   })
-);
+)
 ```
 
 See the [API Reference](../api/use-subscription) for all the possible options.
@@ -338,7 +338,7 @@ See the [API Reference](../api/use-subscription) for all the possible options.
 You can disable and re-enable a subscription with the `enabled` option:
 
 ```js
-const enabled = ref(false);
+const enabled = ref(false)
 
 const { result } = useSubscription(
   gql`
@@ -348,10 +348,10 @@ const { result } = useSubscription(
   () => ({
     enabled: enabled.value
   })
-);
+)
 
 function enableSub() {
-  enabled.value = true;
+  enabled.value = true
 }
 ```
 
@@ -413,7 +413,7 @@ const MESSAGES = gql`
       text
     }
   }
-`;
+`
 
 export default {
   props: ["channelId"],
@@ -422,14 +422,14 @@ export default {
     // Messages list
     const { result } = useQuery(MESSAGES, () => ({
       channelId: props.channelId
-    }));
-    const messages = useResult(result, []);
+    }))
+    const messages = computed(() => result.value?.messages ?? [])
 
     return {
       messages
-    };
+    }
   }
-};
+}
 </script>
 ```
 
@@ -446,7 +446,7 @@ const MESSAGES = gql`
       text
     }
   }
-`;
+`
 
 export default {
   props: ["channelId"],
@@ -455,16 +455,16 @@ export default {
     // Messages list
     const { result, subscribeToMore } = useQuery(MESSAGES, () => ({
       channelId: props.channelId
-    }));
-    const messages = useResult(result, []);
+    }))
+    const messages = computed(() => result.value?.messages ?? [])
 
-    subscribeToMore();
+    subscribeToMore()
 
     return {
       messages
-    };
+    }
   }
-};
+}
 </script>
 ```
 
@@ -473,13 +473,13 @@ It expects either an object or a function that will automatically be reactive:
 ```js
 subscribeToMore({
   // options...
-});
+})
 ```
 
 ```js
 subscribeToMore(() => ({
   // options...
-}));
+}))
 ```
 
 In the latter case, the subscription will automatically restart if the options change.
@@ -495,7 +495,7 @@ const MESSAGES = gql`
       text
     }
   }
-`;
+`
 
 export default {
   props: ["channelId"],
@@ -504,8 +504,8 @@ export default {
     // Messages list
     const { result, subscribeToMore } = useQuery(MESSAGES, () => ({
       channelId: props.channelId
-    }));
-    const messages = useResult(result, []);
+    }))
+    const messages = computed(() => result.value?.messages ?? [])
 
     subscribeToMore(() => ({
       document: gql`
@@ -519,13 +519,13 @@ export default {
       variables: {
         channelId: props.channelId
       }
-    }));
+    }))
 
     return {
       messages
-    };
+    }
   }
-};
+}
 </script>
 ```
 
@@ -545,10 +545,10 @@ subscribeToMore(() => ({
     channelId: props.channelId
   },
   updateQuery: (previousResult, { subscriptionData }) => {
-    previousResult.messages.push(subscriptionData.data.messageAdded);
-    return previousResult;
+    previousResult.messages.push(subscriptionData.data.messageAdded)
+    return previousResult
   }
-}));
+}))
 ```
 
 ## Authentication over WebSocket
@@ -556,7 +556,7 @@ subscribeToMore(() => ({
 In many cases it is necessary to authenticate clients before allowing them to receive subscription results. To do this, the `SubscriptionClient` constructor accepts a `connectionParams` field, which passes a custom object that the server can use to validate the connection before setting up any subscriptions.
 
 ```js
-import { WebSocketLink } from "@apollo/client/link/ws";
+import { WebSocketLink } from "@apollo/client/link/ws"
 
 const wsLink = new WebSocketLink({
   uri: `ws://localhost:5000/`,
@@ -565,7 +565,7 @@ const wsLink = new WebSocketLink({
     connectionParams: {
         authToken: user.authToken,
     },
-});
+})
 ```
 
 ::: tip

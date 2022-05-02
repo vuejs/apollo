@@ -60,27 +60,27 @@ subscription onMessageAdded($channelId: ID!) {
 首先，初始化 GraphQL websocket 连接：
 
 ```js
-import { WebSocketLink } from "@apollo/client/link/ws";
+import { WebSocketLink } from "@apollo/client/link/ws"
 
 const wsLink = new WebSocketLink({
   uri: `ws://localhost:5000/`,
   options: {
     reconnect: true
   }
-});
+})
 ```
 
 We need to either use the `WebSocketLink` or the `HttpLink` depending on the operation type:
 
 ```js
-import { HttpLink, split } from "@apollo/client/core";
-import { WebSocketLink } from "@apollo/client/link/ws";
-import { getMainDefinition } from "@apollo/client/utilities";
+import { HttpLink, split } from "@apollo/client/core"
+import { WebSocketLink } from "@apollo/client/link/ws"
+import { getMainDefinition } from "@apollo/client/utilities"
 
 // 创建一个 http 连接：
 const httpLink = new HttpLink({
   uri: "http://localhost:3000/graphql"
-});
+})
 
 // 创建一个 WebSocket 连接：
 const wsLink = new WebSocketLink({
@@ -88,21 +88,21 @@ const wsLink = new WebSocketLink({
   options: {
     reconnect: true
   }
-});
+})
 
 // 使用拆分连接的功能，你可以根据要发送的操作类型将数据发送到每个连接
 const link = split(
   // 根据操作类型拆分
   ({ query }) => {
-    const definition = getMainDefinition(query);
+    const definition = getMainDefinition(query)
     return (
       definition.kind === "OperationDefinition" &&
       definition.operation === "subscription"
-    );
+    )
   },
   wsLink,
   httpLink
-);
+)
 ```
 
 现在查询和变更将照常通过 HTTP 进行，但是订阅将通过 websocket 传输进行。
@@ -115,13 +115,13 @@ const link = split(
 
 ```vue{2}
 <script>
-import { useSubscription } from "@vue/apollo-composable";
+import { useSubscription } from "@vue/apollo-composable"
 
 export default {
   setup() {
     // 数据和逻辑在这里……
   }
-};
+}
 </script>
 ```
 
@@ -129,7 +129,7 @@ export default {
 
 ```vue{6-13}
 <script>
-import { useSubscription } from "@vue/apollo-composable";
+import { useSubscription } from "@vue/apollo-composable"
 
 export default {
   setup() {
@@ -140,9 +140,9 @@ export default {
           text
         }
       }
-    `);
+    `)
   }
-};
+}
 </script>
 ```
 
@@ -150,8 +150,8 @@ export default {
 
 ```vue{2,16-20}
 <script>
-import { watch } from "vue";
-import { useSubscription } from "@vue/apollo-composable";
+import { watch } from "vue"
+import { useSubscription } from "@vue/apollo-composable"
 
 export default {
   setup() {
@@ -162,19 +162,19 @@ export default {
           text
         }
       }
-    `);
+    `)
 
     watch(
       result,
       data => {
-        console.log("New message received:", data.messageAdded);
+        console.log("New message received:", data.messageAdded)
       },
       {
         lazy: true // 不要立即执行处理程序
       }
-    );
+    )
   }
-};
+}
 </script>
 ```
 
@@ -182,12 +182,12 @@ export default {
 
 ```vue{2,7,19,24-26,31-39}
 <script>
-import { watch, ref } from "vue";
-import { useSubscription } from "@vue/apollo-composable";
+import { watch, ref } from "vue"
+import { useSubscription } from "@vue/apollo-composable"
 
 export default {
   setup() {
-    const messages = ref([]);
+    const messages = ref([])
 
     const { result } = useSubscription(gql`
       subscription onMessageAdded {
@@ -196,23 +196,23 @@ export default {
           text
         }
       }
-    `);
+    `)
 
     watch(
       result,
       data => {
-        messages.value.push(data.messageAdded);
+        messages.value.push(data.messageAdded)
       },
       {
         lazy: true // 不要立即执行处理程序
       }
-    );
+    )
 
     return {
       messages
-    };
+    }
   }
-};
+}
 </script>
 
 <template>
@@ -235,7 +235,7 @@ export default {
 ```js
 const variables = ref({
   channelId: "abc"
-});
+})
 
 const { result } = useSubscription(
   gql`
@@ -247,7 +247,7 @@ const { result } = useSubscription(
     }
   `,
   variables
-);
+)
 ```
 
 使用响应式对象：
@@ -255,7 +255,7 @@ const { result } = useSubscription(
 ```js
 const variables = reactive({
   channelId: "abc"
-});
+})
 
 const { result } = useSubscription(
   gql`
@@ -267,13 +267,13 @@ const { result } = useSubscription(
     }
   `,
   variables
-);
+)
 ```
 
 使用函数（将会是响应式的）：
 
 ```js
-const channelId = ref("abc");
+const channelId = ref("abc")
 
 const { result } = useSubscription(
   gql`
@@ -287,7 +287,7 @@ const { result } = useSubscription(
   () => ({
     channelId: channelId.value
   })
-);
+)
 ```
 
 ### 选项
@@ -308,7 +308,7 @@ const { result } = useSubscription(
   {
     fetchPolicy: "no-cache"
   }
-);
+)
 ```
 
 它也可以是响应式对象，也可以是将自动变为响应式的函数：
@@ -327,7 +327,7 @@ const { result } = useSubscription(
   () => ({
     fetchPolicy: "no-cache"
   })
-);
+)
 ```
 
 在 [API 参考](../api/use-subscription) 查看所有可用的选项。
@@ -337,7 +337,7 @@ const { result } = useSubscription(
 你可以使用 `enabled` 选项来禁用和重新启用订阅：
 
 ```js
-const enabled = ref(false);
+const enabled = ref(false)
 
 const { result } = useSubscription(
   gql`
@@ -347,10 +347,10 @@ const { result } = useSubscription(
   () => ({
     enabled: enabled.value
   })
-);
+)
 
 function enableSub() {
-  enabled.value = true;
+  enabled.value = true
 }
 ```
 
@@ -412,7 +412,7 @@ const MESSAGES = gql`
       text
     }
   }
-`;
+`
 
 export default {
   props: ["channelId"],
@@ -421,14 +421,14 @@ export default {
     // 消息列表
     const { result } = useQuery(MESSAGES, () => ({
       channelId: props.channelId
-    }));
-    const messages = useResult(result, []);
+    }))
+    const messages = computed(() => result.value?.messages ?? [])
 
     return {
       messages
-    };
+    }
   }
-};
+}
 </script>
 ```
 
@@ -445,7 +445,7 @@ const MESSAGES = gql`
       text
     }
   }
-`;
+`
 
 export default {
   props: ["channelId"],
@@ -454,16 +454,16 @@ export default {
     // 消息列表
     const { result, subscribeToMore } = useQuery(MESSAGES, () => ({
       channelId: props.channelId
-    }));
-    const messages = useResult(result, []);
+    }))
+    const messages = computed(() => result.value?.messages ?? [])
 
-    subscribeToMore();
+    subscribeToMore()
 
     return {
       messages
-    };
+    }
   }
-};
+}
 </script>
 ```
 
@@ -472,13 +472,13 @@ export default {
 ```js
 subscribeToMore({
   // 选项……
-});
+})
 ```
 
 ```js
 subscribeToMore(() => ({
   // 选项……
-}));
+}))
 ```
 
 在后一种情况下，订阅将随着选项的更改自动重新启动。
@@ -494,7 +494,7 @@ const MESSAGES = gql`
       text
     }
   }
-`;
+`
 
 export default {
   props: ["channelId"],
@@ -503,8 +503,8 @@ export default {
     // 消息列表
     const { result, subscribeToMore } = useQuery(MESSAGES, () => ({
       channelId: props.channelId
-    }));
-    const messages = useResult(result, []);
+    }))
+    const messages = computed(() => result.value?.messages ?? [])
 
     subscribeToMore(() => ({
       document: gql`
@@ -518,13 +518,13 @@ export default {
       variables: {
         channelId: props.channelId
       }
-    }));
+    }))
 
     return {
       messages
-    };
+    }
   }
-};
+}
 </script>
 ```
 
@@ -544,10 +544,10 @@ subscribeToMore(() => ({
     channelId: props.channelId
   },
   updateQuery: (previousResult, { subscriptionData }) => {
-    previousResult.messages.push(subscriptionData.data.messageAdded);
-    return previousResult;
+    previousResult.messages.push(subscriptionData.data.messageAdded)
+    return previousResult
   }
-}));
+}))
 ```
 
 ## 通过 WebSocket 进行身份验证
@@ -555,7 +555,7 @@ subscribeToMore(() => ({
 在很多情况下，在允许客户端接收订阅结果之前，有必要对客户端进行身份验证。为此 `SubscriptionClient` 构造函数接受一个 `connectionParams` 字段，该字段传递一个自定义对象，服务端可以在设置任何订阅之前使用该对象来验证连接。
 
 ```js
-import { WebSocketLink } from "@apollo/client/link/ws";
+import { WebSocketLink } from "@apollo/client/link/ws"
 
 const wsLink = new WebSocketLink({
   uri: `ws://localhost:5000/`,
@@ -564,7 +564,7 @@ const wsLink = new WebSocketLink({
     connectionParams: {
         authToken: user.authToken,
     },
-});
+})
 ```
 
 ::: tip

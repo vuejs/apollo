@@ -318,210 +318,6 @@ export default {
 </template>
 ```
 
-## useResult
-
-除了 `useQuery` 之外，还有姐妹组合函数 `useResult`，以方便对查询 `result` 的使用。
-
-### 结果挑选
-
-`useResult` 的第一个有用功能是从结果数据中挑选出一个对象。为此，将 `result` 数据作为第一个参数，并将挑选函数作为第三个参数：
-
-```vue{2,18,21,34,35}
-<script>
-import { useQuery, useResult } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
-
-export default {
-  setup () {
-    const { result, loading, error } = useQuery(gql`
-      query getUsers {
-        users {
-          id
-          firstname
-          lastname
-          email
-        }
-      }
-    `)
-
-    const users = useResult(result, null, data => data.users)
-
-    return {
-      users,
-      loading,
-      error,
-    }
-  },
-}
-</script>
-
-<template>
-  <div v-if="loading">Loading...</div>
-
-  <div v-else-if="error">Error: {{ error.message }}</div>
-
-  <ul v-else-if="users">
-    <li v-for="user of users" :key="user.id">
-      {{ user.firstname }} {{ user.lastname }}
-    </li>
-  </ul>
-</template>
-```
-
-如果与组件相关的数据嵌套在查询中，这将非常有用：
-
-```js
-const { result } = useQuery(gql`
-  query getMessages {
-    currentUser {
-      messages {
-        id
-        text
-      }
-    }
-  }
-`)
-
-const messages = useResult(result, null, data => data.currentUser.messages)
-```
-
-`useResult` 的另一个好处是，挑选函数会让其内部的错误静音。例如，如果 `result.value` 是 `undefined`，你不必添加额外的检查：
-
-```js
-// 你不需要这样做！
-const messages = useResult(result, null, data => data && data.currentUser && data.currentUser.messages)
-
-// 而是这样做：
-const messages = useResult(result, null, data => data.currentUser.messages)
-```
-
-::: tip
-不要忘记，在查询成功完成之前，`messages.value` 仍然可以是 `null`！
-:::
-
-证明 `useResult` 非常有用的另外一个用例是当结果数据上有多个对象时：
-
-```js
-const { result } = useQuery(gql`
-  query getUsersAndPosts {
-    users {
-      id
-      email
-    }
-
-    posts {
-      id
-      title
-    }
-  }
-`)
-
-const users = useResult(result, null, data => data.users)
-
-const posts = useResult(result, null, data => data.posts)
-```
-
-看看我们是怎样将结果数据干净地分成两个不同的 `Ref`！
-
-### 自动挑选
-
-如果在数据中只有一个对象，`useResult` 将尝试自动挑选该对象：
-
-```js{12}
-const { result, loading } = useQuery(gql`
-  query getUsers {
-    users {
-      id
-      firstname
-      lastname
-      email
-    }
-  }
-`)
-
-const users = useResult(result)
-```
-
-这里的 `users.value` 将是从服务器中检索到的 `users` 数组。
-
-### 默认值
-
-假设我们想根据用户的姓氏进行排序：
-
-```vue{2,19-21,24,34,35}
-<script>
-import { computed } from 'vue'
-import { useQuery } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
-
-export default {
-  setup () {
-    const { result, loading } = useQuery(gql`
-      query users {
-        users {
-          id
-          firstname
-          lastname
-          email
-        }
-      }
-    `)
-
-    const sortedUsers = computed(() => result.value.users.sort(
-      (a, b) => a.lastname.localeCompare(b.lastname)
-    ))
-
-    return {
-      sortedUsers,
-      loading,
-    }
-  },
-}
-</script>
-
-<template>
-  <div v-if="loading">Loading...</div>
-
-  <ul v-else-if="sortedUsers">
-    <li v-for="user of sortedUsers" :key="user.id">
-      {{ user.firstname }} {{ user.lastname }}
-    </li>
-  </ul>
-</template>
-```
-
-在这里我们会遇到一个错误，因为 `result.value` 可能是 `undefined`（并且 `result.value.users` 也可能是 `undefined`）。因此当我们在 `computed` 属性中调用 `sort` 方法时将引发错误。
-
-我们可以添加检查，但这很快就会变得乏味：
-
-```js
-const sortedUsers = computed(() => result.value && result.value.users ? result.value.users.sort(
-  (a, b) => a.lastname.localeCompare(b.lastname)
-) : [])
-```
-
-我们可以通过 `useResult` 进一步简化它：
-
-```js{1,3,5}
-const users = useResult(result) // 自动挑选
-
-const sortedUsers = computed(() => users.value ? users.value.sort(
-  (a, b) => a.lastname.localeCompare(b.lastname)
-) : [])
-```
-
-但如果我们传递一个默认值作为 `useResult` 的第二个参数，则可以完全取消条件代码：
-
-```js{1,3,5}
-const users = useResult(result, []) // 默认为空数组
-
-const sortedUsers = computed(() => users.value.sort(
-  (a, b) => a.lastname.localeCompare(b.lastname)
-))
-```
-
-如果我们想在 `setup` 函数中的多个地方使用 `users` 数组 `Ref` 时，这将更加有用！
-
 ## 变量
 
 你可以把一个变量对象作为第二个参数传递给 `useQuery`：
@@ -822,7 +618,7 @@ const { result } = useQuery(gql`
 
 ```vue{7,24,40}
 <script>
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 
 export default {
@@ -838,7 +634,7 @@ export default {
       }
     `)
 
-    const users = useResult(result)
+    const users = computed(() => result.value?.users)
 
     return {
       users,

@@ -657,7 +657,7 @@ This is done using the `refetch` function:
 
 ```vue{7,24,40}
 <script>
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 
 export default {
@@ -673,7 +673,7 @@ export default {
       }
     `)
 
-    const users = useResult(result)
+    const users = computed(() => result.value?.users)
 
     return {
       users,

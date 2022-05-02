@@ -313,7 +313,7 @@ For example, our `sendMessage` mutation should add the new message to our cache:
 
 ```vue{33-43}
 <script>
-import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
+import { useQuery, useMutation } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 
 const MESSAGES = gql`
@@ -329,7 +329,7 @@ export default {
   setup () {
     // Messages list
     const { result } = useQuery(MESSAGES)
-    const messages = useResult(result, [])
+    const messages = computed(() => result.value?.messages ?? [])
 
     // Send a new message
     const newMessage = ref('')
@@ -498,7 +498,7 @@ In our example, this is very useful for resetting the message input:
 
 ```vue{22,46-48}
 <script>
-import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
+import { useQuery, useMutation } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 
 const MESSAGES = gql`
@@ -514,7 +514,7 @@ export default {
   setup () {
     // Messages list
     const { result } = useQuery(MESSAGES)
-    const messages = useResult(result, [])
+    const messages = computed(() => result.value?.messages ?? [])
 
     // Send a new message
     const newMessage = ref('')

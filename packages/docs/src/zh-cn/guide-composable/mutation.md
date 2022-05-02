@@ -312,7 +312,7 @@ editMessage()
 
 ```vue{33-37}
 <script>
-import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
+import { useQuery, useMutation } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 
 const MESSAGES = gql`
@@ -328,7 +328,7 @@ export default {
   setup () {
     // Messages list
     const { result } = useQuery(MESSAGES)
-    const messages = useResult(result, [])
+    const messages = computed(() => result.value.messages ?? [])
 
     // Send a new message
     const newMessage = ref('')
@@ -481,7 +481,7 @@ onDone(result => {
 
 ```vue{22,40-42,55}
 <script>
-import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
+import { useQuery, useMutation } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 
 const MESSAGES = gql`
@@ -497,7 +497,7 @@ export default {
   setup () {
     // Messages list
     const { result } = useQuery(MESSAGES)
-    const messages = useResult(result, [])
+    const messages = computed(() => result.value?.messages ?? [])
 
     // Send a new message
     const newMessage = ref('')
