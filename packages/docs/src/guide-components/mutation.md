@@ -106,9 +106,18 @@ export default {
         },
       }
       // Read the query from cache
-      const data = store.readQuery(query)
-      // Mutate cache result
-      data.thread.messages.push(sendMessageToThread.message)
+      let data = store.readQuery(query)
+      // Change cache result
+      data = {
+        ...data,
+        thread: {
+          ...data.thread,
+          messages: [
+            ...data.thread.messages,
+            sendMessageToThread.message
+          ],
+        },
+      }
       // Write back to the cache
       store.writeQuery({
         ...query,
@@ -191,18 +200,20 @@ export default {
         },
       }
       // Read the query from cache
-      const data = store.readQuery(query)
-      // Look for the deleted item
-      const index = data.thread.messages.findIndex(m => m.id === this.messageId)
-      if (index !== -1) {
-        // Mutate cache result
-        data.thread.messages.splice(index, 1)
-        // Write back to the cache
-        store.writeQuery({
-          ...query,
-          data,
-        })
+      let data = store.readQuery(query)
+      // Change cache result
+      data = {
+        ...data,
+        thread: {
+          ...data.thread,
+          messages: data.thread.messages.filter(m => m.id !== this.messageId),
+        },
       }
+      // Write back to the cache
+      store.writeQuery({
+        ...query,
+        data,
+      })
     },
   }
 }

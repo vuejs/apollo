@@ -307,11 +307,11 @@ In this example, if we already loaded the list of messages containing the one wi
 
 If a mutation modifies multiple entities, or if it creates or deletes one or many entities, the Apollo Client will *not* automatically update the cache to reflect the changes made by the mutation. Instead, you should update the cache using an `update` function in the options.
 
-The purpose of this `update` function is to modify your cached data to match the changes made by the mutation on the server.
+The purpose of this `update` function is to modify your cached data to match the changes made by the mutation on the server. Note that Apollo cache data is immutable so you need to either use the `...` (spread) operator or deeply clone the cached data before modifying it.
 
 For example, our `sendMessage` mutation should add the new message to our cache:
 
-```vue{33-37}
+```vue{33-43}
 <script>
 import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
@@ -345,8 +345,14 @@ export default {
         text: newMessage.value,
       },
       update: (cache, { data: { sendMessage } }) => {
-        const data = cache.readQuery({ query: MESSAGES })
-        data.messages.push(sendMessage)
+        let data = cache.readQuery({ query: MESSAGES })
+        data = {
+          ...data,
+          messages: [
+            ...data.messages,
+            sendMessage,
+          ],
+        }
         cache.writeQuery({ query: MESSAGES, data })
       },
     }))
@@ -378,7 +384,7 @@ export default {
 
 Let's focus on the mutation:
 
-```js{12-16}
+```js{12-22}
 const { mutate: sendMessage } = useMutation(gql`
   mutation sendMessage ($text: String!) {
     sendMessage (text: $text) {
@@ -391,8 +397,14 @@ const { mutate: sendMessage } = useMutation(gql`
     text: newMessage.value,
   },
   update: (cache, { data: { sendMessage } }) => {
-    const data = cache.readQuery({ query: MESSAGES })
-    data.messages.push(sendMessage)
+    let data = cache.readQuery({ query: MESSAGES })
+    data = {
+      ...data,
+      messages: [
+        ...data.messages,
+        sendMessage,
+      ],
+    }
     cache.writeQuery({ query: MESSAGES, data })
   },
 }))
@@ -406,7 +418,7 @@ After the `update` function is called, the components whose data has been change
 
 Alternatively, we can pass an `update` function within the second parameter when calling the `mutate`  function:
 
-```js{14-20}
+```js{14-24}
 const { mutate: sendMessage } = useMutation(gql`
   mutation sendMessage ($text: String!) {
     sendMessage (text: $text) {
@@ -416,18 +428,22 @@ const { mutate: sendMessage } = useMutation(gql`
   }
 `)
 
-sendMessage(
-  {
-    text: text.value
-  },
-  {
-    update: (cache, { data: { sendMessage } }) => {
-      const data = cache.readQuery({ query: MESSAGES });
-      data.messages.push(sendMessage);
-      cache.writeQuery({ query: MESSAGES, data });
+sendMessage({
+  text: text.value
+},
+{
+  update: (cache, { data: { sendMessage } }) => {
+    let data = cache.readQuery({ query: MESSAGES })
+    data = {
+      ...data,
+      messages: [
+        ...data.messages,
+        sendMessage,
+      ],
     }
+    cache.writeQuery({ query: MESSAGES, data })
   }
-);
+})
 ```
 
 ## Mutation state
@@ -480,7 +496,7 @@ onDone(result => {
 
 In our example, this is very useful for resetting the message input:
 
-```vue{22,40-42,55}
+```vue{22,46-48}
 <script>
 import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
@@ -514,8 +530,14 @@ export default {
         text: newMessage.value,
       },
       update: (cache, { data: { sendMessage } }) => {
-        const data = cache.readQuery({ query: MESSAGES })
-        data.messages.push(sendMessage)
+        let data = cache.readQuery({ query: MESSAGES })
+        data = {
+          ...data,
+          messages: [
+            ...data.messages,
+            sendMessage,
+          ],
+        }
         cache.writeQuery({ query: MESSAGES, data })
       },
     }))

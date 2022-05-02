@@ -35,9 +35,15 @@ methods: {
       // and then with the real result of the mutation
       update: (store, { data: { addTag } }) => {
         // Read the data from our cache for this query.
-        const data = store.readQuery({ query: TAGS_QUERY })
+        let data = store.readQuery({ query: TAGS_QUERY })
         // Add our tag from the mutation to the end
-        data.tags.push(addTag)
+        data = {
+          ...data,
+          tags: [
+            ...data.tags,
+            addTag,
+          ],
+        }
         // Write our data back to the cache.
         store.writeQuery({ query: TAGS_QUERY, data })
       },
