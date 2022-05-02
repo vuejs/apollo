@@ -28,4 +28,8 @@ In this monorepository:
 
 ## Sponsors
 
-[![sponsors logos](https://guillaume-chau.info/sponsors.png)](https://guillaume-chau.info/sponsors)
+<p align="center">
+  <a href="https://guillaume-chau.info/sponsors/" target="_blank">
+    <img src='https://akryum.netlify.app/sponsors.svg'/>
+  </a>
+</p>

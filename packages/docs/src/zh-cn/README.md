@@ -17,7 +17,11 @@ footer: LICENCE MIT - Created by Guillaume CHAU (@Akryum)
 
 ## 赞助商
 
-[![sponsors logos](https://guillaume-chau.info/sponsors.png)](https://guillaume-chau.info/sponsors)
+<p align="center">
+  <a href="https://guillaume-chau.info/sponsors/" target="_blank">
+    <img src='https://akryum.netlify.app/sponsors.svg'/>
+  </a>
+</p>
 
 ::: tip 当前版本
 中文文档现在同步至 v4.0.0-alpha.12
