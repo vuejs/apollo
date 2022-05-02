@@ -28,6 +28,8 @@ export default class SmartSubscription extends SmartApollo {
   }
 
   executeApollo (variables) {
+    if (this._destroyed) return
+
     const variablesJson = JSON.stringify(variables)
     if (this.sub) {
       // do nothing if subscription is already running using exactly the same variables

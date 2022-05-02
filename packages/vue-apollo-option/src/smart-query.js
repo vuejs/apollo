@@ -94,6 +94,8 @@ export default class SmartQuery extends SmartApollo {
   }
 
   executeApollo (variables) {
+    if (this._destroyed) return
+
     const variablesJson = JSON.stringify(variables)
 
     if (this.sub) {

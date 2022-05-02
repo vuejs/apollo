@@ -98,6 +98,7 @@ export default class SmartApollo {
         const queryCb = this.initialOptions[prop].bind(this.vm)
         this.options[prop] = queryCb()
         let cb = query => {
+          if (this._destroyed) return
           this.options[prop] = query
           this.refresh()
         }
