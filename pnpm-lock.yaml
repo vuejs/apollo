@@ -181,7 +181,7 @@ importers:
       '@babel/plugin-transform-for-of': ^7.4.4
       '@babel/preset-env': ^7.1.0
       '@types/graphql': ^14.0.1
-      '@vue/apollo-option': ^4.0.0-alpha.16
+      '@vue/apollo-option': ^4.0.0-alpha.17
       '@vue/test-utils': ^1.0.0-beta.25
       babel-core: ^7.0.0-bridge.0
       cross-env: ^6.0.0

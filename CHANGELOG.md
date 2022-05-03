@@ -1,3 +1,24 @@
+# [4.0.0-alpha.17](https://github.com/vuejs/vue-apollo/compare/v4.0.0-alpha.16...v4.0.0-alpha.17) (2022-05-03)
+
+
+### Bug Fixes
+
+* $apollo null error if smar obj is destroyed but has throttled/debounced calls ([d6d4da1](https://github.com/vuejs/vue-apollo/commit/d6d4da16d56233e1c6fb4df261cda4a0b9f665d4))
+* added client options to error policy ([#1318](https://github.com/vuejs/vue-apollo/issues/1318)) ([61261bc](https://github.com/vuejs/vue-apollo/commit/61261bccc4639a1d2394413464d46d6032ec4c87))
+* avoid onServerPrefetch warning ([#1281](https://github.com/vuejs/vue-apollo/issues/1281)) ([cf89b25](https://github.com/vuejs/vue-apollo/commit/cf89b252c214401621674c654f0864229b3a6be3))
+* remove console.log ([a79b790](https://github.com/vuejs/vue-apollo/commit/a79b7908f6e4ae3120d11318a6643b724e5718cd))
+* subscriptions array leak ([#1248](https://github.com/vuejs/vue-apollo/issues/1248)) ([f31fa15](https://github.com/vuejs/vue-apollo/commit/f31fa1520c2fe007dd47474268ea274bc2906866))
+* useQuery loading and debounce issues ([#1313](https://github.com/vuejs/vue-apollo/issues/1313)) ([082acf9](https://github.com/vuejs/vue-apollo/commit/082acf90c2c22edf28f443306da39b535d2b0a1d)), closes [#1235](https://github.com/vuejs/vue-apollo/issues/1235) [#1271](https://github.com/vuejs/vue-apollo/issues/1271)
+
+
+### Features
+
+* allow providing multiple apolloClients outside of setup/vue context in vue-apollo-composable ([#1340](https://github.com/vuejs/vue-apollo/issues/1340)) ([64491ce](https://github.com/vuejs/vue-apollo/commit/64491ce1ca0f1a6a3acc498a1999e85347336748))
+* deprecate useResult ([0e9fb48](https://github.com/vuejs/vue-apollo/commit/0e9fb48384647e2d8a825b72cadeb8ff74396294))
+* update vue-demi ([af9f20f](https://github.com/vuejs/vue-apollo/commit/af9f20f131667f173c9708a375e24d676c7adf95))
+
+
+
 # [4.0.0-alpha.16](https://github.com/vuejs/vue-apollo/compare/v4.0.0-alpha.15...v4.0.0-alpha.16) (2021-11-28)
 
 
