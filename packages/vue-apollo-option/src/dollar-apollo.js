@@ -148,7 +148,13 @@ export class DollarApollo {
       smart.autostart()
 
       if (options.linkedQuery) {
-        options.linkedQuery._linkedSubscriptions.push(smart)
+        // prevent subscriptions leak on fetching query with another parameters
+        const index = options.linkedQuery._linkedSubscriptions.findIndex(x => x.key === key)
+        if (index !== -1) {
+          options.linkedQuery._linkedSubscriptions[index] = smart
+        } else {
+          options.linkedQuery._linkedSubscriptions.push(smart)
+        }
       }
 
       return smart
