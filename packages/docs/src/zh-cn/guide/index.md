@@ -16,7 +16,7 @@
 
 你的公司是否使用了 `vue-apollo` 或 `vue-cli-plugin-apollo` 来构建出色的应用程序？成为赞助商并在此文档中添加你的 logo 吧！在 GitHub 上支持我将节省我用于谋生的工作时间，从而能够在如 `vue-apollo` 一样的免费开源软件上工作更多！谢谢！
 
-<sponsor-button/>
+<SponsorButton/>
 
 ## 什么是 GraphQL？
 

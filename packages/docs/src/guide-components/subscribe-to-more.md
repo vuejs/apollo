@@ -43,10 +43,13 @@ export default {
     onMessageAdded (previousResult, { subscriptionData }) {
       // The previous result is immutable
       const newResult = {
-        messages: [...previousResult.messages],
+        ...previousResult,
+        messages: [
+          ...previousResult.messages,
+          // Add the question to the list
+          subscriptionData.data.messageAdded,
+        ],
       }
-      // Add the question to the list
-      newResult.messages.push(subscriptionData.data.messageAdded)
       return newResult
     },
   },
@@ -67,10 +70,13 @@ methods: {
   onMessageAdded (previousResult, { subscriptionData }) {
     // The previous result is immutable
     const newResult = {
-      messages: [...previousResult.messages],
+      ...previousResult,
+      messages: [
+        ...previousResult.messages,
+        // Add the question to the list
+        subscriptionData.data.messageAdded,
+      ],
     }
-    // Add the question to the list
-    newResult.messages.push(subscriptionData.data.messageAdded)
     return newResult
   }
 }
@@ -90,6 +96,7 @@ methods: {
 
     // The previous result is immutable
     const newResult = {
+      ...previousResult,
       messages: [...previousResult.messages],
     }
     // Remove the question from the list

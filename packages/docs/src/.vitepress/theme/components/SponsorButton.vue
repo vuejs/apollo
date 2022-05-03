@@ -21,8 +21,9 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
-.sponsor-button
-  text-align center
-  margin 24px 0
+<style lang="pcss" scoped>
+.sponsor-button {
+  text-align: center;
+  margin: 24px 0;
+}
 </style>

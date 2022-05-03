@@ -8,7 +8,7 @@
 
 ## 使用 `fetchMore`
 
-在 Apollo 中，最简单的分页方法是使用由 `useQuery` 组合函数返回的 [`fetchMore`](/caching/cache-interaction/#incremental-loading-fetchmore) 函数。这基本上可以使你执行新的 GraphQL 查询并将结果合并到原始结果中。
+在 Apollo 中，最简单的分页方法是使用由 `useQuery` 组合函数返回的 `fetchMore` 函数。这基本上可以使你执行新的 GraphQL 查询并将结果合并到原始结果中。
 
 ```js
 const { fetchMore } = useQuery(...)

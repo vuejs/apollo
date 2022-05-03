@@ -1,5 +1,6 @@
 ---
 home: true
+sidebar: false
 heroImage: /logo.png
 actionText: 由此起步 →
 actionLink: /zh-cn/guide/
@@ -13,7 +14,7 @@ features:
 footer: LICENCE MIT - Created by Guillaume CHAU (@Akryum)
 ---
 
-<sponsor-button/>
+<SponsorButton/>
 
 ## 赞助商
 

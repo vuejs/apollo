@@ -104,4 +104,4 @@ module.exports = {
 - [选项（经典）API](../guide-option/setup.md)
 - [组合（进阶）API](../guide-composable/setup.md)
 - [组件 API](../guide-components/setup.md)
-- [进阶主题](../guide-advanced)
+- [进阶主题](../guide-advanced/)

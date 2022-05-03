@@ -35,12 +35,15 @@
     "peerDependencyRules": {
       "ignoreMissing": [
         "webpack",
+        "@types/react",
         "react",
+        "react-dom",
         "eslint",
         "typescript",
         "vue-template-compiler",
         "graphql",
-        "vue-class-component"
+        "vue-class-component",
+        "@algolia/client-search"
       ],
       "allowedVersions": {
         "eslint": "*",

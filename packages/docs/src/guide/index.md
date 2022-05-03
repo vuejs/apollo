@@ -23,7 +23,7 @@ Note: `@vue/apollo-composable` supports Vue 2 thanks to [Vue Demi](https://githu
 
 Is your company using `vue-apollo` or `vue-cli-plugin-apollo` to build awesome apps? Join the other sponsors and add your logo on this documentation! Supporting me on GitHub allows me to work less for a job and to work more on Free Open Source Software such as `vue-apollo`! Thank you!
 
-<sponsor-button/>
+<SponsorButton/>
 
 ## What is GraphQL?
 

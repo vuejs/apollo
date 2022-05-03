@@ -1,6 +1,6 @@
-# Smart Subscription
+# Reactive Subscription
 
-Each subscription declared in the `apollo.$subscribe` option in a component results in the creation of a smart subscription object.
+Each subscription declared in the `apollo.$subscribe` option in a component results in the creation of a reactive subscription object.
 
 ## Options
 
@@ -10,7 +10,7 @@ Each subscription declared in the `apollo.$subscribe` option in a component resu
 - `debounce`: debounce variables updates (in ms).
 - `result(data, key)` is a hook called when a result is received
 - `error(error)` is a hook called when there are errors. `error` is an Apollo error object with either a `graphQLErrors` property or a `networkError` property.
-- `skip` is a boolean or a (reactive) function that returns a boolean. The function gets the current component and smart query key as arguments, so it can be used in `$query` and in `ApolloProvider`'s `defaultOptions`.
+- `skip` is a boolean or a (reactive) function that returns a boolean. The function gets the current component and reactive query key as arguments, so it can be used in `$query` and in `ApolloProvider`'s `defaultOptions`.
 
 ## Properties
 

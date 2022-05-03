@@ -181,7 +181,7 @@ query getSomething {
 }
 ```
 
-将使 `someFragment.graphql` 的内容在当前文件可用。请参见 [Webpack 片段](/integrations/webpack/#fragments) 了解更多详细信息。
+将使 `someFragment.graphql` 的内容在当前文件可用。<!-- @TODO 请参见 [Webpack 片段](#fragments) 了解更多详细信息。-->
 
 ## 联合和接口上的片段
 

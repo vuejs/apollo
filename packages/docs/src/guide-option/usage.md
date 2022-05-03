@@ -40,6 +40,6 @@ Learn more about those special options in the [Special options section](./specia
 
 All the components under the one which has the `apolloProvider` option have an `$apollo` helper available. This is the glue between your component and Apollo and it does all the heavy lifting for you (including automatic updates and teardowns).
 
-You can access the [apollo-client](https://www.apollographql.com/docs/react/) instances with `this.$apollo.provider.defaultClient` or `this.$apollo.provider.clients.<key>` (for [Multiple clients](../multiple-clients.md)) in all your vue components.
+You can access the [apollo-client](https://www.apollographql.com/docs/react/) instances with `this.$apollo.provider.defaultClient` or `this.$apollo.provider.clients.<key>` (for [Multiple clients](./multiple-clients.md)) in all your vue components.
 
 If you are curious, see [$apollo API](../api/dollar-apollo.md).

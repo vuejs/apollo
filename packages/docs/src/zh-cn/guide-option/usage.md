@@ -40,6 +40,6 @@ export default {
 
 在一个有着 `apolloProvider` 选项的组件之下的所有组件都可以使用一个 `$apollo` 辅助函数。这是你的组件和 Apollo 之间的胶水层，它可以为你完成所有繁重的工作（包括自动更新和销毁）。
 
-在你的每个 vue 组件中，你都可以通过 `this.$apollo.provider.defaultClient` 或 `this.$apollo.provider.clients.<key>`（用于 [多客户端](../multiple-clients.md)）来访问 [apollo-client](https://www.apollographql.com/docs/react/) 实例。
+在你的每个 vue 组件中，你都可以通过 `this.$apollo.provider.defaultClient` 或 `this.$apollo.provider.clients.<key>`（用于 [多客户端](./multiple-clients.md)）来访问 [apollo-client](https://www.apollographql.com/docs/react/) 实例。
 
 如果你很好奇，请查看 [$apollo API](../api/dollar-apollo.md)。

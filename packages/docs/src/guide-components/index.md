@@ -11,17 +11,17 @@ Here is a quick example of an [ApolloQuery](./query.md) in a template:
 ```vue
 <template>
   <!-- Apollo Query -->
-  <ApolloQuery :query="/* some query */">
+  <ApolloQuery
+    :query="/* some query */"
+    v-slot="{ result: { data, loading } }"
+  >
     <!-- The result will automatically updated -->
-    <template slot-scope="{ result: { data, loading } }">
-      <!-- Some content -->
-      <div v-if="loading">Loading...</div>
-      <ul v-else>
-        <li v-for="user of data.users" class="user">
-          {{ user.name }}
-        </li>
-      </ul>
-    </template>
+    <div v-if="loading">Loading...</div>
+    <ul v-else>
+      <li v-for="user of data.users" class="user">
+        {{ user.name }}
+      </li>
+    </ul>
   </ApolloQuery>
 </template>
 

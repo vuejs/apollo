@@ -400,7 +400,7 @@ With GraphQL subscriptions your client will be alerted on push from the server a
 
 With `subscribeToMore`, you can easily do the latter.
 
-`subscribeToMore` is a function available on every query created with `useQuery`. It works just like [`fetchMore`](./cache-interaction/#incremental-loading-fetchmore), except that the update function gets called every time the subscription returns, instead of only once.
+`subscribeToMore` is a function available on every query created with `useQuery`. It works just like `fetchMore`, except that the update function gets called every time the subscription returns, instead of only once.
 
 Let's take the query from our previous example component from the section on [mutations](./mutation) (modified a little bit to have a variable):
 

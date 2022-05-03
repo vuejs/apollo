@@ -1,5 +1,9 @@
 # Local state
 
+::: danger Outdated
+This guide is outdated and needs rework for Vue 3 and vue-apollo 4. Contributions welcome!
+:::
+
 ## Why use Apollo local state management?
 
 When you perform GraphQL queries with Apollo, the results of API calls will be stored in **Apollo cache**. Now imagine you also need to store some kind of a local application state and make it available for different components. Usually, in Vue application we can achieve this with [Vuex](https://vuex.vuejs.org/). But having both Apollo and Vuex will mean you store your data in two different places so you have _two sources of truth_.

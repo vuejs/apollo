@@ -399,7 +399,7 @@ onError(error => {
 
 使用 `subscribeToMore`，你可以很轻松地做到后者。
 
-`subscribeToMore` 是在每个使用 `useQuery` 创建的查询上都可用的函数。它的工作原理和 [`fetchMore`](./cache-interaction/#incremental-loading-fetchmore) 一样，除了每次订阅返回时都会调用 update 函数，而不是仅调用一次。
+`subscribeToMore` 是在每个使用 `useQuery` 创建的查询上都可用的函数。它的工作原理和 `fetchMore` 一样，除了每次订阅返回时都会调用 update 函数，而不是仅调用一次。
 
 让我们从[变更](./mutation)一节中的示例组件中进行查询（稍作修改以使用一个变量）：
 

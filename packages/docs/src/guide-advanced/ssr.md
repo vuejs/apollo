@@ -1,5 +1,9 @@
 # Server-Side Rendering
 
+::: danger Outdated
+This guide is outdated and needs rework for Vue 3 and vue-apollo 4. Contributions welcome!
+:::
+
 ::: warning
 **Requires Vue 2.6+ with `serverPrefetch` support**
 :::

@@ -37,10 +37,13 @@ export default {
     onMessageAdded (previousResult, { subscriptionData }) {
       // The previous result is immutable
       const newResult = {
-        messages: [...previousResult.messages],
+        ...previousResult,
+        messages: [
+          ...previousResult.messages,
+          // Add the question to the list
+          subscriptionData.data.messageAdded,
+        ],
       }
-      // Add the question to the list
-      newResult.messages.push(subscriptionData.data.messageAdded)
       return newResult
     },
   },

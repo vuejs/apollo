@@ -1,8 +1,10 @@
-# ApolloProvider
+# createApolloProvider
 
-## Constructor
+## Example
 
 ```js
+import { createApolloProvider } from '@vue/apollo-option'
+
 const apolloProvider = createApolloProvider({
   // Multiple clients support
   // Use the 'client' option inside queries
@@ -41,9 +43,6 @@ const apolloProvider = createApolloProvider({
 Use the apollo provider into your Vue app:
 
 ```js
-new Vue({
-  el: '#app',
-  apolloProvider,
-  render: h => h(App),
-})
+const app = createApp({ /* ... */ })
+app.use(apolloProvider)
 ```
