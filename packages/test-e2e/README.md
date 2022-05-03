@@ -6,12 +6,12 @@ Demo app: Vue + Apollo + Graphql + vue-cli 3
 ### Setup project
 
 ```
-yarn
+pnpm i
 ```
 
 ### Development
 
 ```
-yarn apollo:run
-yarn serve
+pnpm run apollo:run
+pnpm run serve
 ```

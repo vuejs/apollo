@@ -5,25 +5,19 @@
 Install dependencies:
 
 ```
-yarn install
-cd tests/demo && yarn install
-cd ../ssr && yarn install
+pnpm install
 ```
 
-Link the library to test it in your project:
-
-```
-yarn link
-```
+Go to a package in `packages`.
 
 Build the library with watching:
 
 ```
-yarn dev
+pnpm run dev
 ```
 
 Run tests:
 
 ```
-yarn test
+pnpm run test
 ```

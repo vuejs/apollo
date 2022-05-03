@@ -7,15 +7,15 @@
   "unpkg": "dist/vue-apollo-option.min.js",
   "typings": "types/index.d.ts",
   "scripts": {
-    "build": "yarn build:browser && yarn build:es && yarn build:umd",
+    "build": "pnpm run build:browser && pnpm run build:es && pnpm run build:umd",
     "build:browser": "rollup --config build/rollup.config.browser.js",
     "build:es": "rollup --config build/rollup.config.es.js",
     "build:umd": "rollup --config build/rollup.config.umd.js",
-    "prepublishOnly": "yarn test && yarn build",
-    "dev": "nodemon --exec 'yarn build:es && yarn build:umd' --watch src --watch lib",
-    "test": "yarn build && yarn test:types && yarn run test:unit",
+    "prepublishOnly": "pnpm run test && pnpm run build",
+    "dev": "nodemon --exec 'pnpm run build:es && pnpm run build:umd' --watch src --watch lib",
+    "test": "pnpm run test:types && pnpm run test:unit",
     "test:types": "tsc -p types/test",
-    "test:unit": "yarn run jest"
+    "test:unit": "jest"
   },
   "repository": {
     "type": "git",

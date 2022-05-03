@@ -28,9 +28,9 @@
     "dist"
   ],
   "scripts": {
-    "dev": "yarn build --watch",
+    "dev": "pnpm run build --watch",
     "build": "tsc --outDir dist -d",
-    "prepublishOnly": "yarn build"
+    "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
     "serialize-javascript": "^6.0.0"

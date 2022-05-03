@@ -29,11 +29,11 @@
     "dist"
   ],
   "scripts": {
-    "dev": "rimraf dist && nodemon --exec 'yarn build:code' --watch src --ext js,ts",
-    "build": "rimraf dist && yarn run build:code",
+    "dev": "rimraf dist && nodemon --exec 'pnpm run build:code' --watch src --ext js,ts",
+    "build": "rimraf dist && pnpm run build:code",
     "build:code": "node esbuild.mjs && tsc -d --emitDeclarationOnly",
-    "prepublishOnly": "yarn test && yarn build",
-    "test": "yarn test:types",
+    "prepublishOnly": "pnpm run test && pnpm run build",
+    "test": "pnpm run test:types",
     "test:types": "tsc -p tests/types/"
   },
   "dependencies": {

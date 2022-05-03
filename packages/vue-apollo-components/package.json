@@ -6,12 +6,12 @@
   "module": "dist/vue-apollo-components.esm.js",
   "unpkg": "dist/vue-apollo-components.min.js",
   "scripts": {
-    "build": "yarn build:browser && yarn build:es && yarn build:umd",
+    "build": "pnpm run build:browser && pnpm run build:es && pnpm run build:umd",
     "build:browser": "rollup --config build/rollup.config.browser.js",
     "build:es": "rollup --config build/rollup.config.es.js",
     "build:umd": "rollup --config build/rollup.config.umd.js",
-    "prepublishOnly": "yarn build",
-    "dev": "nodemon --exec 'yarn build:es && yarn build:umd' --watch src --watch lib"
+    "prepublishOnly": "pnpm run build",
+    "dev": "nodemon --exec 'pnpm run build:es && pnpm run build:umd' --watch src --watch lib"
   },
   "repository": {
     "type": "git",

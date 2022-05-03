@@ -18,6 +18,7 @@
 
 ```bash
 npm i @vue/apollo-composable
+pnpm i @vue/apollo-composable
 yarn add @vue/apollo-composable
 ```
 
