@@ -172,7 +172,7 @@ export function useQueryImpl<
   // SSR
   let firstResolve: (() => void) | undefined
   let firstReject: ((apolloError: ApolloError) => void) | undefined
-  onServerPrefetch?.(() => {
+  vm && onServerPrefetch?.(() => {
     if (!isEnabled.value || (isServer && currentOptions.value?.prefetch === false)) return
 
     return new Promise<void>((resolve, reject) => {
