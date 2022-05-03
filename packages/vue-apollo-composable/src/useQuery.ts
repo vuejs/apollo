@@ -220,7 +220,7 @@ export function useQueryImpl<
       query: currentDocument,
       variables: currentVariables,
       ...currentOptions.value,
-      ...isServer
+      ...(isServer && currentOptions.value?.fetchPolicy !== 'no-cache')
         ? {
           fetchPolicy: 'network-only',
         }
