@@ -82,3 +82,27 @@ provide(ApolloClients, {
 ```
 
 You can then select which one to use in functions we will cover next (such as `useQuery`, `useMutation` and `useSubscription`) with the `clientId` option.
+
+## Usage outside of setup
+
+When using e.g. `useQuery` outside of vue contexts, the clients cannot be injected using vue's provide/inject mechanism. `@vue/apollo-composable` can manage their own apollo clients
+
+Use `provideApolloClient` for a single default client:
+
+```js
+import { provideApolloClient } from "@vue/apollo-composable";
+
+provideApolloClient(apolloClient)
+```
+
+Use `provideApolloClients` for multiple clients:
+
+```js
+import { provideApolloClients } from "@vue/apollo-composable";
+
+provideApolloClients({
+  default: apolloClient,
+  clientA: apolloClientA,
+  clientB: apolloClientB,
+})
+```

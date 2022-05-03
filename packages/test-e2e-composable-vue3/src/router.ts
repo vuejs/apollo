@@ -19,6 +19,10 @@ export const router = createRouter({
       component: () => import('./components/NoSetupQuery.vue'),
     },
     {
+      path: '/no-setup-query-multi-client',
+      component: () => import('./components/NoSetupQueryMultiClient.vue'),
+    },
+    {
       path: '/lazy-query',
       component: () => import('./components/LazyQuery.vue'),
     },

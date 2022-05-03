@@ -33,28 +33,43 @@ export function useApolloClient<TCacheShape = any> (clientId?: ClientId): UseApo
   let resolveImpl: ResolveClient<TCacheShape, NullableApolloClient<TCacheShape>>
 
   // Save current client in current closure scope
-  const savedCurrentClient = currentApolloClient
+  const savedCurrentClients = currentApolloClients
 
   if (!getCurrentInstance()) {
-    resolveImpl = () => savedCurrentClient
+    resolveImpl = (id?: ClientId) => {
+      if (id) {
+        return resolveClientWithId(savedCurrentClients, id)
+      }
+      return resolveDefaultClient(savedCurrentClients, savedCurrentClients.default)
+    }
   } else {
     const providedApolloClients: ClientDict<TCacheShape> | null = inject(ApolloClients, null)
     const providedApolloClient: ApolloClient<TCacheShape> | null = inject(DefaultApolloClient, null)
 
     resolveImpl = (id?: ClientId) => {
-      if (savedCurrentClient) {
-        return savedCurrentClient
-      } else if (id) {
-        return resolveClientWithId(providedApolloClients, id)
+      if (id) {
+        const client = resolveClientWithId(providedApolloClients, id)
+        if (client) {
+          return client
+        }
+        return resolveClientWithId(savedCurrentClients, id)
       }
-      return resolveDefaultClient(providedApolloClients, providedApolloClient)
+      const client = resolveDefaultClient(providedApolloClients, providedApolloClient)
+      if (client) {
+        return client
+      }
+      return resolveDefaultClient(savedCurrentClients, savedCurrentClients.default)
     }
   }
 
   function resolveClient (id: ClientId | undefined = clientId) {
     const client = resolveImpl(id)
     if (!client) {
-      throw new Error(`Apollo client with id ${id ?? 'default'} not found. Use provideApolloClient() if you are outside of a component setup.`)
+      throw new Error(
+        `Apollo client with id ${
+          id ?? 'default'
+        } not found. Use provideApolloClient() if you are outside of a component setup.`,
+      )
     }
     return client
   }
@@ -67,13 +82,24 @@ export function useApolloClient<TCacheShape = any> (clientId?: ClientId): UseApo
   }
 }
 
-let currentApolloClient: NullableApolloClient<any>
+let currentApolloClients: ClientDict<any> = {}
 
 export function provideApolloClient<TCacheShape = any> (client: ApolloClient<TCacheShape>) {
-  currentApolloClient = client
+  currentApolloClients = {
+    default: client,
+  }
   return function <TFnResult = any> (fn: () => TFnResult) {
     const result = fn()
-    currentApolloClient = undefined
+    currentApolloClients = {}
+    return result
+  }
+}
+
+export function provideApolloClients<TCacheShape = any> (clients: ClientDict<TCacheShape>) {
+  currentApolloClients = clients
+  return function <TFnResult = any> (fn: () => TFnResult) {
+    const result = fn()
+    currentApolloClients = {}
     return result
   }
 }

@@ -43,4 +43,5 @@ export {
   useApolloClient,
   UseApolloClientReturn,
   provideApolloClient,
+  provideApolloClients,
 } from './useApolloClient'
