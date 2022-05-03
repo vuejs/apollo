@@ -1,6 +1,7 @@
 import {
   ref,
   Ref,
+  unref,
   isRef,
   computed,
   watch,
@@ -360,7 +361,7 @@ export function useQueryImpl<
   function updateRestartFn () {
     // On server, will be called before currentOptions is initialized
     // @TODO investigate
-    if (!currentOptions) {
+    if (!currentOptions.value) {
       debouncedRestart = baseRestart
     } else {
       if (currentOptions.value?.throttle) {
@@ -404,7 +405,7 @@ export function useQueryImpl<
   })
 
   // Applying options
-  watch(() => isRef(optionsRef) ? optionsRef.value : optionsRef, value => {
+  watch(() => unref(optionsRef), value => {
     if (currentOptions.value && (
       currentOptions.value.throttle !== value.throttle ||
       currentOptions.value.debounce !== value.debounce
@@ -418,7 +419,7 @@ export function useQueryImpl<
     immediate: true,
   })
 
-  // Fefetch
+  // Refetch
 
   function refetch (variables: TVariables | undefined = undefined) {
     if (query.value) {
@@ -426,6 +427,7 @@ export function useQueryImpl<
         currentVariables = variables
       }
       error.value = null
+      loading.value = true
       return query.value.refetch(variables)
     }
   }
