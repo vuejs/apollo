@@ -31,5 +31,10 @@
     "dev": "yarn build --watch",
     "build": "tsc --outDir dist -d",
     "prepublishOnly": "yarn build"
+  },
+  "devDependencies": {
+    "@apollo/client": "^3.6.2",
+    "graphql": "^15.3.0",
+    "typescript": "^4.1.5"
   }
 }

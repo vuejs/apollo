@@ -55,7 +55,11 @@
   "devDependencies": {
     "@apollo/client": "^3.4.0",
     "@types/throttle-debounce": "^2.1.0",
+    "graphql": "^15.3.0",
+    "graphql-tag": "^2.12.6",
     "nodemon": "^1.18.4",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.1.5",
     "vue": "^3.1.0"
   }
 }

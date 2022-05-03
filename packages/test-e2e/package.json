@@ -14,14 +14,16 @@
   },
   "dependencies": {
     "@apollo/client": "^3.2.1",
-    "@vue/apollo-components": "^4.0.0-alpha.16",
-    "@vue/apollo-option": "^4.0.0-alpha.16",
+    "@vue/apollo-components": "workspace:*",
+    "@vue/apollo-option": "workspace:*",
     "apollo-server-express": "^2.18.2",
     "core-js": "^3.4.1",
     "graphql": "^15.3.0",
     "graphql-type-json": "^0.3.0",
     "marked": "^0.7.0",
+    "regenerator-runtime": "^0.13.9",
     "shortid": "^2.2.8",
+    "subscriptions-transport-ws": "^0.11.0",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0",
     "vuex": "^4.0.0"

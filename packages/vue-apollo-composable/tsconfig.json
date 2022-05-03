@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES2015",
     "module": "CommonJS",
     "sourceMap": true,
     "skipLibCheck": true,

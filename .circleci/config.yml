@@ -27,14 +27,16 @@ jobs:
           nvm use 16
           nvm alias default 16
 
+    - run: npm install -g pnpm
+
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v10-dependencies-{{ checksum "yarn.lock" }}
+          - v11-dependencies-{{ checksum "pnpm-lock.yaml" }}
           # fallback to using the latest cache if no exact match is found
-          - v10-dependencies-
+          - v11-dependencies-
 
-      - run: yarn install
+      - run: pnpm install --frozen-lockfile
 
       - save_cache:
           paths:
@@ -51,19 +53,20 @@ jobs:
             - packages/vue-apollo-ssr/node_modules
             - packages/vue-apollo-util/node_modules
             - ~/.cache
-          key: v10-dependencies-{{ checksum "yarn.lock" }}
+            - ~/.pnpm-store
+          key: v11-dependencies-{{ checksum "pnpm-lock.yaml" }}
         
       # run tests!
-      - run: yarn lint
-      - run: yarn build
-      - run: cd packages/vue-apollo-option && yarn test:types
-      - run: cd packages/vue-apollo-option && yarn test:unit
-      - run: cd packages/vue-apollo-composable && yarn test:types
-      - run: cd packages/test-e2e && yarn test:e2e
-    #   - run: cd packages/test-e2e-composition && yarn test:e2e
-      - run: cd packages/test-e2e-composable-vue3 && yarn test:e2e
-    #   - run: cd packages/test-ssr && yarn test:e2e
-    #   - run: cd packages/test-ssr-composition && yarn test:e2e
+      - run: pnpm run lint
+      - run: pnpm run build
+      - run: cd packages/vue-apollo-option && pnpm run test:types
+      - run: cd packages/vue-apollo-option && pnpm run test:unit
+      - run: cd packages/vue-apollo-composable && pnpm run test:types
+      - run: cd packages/test-e2e && pnpm run test:e2e
+    #   - run: cd packages/test-e2e-composition && pnpm run test:e2e
+      - run: cd packages/test-e2e-composable-vue3 && pnpm run test:e2e
+    #   - run: cd packages/test-ssr && pnpm run test:e2e
+    #   - run: cd packages/test-ssr-composition && pnpm run test:e2e
 
       - store_artifacts:
           path: packages/test-e2e/tests/e2e/videos
