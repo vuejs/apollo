@@ -27,7 +27,7 @@ jobs:
           nvm use 16
           nvm alias default 16
 
-    - run: npm install -g pnpm
+      - run: npm install -g pnpm
 
       # Download and cache dependencies
       - restore_cache:
