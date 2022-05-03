@@ -15,6 +15,7 @@ importers:
       '@typescript-eslint/parser': ^4.2.0
       '@vue/eslint-config-standard': ^6.0.0
       '@vue/eslint-config-typescript': ^7.0.0
+      conventional-changelog-cli: ^2.2.2
       core-js: ^3.4.1
       esbuild: ^0.8.44
       esbuild-node-externals: ^1.0.2
@@ -31,6 +32,7 @@ importers:
       '@typescript-eslint/parser': 4.33.0_e4zyhrvfnqudwdx5bevnvkluy4
       '@vue/eslint-config-standard': 6.1.0_prhfl54rv5bu2u3ooxppsjs65q
       '@vue/eslint-config-typescript': 7.0.0_6la4ba6kt6f6k6jmpxfirguy4m
+      conventional-changelog-cli: 2.2.2
       core-js: 3.22.4
       esbuild: 0.8.57
       esbuild-node-externals: 1.4.1_esbuild@0.8.57

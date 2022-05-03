@@ -14,6 +14,7 @@
     "@typescript-eslint/parser": "^4.2.0",
     "@vue/eslint-config-standard": "^6.0.0",
     "@vue/eslint-config-typescript": "^7.0.0",
+    "conventional-changelog-cli": "^2.2.2",
     "core-js": "^3.4.1",
     "esbuild": "^0.8.44",
     "esbuild-node-externals": "^1.0.2",
