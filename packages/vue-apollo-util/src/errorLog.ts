@@ -48,7 +48,7 @@ export function logErrorMessages (error: ApolloError | ErrorResponse, printStack
     if (stack == null) return
 
     const newLineIndex = stack.indexOf('\n')
-    stack = stack.substr(stack.indexOf('\n', newLineIndex + 1))
+    stack = stack.slice(stack.indexOf('\n', newLineIndex + 1))
     console.log(`%c${stack}`, 'color:grey;')
   }
 }
