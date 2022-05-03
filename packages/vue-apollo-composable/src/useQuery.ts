@@ -284,8 +284,10 @@ export function useQueryImpl<
   function onError (queryError: unknown) {
     // any error should already be an ApolloError, but we make sure
     const apolloError = toApolloError(queryError)
+    const client = resolveClient(currentOptions.value?.clientId)
+    const errorPolicy = currentOptions.value?.errorPolicy || client.defaultOptions?.watchQuery?.errorPolicy
 
-    if (currentOptions.value?.errorPolicy !== 'none') {
+    if (errorPolicy && errorPolicy !== 'none') {
       processNextResult((query.value as ObservableQuery<TResult, TVariables>).getCurrentResult())
     }
     processError(apolloError)
