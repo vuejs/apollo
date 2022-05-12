@@ -6,10 +6,7 @@ const plugin = {}
 
 export function install (app, options) {
   app.component('ApolloQuery', CApolloQuery)
-  app.component('ApolloQuery', CApolloQuery)
   app.component('ApolloSubscribeToMore', CApolloSubscribeToMore)
-  app.component('ApolloSubscribeToMore', CApolloSubscribeToMore)
-  app.component('ApolloMutation', CApolloMutation)
   app.component('ApolloMutation', CApolloMutation)
 }
 
