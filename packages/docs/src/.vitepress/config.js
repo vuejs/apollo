@@ -637,6 +637,11 @@ export default defineConfig({
         },
       },
     },
+    algolia: {
+      appId: 'X6FFODVB9N',
+      apiKey: 'cc89b1eff7e2fc6e6c0bbf8b066ab488',
+      indexName: 'apollo-vuejs',
+    },
   },
 
   vite: {
