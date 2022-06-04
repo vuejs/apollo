@@ -431,6 +431,11 @@ export function useQueryImpl<
       error.value = null
       loading.value = true
       return query.value.refetch(variables)
+        .then((refetchResult) => {
+          const currentResult = query.value?.getCurrentResult()
+          currentResult && processNextResult(currentResult)
+          return refetchResult
+        })
     }
   }
 
@@ -439,7 +444,13 @@ export function useQueryImpl<
   function fetchMore (options: FetchMoreQueryOptions<TVariables, TResult> & FetchMoreOptions<TResult, TVariables>) {
     if (query.value) {
       error.value = null
+      loading.value = true
       return query.value.fetchMore(options)
+        .then((fetchMoreResult) => {
+          const currentResult = query.value?.getCurrentResult()
+          currentResult && processNextResult(currentResult)
+          return fetchMoreResult
+        })
     }
   }
 
