@@ -14,6 +14,11 @@ const app = express()
 
 app.use(cors('*'))
 
+app.get('/_reset', (req, res) => {
+  require('./apollo-server/reset.js').reset()
+  res.status(200).send('OK')
+})
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,

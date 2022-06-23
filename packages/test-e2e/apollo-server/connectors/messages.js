@@ -1,15 +1,19 @@
 const shortid = require('shortid')
 const triggers = require('../triggers')
 
-const messages = [
-  {
-    id: '__bot:1',
-    userId: '__bot',
-    channelId: 'general',
-    content: 'Welcome to the chat!',
-    dateAdded: Date.now(),
-  },
-]
+function createDefaultMessages () {
+  return [
+    {
+      id: '__bot:1',
+      userId: '__bot',
+      channelId: 'general',
+      content: 'Welcome to the chat!',
+      dateAdded: Date.now(),
+    },
+  ]
+}
+
+let messages = createDefaultMessages()
 
 function publishChange ({ type, message }, context) {
   context.pubsub.publish(triggers.MESSAGE_CHANGED, {
@@ -94,4 +98,9 @@ exports.mockMessageSend = (context) => {
     message,
   }, context)
   return true
+}
+
+exports.reset = () => {
+  messages = createDefaultMessages()
+  mockCount = 1
 }

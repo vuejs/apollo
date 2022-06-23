@@ -1,14 +1,18 @@
 const shortid = require('shortid')
 
-const users = [
-  {
-    id: '__bot',
-    email: 'bot@bot.com',
-    password: 'bot',
-    nickname: 'The Bot',
-    tokens: [],
-  },
-]
+function createDefaultUsers () {
+  return [
+    {
+      id: '__bot',
+      email: 'bot@bot.com',
+      password: 'bot',
+      nickname: 'The Bot',
+      tokens: [],
+    },
+  ]
+}
+
+let users = createDefaultUsers()
 
 exports.register = (input, context) => {
   if (users.find(u => u.email === input.email)) {
@@ -76,4 +80,8 @@ exports.validateToken = (token) => {
 exports.current = (context) => {
   if (!context.userId) throw new Error('Unauthorized')
   return exports.getOne(context.userId, context)
+}
+
+exports.reset = () => {
+  users = createDefaultUsers()
 }

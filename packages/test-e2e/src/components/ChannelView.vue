@@ -93,7 +93,7 @@ export default {
           Loading...
         </div>
 
-        <div v-else-if="data">
+        <div v-else-if="data?.channel">
           <!-- Websockets -->
           <ApolloSubscribeToMore
             :document="require('../graphql/messageChanged.gql')"

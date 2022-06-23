@@ -9,6 +9,10 @@ function login () {
 }
 
 describe('test', () => {
+  before(() => {
+    cy.request('http://localhost:4042/_reset')
+  })
+
   it('creates an account', () => {
     cy.visit('/')
     cy.get('[data-id="create-account"]').click()

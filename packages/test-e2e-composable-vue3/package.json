@@ -13,31 +13,32 @@
     "api": "node server.js"
   },
   "dependencies": {
-    "@apollo/client": "^3.2.1",
+    "@apollo/client": "^3.6.9",
     "@vue/apollo-composable": "workspace:*",
     "@vue/apollo-util": "workspace:*",
-    "apollo-server-express": "^2.18.2",
-    "core-js": "^3.6.5",
+    "apollo-server-express": "^2.25.4",
+    "core-js": "^3.23.2",
     "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "graphql": "^15.3.0",
+    "express": "^4.18.1",
+    "graphql": "^15.8.0",
     "graphql-tag": "^2.12.6",
     "regenerator-runtime": "^0.13.9",
-    "shortid": "^2.2.15",
-    "vue": "^3.0.0",
+    "shortid": "^2.2.16",
+    "vue": "^3.2.37",
     "vue-demi": "^0.13.1",
-    "vue-router": "^4.0.0-beta.13"
+    "vue-router": "^4.0.16"
   },
   "devDependencies": {
+    "@babel/core": "^7.18.5",
     "@types/shortid": "^0.0.29",
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-e2e-cypress": "~4.5.0",
-    "@vue/cli-plugin-typescript": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
-    "@vue/compiler-sfc": "^3.0.0",
+    "@vue/cli-plugin-babel": "^5.0.6",
+    "@vue/cli-plugin-e2e-cypress": "^5.0.6",
+    "@vue/cli-plugin-typescript": "^5.0.6",
+    "@vue/cli-service": "^5.0.6",
     "axios": "^0.24.0",
+    "cypress": "^10.2.0",
     "kill-port": "^1.6.1",
-    "start-server-and-test": "^1.10.6",
-    "tailwindcss": "^1.0.1"
+    "start-server-and-test": "^1.14.0",
+    "tailwindcss": "^1.9.6"
   }
 }
