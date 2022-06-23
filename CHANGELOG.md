@@ -1,3 +1,15 @@
+# [4.0.0-alpha.18](https://github.com/vuejs/vue-apollo/compare/v4.0.0-alpha.17...v4.0.0-alpha.18) (2022-06-23)
+
+
+### Bug Fixes
+
+* apollo components registered twice, fix [#1336](https://github.com/vuejs/vue-apollo/issues/1336) ([3ad3ab3](https://github.com/vuejs/vue-apollo/commit/3ad3ab3ddaf5ffafe5297afac904c2f364f50c96))
+* change data init, related to [#1350](https://github.com/vuejs/vue-apollo/issues/1350) ([b94bdf7](https://github.com/vuejs/vue-apollo/commit/b94bdf7e79d0d861073df6e974a63b460f0963ac))
+* Make calls of the refetch() & fetchMore() trigger loading state ([#1366](https://github.com/vuejs/vue-apollo/issues/1366)) ([a32fe9c](https://github.com/vuejs/vue-apollo/commit/a32fe9c469e74d619a36d8df1d2db92c1a9cdb47))
+* vue-demi updated ([#1373](https://github.com/vuejs/vue-apollo/issues/1373)) ([e959a2c](https://github.com/vuejs/vue-apollo/commit/e959a2ccd4310fba22be556f289d97d2c4de379d))
+
+
+
 # [4.0.0-alpha.17](https://github.com/vuejs/vue-apollo/compare/v4.0.0-alpha.16...v4.0.0-alpha.17) (2022-05-03)
 
 
