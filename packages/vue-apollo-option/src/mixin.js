@@ -6,30 +6,6 @@ function hasProperty (holder, key) {
   return typeof holder !== 'undefined' && Object.prototype.hasOwnProperty.call(holder, key)
 }
 
-function proxyData () {
-  this.$_apolloInitData = {}
-
-  const apollo = this.$options.apollo
-  if (apollo) {
-    // watchQuery
-    for (const key in apollo) {
-      if (key.charAt(0) !== '$') {
-        const options = apollo[key]
-        // Property proxy
-        if (!options.manual && !hasProperty(this.$options.props, key) && !hasProperty(this.$options.computed, key) && !hasProperty(this.$options.methods, key)) {
-          Object.defineProperty(this, key, {
-            get: () => this.$data.$apolloData.data[key],
-            // For component class constructor
-            set: value => this.$_apolloInitData[key] = value,
-            enumerable: true,
-            configurable: true,
-          })
-        }
-      }
-    }
-  }
-}
-
 function launch () {
   const apolloProvider = this.$apolloProvider
 
@@ -112,18 +88,30 @@ function destroy () {
 export function installMixin (app, provider) {
   app.mixin({
     data () {
-      return {
+      const result = {
         $apolloData: {
           queries: {},
           loading: 0,
-          data: this.$_apolloInitData,
+          data: {},
         },
       }
+      // Init data props
+      const apollo = this.$options.apollo
+      if (apollo) {
+        for (const key in apollo) {
+          if (key.charAt(0) !== '$') {
+            const options = apollo[key]
+            if (!options.manual && !hasProperty(this.$options.props, key) && !hasProperty(this.$options.computed, key) && !hasProperty(this.$options.methods, key)) {
+              result[key] = null
+            }
+          }
+        }
+      }
+      return result
     },
 
     beforeCreate () {
       this.$apollo = new DollarApollo(this, provider)
-      proxyData.call(this)
       if (isServer) {
         // Patch render function to cleanup apollo
         const render = this.$options.render
