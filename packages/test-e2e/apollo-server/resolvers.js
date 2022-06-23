@@ -29,6 +29,12 @@ module.exports = {
     loadNumber: () => new Promise((resolve) => {
       setTimeout(() => resolve(42), 100)
     }),
+    items: () => [
+      {
+        id: '1',
+        name: 'Item 1',
+      },
+    ],
   },
 
   Mutation: {

@@ -63,6 +63,11 @@ enum MessageChangedType {
   removed
 }
 
+type Item {
+  id: ID!
+  name: String!
+}
+
 type Query {
   userCurrent: User @private
   channels: [Channel] @private
@@ -70,6 +75,7 @@ type Query {
   good: String
   bad: String
   loadNumber: Int!
+  items: [Item!]!
 }
 
 type Mutation {

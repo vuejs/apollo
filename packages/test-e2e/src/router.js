@@ -38,5 +38,9 @@ export default createRouter({
       path: '/manual-add-smart-query',
       component: ManualAddSmartQuery,
     },
+    {
+      path: '/update-cache',
+      component: () => import('./components/UpdateCache.vue'),
+    },
   ],
 })
