@@ -8,7 +8,7 @@ import {
   getCurrentInstance,
   onBeforeUnmount,
   nextTick,
-} from 'vue-demi'
+} from 'vue'
 import {
   OperationVariables,
   SubscriptionOptions,

@@ -1,4 +1,4 @@
-import { Ref, computed } from 'vue-demi'
+import { Ref, computed } from 'vue'
 import { ExtractSingleKey } from './util/ExtractSingleKey'
 import type { DeepNonNullable, DeepRequired } from 'ts-essentials'
 

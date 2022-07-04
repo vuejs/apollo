@@ -1,4 +1,4 @@
-import { Ref, isRef, reactive, computed } from 'vue-demi'
+import { Ref, isRef, reactive, computed } from 'vue'
 import { ReactiveFunction } from './ReactiveFunction'
 
 // eslint-disable-next-line @typescript-eslint/ban-types

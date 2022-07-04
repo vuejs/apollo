@@ -1,4 +1,4 @@
-import { ComputedRef } from 'vue-demi'
+import { ComputedRef } from 'vue'
 import {
   useGlobalMutationLoading,
   useGlobalQueryLoading,

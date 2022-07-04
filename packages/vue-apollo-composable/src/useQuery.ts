@@ -9,7 +9,7 @@ import {
   getCurrentInstance,
   onBeforeUnmount,
   nextTick,
-} from 'vue-demi'
+} from 'vue'
 import { DocumentNode } from 'graphql'
 import {
   OperationVariables,

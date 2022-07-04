@@ -1,4 +1,4 @@
-import { Ref, isRef, computed, ref } from 'vue-demi'
+import { Ref, isRef, computed, ref } from 'vue'
 import { ReactiveFunction } from './ReactiveFunction'
 
 export function paramToRef<T> (param: T | Ref<T> | ReactiveFunction<T>): Ref<T> {

@@ -1,4 +1,4 @@
-import type { ComponentInternalInstance } from 'vue-demi'
+import type { ComponentInternalInstance } from 'vue'
 import type { AppLoadingTracking } from './loadingTracking'
 
 export interface CurrentInstance extends Omit<ComponentInternalInstance, 'root' | '$root'> {

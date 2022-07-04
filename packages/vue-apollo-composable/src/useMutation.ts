@@ -1,6 +1,6 @@
 import { DocumentNode } from 'graphql'
 import { MutationOptions, OperationVariables, FetchResult, TypedDocumentNode, ApolloError } from '@apollo/client/core'
-import { ref, onBeforeUnmount, isRef, Ref, getCurrentInstance } from 'vue-demi'
+import { ref, onBeforeUnmount, isRef, Ref, getCurrentInstance } from 'vue'
 import { useApolloClient } from './useApolloClient'
 import { ReactiveFunction } from './util/ReactiveFunction'
 import { useEventHook } from './util/useEventHook'

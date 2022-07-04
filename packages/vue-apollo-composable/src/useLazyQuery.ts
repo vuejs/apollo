@@ -1,5 +1,5 @@
 import { DocumentNode } from 'graphql'
-import { isRef } from 'vue-demi'
+import { isRef } from 'vue'
 import { useQueryImpl, DocumentParameter, VariablesParameter, OptionsParameter, UseQueryOptions } from './useQuery'
 
 export function useLazyQuery<
