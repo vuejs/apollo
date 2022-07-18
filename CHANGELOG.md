@@ -1,3 +1,14 @@
+# [4.0.0-alpha.19](https://github.com/vuejs/vue-apollo/compare/v4.0.0-alpha.18...v4.0.0-alpha.19) (2022-07-18)
+
+
+### Bug Fixes
+
+* **options:** use beforeUnmount instead of unmounted ([9726e0a](https://github.com/vuejs/vue-apollo/commit/9726e0a8655053789dc1b68103f282f6ef0c1d95))
+* Root instance not found when using with Vue 2.7 ([#1379](https://github.com/vuejs/vue-apollo/issues/1379)) ([cb0ab57](https://github.com/vuejs/vue-apollo/commit/cb0ab5790514ae10ea5e7bab381199f65b8107d5))
+* **ssr:** mock $apollo after serverPrefetch, fix [#1297](https://github.com/vuejs/vue-apollo/issues/1297) ([46ea781](https://github.com/vuejs/vue-apollo/commit/46ea78117adfc81a59219df1a8560c21fa0ad7be))
+
+
+
 # [4.0.0-alpha.18](https://github.com/vuejs/vue-apollo/compare/v4.0.0-alpha.17...v4.0.0-alpha.18) (2022-06-23)
 
 
