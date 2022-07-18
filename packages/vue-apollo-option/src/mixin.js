@@ -126,7 +126,16 @@ export function installMixin (app, provider) {
     serverPrefetch () {
       if (this.$_apolloPromises) {
         return Promise.all(this.$_apolloPromises).then(() => {
+          // Mock `$apollo` for the render function
+          const mocked = {
+            vm: this,
+            provider: this.$apollo.provider,
+            loading: false,
+            queries: {},
+            subscriptions: {},
+          }
           destroy.call(this)
+          this.$apollo = mocked
         }).catch(e => {
           destroy.call(this)
           return Promise.reject(e)
