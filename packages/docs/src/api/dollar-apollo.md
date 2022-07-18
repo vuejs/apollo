@@ -5,8 +5,8 @@ This is the Apollo manager added to any component that uses Apollo. It can be ac
 ## Properties
 
 - `vm`: related component
-- `queries`: array of the component's Reactive Queries.
-- `subscriptions`: array of the component's Reactive Subscriptions.
+- `queries`: object map of the component's Reactive Queries.
+- `subscriptions`: object map of the component's Reactive Subscriptions.
 - `provider`: injected [Apollo Provider](./apollo-provider.md).
 - `loading`: whether at least one query is loading.
 - `skipAllQueries`: (setter) boolean to pause or unpause all Reactive Queries.
