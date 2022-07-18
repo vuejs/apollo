@@ -13,7 +13,7 @@ export interface AppLoadingTracking extends LoadingTracking {
 
 export function getAppTracking () {
   const vm = getCurrentInstance() as CurrentInstance | null
-  const root = vm?.$root ?? vm?.root
+  const root = vm?.$root ?? vm?.root ?? vm?.proxy?.$root as CurrentInstance | null | undefined
   if (!root) {
     throw new Error('Instance $root not found')
   }
