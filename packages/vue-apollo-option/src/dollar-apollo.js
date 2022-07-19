@@ -16,6 +16,12 @@ export class DollarApollo {
     this.error = undefined
   }
 
+  refetchAllQueries () {
+    for (const key in this.queries) {
+      this.queries[key].refetch()
+    }
+  }
+
   getClient (options = null) {
     if (!options || !options.client) {
       if (typeof this.client === 'object') {
