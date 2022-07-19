@@ -1,3 +1,12 @@
+# [4.0.0-alpha.20](https://github.com/vuejs/vue-apollo/compare/v4.0.0-alpha.19...v4.0.0-alpha.20) (2022-07-19)
+
+
+### Reverts
+
+* Revert "fix(options): use beforeUnmount instead of unmounted" ([8d51475](https://github.com/vuejs/vue-apollo/commit/8d51475f40c8605d0187180063487173c52167ba))
+
+
+
 # [4.0.0-alpha.19](https://github.com/vuejs/vue-apollo/compare/v4.0.0-alpha.18...v4.0.0-alpha.19) (2022-07-18)
 
 
