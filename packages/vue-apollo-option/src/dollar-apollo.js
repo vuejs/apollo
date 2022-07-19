@@ -170,6 +170,12 @@ export class DollarApollo {
     }))
   }
 
+  refetchAllQueries() {
+    for (const key in this.queries) {
+      this.queries[key].refetch()
+    }
+  }
+
   set skipAllQueries (value) {
     this._skipAllQueries = value
     for (const key in this.queries) {
