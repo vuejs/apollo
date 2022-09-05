@@ -545,8 +545,9 @@ subscribeToMore(() => ({
     channelId: props.channelId
   },
   updateQuery: (previousResult, { subscriptionData }) => {
-    previousResult.messages.push(subscriptionData.data.messageAdded)
-    return previousResult
+    const tmp = [...previousResult] 
+    tmp.messages.push(subscriptionData.data.messageAdded)
+    return tmp
   }
 }))
 ```
