@@ -1,3 +1,12 @@
+# [4.0.0-beta.1](https://github.com/vuejs/vue-apollo/compare/v4.0.0-alpha.20...v4.0.0-beta.1) (2022-10-05)
+
+
+### Bug Fixes
+
+* **composable:** Remove immediate result logic ([#1388](https://github.com/vuejs/vue-apollo/issues/1388)) ([fc98307](https://github.com/vuejs/vue-apollo/commit/fc983077dcf89e10b4eb88731eee77b375a8a85f))
+
+
+
 # [4.0.0-alpha.20](https://github.com/vuejs/vue-apollo/compare/v4.0.0-alpha.19...v4.0.0-alpha.20) (2022-07-19)
 
 
