@@ -79,7 +79,7 @@ export function useResult<
   defaultValue?: TDefaultValue,
   pick?: (data: DeepRequired<DeepNonNullable<TResult>>) => TReturnValue,
 ): UseResultReturn<TResult | TResult[keyof TResult] | TDefaultValue | TReturnValue | undefined> {
-  console.warn(`'useResult' is deprecated and will be removed soon. Plase use a computed instead.
+  console.warn(`'useResult' is deprecated and will be removed soon. Please use 'computed' instead.
 Before:
 const items = useResult(result, [], data => data.someField.myItems)
 After:
