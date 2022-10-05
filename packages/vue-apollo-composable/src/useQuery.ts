@@ -228,14 +228,6 @@ export function useQueryImpl<
 
     startQuerySubscription()
 
-    if (!isServer && (currentOptions.value?.fetchPolicy !== 'no-cache' || currentOptions.value.notifyOnNetworkStatusChange)) {
-      const currentResult = query.value.getCurrentResult()
-
-      if (!currentResult.loading || currentResult.partial || currentOptions.value?.notifyOnNetworkStatusChange) {
-        onNextResult(currentResult)
-      }
-    }
-
     if (!isServer) {
       for (const item of subscribeToMoreItems) {
         addSubscribeToMore(item)
