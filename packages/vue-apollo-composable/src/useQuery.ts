@@ -500,7 +500,9 @@ export function useQueryImpl<
   // Auto start & stop
   watch(isEnabled, value => {
     if (value) {
-      start()
+      nextTick(() => {
+        start()
+      })
     } else {
       stop()
     }
