@@ -195,9 +195,6 @@ export function useQueryImpl<
     if (!isEnabled.value || (isServer && currentOptions.value?.prefetch === false)) return
 
     return new Promise<void>((resolve, reject) => {
-      if (firstResolveTriggered) return
-      if (firstRejectError) throw firstRejectError
-
       firstResolve = () => {
         resolve()
         resetFirstResolveReject()
@@ -205,6 +202,12 @@ export function useQueryImpl<
       firstReject = (apolloError: ApolloError) => {
         reject(apolloError)
         resetFirstResolveReject()
+      }
+
+      if (firstResolveTriggered) {
+        firstResolve()
+      } else if (firstRejectError) {
+        firstReject(firstRejectError)
       }
     }).then(stop).catch(stop)
   })
