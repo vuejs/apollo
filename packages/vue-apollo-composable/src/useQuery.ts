@@ -189,6 +189,7 @@ export function useQueryImpl<
     firstReject = undefined
     firstResolveTriggered = false
     firstRejectError = undefined
+    stop()
   }
 
   vm && onServerPrefetch?.(() => {
@@ -196,12 +197,12 @@ export function useQueryImpl<
 
     return new Promise<void>((resolve, reject) => {
       firstResolve = () => {
-        resolve()
         resetFirstResolveReject()
+        resolve()
       }
       firstReject = (apolloError: ApolloError) => {
-        reject(apolloError)
         resetFirstResolveReject()
+        reject(apolloError)
       }
 
       if (firstResolveTriggered) {
@@ -283,10 +284,7 @@ export function useQueryImpl<
       processError(resultErrorsToApolloError(queryResult.errors))
     }
 
-    if (firstResolve) {
-      tryFirstResolve()
-      stop()
-    }
+    tryFirstResolve()
   }
 
   function processNextResult (queryResult: ApolloQueryResult<TResult>) {
@@ -306,10 +304,7 @@ export function useQueryImpl<
       processNextResult((query.value as ObservableQuery<TResult, TVariables>).getCurrentResult())
     }
     processError(apolloError)
-    if (firstReject) {
-      tryFirstReject(apolloError)
-      stop()
-    }
+    tryFirstReject(apolloError)
     // The observable closes the sub if an error occurs
     resubscribeToQuery()
   }
