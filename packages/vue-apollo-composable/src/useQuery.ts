@@ -170,20 +170,44 @@ export function useQueryImpl<
 
   // SSR
   let firstResolve: (() => void) | undefined
+  let firstResolveTriggered = false
   let firstReject: ((apolloError: ApolloError) => void) | undefined
+  let firstRejectError: undefined | ApolloError
+
+  const tryFirstResolve = () => {
+    firstResolveTriggered = true
+    if (firstResolve) firstResolve()
+  }
+
+  const tryFirstReject = (apolloError: ApolloError) => {
+    firstRejectError = apolloError
+    if (firstReject) firstReject(apolloError)
+  }
+
+  const resetFirstResolveReject = () => {
+    firstResolve = undefined
+    firstReject = undefined
+    firstResolveTriggered = false
+    firstRejectError = undefined
+  }
+
   vm && onServerPrefetch?.(() => {
     if (!isEnabled.value || (isServer && currentOptions.value?.prefetch === false)) return
 
     return new Promise<void>((resolve, reject) => {
       firstResolve = () => {
         resolve()
-        firstResolve = undefined
-        firstReject = undefined
+        resetFirstResolveReject()
       }
       firstReject = (apolloError: ApolloError) => {
         reject(apolloError)
-        firstResolve = undefined
-        firstReject = undefined
+        resetFirstResolveReject()
+      }
+
+      if (firstResolveTriggered) {
+        firstResolve()
+      } else if (firstRejectError) {
+        firstReject(firstRejectError)
       }
     }).then(stop).catch(stop)
   })
@@ -205,7 +229,7 @@ export function useQueryImpl<
       started || !isEnabled.value ||
       (isServer && currentOptions.value?.prefetch === false)
     ) {
-      if (firstResolve) firstResolve()
+      tryFirstResolve()
       return
     }
 
@@ -260,7 +284,7 @@ export function useQueryImpl<
     }
 
     if (firstResolve) {
-      firstResolve()
+      tryFirstResolve()
       stop()
     }
   }
@@ -283,7 +307,7 @@ export function useQueryImpl<
     }
     processError(apolloError)
     if (firstReject) {
-      firstReject(apolloError)
+      tryFirstReject(apolloError)
       stop()
     }
     // The observable closes the sub if an error occurs
@@ -312,7 +336,7 @@ export function useQueryImpl<
    * Stop watching the query
    */
   function stop () {
-    if (firstResolve) firstResolve()
+    tryFirstResolve()
     if (!started) return
     started = false
     loading.value = false
