@@ -431,6 +431,45 @@ export const resolvers = {
 }
 ```
 
+## Headers
+You can use the `setContext` method from `@apollo/client/link/context` to submit your own custom headers or authorization headers i.e., Bearer.
+
+
+```js
+// other imports ...
+import {setContext} from '@apollo/client/link/context'
+
+// createUploadLink can be used as well
+// jaydenseric/apollo-upload-client library for uploading files using apollo
+
+let link = createHttpLink({uri: url})
+link = setContext(async (_, {headers}) => {
+    
+    // getToken() your defined function for getting the token
+    const Authorization = getToken()
+    
+    const authorizationHeader = Authorization ? {Authorization} : {}
+    return {
+        headers: {
+            ...headers,
+            ...authorizationHeader,
+        },
+    }
+}).concat(link)
+
+function getToken() {
+    const token = JSON.parse(localStorage.getItem('apollo-token'));
+    return `Bearer ${token}` || null;
+}
+```
+then pass that `link` to your `ApolloClient`
+```js
+    new ApolloClient({
+        link: link
+    })
+```
+
+
 ## Manually adding a smart Query
 
 You can manually add a smart query with the `$apollo.addSmartQuery(key, options)` method:
