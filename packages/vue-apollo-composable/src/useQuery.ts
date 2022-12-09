@@ -21,6 +21,7 @@ import {
   ObservableSubscription,
   TypedDocumentNode,
   ApolloError,
+  NetworkStatus
 } from '@apollo/client/core'
 import { throttle, debounce } from 'throttle-debounce'
 import { useApolloClient } from './useApolloClient'
@@ -196,6 +197,7 @@ export function useQueryImpl<
   const query: Ref<ObservableQuery<TResult, TVariables> | null | undefined> = ref()
   let observer: ObservableSubscription | undefined
   let started = false
+  let isFirstRun = true
 
   /**
    * Starts watching the query
@@ -233,11 +235,25 @@ export function useQueryImpl<
         addSubscribeToMore(item)
       }
     }
+
+    isFirstRun = false
   }
 
   function startQuerySubscription () {
     if (observer && !observer.closed) return
     if (!query.value) return
+
+    // If hydrating already finished queries, just handle result immediately
+    if (!isServer && isFirstRun) {
+      const currentResult = query.value.getCurrentResult()
+      if (currentResult) {
+        if (currentResult.networkStatus === NetworkStatus.ready) {
+          onNextResult(currentResult)
+        } else if (currentResult.networkStatus === NetworkStatus.error && currentResult.error) {
+          onError(currentResult.error)
+        }
+      }
+    }
 
     // Create subscription
     observer = query.value.subscribe({
