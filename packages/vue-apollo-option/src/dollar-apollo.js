@@ -170,7 +170,7 @@ export class DollarApollo {
     }))
   }
 
-  refetchAllQueries() {
+  refetchAllQueries () {
     for (const key in this.queries) {
       this.queries[key].refetch()
     }
