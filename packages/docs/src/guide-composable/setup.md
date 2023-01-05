@@ -92,7 +92,12 @@ Use `provideApolloClient` for a single default client:
 ```js
 import { provideApolloClient } from "@vue/apollo-composable";
 
-provideApolloClient(apolloClient)
+const query = provideApolloClient(apolloClient)(() => useQuery(gql`
+  query hello {
+    hello
+  }
+`))
+const hello = computed(() => query.result.value?.hello ?? '')
 ```
 
 Use `provideApolloClients` for multiple clients:
