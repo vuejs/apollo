@@ -1,26 +1,47 @@
 # Subscriptions
 
-## Setup
-
 *For the server implementation, you can take a look at [this simple example](https://github.com/Akryum/apollo-server-example).*
+## Client setup
+The GraphQL spec does not define a specific protocol for sending subscription requests. The first popular JavaScript library to implement subscriptions over WebSocket is called *subscriptions-transport-ws*. This library is no longer actively maintained. Its successor is a library called *graphql-ws*. The two libraries do not use the same WebSocket subprotocol, so you need to make sure that your server and clients all use the same library.
+
+Apollo Client supports both *graphql-ws* and *subscriptions-transport-ws*. Apollo [documentation](https://www.apollographql.com/docs/react/data/subscriptions/#choosing-a-subscription-library) suggest to use the newer library *graphql-ws*, but in case you need it, here its explained how to do it with both.
+
+### The new library: **graphql-ws**
+Let's look at how to add support for this transport to Apollo Client using a link set up for newest library [graphql-ws](https://github.com/enisdenjo/graphql-ws). First, install: 
+```bash
+npm install graphql-ws
+```
+Then initialize a GraphQL web socket link:
 
 ```js
-import { ApolloClient, HttpLink, InMemoryCache, split } from '@apollo/client/core'
-import { WebSocketLink } from '@apollo/client/link/ws'
-import { getMainDefinition } from '@apollo/client/utilities'
+import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
+import { createClient } from "graphql-ws";
 
+const wsLink = new GraphQLWsLink(
+  createClient({
+    url: "ws://localhost:4000/graphql",
+  })
+);
+```
+
+We need to either use the `GraphQLWsLink` or the `HttpLink` depending on the operation type:
+
+```js
+import { HttpLink, split } from "@apollo/client/core"
+import { GraphQLWsLink } from "@apollo/client/link/subscriptions"; // <-- This one uses graphql-ws
+import { getMainDefinition } from "@apollo/client/utilities"
+
+// Create an http link:
 const httpLink = new HttpLink({
-  // You should use an absolute URL here
-  uri: 'http://localhost:3020/graphql',
+  uri: "http://localhost:3000/graphql"
 })
 
-// Create the subscription websocket link
-const wsLink = new WebSocketLink({
-  uri: 'ws://localhost:3000/subscriptions',
-  options: {
-    reconnect: true,
-  },
-})
+// Create a GraphQLWsLink link:
+const wsLink = new GraphQLWsLink(
+  createClient({
+    url: "ws://localhost:5000/",
+  })
+);
 
 // using the ability to split links, you can send data to each link
 // depending on what kind of operation is being sent
@@ -28,20 +49,41 @@ const link = split(
   // split based on operation type
   ({ query }) => {
     const definition = getMainDefinition(query)
-    return definition.kind === 'OperationDefinition' &&
-      definition.operation === 'subscription'
+    return (
+      definition.kind === "OperationDefinition" &&
+      definition.operation === "subscription"
+    )
   },
   wsLink,
   httpLink
 )
 
-// Create the apollo client
+// Create the apollo client with cache implementation.
 const apolloClient = new ApolloClient({
   link,
   cache: new InMemoryCache(),
-  connectToDevTools: true,
+});
+```
+The apollo client is the one that will be provided to the vue app, see the [setup section](https://v4.apollo.vuejs.org/guide-composable/setup.html) for more details.
+
+Now, queries and mutations will go over HTTP as normal, but subscriptions will be done over the websocket transport.
+### The old library: **subscriptions-transport-ws**
+If you need to use [subscriptions-transport-ws](https://github.com/apollographql/subscriptions-transport-ws) because your server still uses that protocol, instead of installing graphql-ws, install:
+```bash
+npm install subscriptions-transport-ws
+```
+And then initialize a GraphQL web socket link:
+```js
+import { WebSocketLink } from "@apollo/client/link/ws" // <-- This one uses subscriptions-transport-ws
+
+const wsLink = new WebSocketLink({
+  uri: `ws://localhost:5000/`,
+  options: {
+    reconnect: true
+  }
 })
 ```
+The rest of the configuration (creating a httpLink and link) is the same as described above for graphql-ws.
 
 ## Subscribe To More
 
