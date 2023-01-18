@@ -117,7 +117,7 @@ const apolloClient = new ApolloClient({
   cache: new InMemoryCache(),
 });
 ```
-The apollo client is the one that will be provided to the vue app, see the [setup section](https://v4.apollo.vuejs.org/guide-composable/setup.html) for more deatils
+The apollo client is the one that will be provided to the vue app, see the [setup section](https://v4.apollo.vuejs.org/guide-composable/setup.html) for more details.
 
 Now, queries and mutations will go over HTTP as normal, but subscriptions will be done over the websocket transport.
 ### The old library: **subscriptions-transport-ws**
