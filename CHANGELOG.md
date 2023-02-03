@@ -1,3 +1,15 @@
+# [4.0.0-beta.2](https://github.com/vuejs/vue-apollo/compare/v4.0.0-beta.1...v4.0.0-beta.2) (2023-02-03)
+
+
+### Bug Fixes
+
+* **@vue/apollo-option:** ssr cleanup function fails to run ([#1424](https://github.com/vuejs/vue-apollo/issues/1424)) ([#1425](https://github.com/vuejs/vue-apollo/issues/1425)) ([8dfe93b](https://github.com/vuejs/vue-apollo/commit/8dfe93b82679fac42b8d1509febc97e7faeed1e0))
+* hydration error, revert [#1388](https://github.com/vuejs/vue-apollo/issues/1388), fix [#1432](https://github.com/vuejs/vue-apollo/issues/1432) ([9302d4d](https://github.com/vuejs/vue-apollo/commit/9302d4d4a55541bb49292463d8176d0527c06ce9))
+* ignore next result only if not loading ([1e24d21](https://github.com/vuejs/vue-apollo/commit/1e24d2110c3ea6ee80590c2b6578fef45a2e448e))
+* typo in useResult deprecation message ([#1414](https://github.com/vuejs/vue-apollo/issues/1414)) ([3728928](https://github.com/vuejs/vue-apollo/commit/372892855d76622128ac560e8fadc689c50675bc))
+
+
+
 # [4.0.0-beta.1](https://github.com/vuejs/vue-apollo/compare/v4.0.0-alpha.20...v4.0.0-beta.1) (2022-10-05)
 
 
