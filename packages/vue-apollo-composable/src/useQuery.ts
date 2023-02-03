@@ -196,6 +196,7 @@ export function useQueryImpl<
   const query: Ref<ObservableQuery<TResult, TVariables> | null | undefined> = ref()
   let observer: ObservableSubscription | undefined
   let started = false
+  let ignoreNextResult = false
 
   /**
    * Starts watching the query
@@ -228,6 +229,20 @@ export function useQueryImpl<
 
     startQuerySubscription()
 
+    // Make the cache data available to the component immediately
+    // This prevents SSR hydration mismatches
+    if (!isServer && (currentOptions.value?.fetchPolicy !== 'no-cache' || currentOptions.value.notifyOnNetworkStatusChange)) {
+      const currentResult = query.value.getCurrentResult(false)
+
+      if (!currentResult.loading || currentResult.partial || currentOptions.value?.notifyOnNetworkStatusChange) {
+        onNextResult(currentResult)
+        ignoreNextResult = true
+      } else if (currentResult.error) {
+        onError(currentResult.error)
+        ignoreNextResult = true
+      }
+    }
+
     if (!isServer) {
       for (const item of subscribeToMoreItems) {
         addSubscribeToMore(item)
@@ -240,6 +255,7 @@ export function useQueryImpl<
     if (!query.value) return
 
     // Create subscription
+    ignoreNextResult = false
     observer = query.value.subscribe({
       next: onNextResult,
       error: onError,
@@ -247,6 +263,11 @@ export function useQueryImpl<
   }
 
   function onNextResult (queryResult: ApolloQueryResult<TResult>) {
+    if (ignoreNextResult) {
+      ignoreNextResult = false
+      return
+    }
+
     // Remove any previous error that may still be present from the last fetch (so result handlers
     // don't receive old errors that may not even be applicable anymore).
     error.value = null
@@ -273,6 +294,11 @@ export function useQueryImpl<
   }
 
   function onError (queryError: unknown) {
+    if (ignoreNextResult) {
+      ignoreNextResult = false
+      return
+    }
+
     // any error should already be an ApolloError, but we make sure
     const apolloError = toApolloError(queryError)
     const client = resolveClient(currentOptions.value?.clientId)
