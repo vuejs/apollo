@@ -236,7 +236,7 @@ export function useQueryImpl<
 
       if (!currentResult.loading || currentResult.partial || currentOptions.value?.notifyOnNetworkStatusChange) {
         onNextResult(currentResult)
-        ignoreNextResult = true
+        ignoreNextResult = !currentResult.loading
       } else if (currentResult.error) {
         onError(currentResult.error)
         ignoreNextResult = true
