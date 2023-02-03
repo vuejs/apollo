@@ -114,8 +114,8 @@ export function installMixin (app, provider) {
       this.$apollo = new DollarApollo(this, provider)
       if (isServer) {
         // Patch render function to cleanup apollo
-        const render = this.$options.render
-        this.$options.render = (h) => {
+        const render = this.$options.ssrRender
+        this.$options.ssrRender = (h) => {
           const result = render.call(this, h)
           destroy.call(this)
           return result
