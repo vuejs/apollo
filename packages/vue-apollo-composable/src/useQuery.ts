@@ -37,7 +37,7 @@ import type { CurrentInstance } from './util/types'
 export interface UseQueryOptions<
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   TResult = any,
-  TVariables = OperationVariables
+  TVariables extends OperationVariables = OperationVariables
 > extends Omit<WatchQueryOptions<TVariables>, 'query' | 'variables'> {
   clientId?: string
   enabled?: boolean
@@ -54,10 +54,10 @@ interface SubscribeToMoreItem {
 // Parameters
 export type DocumentParameter<TResult, TVariables = undefined> = DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode> | TypedDocumentNode<TResult, TVariables> | Ref<TypedDocumentNode<TResult, TVariables>> | ReactiveFunction<TypedDocumentNode<TResult, TVariables>>
 export type VariablesParameter<TVariables> = TVariables | Ref<TVariables> | ReactiveFunction<TVariables>
-export type OptionsParameter<TResult, TVariables> = UseQueryOptions<TResult, TVariables> | Ref<UseQueryOptions<TResult, TVariables>> | ReactiveFunction<UseQueryOptions<TResult, TVariables>>
+export type OptionsParameter<TResult, TVariables extends Record<string, unknown>> = UseQueryOptions<TResult, TVariables> | Ref<UseQueryOptions<TResult, TVariables>> | ReactiveFunction<UseQueryOptions<TResult, TVariables>>
 
 // Return
-export interface UseQueryReturn<TResult, TVariables> {
+export interface UseQueryReturn<TResult, TVariables extends Record<string, unknown>> {
   result: Ref<TResult | undefined>
   loading: Ref<boolean>
   networkStatus: Ref<number | undefined>
@@ -84,21 +84,21 @@ export interface UseQueryReturn<TResult, TVariables> {
 /**
  * Use a query that does not require variables or options.
  * */
-export function useQuery<TResult = any> (
+export function useQuery<TResult = unknown> (
   document: DocumentParameter<TResult, undefined>
-): UseQueryReturn<TResult, undefined>
+): UseQueryReturn<TResult, Record<string, unknown>>
 
 /**
  * Use a query that has optional variables but not options
  */
-export function useQuery<TResult = any, TVariables extends OperationVariables = OperationVariables> (
+export function useQuery<TResult = unknown, TVariables extends OperationVariables = OperationVariables> (
   document: DocumentParameter<TResult, TVariables>
 ): UseQueryReturn<TResult, TVariables>
 
 /**
  * Use a query that has required variables but not options
  */
-export function useQuery<TResult = any, TVariables extends OperationVariables = OperationVariables> (
+export function useQuery<TResult = unknown, TVariables extends OperationVariables = OperationVariables> (
   document: DocumentParameter<TResult, TVariables>,
   variables: VariablesParameter<TVariables>
 ): UseQueryReturn<TResult, TVariables>
@@ -106,16 +106,16 @@ export function useQuery<TResult = any, TVariables extends OperationVariables = 
 /**
  * Use a query that requires options but not variables.
  */
-export function useQuery<TResult = any> (
+export function useQuery<TResult = unknown> (
   document: DocumentParameter<TResult, undefined>,
   variables: undefined | null,
-  options: OptionsParameter<TResult, null>,
-): UseQueryReturn<TResult, null>
+  options: OptionsParameter<TResult, Record<string, unknown>>,
+): UseQueryReturn<TResult, Record<string, unknown>>
 
 /**
  * Use a query that requires variables and options.
  */
-export function useQuery<TResult = any, TVariables extends OperationVariables = OperationVariables> (
+export function useQuery<TResult = unknown, TVariables extends OperationVariables = OperationVariables> (
   document: DocumentParameter<TResult, TVariables>,
   variables: VariablesParameter<TVariables>,
   options: OptionsParameter<TResult, TVariables>,

@@ -105,7 +105,7 @@ export function useSubscription<TResult = any, TVariables extends OperationVaria
 
 export function useSubscription <
   TResult,
-  TVariables
+  TVariables extends Record<string, unknown>
 > (
   document: DocumentParameter<TResult, TVariables>,
   variables: VariablesParameter<TVariables> | undefined = undefined,

@@ -4,7 +4,7 @@ import { useQueryImpl, DocumentParameter, VariablesParameter, OptionsParameter, 
 
 export function useLazyQuery<
   TResult = any,
-  TVariables = any,
+  TVariables extends Record<string, unknown> = any,
 > (
   document: DocumentParameter<TResult, TVariables>,
   variables?: VariablesParameter<TVariables>,
