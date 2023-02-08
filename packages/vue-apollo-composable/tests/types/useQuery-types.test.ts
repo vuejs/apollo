@@ -148,7 +148,9 @@ import { assertExactType } from './assertions'
     { id: '4E79Lq' },
     {
       clientId: 'any',
-      context: 'any',
+      context: {
+        string: 'any',
+      },
       debounce: 500,
       enabled: true,
       errorPolicy: 'all',
