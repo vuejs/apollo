@@ -55,7 +55,7 @@ importers:
 
   packages/test-e2e:
     specifiers:
-      '@apollo/client': ^3.6.9
+      '@apollo/client': ^3.7.7
       '@babel/core': ^7.18.5
       '@typescript-eslint/eslint-plugin': ^4.33.0
       '@typescript-eslint/parser': ^4.33.0
@@ -88,7 +88,7 @@ importers:
       vue-router: ^4.0.16
       vuex: ^4.0.2
     dependencies:
-      '@apollo/client': 3.6.9_nvv7ff2t7tnlinssgmzirzznsi
+      '@apollo/client': 3.7.7_nvv7ff2t7tnlinssgmzirzznsi
       '@vue/apollo-components': link:../vue-apollo-components
       '@vue/apollo-option': link:../vue-apollo-option
       apollo-server-express: 2.25.4_graphql@15.8.0
@@ -124,7 +124,7 @@ importers:
 
   packages/test-e2e-composable-vue3:
     specifiers:
-      '@apollo/client': ^3.6.9
+      '@apollo/client': ^3.7.7
       '@babel/core': ^7.18.5
       '@types/shortid': ^0.0.29
       '@vue/apollo-composable': workspace:*
@@ -150,7 +150,7 @@ importers:
       vue-demi: ^0.13.1
       vue-router: ^4.0.16
     dependencies:
-      '@apollo/client': 3.6.9_graphql@15.8.0
+      '@apollo/client': 3.7.7_graphql@15.8.0
       '@vue/apollo-composable': link:../vue-apollo-composable
       '@vue/apollo-util': link:../vue-apollo-util
       apollo-server-express: 2.25.4_graphql@15.8.0
@@ -179,7 +179,7 @@ importers:
 
   packages/vue-apollo-components:
     specifiers:
-      '@apollo/client': ^3.6.9
+      '@apollo/client': ^3.7.7
       '@babel/core': ^7.18.5
       '@babel/plugin-proposal-class-properties': ^7.17.12
       '@babel/plugin-transform-for-of': ^7.18.1
@@ -205,7 +205,7 @@ importers:
     dependencies:
       '@vue/apollo-option': link:../vue-apollo-option
     devDependencies:
-      '@apollo/client': 3.6.9_graphql@15.8.0
+      '@apollo/client': 3.7.7_graphql@15.8.0
       '@babel/core': 7.18.5
       '@babel/plugin-proposal-class-properties': 7.17.12_@babel+core@7.18.5
       '@babel/plugin-transform-for-of': 7.18.1_@babel+core@7.18.5
@@ -230,7 +230,7 @@ importers:
 
   packages/vue-apollo-composable:
     specifiers:
-      '@apollo/client': ^3.6.9
+      '@apollo/client': ^3.7.7
       '@types/throttle-debounce': ^2.1.0
       graphql: ^15
       graphql-tag: ^2.12.6
@@ -246,7 +246,7 @@ importers:
       ts-essentials: 9.1.2_typescript@4.7.4
       vue-demi: 0.13.1_vue@3.2.37
     devDependencies:
-      '@apollo/client': 3.6.9_graphql@15.8.0
+      '@apollo/client': 3.7.7_graphql@15.8.0
       '@types/throttle-debounce': 2.1.0
       graphql: 15.8.0
       graphql-tag: 2.12.6_graphql@15.8.0
@@ -257,7 +257,7 @@ importers:
 
   packages/vue-apollo-option:
     specifiers:
-      '@apollo/client': ^3.6.9
+      '@apollo/client': ^3.7.7
       '@babel/core': ^7.18.5
       '@babel/plugin-proposal-class-properties': ^7.17.12
       '@babel/plugin-transform-for-of': ^7.18.1
@@ -285,7 +285,7 @@ importers:
     dependencies:
       throttle-debounce: 3.0.1
     devDependencies:
-      '@apollo/client': 3.6.9_graphql@15.8.0
+      '@apollo/client': 3.7.7_graphql@15.8.0
       '@babel/core': 7.18.5
       '@babel/plugin-proposal-class-properties': 7.17.12_@babel+core@7.18.5
       '@babel/plugin-transform-for-of': 7.18.1_@babel+core@7.18.5
@@ -312,24 +312,24 @@ importers:
 
   packages/vue-apollo-ssr:
     specifiers:
-      '@apollo/client': ^3.6.9
+      '@apollo/client': ^3.7.7
       '@types/serialize-javascript': ^5.0.2
       serialize-javascript: ^6.0.0
       typescript: ^4.7.4
     dependencies:
       serialize-javascript: 6.0.0
     devDependencies:
-      '@apollo/client': 3.6.9
+      '@apollo/client': 3.7.7
       '@types/serialize-javascript': 5.0.2
       typescript: 4.7.4
 
   packages/vue-apollo-util:
     specifiers:
-      '@apollo/client': ^3.6.9
+      '@apollo/client': ^3.7.7
       graphql: ^15
       typescript: ^4.7.4
     devDependencies:
-      '@apollo/client': 3.6.9_graphql@15.8.0
+      '@apollo/client': 3.7.7_graphql@15.8.0
       graphql: 15.8.0
       typescript: 4.7.4
 
@@ -459,12 +459,13 @@ packages:
       '@jridgewell/trace-mapping': 0.3.13
     dev: true
 
-  /@apollo/client/3.6.9:
-    resolution: {integrity: sha512-Y1yu8qa2YeaCUBVuw08x8NHenFi0sw2I3KCu7Kw9mDSu86HmmtHJkCAifKVrN2iPgDTW/BbP3EpSV8/EQCcxZA==}
+  /@apollo/client/3.7.7:
+    resolution: {integrity: sha512-Rp/pCWuJSjLN7Xl5Qi2NoeURmZYEU/TIUz0n/LOwEo1tGdU2W7/fGVZ8+5um58JeVYq4UoTGBKFxSVeG4s411A==}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
       graphql-ws: ^5.5.5
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
       subscriptions-transport-ws: ^0.9.0 || ^0.11.0
     peerDependenciesMeta:
       graphql:
@@ -473,29 +474,33 @@ packages:
         optional: true
       react:
         optional: true
+      react-dom:
+        optional: true
       subscriptions-transport-ws:
         optional: true
     dependencies:
       '@graphql-typed-document-node/core': 3.1.1
-      '@wry/context': 0.6.1
+      '@wry/context': 0.7.0
       '@wry/equality': 0.5.2
       '@wry/trie': 0.3.1
       graphql-tag: 2.12.6
       hoist-non-react-statics: 3.3.2
       optimism: 0.16.1
       prop-types: 15.8.1
+      response-iterator: 0.2.6
       symbol-observable: 4.0.0
       ts-invariant: 0.10.3
       tslib: 2.4.0
       zen-observable-ts: 1.2.5
     dev: true
 
-  /@apollo/client/3.6.9_graphql@15.8.0:
-    resolution: {integrity: sha512-Y1yu8qa2YeaCUBVuw08x8NHenFi0sw2I3KCu7Kw9mDSu86HmmtHJkCAifKVrN2iPgDTW/BbP3EpSV8/EQCcxZA==}
+  /@apollo/client/3.7.7_graphql@15.8.0:
+    resolution: {integrity: sha512-Rp/pCWuJSjLN7Xl5Qi2NoeURmZYEU/TIUz0n/LOwEo1tGdU2W7/fGVZ8+5um58JeVYq4UoTGBKFxSVeG4s411A==}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
       graphql-ws: ^5.5.5
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
       subscriptions-transport-ws: ^0.9.0 || ^0.11.0
     peerDependenciesMeta:
       graphql:
@@ -504,11 +509,13 @@ packages:
         optional: true
       react:
         optional: true
+      react-dom:
+        optional: true
       subscriptions-transport-ws:
         optional: true
     dependencies:
       '@graphql-typed-document-node/core': 3.1.1_graphql@15.8.0
-      '@wry/context': 0.6.1
+      '@wry/context': 0.7.0
       '@wry/equality': 0.5.2
       '@wry/trie': 0.3.1
       graphql: 15.8.0
@@ -516,17 +523,19 @@ packages:
       hoist-non-react-statics: 3.3.2
       optimism: 0.16.1
       prop-types: 15.8.1
+      response-iterator: 0.2.6
       symbol-observable: 4.0.0
       ts-invariant: 0.10.3
       tslib: 2.4.0
       zen-observable-ts: 1.2.5
 
-  /@apollo/client/3.6.9_nvv7ff2t7tnlinssgmzirzznsi:
-    resolution: {integrity: sha512-Y1yu8qa2YeaCUBVuw08x8NHenFi0sw2I3KCu7Kw9mDSu86HmmtHJkCAifKVrN2iPgDTW/BbP3EpSV8/EQCcxZA==}
+  /@apollo/client/3.7.7_nvv7ff2t7tnlinssgmzirzznsi:
+    resolution: {integrity: sha512-Rp/pCWuJSjLN7Xl5Qi2NoeURmZYEU/TIUz0n/LOwEo1tGdU2W7/fGVZ8+5um58JeVYq4UoTGBKFxSVeG4s411A==}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
       graphql-ws: ^5.5.5
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
       subscriptions-transport-ws: ^0.9.0 || ^0.11.0
     peerDependenciesMeta:
       graphql:
@@ -535,11 +544,13 @@ packages:
         optional: true
       react:
         optional: true
+      react-dom:
+        optional: true
       subscriptions-transport-ws:
         optional: true
     dependencies:
       '@graphql-typed-document-node/core': 3.1.1_graphql@15.8.0
-      '@wry/context': 0.6.1
+      '@wry/context': 0.7.0
       '@wry/equality': 0.5.2
       '@wry/trie': 0.3.1
       graphql: 15.8.0
@@ -547,6 +558,7 @@ packages:
       hoist-non-react-statics: 3.3.2
       optimism: 0.16.1
       prop-types: 15.8.1
+      response-iterator: 0.2.6
       subscriptions-transport-ws: 0.9.19_graphql@15.8.0
       symbol-observable: 4.0.0
       ts-invariant: 0.10.3
@@ -3674,6 +3686,12 @@ packages:
 
   /@wry/context/0.6.1:
     resolution: {integrity: sha512-LOmVnY1iTU2D8tv4Xf6MVMZZ+juIJ87Kt/plMijjN20NMAXGmH4u8bS1t0uT74cZ5gwpocYueV58YwyI8y+GKw==}
+    engines: {node: '>=8'}
+    dependencies:
+      tslib: 2.4.0
+
+  /@wry/context/0.7.0:
+    resolution: {integrity: sha512-LcDAiYWRtwAoSOArfk7cuYvFXytxfVrdX7yxoUmK7pPITLk5jYh2F8knCwS7LjgYL8u1eidPlKKV6Ikqq0ODqQ==}
     engines: {node: '>=8'}
     dependencies:
       tslib: 2.4.0
@@ -11696,6 +11714,10 @@ packages:
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
     dev: true
+
+  /response-iterator/0.2.6:
+    resolution: {integrity: sha512-pVzEEzrsg23Sh053rmDUvLSkGXluZio0qu8VT6ukrYuvtjVfCbDZH9d6PGXb8HZfzdNZt8feXv/jvUzlhRgLnw==}
+    engines: {node: '>=0.8'}
 
   /restore-cursor/2.0.0:
     resolution: {integrity: sha512-6IzJLuGi4+R14vwagDHX+JrXmPVtPpn4mffDJ1UdR7/Edm87fl6yi8mMBIVvFtJaNTUvjughmW4hwLhRG7gC1Q==}
