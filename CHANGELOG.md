@@ -1,3 +1,12 @@
+# [4.0.0-beta.3](https://github.com/vuejs/vue-apollo/compare/v4.0.0-beta.2...v4.0.0-beta.3) (2023-02-21)
+
+
+### Bug Fixes
+
+* **ssr:** error not bubbling up ([18fe206](https://github.com/vuejs/vue-apollo/commit/18fe206761eba0af05971dff34113d5396e6e6bf))
+
+
+
 # [4.0.0-beta.2](https://github.com/vuejs/vue-apollo/compare/v4.0.0-beta.1...v4.0.0-beta.2) (2023-02-03)
 
 

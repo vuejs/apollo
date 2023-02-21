@@ -1,6 +1,6 @@
 {
   "name": "vue-apollo-monorepo",
-  "version": "4.0.0-beta.2",
+  "version": "4.0.0-beta.3",
   "private": true,
   "scripts": {
     "build": "pnpm run -r --filter \"vue-apollo*\" --filter \"@vue/apollo*\" build",
