@@ -185,7 +185,7 @@ export function useQueryImpl<
         firstResolve = undefined
         firstReject = undefined
       }
-    }).then(stop).catch(stop)
+    }).finally(stop)
   })
 
   // Apollo Client
