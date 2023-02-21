@@ -10,7 +10,7 @@ import {
   nextTick,
 } from 'vue-demi'
 import { DocumentNode } from 'graphql'
-import {
+import type {
   OperationVariables,
   WatchQueryOptions,
   ObservableQuery,
@@ -38,6 +38,7 @@ export interface UseQueryOptions<
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   TResult = any,
   TVariables = OperationVariables
+  // @ts-expect-error apollo-client types issue with TVariables
 > extends Omit<WatchQueryOptions<TVariables>, 'query' | 'variables'> {
   clientId?: string
   enabled?: boolean
@@ -69,6 +70,7 @@ export interface UseQueryReturn<TResult, TVariables> {
   document: Ref<DocumentNode>
   variables: Ref<TVariables | undefined>
   options: UseQueryOptions<TResult, TVariables> | Ref<UseQueryOptions<TResult, TVariables>>
+  // @ts-expect-error apollo-client types issue with TVariables
   query: Ref<ObservableQuery<TResult, TVariables> | null | undefined>
   refetch: (variables?: TVariables) => Promise<ApolloQueryResult<TResult>> | undefined
   fetchMore: (options: FetchMoreQueryOptions<TVariables, TResult> & FetchMoreOptions<TResult, TVariables>) => Promise<ApolloQueryResult<TResult>> | undefined
