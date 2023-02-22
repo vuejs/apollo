@@ -1,3 +1,12 @@
+# [4.0.0-beta.4](https://github.com/vuejs/vue-apollo/compare/v4.0.0-beta.3...v4.0.0-beta.4) (2023-02-22)
+
+
+### Features
+
+* improve ESM support ([2623b32](https://github.com/vuejs/vue-apollo/commit/2623b32d6c999cfa677b3b36969bd6b5b782d387))
+
+
+
 # [4.0.0-beta.3](https://github.com/vuejs/vue-apollo/compare/v4.0.0-beta.2...v4.0.0-beta.3) (2023-02-21)
 
 
