@@ -22,14 +22,23 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "dist/esm/index.d.ts",
+      "import": "dist/esm/index.js",
+      "require": "dist/cjs/index.js"
+    },
+    "./*": "./*"
+  },
   "files": [
     "dist"
   ],
   "scripts": {
     "dev": "pnpm run build --watch",
-    "build": "tsc --outDir dist -d",
+    "build": "rm -rf dist && tsc --outDir dist/esm -d && tsc --outDir dist/cjs --module commonjs --target ES2015",
     "prepublishOnly": "pnpm run build"
   },
   "dependencies": {

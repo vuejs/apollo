@@ -21,7 +21,7 @@ import type {
   ObservableSubscription,
   TypedDocumentNode,
   ApolloError,
-} from '@apollo/client/core'
+} from '@apollo/client/core/index.js'
 import { throttle, debounce } from 'throttle-debounce'
 import { useApolloClient } from './useApolloClient'
 import { ReactiveFunction } from './util/ReactiveFunction'

@@ -5,6 +5,13 @@
   "main": "dist/vue-apollo-components.umd.js",
   "module": "dist/vue-apollo-components.esm.js",
   "unpkg": "dist/vue-apollo-components.min.js",
+  "exports": {
+    ".": {
+      "import": "./dist/vue-apollo-components.esm.js",
+      "require": "./dist/vue-apollo-components.umd.js"
+    },
+    "./*": "./*"
+  },
   "scripts": {
     "build": "pnpm run build:browser && pnpm run build:es && pnpm run build:umd",
     "build:browser": "rollup --config build/rollup.config.browser.js",

@@ -1,6 +1,6 @@
 import { print } from 'graphql/language/printer'
-import { ApolloError } from '@apollo/client/core'
-import { ErrorResponse } from '@apollo/client/link/error'
+import { ApolloError } from '@apollo/client/core/index.js'
+import { ErrorResponse } from '@apollo/client/link/error/index.js'
 
 export function getErrorMessages (error: ErrorResponse | ApolloError) {
   const messages: string[] = []

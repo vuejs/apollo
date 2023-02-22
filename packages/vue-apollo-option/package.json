@@ -5,7 +5,15 @@
   "main": "dist/vue-apollo-option.umd.js",
   "module": "dist/vue-apollo-option.esm.js",
   "unpkg": "dist/vue-apollo-option.min.js",
-  "typings": "types/index.d.ts",
+  "types": "types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "import": "./dist/vue-apollo-option.esm.js",
+      "require": "./dist/vue-apollo-option.umd.js"
+    },
+    "./*": "./*"
+  },
   "scripts": {
     "build": "pnpm run build:browser && pnpm run build:es && pnpm run build:umd",
     "build:browser": "rollup --config build/rollup.config.browser.js",

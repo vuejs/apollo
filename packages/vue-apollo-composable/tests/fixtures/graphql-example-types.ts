@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import { TypedDocumentNode } from '@apollo/client/core'
+import { TypedDocumentNode } from '@apollo/client/core/index.js'
 
 export type ID = string
 
