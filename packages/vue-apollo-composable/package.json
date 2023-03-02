@@ -24,11 +24,11 @@
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "module": "dist/index.esm.js",
+  "module": "dist/index.mjs",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.esm.js",
+      "import": "./dist/index.mjs",
       "require": "./dist/index.js"
     },
     "./*": "./*"
