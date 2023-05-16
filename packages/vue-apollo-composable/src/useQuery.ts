@@ -204,7 +204,8 @@ export function useQueryImpl<
   function start () {
     if (
       started || !isEnabled.value ||
-      (isServer && currentOptions.value?.prefetch === false)
+      (isServer && currentOptions.value?.prefetch === false) ||
+      !currentDocument
     ) {
       if (firstResolve) firstResolve()
       return
@@ -413,6 +414,9 @@ export function useQueryImpl<
     debouncedRestart()
   }
 
+  // Applying document
+  let currentDocument: DocumentNode = documentRef.value
+
   // Enabled state
 
   const forceDisabled = ref(lazy)
@@ -435,12 +439,9 @@ export function useQueryImpl<
   })
 
   // Applying document
-  let currentDocument: DocumentNode
   watch(documentRef, value => {
     currentDocument = value
     restart()
-  }, {
-    immediate: true,
   })
 
   // Applying variables
