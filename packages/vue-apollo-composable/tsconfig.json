@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2015",
-    "module": "CommonJS",
+    "target": "ESNext",
     "sourceMap": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
@@ -9,7 +8,7 @@
     "moduleResolution": "node",
     "lib": [
       "DOM",
-      "ES2015",
+      "ES2020",
       "ES2020.Symbol.WellKnown"
     ],
     "declaration": true,

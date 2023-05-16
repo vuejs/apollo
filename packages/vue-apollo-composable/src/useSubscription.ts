@@ -9,7 +9,7 @@ import {
   onBeforeUnmount,
   nextTick,
 } from 'vue-demi'
-import {
+import type {
   OperationVariables,
   SubscriptionOptions,
   FetchResult,
@@ -17,7 +17,7 @@ import {
   ObservableSubscription,
   TypedDocumentNode,
   ApolloError,
-} from '@apollo/client/core'
+} from '@apollo/client/core/index.js'
 import { throttle, debounce } from 'throttle-debounce'
 import { ReactiveFunction } from './util/ReactiveFunction'
 import { paramToRef } from './util/paramToRef'
@@ -140,6 +140,7 @@ export function useSubscription <
 
     const client = resolveClient(currentOptions.value?.clientId)
 
+    // @ts-expect-error apollo-client types issue with TVariables
     subscription.value = client.subscribe<TResult, TVariables>({
       query: currentDocument,
       variables: currentVariables,

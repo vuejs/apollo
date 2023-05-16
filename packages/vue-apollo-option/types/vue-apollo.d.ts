@@ -9,7 +9,7 @@ import {
   OperationVariables,
   FetchResult,
   Observable,
-} from '@apollo/client/core'
+} from '@apollo/client/core/index.js'
 import { ApolloProvider } from './apollo-provider'
 import {
   VueApolloQueryDefinition,

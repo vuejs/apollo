@@ -10,6 +10,7 @@ export function useLazyQuery<
   variables?: VariablesParameter<TVariables>,
   options?: OptionsParameter<TResult, TVariables>,
 ) {
+  // @ts-expect-error apollo-client types issue with TVariables
   const query = useQueryImpl<TResult, TVariables>(document, variables, options, true)
 
   function load (
@@ -26,7 +27,9 @@ export function useLazyQuery<
     if (options) {
       Object.assign(isRef(query.options) ? query.options.value : query.options, options)
     }
+    const oldForceDisabled = query.forceDisabled.value
     query.forceDisabled.value = false
+    return oldForceDisabled
   }
 
   return {

@@ -10,7 +10,7 @@ import {
   nextTick,
 } from 'vue-demi'
 import { DocumentNode } from 'graphql'
-import {
+import type {
   OperationVariables,
   WatchQueryOptions,
   ObservableQuery,
@@ -21,7 +21,7 @@ import {
   ObservableSubscription,
   TypedDocumentNode,
   ApolloError,
-} from '@apollo/client/core'
+} from '@apollo/client/core/index.js'
 import { throttle, debounce } from 'throttle-debounce'
 import { useApolloClient } from './useApolloClient'
 import { ReactiveFunction } from './util/ReactiveFunction'
@@ -185,7 +185,7 @@ export function useQueryImpl<
         firstResolve = undefined
         firstReject = undefined
       }
-    }).then(stop).catch(stop)
+    }).finally(stop)
   })
 
   // Apollo Client
@@ -262,6 +262,11 @@ export function useQueryImpl<
     })
   }
 
+  function getErrorPolicy () {
+    const client = resolveClient(currentOptions.value?.clientId)
+    return currentOptions.value?.errorPolicy || client.defaultOptions?.watchQuery?.errorPolicy
+  }
+
   function onNextResult (queryResult: ApolloQueryResult<TResult>) {
     if (ignoreNextResult) {
       ignoreNextResult = false
@@ -275,8 +280,12 @@ export function useQueryImpl<
     processNextResult(queryResult)
 
     // When `errorPolicy` is `all`, `onError` will not get called and
-    // ApolloQueryResult.errors may be set at the same time as we get a result
-    if (!queryResult.error && queryResult.errors?.length) {
+    // ApolloQueryResult.errors may be set at the same time as we get a result.
+    // The code is only relevant when `errorPolicy` is `all`, because for other situations it
+    // could hapen that next and error are called at the same time and then it will lead to multiple
+    // onError calls.
+    const errorPolicy = getErrorPolicy()
+    if (errorPolicy && errorPolicy === 'all' && !queryResult.error && queryResult.errors?.length) {
       processError(resultErrorsToApolloError(queryResult.errors))
     }
 
@@ -290,7 +299,10 @@ export function useQueryImpl<
     result.value = queryResult.data && Object.keys(queryResult.data).length === 0 ? undefined : queryResult.data
     loading.value = queryResult.loading
     networkStatus.value = queryResult.networkStatus
-    resultEvent.trigger(queryResult)
+    // Wait for handlers to be registered
+    nextTick(() => {
+      resultEvent.trigger(queryResult)
+    })
   }
 
   function onError (queryError: unknown) {
@@ -301,8 +313,7 @@ export function useQueryImpl<
 
     // any error should already be an ApolloError, but we make sure
     const apolloError = toApolloError(queryError)
-    const client = resolveClient(currentOptions.value?.clientId)
-    const errorPolicy = currentOptions.value?.errorPolicy || client.defaultOptions?.watchQuery?.errorPolicy
+    const errorPolicy = getErrorPolicy()
 
     if (errorPolicy && errorPolicy !== 'none') {
       processNextResult((query.value as ObservableQuery<TResult, TVariables>).getCurrentResult())
@@ -320,7 +331,10 @@ export function useQueryImpl<
     error.value = apolloError
     loading.value = false
     networkStatus.value = 8
-    errorEvent.trigger(apolloError)
+    // Wait for handlers to be registered
+    nextTick(() => {
+      errorEvent.trigger(apolloError)
+    })
   }
 
   function resubscribeToQuery () {
@@ -399,6 +413,27 @@ export function useQueryImpl<
     debouncedRestart()
   }
 
+  // Enabled state
+
+  const forceDisabled = ref(lazy)
+  const enabledOption = computed(() => !currentOptions.value || currentOptions.value.enabled == null || currentOptions.value.enabled)
+  const isEnabled = computed(() => enabledOption.value && !forceDisabled.value)
+
+  // Applying options first (in case it disables the query)
+  watch(() => unref(optionsRef), value => {
+    if (currentOptions.value && (
+      currentOptions.value.throttle !== value.throttle ||
+      currentOptions.value.debounce !== value.debounce
+    )) {
+      updateRestartFn()
+    }
+    currentOptions.value = value
+    restart()
+  }, {
+    deep: true,
+    immediate: true,
+  })
+
   // Applying document
   let currentDocument: DocumentNode
   watch(documentRef, value => {
@@ -411,28 +446,19 @@ export function useQueryImpl<
   // Applying variables
   let currentVariables: TVariables | undefined
   let currentVariablesSerialized: string
-  watch(variablesRef, (value, oldValue) => {
-    const serialized = JSON.stringify(value)
+  watch(() => {
+    if (isEnabled.value) {
+      return variablesRef.value
+    } else {
+      return undefined
+    }
+  }, (value) => {
+    const serialized = JSON.stringify([value, isEnabled.value])
     if (serialized !== currentVariablesSerialized) {
       currentVariables = value
       restart()
     }
     currentVariablesSerialized = serialized
-  }, {
-    deep: true,
-    immediate: true,
-  })
-
-  // Applying options
-  watch(() => unref(optionsRef), value => {
-    if (currentOptions.value && (
-      currentOptions.value.throttle !== value.throttle ||
-      currentOptions.value.debounce !== value.debounce
-    )) {
-      updateRestartFn()
-    }
-    currentOptions.value = value
-    restart()
   }, {
     deep: true,
     immediate: true,
@@ -517,22 +543,21 @@ export function useQueryImpl<
     item.unsubscribeFns.push(unsubscribe)
   }
 
-  // Enabled state
-
-  const forceDisabled = ref(lazy)
-  const enabledOption = computed(() => !currentOptions.value || currentOptions.value.enabled == null || currentOptions.value.enabled)
-  const isEnabled = computed(() => enabledOption.value && !forceDisabled.value)
-
   // Auto start & stop
+
   watch(isEnabled, value => {
     if (value) {
-      start()
+      nextTick(() => {
+        start()
+      })
     } else {
       stop()
     }
-  }, {
-    immediate: true,
   })
+
+  if (isEnabled.value) {
+    start()
+  }
 
   // Teardown
   vm && onBeforeUnmount(() => {

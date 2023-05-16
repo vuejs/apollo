@@ -1,5 +1,5 @@
 import { getCurrentInstance, inject } from 'vue-demi'
-import { ApolloClient } from '@apollo/client/core'
+import { ApolloClient } from '@apollo/client/core/index.js'
 
 export const DefaultApolloClient = Symbol('default-apollo-client')
 export const ApolloClients = Symbol('apollo-clients')

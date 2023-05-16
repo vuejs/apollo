@@ -824,3 +824,20 @@ export default {
   </div>
 </template>
 ```
+
+### Refetch lazy query
+
+`load()` returns `true` if it is the first time the query is activated, `false` otherwise. You can use this to refetch the query with `refetch()` in case the user clicks on the button again, meaning `load()` returns `false`.
+
+```js
+const { result, load, refetch } = useLazyQuery(gql`
+  query list {
+    list
+  }
+`)
+// ...
+
+function loadOrRefetch () {
+  load() || refetch()
+}
+```
