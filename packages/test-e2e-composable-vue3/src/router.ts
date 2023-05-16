@@ -38,5 +38,9 @@ export const router = createRouter({
       path: '/disabled',
       component: () => import('./components/Disabled.vue'),
     },
+    {
+      path: '/on-result',
+      component: () => import('./components/OnResult.vue'),
+    },
   ],
 })

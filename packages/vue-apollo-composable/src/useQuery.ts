@@ -292,7 +292,10 @@ export function useQueryImpl<
     result.value = queryResult.data && Object.keys(queryResult.data).length === 0 ? undefined : queryResult.data
     loading.value = queryResult.loading
     networkStatus.value = queryResult.networkStatus
-    resultEvent.trigger(queryResult)
+    // Wait for handlers to be registered
+    nextTick(() => {
+      resultEvent.trigger(queryResult)
+    })
   }
 
   function onError (queryError: unknown) {
@@ -322,7 +325,10 @@ export function useQueryImpl<
     error.value = apolloError
     loading.value = false
     networkStatus.value = 8
-    errorEvent.trigger(apolloError)
+    // Wait for handlers to be registered
+    nextTick(() => {
+      errorEvent.trigger(apolloError)
+    })
   }
 
   function resubscribeToQuery () {

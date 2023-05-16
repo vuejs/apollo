@@ -117,4 +117,15 @@ describe('Vue 3 + Apollo Composable', () => {
     cy.get('button').click()
     cy.get('[data-test-id="data"]').should('contain', 'Loaded channel: General')
   })
+
+  it('onResult with immediate result', () => {
+    cy.visit('/on-result')
+    cy.get('[data-test-id="data"]').should('not.exist')
+    cy.get('input[type="checkbox"]').click()
+    cy.get('[data-test-id="data"]').should('contain', 'Loaded channel: General')
+    cy.get('input[type="checkbox"]').click()
+    cy.get('[data-test-id="data"]').should('not.exist')
+    cy.get('input[type="checkbox"]').click()
+    cy.get('[data-test-id="data"]').should('contain', 'Loaded channel: General')
+  })
 })
