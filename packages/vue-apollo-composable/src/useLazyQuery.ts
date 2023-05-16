@@ -4,13 +4,12 @@ import { useQueryImpl, DocumentParameter, VariablesParameter, OptionsParameter, 
 
 export function useLazyQuery<
   TResult = any,
-  TVariables = any,
+  TVariables extends Record<string, unknown> = any,
 > (
   document: DocumentParameter<TResult, TVariables>,
   variables?: VariablesParameter<TVariables>,
   options?: OptionsParameter<TResult, TVariables>,
 ) {
-  // @ts-expect-error apollo-client types issue with TVariables
   const query = useQueryImpl<TResult, TVariables>(document, variables, options, true)
 
   function load (

@@ -54,7 +54,7 @@
     "throttle-debounce": "^3.0.1"
   },
   "devDependencies": {
-    "@apollo/client": "^3.6.9",
+    "@apollo/client": "^3.7.7",
     "@babel/core": "^7.18.5",
     "@babel/plugin-proposal-class-properties": "^7.17.12",
     "@babel/plugin-transform-for-of": "^7.18.1",

@@ -105,7 +105,7 @@ export function useSubscription<TResult = any, TVariables extends OperationVaria
 
 export function useSubscription <
   TResult,
-  TVariables
+  TVariables extends Record<string, unknown>
 > (
   document: DocumentParameter<TResult, TVariables>,
   variables: VariablesParameter<TVariables> | undefined = undefined,
@@ -140,7 +140,6 @@ export function useSubscription <
 
     const client = resolveClient(currentOptions.value?.clientId)
 
-    // @ts-expect-error apollo-client types issue with TVariables
     subscription.value = client.subscribe<TResult, TVariables>({
       query: currentDocument,
       variables: currentVariables,

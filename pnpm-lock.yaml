@@ -72,7 +72,7 @@ importers:
   packages/test-e2e:
     dependencies:
       '@apollo/client':
-        specifier: ^3.6.9
+        specifier: ^3.7.7
         version: 3.7.9(graphql@15.8.0)(subscriptions-transport-ws@0.9.19)
       '@vue/apollo-components':
         specifier: workspace:*
@@ -172,7 +172,7 @@ importers:
   packages/test-e2e-composable-vue3:
     dependencies:
       '@apollo/client':
-        specifier: ^3.6.9
+        specifier: ^3.7.7
         version: 3.7.9(graphql@15.8.0)(subscriptions-transport-ws@0.9.19)
       '@vue/apollo-composable':
         specifier: workspace:*
@@ -255,7 +255,7 @@ importers:
         version: link:../vue-apollo-option
     devDependencies:
       '@apollo/client':
-        specifier: ^3.6.9
+        specifier: ^3.7.7
         version: 3.7.9(graphql@15.8.0)(subscriptions-transport-ws@0.9.19)
       '@babel/core':
         specifier: ^7.18.5
@@ -337,7 +337,7 @@ importers:
         version: 0.13.11(@vue/composition-api@1.0.0)(vue@3.2.47)
     devDependencies:
       '@apollo/client':
-        specifier: ^3.6.9
+        specifier: ^3.7.7
         version: 3.7.9(graphql@15.8.0)(subscriptions-transport-ws@0.9.19)
       '@types/throttle-debounce':
         specifier: ^2.1.0
@@ -368,7 +368,7 @@ importers:
         version: 3.0.1
     devDependencies:
       '@apollo/client':
-        specifier: ^3.6.9
+        specifier: ^3.7.7
         version: 3.7.9(graphql@15.8.0)(subscriptions-transport-ws@0.9.19)
       '@babel/core':
         specifier: ^7.18.5
@@ -447,7 +447,7 @@ importers:
         version: 6.0.1
     devDependencies:
       '@apollo/client':
-        specifier: ^3.6.9
+        specifier: ^3.7.7
         version: 3.7.9(graphql@15.8.0)(subscriptions-transport-ws@0.9.19)
       '@types/serialize-javascript':
         specifier: ^5.0.2
@@ -459,7 +459,7 @@ importers:
   packages/vue-apollo-util:
     devDependencies:
       '@apollo/client':
-        specifier: ^3.6.9
+        specifier: ^3.7.7
         version: 3.7.9(graphql@15.8.0)(subscriptions-transport-ws@0.9.19)
       graphql:
         specifier: ^15

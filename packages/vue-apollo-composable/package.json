@@ -61,7 +61,7 @@
     }
   },
   "devDependencies": {
-    "@apollo/client": "^3.6.9",
+    "@apollo/client": "^3.7.7",
     "@types/throttle-debounce": "^2.1.0",
     "graphql": "^15.8.0",
     "graphql-tag": "^2.12.6",

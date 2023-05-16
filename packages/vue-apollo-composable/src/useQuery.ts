@@ -37,8 +37,7 @@ import type { CurrentInstance } from './util/types'
 export interface UseQueryOptions<
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   TResult = any,
-  TVariables = OperationVariables
-  // @ts-expect-error apollo-client types issue with TVariables
+  TVariables extends OperationVariables = OperationVariables
 > extends Omit<WatchQueryOptions<TVariables>, 'query' | 'variables'> {
   clientId?: string
   enabled?: boolean
@@ -55,10 +54,10 @@ interface SubscribeToMoreItem {
 // Parameters
 export type DocumentParameter<TResult, TVariables = undefined> = DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode> | TypedDocumentNode<TResult, TVariables> | Ref<TypedDocumentNode<TResult, TVariables>> | ReactiveFunction<TypedDocumentNode<TResult, TVariables>>
 export type VariablesParameter<TVariables> = TVariables | Ref<TVariables> | ReactiveFunction<TVariables>
-export type OptionsParameter<TResult, TVariables> = UseQueryOptions<TResult, TVariables> | Ref<UseQueryOptions<TResult, TVariables>> | ReactiveFunction<UseQueryOptions<TResult, TVariables>>
+export type OptionsParameter<TResult, TVariables extends OperationVariables> = UseQueryOptions<TResult, TVariables> | Ref<UseQueryOptions<TResult, TVariables>> | ReactiveFunction<UseQueryOptions<TResult, TVariables>>
 
 // Return
-export interface UseQueryReturn<TResult, TVariables> {
+export interface UseQueryReturn<TResult, TVariables extends OperationVariables> {
   result: Ref<TResult | undefined>
   loading: Ref<boolean>
   networkStatus: Ref<number | undefined>
@@ -70,7 +69,6 @@ export interface UseQueryReturn<TResult, TVariables> {
   document: Ref<DocumentNode>
   variables: Ref<TVariables | undefined>
   options: UseQueryOptions<TResult, TVariables> | Ref<UseQueryOptions<TResult, TVariables>>
-  // @ts-expect-error apollo-client types issue with TVariables
   query: Ref<ObservableQuery<TResult, TVariables> | null | undefined>
   refetch: (variables?: TVariables) => Promise<ApolloQueryResult<TResult>> | undefined
   fetchMore: (options: FetchMoreQueryOptions<TVariables, TResult> & FetchMoreOptions<TResult, TVariables>) => Promise<ApolloQueryResult<TResult>> | undefined
@@ -88,7 +86,7 @@ export interface UseQueryReturn<TResult, TVariables> {
  * */
 export function useQuery<TResult = any> (
   document: DocumentParameter<TResult, undefined>
-): UseQueryReturn<TResult, undefined>
+): UseQueryReturn<TResult, Record<string, never>>
 
 /**
  * Use a query that has optional variables but not options
@@ -111,8 +109,8 @@ export function useQuery<TResult = any, TVariables extends OperationVariables = 
 export function useQuery<TResult = any> (
   document: DocumentParameter<TResult, undefined>,
   variables: undefined | null,
-  options: OptionsParameter<TResult, null>,
-): UseQueryReturn<TResult, null>
+  options: OptionsParameter<TResult, Record<string, never>>,
+): UseQueryReturn<TResult, Record<string, never>>
 
 /**
  * Use a query that requires variables and options.
@@ -220,7 +218,7 @@ export function useQueryImpl<
 
     query.value = client.watchQuery<TResult, TVariables>({
       query: currentDocument,
-      variables: currentVariables,
+      variables: currentVariables ?? {} as TVariables,
       ...currentOptions.value,
       ...(isServer && currentOptions.value?.fetchPolicy !== 'no-cache')
         ? {

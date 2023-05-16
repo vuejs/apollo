@@ -20,7 +20,7 @@ import { assertExactType } from './assertions'
   useQueryNoTypesResult.type.is.any
 
   const useQueryNoTypesVariables = useQueryNoTypes.variables.value
-  assertExactType<typeof useQueryNoTypesVariables, undefined>(useQueryNoTypesVariables)
+  assertExactType<typeof useQueryNoTypesVariables, Record<string, never> | undefined>(useQueryNoTypesVariables)
 }
 
 // =============================================================================
@@ -35,7 +35,7 @@ import { assertExactType } from './assertions'
   assertExactType<typeof useQueryOnlyQueryTypeResult, ExampleQuery | null | undefined>(useQueryOnlyQueryTypeResult)
 
   const useQueryOnlyQueryTypeVariables = useQueryOnlyQueryType.variables.value
-  assertExactType<typeof useQueryOnlyQueryTypeVariables, undefined>(useQueryOnlyQueryTypeVariables)
+  assertExactType<typeof useQueryOnlyQueryTypeVariables, Record<string, never> | undefined>(useQueryOnlyQueryTypeVariables)
 }
 
 // =============================================================================
@@ -111,7 +111,7 @@ import { assertExactType } from './assertions'
 
   const useQueryOnlyQueryTypeNoVarsWithOptionsVariables =
     useQueryOnlyQueryTypeNoVarsWithOptions.variables.value
-  assertExactType<typeof useQueryOnlyQueryTypeNoVarsWithOptionsVariables, null | undefined>(
+  assertExactType<typeof useQueryOnlyQueryTypeNoVarsWithOptionsVariables, Record<string, never> | undefined>(
     useQueryOnlyQueryTypeNoVarsWithOptionsVariables,
   )
 }
@@ -132,7 +132,7 @@ import { assertExactType } from './assertions'
 
   const useQueryOnlyQueryTypeNoVarsWithOptionsVariables =
     useQueryOnlyQueryTypeNoVarsWithOptions.variables.value
-  assertExactType<typeof useQueryOnlyQueryTypeNoVarsWithOptionsVariables, null | undefined>(
+  assertExactType<typeof useQueryOnlyQueryTypeNoVarsWithOptionsVariables, Record<string, never> | undefined>(
     useQueryOnlyQueryTypeNoVarsWithOptionsVariables,
   )
 }
@@ -148,7 +148,9 @@ import { assertExactType } from './assertions'
     { id: '4E79Lq' },
     {
       clientId: 'any',
-      context: { foo: 'any' },
+      context: {
+        string: 'any',
+      },
       debounce: 500,
       enabled: true,
       errorPolicy: 'all',
