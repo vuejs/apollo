@@ -27,7 +27,7 @@ module.exports = {
       throw new Error('An error')
     },
     loadNumber: () => new Promise((resolve) => {
-      setTimeout(() => resolve(42), 100)
+      setTimeout(() => resolve(42), 500)
     }),
     items: () => [
       {
