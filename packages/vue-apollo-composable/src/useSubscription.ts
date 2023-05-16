@@ -140,7 +140,6 @@ export function useSubscription <
 
     const client = resolveClient(currentOptions.value?.clientId)
 
-    // @ts-expect-error apollo-client types issue with TVariables
     subscription.value = client.subscribe<TResult, TVariables>({
       query: currentDocument,
       variables: currentVariables,

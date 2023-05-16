@@ -86,7 +86,7 @@ export interface UseQueryReturn<TResult, TVariables extends OperationVariables> 
  * */
 export function useQuery<TResult = any> (
   document: DocumentParameter<TResult, undefined>
-): UseQueryReturn<TResult, undefined>
+): UseQueryReturn<TResult, Record<string, never>>
 
 /**
  * Use a query that has optional variables but not options
@@ -109,8 +109,8 @@ export function useQuery<TResult = any, TVariables extends OperationVariables = 
 export function useQuery<TResult = any> (
   document: DocumentParameter<TResult, undefined>,
   variables: undefined | null,
-  options: OptionsParameter<TResult, null>,
-): UseQueryReturn<TResult, null>
+  options: OptionsParameter<TResult, Record<string, never>>,
+): UseQueryReturn<TResult, Record<string, never>>
 
 /**
  * Use a query that requires variables and options.
@@ -218,7 +218,7 @@ export function useQueryImpl<
 
     query.value = client.watchQuery<TResult, TVariables>({
       query: currentDocument,
-      variables: currentVariables,
+      variables: currentVariables ?? {} as TVariables,
       ...currentOptions.value,
       ...(isServer && currentOptions.value?.fetchPolicy !== 'no-cache')
         ? {
