@@ -264,6 +264,11 @@ export function useQueryImpl<
     })
   }
 
+  function getErrorPolicy () {
+    const client = resolveClient(currentOptions.value?.clientId)
+    return currentOptions.value?.errorPolicy || client.defaultOptions?.watchQuery?.errorPolicy
+  }
+
   function onNextResult (queryResult: ApolloQueryResult<TResult>) {
     if (ignoreNextResult) {
       ignoreNextResult = false
@@ -277,8 +282,12 @@ export function useQueryImpl<
     processNextResult(queryResult)
 
     // When `errorPolicy` is `all`, `onError` will not get called and
-    // ApolloQueryResult.errors may be set at the same time as we get a result
-    if (!queryResult.error && queryResult.errors?.length) {
+    // ApolloQueryResult.errors may be set at the same time as we get a result.
+    // The code is only relevant when `errorPolicy` is `all`, because for other situations it
+    // could hapen that next and error are called at the same time and then it will lead to multiple
+    // onError calls.
+    const errorPolicy = getErrorPolicy()
+    if (errorPolicy && errorPolicy === 'all' && !queryResult.error && queryResult.errors?.length) {
       processError(resultErrorsToApolloError(queryResult.errors))
     }
 
@@ -306,8 +315,7 @@ export function useQueryImpl<
 
     // any error should already be an ApolloError, but we make sure
     const apolloError = toApolloError(queryError)
-    const client = resolveClient(currentOptions.value?.clientId)
-    const errorPolicy = currentOptions.value?.errorPolicy || client.defaultOptions?.watchQuery?.errorPolicy
+    const errorPolicy = getErrorPolicy()
 
     if (errorPolicy && errorPolicy !== 'none') {
       processNextResult((query.value as ObservableQuery<TResult, TVariables>).getCurrentResult())
