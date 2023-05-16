@@ -57,6 +57,7 @@ jobs:
         run: pnpm run build
 
       - name: E2E tests
+        working-directory: ${{env.dir}}
         run: pnpm run test:e2e
 
       - uses: actions/upload-artifact@v2
