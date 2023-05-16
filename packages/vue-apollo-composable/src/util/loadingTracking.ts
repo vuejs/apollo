@@ -1,5 +1,5 @@
 import { Ref, watch, onUnmounted, ref, getCurrentInstance, onBeforeUnmount } from 'vue-demi'
-import type { CurrentInstance } from './types'
+import { isServer } from './env.js'
 
 export interface LoadingTracking {
   queries: Ref<number>
@@ -11,71 +11,51 @@ export interface AppLoadingTracking extends LoadingTracking {
   components: Map<any, LoadingTracking>
 }
 
-export function getAppTracking () {
-  const vm = getCurrentInstance() as CurrentInstance | null
-  const root = vm?.$root ?? vm?.root ?? vm?.proxy?.$root as CurrentInstance | null | undefined
-  if (!root) {
-    throw new Error('Instance $root not found')
-  }
-
-  let appTracking: AppLoadingTracking
-
-  if (!root._apolloAppTracking) {
-    // Add per Vue tracking
-    appTracking = root._apolloAppTracking = {
-      queries: ref(0),
-      mutations: ref(0),
-      subscriptions: ref(0),
-      components: new Map(),
-    }
-  } else {
-    appTracking = root._apolloAppTracking
-  }
-
-  return {
-    appTracking,
-  }
+export const globalTracking: AppLoadingTracking = {
+  queries: ref(0),
+  mutations: ref(0),
+  subscriptions: ref(0),
+  components: new Map(),
 }
 
 export function getCurrentTracking () {
   const vm = getCurrentInstance()
   if (!vm) {
-    throw new Error('getCurrentTracking must be used during a component setup')
+    return {}
   }
-
-  const { appTracking } = getAppTracking()
 
   let tracking: LoadingTracking
 
-  if (!appTracking.components.has(vm)) {
+  if (!globalTracking.components.has(vm)) {
     // Add per-component tracking
-    appTracking.components.set(vm, tracking = {
+    globalTracking.components.set(vm, tracking = {
       queries: ref(0),
       mutations: ref(0),
       subscriptions: ref(0),
     })
     // Cleanup
     onUnmounted(() => {
-      appTracking.components.delete(vm)
+      globalTracking.components.delete(vm)
     })
   } else {
-    tracking = appTracking.components.get(vm) as LoadingTracking
+    tracking = globalTracking.components.get(vm) as LoadingTracking
   }
 
   return {
-    appTracking,
     tracking,
   }
 }
 
 function track (loading: Ref<boolean>, type: keyof LoadingTracking) {
-  const { appTracking, tracking } = getCurrentTracking()
+  if (isServer) return
+
+  const { tracking } = getCurrentTracking()
 
   watch(loading, (value, oldValue) => {
     if (oldValue != null && value !== oldValue) {
       const mod = value ? 1 : -1
-      tracking[type].value += mod
-      appTracking[type].value += mod
+      if (tracking) tracking[type].value += mod
+      globalTracking[type].value += mod
     }
   }, {
     immediate: true,
@@ -83,8 +63,8 @@ function track (loading: Ref<boolean>, type: keyof LoadingTracking) {
 
   onBeforeUnmount(() => {
     if (loading.value) {
-      tracking[type].value--
-      appTracking[type].value--
+      if (tracking) tracking[type].value--
+      globalTracking[type].value--
     }
   })
 }
