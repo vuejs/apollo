@@ -1,6 +1,6 @@
 {
   "name": "@vue/apollo-ssr",
-  "version": "4.0.0-beta.4",
+  "version": "4.0.0-beta.5",
   "description": "Apollo GraphQL for Vue - Server Side Rendering utilities",
   "repository": {
     "type": "git",

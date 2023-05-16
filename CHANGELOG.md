@@ -1,3 +1,54 @@
+# Changelog
+
+## v4.0.0-beta.5
+
+
+### 🚀 Enhancements
+
+  - UseLazyQuery load returns boolean to make is easier to refetch (dcb1768)
+  - **ts:** Update types to account for changes in TypeScript 4.8 (#1454)
+  - Allow global tracking outside of components (5967e16)
+
+### 🩹 Fixes
+
+  - Don't call variables if query is disabled + fix enabling race conditions, fix #1243, fix #1422 (#1243, #1422)
+  - Events not registered in case of immediate trigger, fix #1154 (#1154)
+  - @vue/apollo-composable ESM settings, fix #1462 (#1463, #1462)
+  - Avoid multiple on error calls without usage of errorPolicy 'all' (#1461)
+  - Ssr export paths, fix #1469 (#1469)
+  - Initialize currentDocument early, fix #1325 (#1325)
+  - **ts:** Allow null on `userLazyQuery` `load` fn, fix #1386 (#1386)
+  - **ssr:** Handle result/error set before serverPrefetch call, fix #1429 (#1429)
+
+### 📖 Documentation
+
+  - Subscriptions configuration docs updated to describe graphql-ws configuration. (#1449)
+
+### 🏡 Chore
+
+  - Update lockfile to v6.0 (81ea32c)
+  - Update sheep/release-tag (cf7917e)
+
+### ✅ Tests
+
+  - Config cypress downloads (32c95de)
+  - Demo useLazyQuery with immediate load (53554b8)
+  - Enabled (db7d79c)
+
+### 🤖 CI
+
+  - Switch to github actions (25c31d2)
+  - Enable on v4 branch (bc3d80c)
+
+### ❤️  Contributors
+
+- Guillaume Chau ([@Akryum](http://github.com/Akryum))
+- Gibran Amparan ([@gibranamparan](http://github.com/gibranamparan))
+- Alessia Bellisario <alessia@apollographql.com>
+- Dominik Klein <dk@zammad.com>
+- Changwan Jun ([@wan2land](http://github.com/wan2land))
+
+
 # [4.0.0-beta.4](https://github.com/vuejs/vue-apollo/compare/v4.0.0-beta.3...v4.0.0-beta.4) (2023-02-22)
 
 
