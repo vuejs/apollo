@@ -170,20 +170,44 @@ export function useQueryImpl<
 
   // SSR
   let firstResolve: (() => void) | undefined
+  let firstResolveTriggered = false
   let firstReject: ((apolloError: ApolloError) => void) | undefined
+  let firstRejectError: undefined | ApolloError
+
+  const tryFirstResolve = () => {
+    firstResolveTriggered = true
+    if (firstResolve) firstResolve()
+  }
+
+  const tryFirstReject = (apolloError: ApolloError) => {
+    firstRejectError = apolloError
+    if (firstReject) firstReject(apolloError)
+  }
+
+  const resetFirstResolveReject = () => {
+    firstResolve = undefined
+    firstReject = undefined
+    firstResolveTriggered = false
+    firstRejectError = undefined
+  }
+
   vm && onServerPrefetch?.(() => {
     if (!isEnabled.value || (isServer && currentOptions.value?.prefetch === false)) return
 
     return new Promise<void>((resolve, reject) => {
       firstResolve = () => {
+        resetFirstResolveReject()
         resolve()
-        firstResolve = undefined
-        firstReject = undefined
       }
       firstReject = (apolloError: ApolloError) => {
+        resetFirstResolveReject()
         reject(apolloError)
-        firstResolve = undefined
-        firstReject = undefined
+      }
+
+      if (firstResolveTriggered) {
+        firstResolve()
+      } else if (firstRejectError) {
+        firstReject(firstRejectError)
       }
     }).finally(stop)
   })
@@ -207,7 +231,7 @@ export function useQueryImpl<
       (isServer && currentOptions.value?.prefetch === false) ||
       !currentDocument
     ) {
-      if (firstResolve) firstResolve()
+      tryFirstResolve()
       return
     }
 
@@ -290,10 +314,7 @@ export function useQueryImpl<
       processError(resultErrorsToApolloError(queryResult.errors))
     }
 
-    if (firstResolve) {
-      firstResolve()
-      stop()
-    }
+    tryFirstResolve()
   }
 
   function processNextResult (queryResult: ApolloQueryResult<TResult>) {
@@ -320,10 +341,7 @@ export function useQueryImpl<
       processNextResult((query.value as ObservableQuery<TResult, TVariables>).getCurrentResult())
     }
     processError(apolloError)
-    if (firstReject) {
-      firstReject(apolloError)
-      stop()
-    }
+    tryFirstReject(apolloError)
     // The observable closes the sub if an error occurs
     resubscribeToQuery()
   }
@@ -353,7 +371,7 @@ export function useQueryImpl<
    * Stop watching the query
    */
   function stop () {
-    if (firstResolve) firstResolve()
+    tryFirstResolve()
     if (!started) return
     started = false
     loading.value = false
