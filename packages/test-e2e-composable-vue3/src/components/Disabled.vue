@@ -5,7 +5,7 @@ import { defineComponent, computed, ref } from 'vue'
 
 export default defineComponent({
   setup () {
-    const selectedId = ref<string | null>(null)
+    const selectedId = ref<{ id: string } | null>(null)
 
     const { result, loading } = useQuery(gql`
       query channel ($id: ID!) {
@@ -18,7 +18,8 @@ export default defineComponent({
         }
       }
     `, () => ({
-      id: selectedId.value,
+      // Should not throw since it will not be called if the query is disabled
+      id: selectedId.value!.id,
     }), () => ({
       fetchPolicy: 'no-cache',
       enabled: !!selectedId.value,
@@ -26,7 +27,7 @@ export default defineComponent({
     const channel = computed(() => result.value?.channel)
 
     function load () {
-      selectedId.value = 'general'
+      selectedId.value = { id: 'general' }
     }
 
     return {

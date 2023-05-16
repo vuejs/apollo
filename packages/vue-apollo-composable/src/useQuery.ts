@@ -401,6 +401,27 @@ export function useQueryImpl<
     debouncedRestart()
   }
 
+  // Enabled state
+
+  const forceDisabled = ref(lazy)
+  const enabledOption = computed(() => !currentOptions.value || currentOptions.value.enabled == null || currentOptions.value.enabled)
+  const isEnabled = computed(() => enabledOption.value && !forceDisabled.value)
+
+  // Applying options first (in case it disables the query)
+  watch(() => unref(optionsRef), value => {
+    if (currentOptions.value && (
+      currentOptions.value.throttle !== value.throttle ||
+      currentOptions.value.debounce !== value.debounce
+    )) {
+      updateRestartFn()
+    }
+    currentOptions.value = value
+    restart()
+  }, {
+    deep: true,
+    immediate: true,
+  })
+
   // Applying document
   let currentDocument: DocumentNode
   watch(documentRef, value => {
@@ -413,28 +434,19 @@ export function useQueryImpl<
   // Applying variables
   let currentVariables: TVariables | undefined
   let currentVariablesSerialized: string
-  watch(variablesRef, (value, oldValue) => {
-    const serialized = JSON.stringify(value)
+  watch(() => {
+    if (isEnabled.value) {
+      return variablesRef.value
+    } else {
+      return undefined
+    }
+  }, (value) => {
+    const serialized = JSON.stringify([value, isEnabled.value])
     if (serialized !== currentVariablesSerialized) {
       currentVariables = value
       restart()
     }
     currentVariablesSerialized = serialized
-  }, {
-    deep: true,
-    immediate: true,
-  })
-
-  // Applying options
-  watch(() => unref(optionsRef), value => {
-    if (currentOptions.value && (
-      currentOptions.value.throttle !== value.throttle ||
-      currentOptions.value.debounce !== value.debounce
-    )) {
-      updateRestartFn()
-    }
-    currentOptions.value = value
-    restart()
   }, {
     deep: true,
     immediate: true,
@@ -519,22 +531,21 @@ export function useQueryImpl<
     item.unsubscribeFns.push(unsubscribe)
   }
 
-  // Enabled state
-
-  const forceDisabled = ref(lazy)
-  const enabledOption = computed(() => !currentOptions.value || currentOptions.value.enabled == null || currentOptions.value.enabled)
-  const isEnabled = computed(() => enabledOption.value && !forceDisabled.value)
-
   // Auto start & stop
+
   watch(isEnabled, value => {
     if (value) {
-      start()
+      nextTick(() => {
+        start()
+      })
     } else {
       stop()
     }
-  }, {
-    immediate: true,
   })
+
+  if (isEnabled.value) {
+    start()
+  }
 
   // Teardown
   vm && onBeforeUnmount(() => {
