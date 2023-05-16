@@ -27,7 +27,9 @@ export function useLazyQuery<
     if (options) {
       Object.assign(isRef(query.options) ? query.options.value : query.options, options)
     }
+    const oldForceDisabled = query.forceDisabled.value
     query.forceDisabled.value = false
+    return oldForceDisabled
   }
 
   return {

@@ -1,20 +1,33 @@
 <script lang="ts">
 import gql from 'graphql-tag'
 import { useLazyQuery } from '@vue/apollo-composable'
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, ref } from 'vue'
 
 export default defineComponent({
   setup () {
-    const { result, load } = useLazyQuery(gql`
+    const { result, loading, load, refetch } = useLazyQuery(gql`
       query list {
         list
       }
     `)
     const list = computed(() => result.value?.list ?? [])
 
+    const refetched = ref(false)
+
+    function r () {
+      refetched.value = true
+      refetch()
+    }
+
+    function loadOrRefetch () {
+      load() || r()
+    }
+
     return {
-      load,
+      loadOrRefetch,
+      loading,
       list,
+      refetched,
     }
   },
 })
@@ -22,12 +35,25 @@ export default defineComponent({
 
 <template>
   <div class="m-6">
-    <button
-      class="bg-green-200 rounded-lg p-4"
-      @click="load()"
+    <div>
+      <button
+        class="bg-green-200 rounded-lg p-4"
+        @click="loadOrRefetch()"
+      >
+        Load list
+      </button>
+
+      <span data-test-id="refetched">
+        Refetched: {{ refetched }}
+      </span>
+    </div>
+
+    <div
+      v-if="loading"
+      class="loading"
     >
-      Load list
-    </button>
+      Loading...
+    </div>
 
     <ul class="my-4">
       <li
