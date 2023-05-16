@@ -13,9 +13,9 @@ export function useLazyQuery<
   const query = useQueryImpl<TResult, TVariables>(document, variables, options, true)
 
   function load (
-    document?: DocumentNode,
-    variables?: TVariables,
-    options?: UseQueryOptions,
+    document?: DocumentNode | null,
+    variables?: TVariables | null,
+    options?: UseQueryOptions | null,
   ) {
     if (document) {
       query.document.value = document
