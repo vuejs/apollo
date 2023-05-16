@@ -34,5 +34,9 @@ export const router = createRouter({
       path: '/partial-error',
       component: () => import('./components/PartialError.vue'),
     },
+    {
+      path: '/disabled',
+      component: () => import('./components/Disabled.vue'),
+    },
   ],
 })

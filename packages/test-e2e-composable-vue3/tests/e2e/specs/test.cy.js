@@ -109,4 +109,12 @@ describe('Vue 3 + Apollo Composable', () => {
     cy.get('.list-disc').should('have.length', 3)
     cy.get('[data-test-id="refetched"]').should('contain', 'true')
   })
+
+  it('enabled', () => {
+    cy.visit('/disabled')
+    cy.get('[data-test-id="data"]').should('not.exist')
+    cy.get('.loading').should('not.exist')
+    cy.get('button').click()
+    cy.get('[data-test-id="data"]').should('contain', 'Loaded channel: General')
+  })
 })
