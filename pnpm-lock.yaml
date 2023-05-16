@@ -11,8 +11,8 @@ importers:
   .:
     devDependencies:
       '@akryum/sheep':
-        specifier: ^0.3.3
-        version: 0.3.3
+        specifier: ^0.5.0
+        version: 0.5.0
       '@typescript-eslint/eslint-plugin':
         specifier: ^4.33.0
         version: 4.33.0(@typescript-eslint/parser@4.33.0)(eslint@7.32.0)(typescript@4.9.5)
@@ -479,11 +479,9 @@ packages:
       js-message: 1.0.7
     dev: true
 
-  /@akryum/sheep@0.3.3:
-    resolution: {integrity: sha512-Nt+EsDI3wjECeCv864b5CQFLp7g99UDD15vlfNavFBE9C0jbSD/KrBN+JagXE4TmjBjIT7cq0d6cVJS1Rvl7xA==}
+  /@akryum/sheep@0.5.0:
+    resolution: {integrity: sha512-VcJqPUpeAtjiUwuSuwZSkl09LUpcsk7PKgGy4EUMoAM3St05hkT+PaBnQxgBgsJIDl6PfWfq3xRhPxkL0h1REA==}
     hasBin: true
-    dependencies:
-      conventional-changelog-cli: 2.2.2
     dev: true
 
   /@algolia/autocomplete-core@1.7.4:
