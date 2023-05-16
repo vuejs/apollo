@@ -1,0 +1,71 @@
+name: E2E options/components
+
+on:
+  push:
+    branches:
+      - main
+      - feat/*
+      - fix/*
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    name: Build and test
+
+    env:
+      dir: ./packages/test-e2e
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 8.5.1
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: |
+          echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
+
+      - name: Cache pnpm modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+            ~/.cache/Cypress
+          key: pnpm-v1-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-v1-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build
+        run: pnpm run build
+
+      - name: E2E tests
+        run: pnpm run test:e2e
+
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: ${{env.dir}}/tests/e2e/screenshots
+
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: cypress-videos
+          path: ${{env.dir}}/tests/e2e/videos
