@@ -2,7 +2,7 @@ lockfileVersion: '6.0'
 
 overrides:
   eslint-scope: ^5
-  graphql: ^15
+  graphql: ^16
   serialize-javascript: ^6.0.0
   subscriptions-transport-ws: ^0.9
 
@@ -73,7 +73,7 @@ importers:
     dependencies:
       '@apollo/client':
         specifier: ^3.7.7
-        version: 3.7.9(graphql@15.8.0)(subscriptions-transport-ws@0.9.19)
+        version: 3.7.9(graphql@16.0.0)(subscriptions-transport-ws@0.9.19)
       '@vue/apollo-components':
         specifier: workspace:*
         version: link:../vue-apollo-components
@@ -82,16 +82,16 @@ importers:
         version: link:../vue-apollo-option
       apollo-server-express:
         specifier: ^2.25.4
-        version: 2.26.1(graphql@15.8.0)
+        version: 2.26.1(graphql@16.0.0)
       core-js:
         specifier: ^3.23.2
         version: 3.28.0
       graphql:
-        specifier: ^15
-        version: 15.8.0
+        specifier: ^16
+        version: 16.0.0
       graphql-type-json:
         specifier: ^0.3.2
-        version: 0.3.2(graphql@15.8.0)
+        version: 0.3.2(graphql@16.0.0)
       marked:
         specifier: ^0.7.0
         version: 0.7.0
@@ -103,7 +103,7 @@ importers:
         version: 2.2.16
       subscriptions-transport-ws:
         specifier: ^0.9
-        version: 0.9.19(graphql@15.8.0)
+        version: 0.9.19(graphql@16.0.0)
       vue:
         specifier: ^3.2.37
         version: 3.2.47
@@ -152,7 +152,7 @@ importers:
         version: 7.20.0(eslint@7.32.0)
       graphql-tag:
         specifier: ^2.12.6
-        version: 2.12.6(graphql@15.8.0)
+        version: 2.12.6(graphql@16.0.0)
       kill-port:
         specifier: ^1.6.1
         version: 1.6.1
@@ -173,7 +173,7 @@ importers:
     dependencies:
       '@apollo/client':
         specifier: ^3.7.7
-        version: 3.7.9(graphql@15.8.0)(subscriptions-transport-ws@0.9.19)
+        version: 3.7.9(graphql@16.0.0)(subscriptions-transport-ws@0.9.19)
       '@vue/apollo-composable':
         specifier: workspace:*
         version: link:../vue-apollo-composable
@@ -182,7 +182,7 @@ importers:
         version: link:../vue-apollo-util
       apollo-server-express:
         specifier: ^2.25.4
-        version: 2.26.1(graphql@15.8.0)
+        version: 2.26.1(graphql@16.0.0)
       core-js:
         specifier: ^3.23.2
         version: 3.28.0
@@ -193,11 +193,11 @@ importers:
         specifier: ^4.18.1
         version: 4.18.2
       graphql:
-        specifier: ^15
-        version: 15.8.0
+        specifier: ^16
+        version: 16.0.0
       graphql-tag:
         specifier: ^2.12.6
-        version: 2.12.6(graphql@15.8.0)
+        version: 2.12.6(graphql@16.0.0)
       regenerator-runtime:
         specifier: ^0.13.9
         version: 0.13.11
@@ -256,7 +256,7 @@ importers:
     devDependencies:
       '@apollo/client':
         specifier: ^3.7.7
-        version: 3.7.9(graphql@15.8.0)(subscriptions-transport-ws@0.9.19)
+        version: 3.7.9(graphql@16.0.0)(subscriptions-transport-ws@0.9.19)
       '@babel/core':
         specifier: ^7.18.5
         version: 7.21.0
@@ -282,8 +282,8 @@ importers:
         specifier: ^6.0.3
         version: 6.0.3
       graphql:
-        specifier: ^15
-        version: 15.8.0
+        specifier: ^16
+        version: 16.0.0
       jest:
         specifier: ^24.9.0
         version: 24.9.0
@@ -338,16 +338,16 @@ importers:
     devDependencies:
       '@apollo/client':
         specifier: ^3.7.7
-        version: 3.7.9(graphql@15.8.0)(subscriptions-transport-ws@0.9.19)
+        version: 3.7.9(graphql@16.0.0)(subscriptions-transport-ws@0.9.19)
       '@types/throttle-debounce':
         specifier: ^2.1.0
         version: 2.1.0
       graphql:
-        specifier: ^15
-        version: 15.8.0
+        specifier: ^16
+        version: 16.0.0
       graphql-tag:
         specifier: ^2.12.6
-        version: 2.12.6(graphql@15.8.0)
+        version: 2.12.6(graphql@16.0.0)
       nodemon:
         specifier: ^1.19.4
         version: 1.19.4
@@ -369,7 +369,7 @@ importers:
     devDependencies:
       '@apollo/client':
         specifier: ^3.7.7
-        version: 3.7.9(graphql@15.8.0)(subscriptions-transport-ws@0.9.19)
+        version: 3.7.9(graphql@16.0.0)(subscriptions-transport-ws@0.9.19)
       '@babel/core':
         specifier: ^7.18.5
         version: 7.21.0
@@ -398,11 +398,11 @@ importers:
         specifier: ^6.0.3
         version: 6.0.3
       graphql:
-        specifier: ^15
-        version: 15.8.0
+        specifier: ^16
+        version: 16.0.0
       graphql-tag:
         specifier: ^2.12.6
-        version: 2.12.6(graphql@15.8.0)
+        version: 2.12.6(graphql@16.0.0)
       jest:
         specifier: ^24.9.0
         version: 24.9.0
@@ -448,7 +448,7 @@ importers:
     devDependencies:
       '@apollo/client':
         specifier: ^3.7.7
-        version: 3.7.9(graphql@15.8.0)(subscriptions-transport-ws@0.9.19)
+        version: 3.7.9(graphql@16.0.0)(subscriptions-transport-ws@0.9.19)
       '@types/serialize-javascript':
         specifier: ^5.0.2
         version: 5.0.2
@@ -460,10 +460,10 @@ importers:
     devDependencies:
       '@apollo/client':
         specifier: ^3.7.7
-        version: 3.7.9(graphql@15.8.0)(subscriptions-transport-ws@0.9.19)
+        version: 3.7.9(graphql@16.0.0)(subscriptions-transport-ws@0.9.19)
       graphql:
-        specifier: ^15
-        version: 15.8.0
+        specifier: ^16
+        version: 16.0.0
       typescript:
         specifier: ^4.7.4
         version: 4.9.5
@@ -605,7 +605,7 @@ packages:
       '@jridgewell/trace-mapping': 0.3.17
     dev: true
 
-  /@apollo/client@3.7.9(graphql@15.8.0)(subscriptions-transport-ws@0.9.19):
+  /@apollo/client@3.7.9(graphql@16.0.0)(subscriptions-transport-ws@0.9.19):
     resolution: {integrity: sha512-YnJvrJOVWrp4y/zdNvUaM8q4GuSHCEIecsRDTJhK/veT33P/B7lfqGJ24NeLdKMj8tDEuXYF7V0t+th4+rgC+Q==}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
@@ -625,17 +625,17 @@ packages:
       subscriptions-transport-ws:
         optional: true
     dependencies:
-      '@graphql-typed-document-node/core': 3.1.1(graphql@15.8.0)
+      '@graphql-typed-document-node/core': 3.1.1(graphql@16.0.0)
       '@wry/context': 0.7.0
       '@wry/equality': 0.5.3
       '@wry/trie': 0.3.2
-      graphql: 15.8.0
-      graphql-tag: 2.12.6(graphql@15.8.0)
+      graphql: 16.0.0
+      graphql-tag: 2.12.6(graphql@16.0.0)
       hoist-non-react-statics: 3.3.2
       optimism: 0.16.2
       prop-types: 15.8.1
       response-iterator: 0.2.6
-      subscriptions-transport-ws: 0.9.19(graphql@15.8.0)
+      subscriptions-transport-ws: 0.9.19(graphql@16.0.0)
       symbol-observable: 4.0.0
       ts-invariant: 0.10.3
       tslib: 2.5.0
@@ -661,7 +661,7 @@ packages:
       long: 4.0.0
     dev: false
 
-  /@apollographql/apollo-tools@0.5.4(graphql@15.8.0):
+  /@apollographql/apollo-tools@0.5.4(graphql@16.0.0):
     resolution: {integrity: sha512-shM3q7rUbNyXVVRkQJQseXv6bnYM3BUma/eZhwXR4xsuM+bqWnJKvW7SAfRjP7LuSCocrexa5AXhjjawNHrIlw==}
     engines: {node: '>=8', npm: '>=6'}
     peerDependencies:
@@ -670,7 +670,7 @@ packages:
       graphql:
         optional: true
     dependencies:
-      graphql: 15.8.0
+      graphql: 16.0.0
     dev: false
 
   /@apollographql/graphql-playground-html@1.6.27:
@@ -679,7 +679,7 @@ packages:
       xss: 1.0.14
     dev: false
 
-  /@apollographql/graphql-upload-8-fork@8.1.4(graphql@15.8.0):
+  /@apollographql/graphql-upload-8-fork@8.1.4(graphql@16.0.0):
     resolution: {integrity: sha512-lHAj/PUegYu02zza9Pg0bQQYH5I0ah1nyIzu2YIqOv41P0vu3GCBISAmQCfFHThK7N3dy7dLFPhoKcXlXRLPoQ==}
     engines: {node: '>=8.5'}
     peerDependencies:
@@ -693,7 +693,7 @@ packages:
       '@types/koa': 2.13.5
       busboy: 0.3.1
       fs-capacitor: 2.0.4
-      graphql: 15.8.0
+      graphql: 16.0.0
       http-errors: 1.8.1
       object-path: 0.11.8
     dev: false
@@ -2024,7 +2024,7 @@ packages:
       purgecss: 2.3.0
     dev: true
 
-  /@graphql-typed-document-node/core@3.1.1(graphql@15.8.0):
+  /@graphql-typed-document-node/core@3.1.1(graphql@16.0.0):
     resolution: {integrity: sha512-NQ17ii0rK1b34VZonlmT2QMJFI70m0TRwbknO/ihlbatXyaktDhN/98vBiUU6kNBPljqGqyIrl2T4nY2RpFANg==}
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
@@ -2032,7 +2032,7 @@ packages:
       graphql:
         optional: true
     dependencies:
-      graphql: 15.8.0
+      graphql: 16.0.0
 
   /@hapi/hoek@9.3.0:
     resolution: {integrity: sha512-/c6rf4UJlmHlC9b5BaNvzAcFv7HZ2QHaV0D4/HNlBdvFnvQq8RI4kYdhyPCl7Xj+oWvTWQ8ujhqS53LIgAe6KQ==}
@@ -2520,7 +2520,7 @@ packages:
     resolution: {integrity: sha512-MOkzsEp1Jk5bXuAsHsUi6BVv0zCO+7/2PTiZMXWDSsMXvNU6w/PLMQT2vHn8hy2i0JqojPz1Sz6rsFjHtsU0lA==}
     deprecated: This is a stub types definition. graphql provides its own type definitions, so you do not need this installed.
     dependencies:
-      graphql: 15.8.0
+      graphql: 16.0.0
     dev: true
 
   /@types/html-minifier-terser@6.1.0:
@@ -3895,7 +3895,7 @@ packages:
       picomatch: 2.3.1
     dev: true
 
-  /apollo-cache-control@0.15.0(graphql@15.8.0):
+  /apollo-cache-control@0.15.0(graphql@16.0.0):
     resolution: {integrity: sha512-U2uYvHZsWmR6s6CD5zlq3PepfbUAM8953CeVM2Y2QYMtJ8i4CYplEPbIWb3zTIXSPbIPeWGddM56pChI6Iz3zA==}
     engines: {node: '>=6.0'}
     deprecated: The functionality provided by the `apollo-cache-control` package is built in to `apollo-server-core` starting with Apollo Server 3. See https://www.apollographql.com/docs/apollo-server/migration/#cachecontrol for details.
@@ -3906,8 +3906,8 @@ packages:
         optional: true
     dependencies:
       apollo-server-env: 3.2.0
-      apollo-server-plugin-base: 0.14.0(graphql@15.8.0)
-      graphql: 15.8.0
+      apollo-server-plugin-base: 0.14.0(graphql@16.0.0)
+      graphql: 16.0.0
     transitivePeerDependencies:
       - encoding
     dev: false
@@ -3923,7 +3923,7 @@ packages:
       - encoding
     dev: false
 
-  /apollo-graphql@0.9.7(graphql@15.8.0):
+  /apollo-graphql@0.9.7(graphql@16.0.0):
     resolution: {integrity: sha512-bezL9ItUWUGHTm1bI/XzIgiiZbhXpsC7uxk4UxFPmcVJwJsDc3ayZ99oXxAaK+3Rbg/IoqrHckA6CwmkCsbaSA==}
     engines: {node: '>=6'}
     peerDependencies:
@@ -3933,12 +3933,12 @@ packages:
         optional: true
     dependencies:
       core-js-pure: 3.28.0
-      graphql: 15.8.0
+      graphql: 16.0.0
       lodash.sortby: 4.7.0
       sha.js: 2.4.11
     dev: false
 
-  /apollo-link@1.2.14(graphql@15.8.0):
+  /apollo-link@1.2.14(graphql@16.0.0):
     resolution: {integrity: sha512-p67CMEFP7kOG1JZ0ZkYZwRDa369w5PIjtMjvrQd/HnIV8FRsHRqLqK+oAZQnFa1DDdZtOtHTi+aMIW6EatC2jg==}
     peerDependencies:
       graphql: ^0.11.3 || ^0.12.3 || ^0.13.0 || ^14.0.0 || ^15.0.0
@@ -3946,8 +3946,8 @@ packages:
       graphql:
         optional: true
     dependencies:
-      apollo-utilities: 1.3.4(graphql@15.8.0)
-      graphql: 15.8.0
+      apollo-utilities: 1.3.4(graphql@16.0.0)
+      graphql: 16.0.0
       ts-invariant: 0.4.4
       tslib: 1.14.1
       zen-observable-ts: 0.8.21
@@ -3968,7 +3968,7 @@ packages:
       lru-cache: 6.0.0
     dev: false
 
-  /apollo-server-core@2.26.1(graphql@15.8.0):
+  /apollo-server-core@2.26.1(graphql@16.0.0):
     resolution: {integrity: sha512-YnO1YXhHOnCY7Q2SZ0uUtPq6SLCw+t2uI19l59mzWuCyZYdHrtSy3zUEU6pM3tR9vvUuRGkYIfMRlo/Q8a1U5g==}
     engines: {node: '>=6'}
     deprecated: The `apollo-server-core` package is part of Apollo Server v2 and v3, which are now deprecated (end-of-life October 22nd 2023). This package's functionality is now found in the `@apollo/server` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
@@ -3978,31 +3978,31 @@ packages:
       graphql:
         optional: true
     dependencies:
-      '@apollographql/apollo-tools': 0.5.4(graphql@15.8.0)
+      '@apollographql/apollo-tools': 0.5.4(graphql@16.0.0)
       '@apollographql/graphql-playground-html': 1.6.27
-      '@apollographql/graphql-upload-8-fork': 8.1.4(graphql@15.8.0)
+      '@apollographql/graphql-upload-8-fork': 8.1.4(graphql@16.0.0)
       '@josephg/resolvable': 1.0.1
       '@types/ws': 7.4.7
-      apollo-cache-control: 0.15.0(graphql@15.8.0)
+      apollo-cache-control: 0.15.0(graphql@16.0.0)
       apollo-datasource: 0.10.0
-      apollo-graphql: 0.9.7(graphql@15.8.0)
+      apollo-graphql: 0.9.7(graphql@16.0.0)
       apollo-reporting-protobuf: 0.8.0
       apollo-server-caching: 0.7.0
       apollo-server-env: 3.2.0
-      apollo-server-errors: 2.5.0(graphql@15.8.0)
-      apollo-server-plugin-base: 0.14.0(graphql@15.8.0)
-      apollo-server-types: 0.10.0(graphql@15.8.0)
-      apollo-tracing: 0.16.0(graphql@15.8.0)
+      apollo-server-errors: 2.5.0(graphql@16.0.0)
+      apollo-server-plugin-base: 0.14.0(graphql@16.0.0)
+      apollo-server-types: 0.10.0(graphql@16.0.0)
+      apollo-tracing: 0.16.0(graphql@16.0.0)
       async-retry: 1.3.3
       fast-json-stable-stringify: 2.1.0
-      graphql: 15.8.0
-      graphql-extensions: 0.16.0(graphql@15.8.0)
-      graphql-tag: 2.12.6(graphql@15.8.0)
-      graphql-tools: 4.0.8(graphql@15.8.0)
+      graphql: 16.0.0
+      graphql-extensions: 0.16.0(graphql@16.0.0)
+      graphql-tag: 2.12.6(graphql@16.0.0)
+      graphql-tools: 4.0.8(graphql@16.0.0)
       loglevel: 1.8.1
       lru-cache: 6.0.0
       sha.js: 2.4.11
-      subscriptions-transport-ws: 0.9.19(graphql@15.8.0)
+      subscriptions-transport-ws: 0.9.19(graphql@16.0.0)
       uuid: 8.3.2
     transitivePeerDependencies:
       - bufferutil
@@ -4021,7 +4021,7 @@ packages:
       - encoding
     dev: false
 
-  /apollo-server-errors@2.5.0(graphql@15.8.0):
+  /apollo-server-errors@2.5.0(graphql@16.0.0):
     resolution: {integrity: sha512-lO5oTjgiC3vlVg2RKr3RiXIIQ5pGXBFxYGGUkKDhTud3jMIhs+gel8L8zsEjKaKxkjHhCQAA/bcEfYiKkGQIvA==}
     engines: {node: '>=6'}
     deprecated: The `apollo-server-errors` package is part of Apollo Server v2 and v3, which are now deprecated (end-of-life October 22nd 2023). This package's functionality is now found in the `@apollo/server` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
@@ -4031,10 +4031,10 @@ packages:
       graphql:
         optional: true
     dependencies:
-      graphql: 15.8.0
+      graphql: 16.0.0
     dev: false
 
-  /apollo-server-express@2.26.1(graphql@15.8.0):
+  /apollo-server-express@2.26.1(graphql@16.0.0):
     resolution: {integrity: sha512-eATTtlGhZFuo4KNRgaQ25jflUchI18oMd0vZyx0uIQ/CM0FPttO1noQ0fPAO6U0oSrxS8J9fCh8naJFDTUsZ0w==}
     engines: {node: '>=6'}
     deprecated: The `apollo-server-express` package is part of Apollo Server v2 and v3, which are now deprecated (end-of-life October 22nd 2023). This package's functionality is now found in the `@apollo/server` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
@@ -4051,16 +4051,16 @@ packages:
       '@types/express': 4.17.17
       '@types/express-serve-static-core': 4.17.33
       accepts: 1.3.8
-      apollo-server-core: 2.26.1(graphql@15.8.0)
-      apollo-server-types: 0.10.0(graphql@15.8.0)
+      apollo-server-core: 2.26.1(graphql@16.0.0)
+      apollo-server-types: 0.10.0(graphql@16.0.0)
       body-parser: 1.20.1
       cors: 2.8.5
       express: 4.18.2
-      graphql: 15.8.0
-      graphql-subscriptions: 1.2.1(graphql@15.8.0)
-      graphql-tools: 4.0.8(graphql@15.8.0)
+      graphql: 16.0.0
+      graphql-subscriptions: 1.2.1(graphql@16.0.0)
+      graphql-tools: 4.0.8(graphql@16.0.0)
       parseurl: 1.3.3
-      subscriptions-transport-ws: 0.9.19(graphql@15.8.0)
+      subscriptions-transport-ws: 0.9.19(graphql@16.0.0)
       type-is: 1.6.18
     transitivePeerDependencies:
       - bufferutil
@@ -4069,7 +4069,7 @@ packages:
       - utf-8-validate
     dev: false
 
-  /apollo-server-plugin-base@0.14.0(graphql@15.8.0):
+  /apollo-server-plugin-base@0.14.0(graphql@16.0.0):
     resolution: {integrity: sha512-nTNSFuBhZURGjtWptdVqwemYUOdsvABj/GSKzeNvepiEubiv4N0rt4Gvy1inHDiMbo98wQTdF/7XohNcB9A77g==}
     engines: {node: '>=6'}
     deprecated: The `apollo-server-plugin-base` package is part of Apollo Server v2 and v3, which are now deprecated (end-of-life October 22nd 2023). This package's functionality is now found in the `@apollo/server` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
@@ -4079,13 +4079,13 @@ packages:
       graphql:
         optional: true
     dependencies:
-      apollo-server-types: 0.10.0(graphql@15.8.0)
-      graphql: 15.8.0
+      apollo-server-types: 0.10.0(graphql@16.0.0)
+      graphql: 16.0.0
     transitivePeerDependencies:
       - encoding
     dev: false
 
-  /apollo-server-types@0.10.0(graphql@15.8.0):
+  /apollo-server-types@0.10.0(graphql@16.0.0):
     resolution: {integrity: sha512-LsB3epw1X3Co/HGiKHCGtzWG35J59gG8Ypx0p22+wgdM9AVDm1ylsNGZy+osNIVJc1lUJf3nF5kZ90vA866K/w==}
     engines: {node: '>=6'}
     deprecated: The `apollo-server-types` package is part of Apollo Server v2 and v3, which are now deprecated (end-of-life October 22nd 2023). This package's functionality is now found in the `@apollo/server` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
@@ -4098,12 +4098,12 @@ packages:
       apollo-reporting-protobuf: 0.8.0
       apollo-server-caching: 0.7.0
       apollo-server-env: 3.2.0
-      graphql: 15.8.0
+      graphql: 16.0.0
     transitivePeerDependencies:
       - encoding
     dev: false
 
-  /apollo-tracing@0.16.0(graphql@15.8.0):
+  /apollo-tracing@0.16.0(graphql@16.0.0):
     resolution: {integrity: sha512-Oy8kTggB+fJ/hHXwHyMpuTl5KW7u1XetKFDErZVOobUKc2zjc/NgWiC/s7SGYZCgfLodBjvwfa6rMcvLkz7c0w==}
     engines: {node: '>=4.0'}
     deprecated: The `apollo-tracing` package is no longer part of Apollo Server 3. See https://www.apollographql.com/docs/apollo-server/migration/#tracing for details
@@ -4114,13 +4114,13 @@ packages:
         optional: true
     dependencies:
       apollo-server-env: 3.2.0
-      apollo-server-plugin-base: 0.14.0(graphql@15.8.0)
-      graphql: 15.8.0
+      apollo-server-plugin-base: 0.14.0(graphql@16.0.0)
+      graphql: 16.0.0
     transitivePeerDependencies:
       - encoding
     dev: false
 
-  /apollo-utilities@1.3.4(graphql@15.8.0):
+  /apollo-utilities@1.3.4(graphql@16.0.0):
     resolution: {integrity: sha512-pk2hiWrCXMAy2fRPwEyhvka+mqwzeP60Jr1tRYi5xru+3ko94HI9o6lK0CT33/w4RDlxWchmdhDCrvdr+pHCig==}
     peerDependencies:
       graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
@@ -4130,7 +4130,7 @@ packages:
     dependencies:
       '@wry/equality': 0.1.11
       fast-json-stable-stringify: 2.1.0
-      graphql: 15.8.0
+      graphql: 16.0.0
       ts-invariant: 0.4.4
       tslib: 1.14.1
     dev: false
@@ -7778,7 +7778,7 @@ packages:
     resolution: {integrity: sha512-9ByhssR2fPVsNZj478qUUbKfmL0+t5BDVyjShtyZZLiK7ZDAArFFfopyOTj0M05wE2tJPisA4iTnnXl2YoPvOA==}
     dev: true
 
-  /graphql-extensions@0.16.0(graphql@15.8.0):
+  /graphql-extensions@0.16.0(graphql@16.0.0):
     resolution: {integrity: sha512-rZQc/USoEIw437BGRUwoHoLPR1LA791Ltj6axONqgKIyyx2sqIO3YT9kTbB/eIUdJBrCozp4KuUeZ09xKeQDxg==}
     engines: {node: '>=6.0'}
     deprecated: 'The `graphql-extensions` API has been removed from Apollo Server 3. Use the plugin API instead: https://www.apollographql.com/docs/apollo-server/integrations/plugins/'
@@ -7788,15 +7788,15 @@ packages:
       graphql:
         optional: true
     dependencies:
-      '@apollographql/apollo-tools': 0.5.4(graphql@15.8.0)
+      '@apollographql/apollo-tools': 0.5.4(graphql@16.0.0)
       apollo-server-env: 3.2.0
-      apollo-server-types: 0.10.0(graphql@15.8.0)
-      graphql: 15.8.0
+      apollo-server-types: 0.10.0(graphql@16.0.0)
+      graphql: 16.0.0
     transitivePeerDependencies:
       - encoding
     dev: false
 
-  /graphql-subscriptions@1.2.1(graphql@15.8.0):
+  /graphql-subscriptions@1.2.1(graphql@16.0.0):
     resolution: {integrity: sha512-95yD/tKi24q8xYa7Q9rhQN16AYj5wPbrb8tmHGM3WRc9EBmWrG/0kkMl+tQG8wcEuE9ibR4zyOM31p5Sdr2v4g==}
     peerDependencies:
       graphql: ^0.10.5 || ^0.11.3 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
@@ -7804,11 +7804,11 @@ packages:
       graphql:
         optional: true
     dependencies:
-      graphql: 15.8.0
+      graphql: 16.0.0
       iterall: 1.3.0
     dev: false
 
-  /graphql-tag@2.12.6(graphql@15.8.0):
+  /graphql-tag@2.12.6(graphql@16.0.0):
     resolution: {integrity: sha512-FdSNcu2QQcWnM2VNvSCCDCVS5PpPqpzgFT8+GXzqJuoDd0CBncxCY278u4mhRO7tMgo2JjgJA5aZ+nWSQ/Z+xg==}
     engines: {node: '>=10'}
     peerDependencies:
@@ -7817,10 +7817,10 @@ packages:
       graphql:
         optional: true
     dependencies:
-      graphql: 15.8.0
+      graphql: 16.0.0
       tslib: 2.5.0
 
-  /graphql-tools@4.0.8(graphql@15.8.0):
+  /graphql-tools@4.0.8(graphql@16.0.0):
     resolution: {integrity: sha512-MW+ioleBrwhRjalKjYaLQbr+920pHBgy9vM/n47sswtns8+96sRn5M/G+J1eu7IMeKWiN/9p6tmwCHU7552VJg==}
     deprecated: This package has been deprecated and now it only exports makeExecutableSchema.\nAnd it will no longer receive updates.\nWe recommend you to migrate to scoped packages such as @graphql-tools/schema, @graphql-tools/utils and etc.\nCheck out https://www.graphql-tools.com to learn what package you should use instead
     peerDependencies:
@@ -7829,15 +7829,15 @@ packages:
       graphql:
         optional: true
     dependencies:
-      apollo-link: 1.2.14(graphql@15.8.0)
-      apollo-utilities: 1.3.4(graphql@15.8.0)
+      apollo-link: 1.2.14(graphql@16.0.0)
+      apollo-utilities: 1.3.4(graphql@16.0.0)
       deprecated-decorator: 0.1.6
-      graphql: 15.8.0
+      graphql: 16.0.0
       iterall: 1.3.0
       uuid: 3.4.0
     dev: false
 
-  /graphql-type-json@0.3.2(graphql@15.8.0):
+  /graphql-type-json@0.3.2(graphql@16.0.0):
     resolution: {integrity: sha512-J+vjof74oMlCWXSvt0DOf2APEdZOCdubEvGDUAlqH//VBYcOYsGgRW7Xzorr44LvkjiuvecWc8fChxuZZbChtg==}
     peerDependencies:
       graphql: '>=0.8.0'
@@ -7845,12 +7845,12 @@ packages:
       graphql:
         optional: true
     dependencies:
-      graphql: 15.8.0
+      graphql: 16.0.0
     dev: false
 
-  /graphql@15.8.0:
-    resolution: {integrity: sha512-5gghUc24tP9HRznNpV2+FIoq3xKkj5dTQqf4v0CpdPbFVwFkWoxOM+o+2OC9ZSvjEMTjfmG9QT+gcvggTwW1zw==}
-    engines: {node: '>= 10.x'}
+  /graphql@16.0.0:
+    resolution: {integrity: sha512-n9NxoRfwnpYBZB/WJ7L166gyrShuZ8qYgVaX8oxVyELcJfAwkvwPt6WlYIl90WRlzqDjaNWvLmNOSnKs5llZWQ==}
+    engines: {node: ^12.22.0 || ^14.16.0 || >=16.0.0}
 
   /growly@1.3.0:
     resolution: {integrity: sha512-+xGQY0YyAWCnqy7Cd++hc2JqMYzlm0dG30Jd0beaA64sROr8C4nt8Yc9V5Ro3avlSUDTN0ulqP/VBKi1/lLygw==}
@@ -12424,7 +12424,7 @@ packages:
       - supports-color
     dev: true
 
-  /subscriptions-transport-ws@0.9.19(graphql@15.8.0):
+  /subscriptions-transport-ws@0.9.19(graphql@16.0.0):
     resolution: {integrity: sha512-dxdemxFFB0ppCLg10FTtRqH/31FNRL1y1BQv8209MK5I4CwALb7iihQg+7p65lFcIl8MHatINWBLOqpgU4Kyyw==}
     deprecated: The `subscriptions-transport-ws` package is no longer maintained. We recommend you use `graphql-ws` instead. For help migrating Apollo software to `graphql-ws`, see https://www.apollographql.com/docs/apollo-server/data/subscriptions/#switching-from-subscriptions-transport-ws    For general help using `graphql-ws`, see https://github.com/enisdenjo/graphql-ws/blob/master/README.md
     peerDependencies:
@@ -12435,7 +12435,7 @@ packages:
     dependencies:
       backo2: 1.0.2
       eventemitter3: 3.1.2
-      graphql: 15.8.0
+      graphql: 16.0.0
       iterall: 1.3.0
       symbol-observable: 1.2.0
       ws: 7.5.9
