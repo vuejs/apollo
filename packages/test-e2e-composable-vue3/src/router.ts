@@ -27,8 +27,8 @@ export const router = createRouter({
       component: () => import('./components/LazyQuery.vue'),
     },
     {
-      path: '/lazy-query-immediatly',
-      component: () => import('./components/LazyQueryImmediatly.vue'),
+      path: '/lazy-query-immediately',
+      component: () => import('./components/LazyQueryImmediately.vue'),
     },
     {
       path: '/partial-error',
