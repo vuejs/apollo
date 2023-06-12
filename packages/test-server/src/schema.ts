@@ -2,8 +2,8 @@ import { makeExecutableSchema } from '@graphql-tools/schema'
 import { PubSub, withFilter } from 'graphql-subscriptions'
 import shortid from 'shortid'
 import gql from 'graphql-tag'
-import { channels } from './data.mjs'
-import { simulateLatency, GraphQLErrorWithCode } from './util.mjs'
+import { channels } from './data.js'
+import { GraphQLErrorWithCode } from './util.js'
 
 const pubsub = new PubSub()
 
@@ -51,21 +51,31 @@ type Subscription {
 }
 `
 
+interface AddMessageInput {
+  channelId: string
+  text: string
+}
+
+interface UpdateMessageInput {
+  id: string
+  channelId: string
+  text: string
+}
+
 const resolvers = {
   Query: {
-    hello: () => simulateLatency().then(() => 'Hello world!'),
-    channels: () => simulateLatency().then(() => channels),
-    channel: (root, { id }) => simulateLatency().then(() => channels.find(c => c.id === id)),
-    list: () => simulateLatency().then(() => ['a', 'b', 'c']),
-    good: () => simulateLatency().then(() => 'good'),
+    hello: () => 'Hello world!',
+    channels: () => channels,
+    channel: (root: any, { id }: { id: string }) => channels.find(c => c.id === id),
+    list: () => ['a', 'b', 'c'],
+    good: () => 'good',
     bad: async () => {
-      await simulateLatency()
       throw new Error('An error')
     },
   },
 
   Mutation: {
-    addMessage: (root, { input }) => {
+    addMessage: (root: any, { input }: { input: AddMessageInput }) => {
       const channel = channels.find(c => c.id === input.channelId)
       if (!channel) {
         throw new GraphQLErrorWithCode(`Channel ${input.channelId} not found`, 'not-found')
@@ -80,12 +90,15 @@ const resolvers = {
       return message
     },
 
-    updateMessage: (root, { input }) => {
+    updateMessage: (root: any, { input }: { input: UpdateMessageInput }) => {
       const channel = channels.find(c => c.id === input.channelId)
       if (!channel) {
         throw new GraphQLErrorWithCode(`Channel ${input.channelId} not found`, 'not-found')
       }
       const message = channel.messages.find(m => m.id === input.id)
+      if (!message) {
+        throw new GraphQLErrorWithCode(`Message ${input.id} not found`, 'not-found')
+      }
       Object.assign(message, {
         text: input.text,
       })

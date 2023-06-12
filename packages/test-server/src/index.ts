@@ -6,12 +6,15 @@ import { ApolloServer } from '@apollo/server'
 import { expressMiddleware } from '@apollo/server/express4'
 import { WebSocketServer } from 'ws'
 import { useServer } from 'graphql-ws/lib/use/ws'
-import { schema } from './schema.mjs'
-import { resetDatabase } from './data.mjs'
+import { schema } from './schema.js'
+import { resetDatabase } from './data.js'
+import { simulateLatency } from './util.js'
 
 const app = express()
 
-app.use(cors('*'))
+app.use(cors({
+  origin: '*',
+}))
 
 app.use(bodyParser.json())
 
@@ -22,9 +25,6 @@ app.get('/_reset', (req, res) => {
 
 const server = new ApolloServer({
   schema,
-  context: () => new Promise(resolve => {
-    setTimeout(() => resolve({}), 50)
-  }),
   plugins: [
     // Proper shutdown for the WebSocket server.
     {
@@ -42,7 +42,12 @@ const server = new ApolloServer({
 
 await server.start()
 
-app.use('/graphql', expressMiddleware(server))
+app.use('/graphql', expressMiddleware(server, {
+  context: async () => {
+    await simulateLatency()
+    return {}
+  },
+}))
 
 const httpServer = createServer(app)
 

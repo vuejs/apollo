@@ -1,4 +1,4 @@
-import { GraphQLError } from 'graphql'
+import { GraphQLError, GraphQLErrorExtensions } from 'graphql'
 
 const shouldSimulateLatency = process.argv.includes('--simulate-latency')
 
@@ -11,7 +11,7 @@ if (shouldSimulateLatency) {
 }
 
 export function simulateLatency () {
-  return new Promise(resolve => {
+  return new Promise<void>(resolve => {
     if (shouldSimulateLatency) {
       setTimeout(resolve, latency)
     } else {
@@ -21,8 +21,8 @@ export function simulateLatency () {
 }
 
 export class GraphQLErrorWithCode extends GraphQLError {
-  constructor (message, code, extensions) {
-    super(message, {
+  constructor (message: string, code: string, extensions?: GraphQLErrorExtensions) {
+    super(message, null, null, null, null, null, {
       extensions: {
         code,
         ...extensions,
