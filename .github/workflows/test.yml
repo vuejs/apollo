@@ -30,7 +30,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2.0.1
         with:
-          version: 8.5.1
+          version: 8.6.2
 
       - name: Get pnpm store directory
         id: pnpm-cache
