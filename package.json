@@ -31,7 +31,6 @@
   "pnpm": {
     "overrides": {
       "eslint-scope": "^5",
-      "graphql": "^16",
       "serialize-javascript": "^6.0.0",
       "subscriptions-transport-ws": "^0.9"
     },
