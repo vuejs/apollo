@@ -34,6 +34,7 @@ export default defineComponent({
       id: props.id,
     }), {
       notifyOnNetworkStatusChange: true,
+      keepPreviousResult: true,
     })
     const channel = computed(() => result.value?.channel)
 
@@ -63,42 +64,46 @@ export default defineComponent({
 </script>
 
 <template>
-  <div
-    v-if="loading"
-    class="loading-channel"
-  >
-    Loading channel...
-  </div>
-
-  <div
-    v-else
-    class="flex flex-col"
-  >
-    <div class="flex-none p-6 border-b border-gray-200 bg-white">
-      Currently viewing # {{ channel.label }}
-
-      <a
-        class="text-green-500 cursor-pointer"
-        data-test-id="refetch"
-        @click="refetch()"
-      >Refetch</a>
+  <div>
+    <div
+      v-if="loading"
+      class="loading-channel fixed top-0 left-0 w-full flex"
+    >
+      <div class="px-4 py-2 rounded-b mx-auto bg-white border-b border-l border-r border-gray-200">
+        Loading channel...
+      </div>
     </div>
 
     <div
-      ref="messagesEl"
-      class="flex-1 overflow-y-auto"
+      v-if="channel"
+      class="flex flex-col h-full"
     >
-      <MessageItem
-        v-for="message of channel.messages"
-        :key="message.id"
-        :message="message"
-        class="m-2"
+      <div class="flex-none p-6 border-b border-gray-200 bg-white">
+        Currently viewing # {{ channel.label }}
+
+        <a
+          class="text-green-500 cursor-pointer"
+          data-test-id="refetch"
+          @click="refetch()"
+        >Refetch</a>
+      </div>
+
+      <div
+        ref="messagesEl"
+        class="flex-1 overflow-y-auto"
+      >
+        <MessageItem
+          v-for="message of channel.messages"
+          :key="message.id"
+          :message="message"
+          class="m-2"
+        />
+      </div>
+
+      <MessageForm
+        :channel-id="channel.id"
+        class="flex-none m-2 mt-0"
       />
     </div>
-
-    <MessageForm
-      :channel-id="channel.id"
-      class="flex-none m-2 mt-0"
-    />
   </div>
 </template>
