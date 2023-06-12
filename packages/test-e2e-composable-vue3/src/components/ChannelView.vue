@@ -34,7 +34,6 @@ export default defineComponent({
       id: props.id,
     }), {
       notifyOnNetworkStatusChange: true,
-      keepPreviousResult: true,
     })
     const channel = computed(() => result.value?.channel)
 

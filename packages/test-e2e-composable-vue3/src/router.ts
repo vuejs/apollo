@@ -42,5 +42,9 @@ export const router = createRouter({
       path: '/on-result',
       component: () => import('./components/OnResult.vue'),
     },
+    {
+      path: '/keep-previous-result',
+      component: () => import('./components/KeepPreviousResult.vue'),
+    },
   ],
 })

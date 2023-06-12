@@ -42,6 +42,8 @@
 
   - `throttle`: Throttle interval in ms.
 
+  - `keepPreviousResult`: (default: `false`) Whether or not to keep previous result when the query is fetch again (for example when a variable changes). This can be useful to prevent a flash of empty content.
+
 ## Return
 
 - `result`: result data object.
