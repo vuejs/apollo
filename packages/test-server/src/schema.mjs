@@ -1,37 +1,11 @@
-import { createServer } from 'node:http'
-import express from 'express'
-import cors from 'cors'
-import bodyParser from 'body-parser'
-import { ApolloServer } from '@apollo/server'
-import { expressMiddleware } from '@apollo/server/express4'
 import { makeExecutableSchema } from '@graphql-tools/schema'
-import { WebSocketServer } from 'ws'
-import { useServer } from 'graphql-ws/lib/use/ws'
 import { PubSub, withFilter } from 'graphql-subscriptions'
 import shortid from 'shortid'
 import gql from 'graphql-tag'
-import { GraphQLError } from 'graphql'
+import { channels } from './data.mjs'
+import { simulateLatency, GraphQLErrorWithCode } from './util.mjs'
 
-const shouldSimulateLatency = process.argv.includes('--simulate-latency')
-
-let latency = 500
-if (shouldSimulateLatency) {
-  const index = process.argv.indexOf('--simulate-latency')
-  if (index !== -1 && process.argv.length > index + 1) {
-    latency = parseInt(process.argv[index + 1])
-  }
-}
-
-export class GraphQLErrorWithCode extends GraphQLError {
-  constructor (message, code, extensions) {
-    super(message, {
-      extensions: {
-        code,
-        ...extensions,
-      },
-    })
-  }
-}
+const pubsub = new PubSub()
 
 const typeDefs = gql`
 type Channel {
@@ -76,37 +50,6 @@ type Subscription {
   messageUpdated (channelId: ID!): Message!
 }
 `
-
-const pubsub = new PubSub()
-
-let channels = []
-
-function resetDatabase () {
-  channels = [
-    {
-      id: 'general',
-      label: 'General',
-      messages: [],
-    },
-    {
-      id: 'random',
-      label: 'Random',
-      messages: [],
-    },
-  ]
-}
-
-resetDatabase()
-
-function simulateLatency () {
-  return new Promise(resolve => {
-    if (shouldSimulateLatency) {
-      setTimeout(resolve, latency)
-    } else {
-      resolve()
-    }
-  })
-}
 
 const resolvers = {
   Query: {
@@ -168,61 +111,7 @@ const resolvers = {
   },
 }
 
-const schema = makeExecutableSchema({
+export const schema = makeExecutableSchema({
   typeDefs,
   resolvers,
-})
-
-const app = express()
-
-app.use(cors('*'))
-
-app.use(bodyParser.json())
-
-app.get('/_reset', (req, res) => {
-  resetDatabase()
-  res.status(200).end()
-})
-
-const server = new ApolloServer({
-  schema,
-  context: () => new Promise(resolve => {
-    setTimeout(() => resolve({}), 50)
-  }),
-  plugins: [
-    // Proper shutdown for the WebSocket server.
-    {
-      async serverWillStart () {
-        return {
-          async drainServer () {
-            await serverCleanup.dispose()
-          },
-        }
-      },
-    },
-  ],
-  csrfPrevention: false,
-})
-
-await server.start()
-
-app.use('/graphql', expressMiddleware(server))
-
-const httpServer = createServer(app)
-
-// Websocket
-
-const wsServer = new WebSocketServer({
-  server: httpServer,
-  path: '/graphql',
-})
-
-const serverCleanup = useServer({
-  schema,
-}, wsServer)
-
-httpServer.listen({
-  port: 4042,
-}, () => {
-  console.log('🚀  Server ready at http://localhost:4042')
 })

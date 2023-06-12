@@ -1,0 +1,24 @@
+{
+  "name": "test-server",
+  "version": "4.0.0-alpha.16",
+  "private": true,
+  "bin": {
+    "test-server": "./bin.mjs"
+  },
+  "dependencies": {
+    "@apollo/server": "^4.7.3",
+    "@graphql-tools/schema": "^10.0.0",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.1",
+    "graphql": "^16.6.0",
+    "graphql-subscriptions": "^2.0.0",
+    "graphql-tag": "^2.12.6",
+    "graphql-ws": "^5.13.1",
+    "shortid": "^2.2.16",
+    "ws": "^8.13.0"
+  },
+  "devDependencies": {
+    "@types/shortid": "^0.0.29"
+  }
+}

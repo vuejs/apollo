@@ -178,36 +178,18 @@ importers:
       '@apollo/client':
         specifier: ^3.7.7
         version: 3.7.9(graphql-ws@5.13.1)(graphql@16.0.0)
-      '@apollo/server':
-        specifier: ^4.7.3
-        version: 4.7.3(graphql@16.0.0)
-      '@graphql-tools/schema':
-        specifier: ^10.0.0
-        version: 10.0.0(graphql@16.0.0)
       '@vue/apollo-composable':
         specifier: workspace:*
         version: link:../vue-apollo-composable
       '@vue/apollo-util':
         specifier: workspace:*
         version: link:../vue-apollo-util
-      body-parser:
-        specifier: ^1.20.2
-        version: 1.20.2
       core-js:
         specifier: ^3.23.2
         version: 3.28.0
-      cors:
-        specifier: ^2.8.5
-        version: 2.8.5
-      express:
-        specifier: ^4.18.1
-        version: 4.18.2
       graphql:
         specifier: ^16
         version: 16.0.0
-      graphql-subscriptions:
-        specifier: ^2.0.0
-        version: 2.0.0(graphql@16.0.0)
       graphql-tag:
         specifier: ^2.12.6
         version: 2.12.6(graphql@16.0.0)
@@ -217,9 +199,9 @@ importers:
       regenerator-runtime:
         specifier: ^0.13.9
         version: 0.13.11
-      shortid:
-        specifier: ^2.2.16
-        version: 2.2.16
+      test-server:
+        specifier: workspace:*
+        version: link:../test-server
       vue:
         specifier: ^3.2.37
         version: 3.2.47
@@ -229,16 +211,10 @@ importers:
       vue-router:
         specifier: ^4.0.16
         version: 4.1.6(vue@3.2.47)
-      ws:
-        specifier: ^8.13.0
-        version: 8.13.0
     devDependencies:
       '@babel/core':
         specifier: ^7.18.5
         version: 7.21.0
-      '@types/shortid':
-        specifier: ^0.0.29
-        version: 0.0.29
       '@vue/cli-plugin-babel':
         specifier: ^5.0.6
         version: 5.0.8(@vue/cli-service@5.0.8)(core-js@3.28.0)(esbuild@0.8.57)(vue@3.2.47)
@@ -266,6 +242,46 @@ importers:
       tailwindcss:
         specifier: ^1.9.6
         version: 1.9.6
+
+  packages/test-server:
+    dependencies:
+      '@apollo/server':
+        specifier: ^4.7.3
+        version: 4.7.3(graphql@16.0.0)
+      '@graphql-tools/schema':
+        specifier: ^10.0.0
+        version: 10.0.0(graphql@16.0.0)
+      body-parser:
+        specifier: ^1.20.2
+        version: 1.20.2
+      cors:
+        specifier: ^2.8.5
+        version: 2.8.5
+      express:
+        specifier: ^4.18.1
+        version: 4.18.2
+      graphql:
+        specifier: ^16
+        version: 16.0.0
+      graphql-subscriptions:
+        specifier: ^2.0.0
+        version: 2.0.0(graphql@16.0.0)
+      graphql-tag:
+        specifier: ^2.12.6
+        version: 2.12.6(graphql@16.0.0)
+      graphql-ws:
+        specifier: ^5.13.1
+        version: 5.13.1(graphql@16.0.0)
+      shortid:
+        specifier: ^2.2.16
+        version: 2.2.16
+      ws:
+        specifier: ^8.13.0
+        version: 8.13.0
+    devDependencies:
+      '@types/shortid':
+        specifier: ^0.0.29
+        version: 0.0.29
 
   packages/vue-apollo-components:
     dependencies:
