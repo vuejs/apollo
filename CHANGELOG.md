@@ -1,5 +1,35 @@
 # Changelog
 
+## v4.0.0-beta.6
+
+
+### 🚀 Enhancements
+
+  - KeepPreviousResult (e794c1e)
+
+### 📖 Documentation
+
+  - ProvideApolloClient (#1442)
+
+### 🏡 Chore
+
+  - Update graphql to 16 in repo (4dcfa20)
+  - Typo in test component file (bfca616)
+  - Update lockfile version (2077502)
+
+### ✅ Tests
+
+  - Update server (13bfbbe)
+  - Update pnpm version (722fa0f)
+  - Test-server package (f1ebe70)
+  - Migrate server to typescript (97c1402)
+  - Fix (c881439)
+
+### ❤️  Contributors
+
+- Stefan Schneider <stefan.schneider@gmx.net>
+- Guillaume Chau ([@Akryum](http://github.com/Akryum))
+
 ## v4.0.0-beta.5
 
 
