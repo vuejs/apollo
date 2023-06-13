@@ -222,6 +222,7 @@ export function useQueryImpl<
   let observer: ObservableSubscription | undefined
   let started = false
   let ignoreNextResult = false
+  let firstStart = true
 
   /**
    * Starts watching the query
@@ -257,7 +258,7 @@ export function useQueryImpl<
 
     // Make the cache data available to the component immediately
     // This prevents SSR hydration mismatches
-    if (!isServer && !currentOptions.value?.keepPreviousResult && (currentOptions.value?.fetchPolicy !== 'no-cache' || currentOptions.value.notifyOnNetworkStatusChange)) {
+    if (!isServer && (firstStart || !currentOptions.value?.keepPreviousResult) && (currentOptions.value?.fetchPolicy !== 'no-cache' || currentOptions.value.notifyOnNetworkStatusChange)) {
       const currentResult = query.value.getCurrentResult(false)
 
       if (!currentResult.loading || currentResult.partial || currentOptions.value?.notifyOnNetworkStatusChange) {
@@ -274,6 +275,8 @@ export function useQueryImpl<
         addSubscribeToMore(item)
       }
     }
+
+    firstStart = false
   }
 
   function startQuerySubscription () {
