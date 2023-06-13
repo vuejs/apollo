@@ -1,5 +1,16 @@
 # Changelog
 
+## v4.0.0-beta.7
+
+
+### 🩹 Fixes
+
+  - **ssr:** Hydration mismatch with keepPreviousResult (87188c4)
+
+### ❤️  Contributors
+
+- Guillaume Chau ([@Akryum](http://github.com/Akryum))
+
 ## v4.0.0-beta.6
 
 
