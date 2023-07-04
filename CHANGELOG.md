@@ -1,5 +1,16 @@
 # Changelog
 
+## v4.0.0-beta.8
+
+
+### 🚀 Enhancements
+
+  - **useQuery:** Nullable query (auto disable) (28f3520)
+
+### ❤️  Contributors
+
+- Guillaume Chau ([@Akryum](http://github.com/Akryum))
+
 ## v4.0.0-beta.7
 
 
