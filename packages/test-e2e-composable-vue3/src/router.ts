@@ -46,5 +46,9 @@ export const router = createRouter({
       path: '/keep-previous-result',
       component: () => import('./components/KeepPreviousResult.vue'),
     },
+    {
+      path: '/null-query',
+      component: () => import('./components/NullQuery.vue'),
+    },
   ],
 })

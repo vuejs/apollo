@@ -53,7 +53,7 @@ interface SubscribeToMoreItem {
 }
 
 // Parameters
-export type DocumentParameter<TResult, TVariables = undefined> = DocumentNode | Ref<DocumentNode> | ReactiveFunction<DocumentNode> | TypedDocumentNode<TResult, TVariables> | Ref<TypedDocumentNode<TResult, TVariables>> | ReactiveFunction<TypedDocumentNode<TResult, TVariables>>
+export type DocumentParameter<TResult, TVariables> = DocumentNode | Ref<DocumentNode | null | undefined> | ReactiveFunction<DocumentNode | null | undefined> | TypedDocumentNode<TResult, TVariables> | Ref<TypedDocumentNode<TResult, TVariables> | null | undefined> | ReactiveFunction<TypedDocumentNode<TResult, TVariables> | null | undefined>
 export type VariablesParameter<TVariables> = TVariables | Ref<TVariables> | ReactiveFunction<TVariables>
 export type OptionsParameter<TResult, TVariables extends OperationVariables> = UseQueryOptions<TResult, TVariables> | Ref<UseQueryOptions<TResult, TVariables>> | ReactiveFunction<UseQueryOptions<TResult, TVariables>>
 
@@ -67,7 +67,7 @@ export interface UseQueryReturn<TResult, TVariables extends OperationVariables> 
   stop: () => void
   restart: () => void
   forceDisabled: Ref<boolean>
-  document: Ref<DocumentNode>
+  document: Ref<DocumentNode | null | undefined>
   variables: Ref<TVariables | undefined>
   options: UseQueryOptions<TResult, TVariables> | Ref<UseQueryOptions<TResult, TVariables>>
   query: Ref<ObservableQuery<TResult, TVariables> | null | undefined>
@@ -437,13 +437,13 @@ export function useQueryImpl<
   }
 
   // Applying document
-  let currentDocument: DocumentNode = documentRef.value
+  let currentDocument: DocumentNode | null | undefined = documentRef.value
 
   // Enabled state
 
   const forceDisabled = ref(lazy)
   const enabledOption = computed(() => !currentOptions.value || currentOptions.value.enabled == null || currentOptions.value.enabled)
-  const isEnabled = computed(() => enabledOption.value && !forceDisabled.value)
+  const isEnabled = computed(() => enabledOption.value && !forceDisabled.value && !!documentRef.value)
 
   // Applying options first (in case it disables the query)
   watch(() => unref(optionsRef), value => {
