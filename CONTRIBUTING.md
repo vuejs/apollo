@@ -10,10 +10,10 @@ pnpm install
 
 Go to a package in `packages`.
 
-Build the library with watching:
+Build the library:
 
 ```
-pnpm run dev
+pnpm run build
 ```
 
 Run tests:

@@ -1,7 +1,7 @@
 import { defineConfig } from 'cypress'
 import axios from 'axios'
 
-module.exports = defineConfig({
+export default defineConfig({
   fixturesFolder: 'tests/e2e/fixtures',
   screenshotsFolder: 'tests/e2e/screenshots',
   videosFolder: 'tests/e2e/videos',
@@ -9,7 +9,7 @@ module.exports = defineConfig({
   e2e: {
     // We've imported your old cypress plugins here.
     // You may want to clean this up later by importing these.
-    setupNodeEvents (on, config) {
+    setupNodeEvents (on) {
       on('task', {
         async 'db:reset' () {
           await axios.get('http://localhost:4042/_reset')
