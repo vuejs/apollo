@@ -6,7 +6,7 @@
     "dev": "vite --port 8080",
     "build": "vite build",
     "preview": "vite preview --port 8080",
-    "test": "pnpm run build && pnpm run preview & wait-on --timeout 10000 http://127.0.0.1:8080 && pnpm run test:e2e && kill-port 4042",
+    "test": "pnpm run build && pnpm run preview & wait-on --timeout 10000 http://127.0.0.1:8080 && pnpm run test:e2e && kill-port 8080",
     "test:e2e": "start-server-and-test api 'http-get://localhost:4042/graphql?query=%7B__typename%7D' cy:run",
     "cy:run": "cypress run --headless",
     "api": "test-server --simulate-latency 50",
