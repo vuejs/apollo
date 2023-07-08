@@ -1,5 +1,3 @@
-/// <reference types="Cypress" />
-
 describe('Vue 3 + Apollo Composable', () => {
   beforeEach(() => {
     cy.task('db:reset')
