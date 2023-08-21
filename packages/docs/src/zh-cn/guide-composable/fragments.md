@@ -32,7 +32,7 @@ query GetPerson {
 为此，我们可以简单地共享一个片段，来描述我们在评论中需要的字段：
 
 ```js
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export const commentFragment = {
   comment: gql`

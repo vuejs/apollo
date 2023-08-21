@@ -139,7 +139,7 @@ See [refetching queries after mutation](https://www.apollographql.com/docs/react
 </template>
 
 <script>
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export default {
   computed: {

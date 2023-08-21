@@ -104,7 +104,7 @@ export default {
 ```vue{3,7-16}
 <script>
 import { useQuery } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export default {
   setup () {
@@ -131,7 +131,7 @@ export default {
 <script>
 import { watch } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export default {
   setup () {
@@ -160,7 +160,7 @@ export default {
 <script>
 import { watch } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export default {
   setup () {
@@ -188,7 +188,7 @@ export default {
 ```vue{18-20,25-31}
 <script>
 import { useQuery } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export default {
   setup () {
@@ -240,7 +240,7 @@ export default {
 ```vue{7,20,27,29}
 <script>
 import { useQuery } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export default {
   setup () {
@@ -281,7 +281,7 @@ export default {
 ```vue{7,21,30}
 <script>
 import { useQuery } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export default {
   setup () {
@@ -619,7 +619,7 @@ const { result } = useQuery(gql`
 ```vue{7,24,40}
 <script>
 import { useQuery } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export default {
   setup () {

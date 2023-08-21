@@ -245,7 +245,7 @@ We want to extract all the fields in `messages` of the `Message` type into a fra
 First import the `gql` tag in the component:
 
 ```js
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 ```
 
 Then, inside the component definition, declare a new `fragments` object:
@@ -356,7 +356,7 @@ Here is the full example component:
 ```vue
 <!-- MessageList.vue -->
 <script>
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export default {
   fragments: {
@@ -398,7 +398,7 @@ Now we can retrieve the `message` fragment in another component:
 ```vue
 <!-- MessageForm.vue -->
 <script>
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 import MessageList from './MessageList.vue'
 
 export default {

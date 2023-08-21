@@ -25,7 +25,7 @@ You can use `useMutation` in your `setup` option by passing it a GraphQL documen
 ```vue{3,7-13}
 <script>
 import { useMutation } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export default {
   setup () {
@@ -46,7 +46,7 @@ It's generally a good idea to rename the `mutate` function into something more e
 ```vue{7}
 <script>
 import { useMutation } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export default {
   setup () {
@@ -67,7 +67,7 @@ We can now use it in our template by passing variables to `mutate` (now called `
 ```vue{15-17,22-28}
 <script>
 import { useMutation } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export default {
   setup () {
@@ -216,7 +216,7 @@ Our component now looks like:
 <script>
 import { ref } from 'vue'
 import { useMutation } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export default {
   setup () {
@@ -314,7 +314,7 @@ For example, our `sendMessage` mutation should add the new message to our cache:
 ```vue{33-43}
 <script>
 import { useQuery, useMutation } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 const MESSAGES = gql`
   query getMessages {
@@ -499,7 +499,7 @@ In our example, this is very useful for resetting the message input:
 ```vue{22,46-48}
 <script>
 import { useQuery, useMutation } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 const MESSAGES = gql`
   query getMessages {

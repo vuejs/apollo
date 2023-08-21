@@ -104,7 +104,7 @@ You can use `useQuery` in your `setup` option and pass it a GraphQL document as 
 ```vue{3,7-16}
 <script>
 import { useQuery } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export default {
   setup () {
@@ -131,7 +131,7 @@ If you want to directly access the data object, use `result.value`:
 <script>
 import { watch } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export default {
   setup () {
@@ -160,7 +160,7 @@ In this example, you could also watch the `Ref` directly:
 <script>
 import { watch } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export default {
   setup () {
@@ -188,7 +188,7 @@ Let's expose our result in the template:
 ```vue{18-20,25-31}
 <script>
 import { useQuery } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export default {
   setup () {
@@ -237,7 +237,7 @@ We can use a `computed` prop to simplify access to part of the result and to pro
 <script>
 import { computed } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export default {
   setup () {
@@ -279,7 +279,7 @@ Alongside `result`, `useQuery` returns `loading`, a boolean `Ref` tracking the l
 ```vue{7,20,27,29}
 <script>
 import { useQuery } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export default {
   setup () {
@@ -320,7 +320,7 @@ There is also an `error` `Ref` that holds any error that may occur during the re
 ```vue{7,21,30}
 <script>
 import { useQuery } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export default {
   setup () {
@@ -658,7 +658,7 @@ This is done using the `refetch` function:
 ```vue{7,24,40}
 <script>
 import { useQuery } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export default {
   setup () {
@@ -783,7 +783,7 @@ Example:
 ```vue{4,8,16,27}
 <script>
 import { computed } from 'vue'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 import { useLazyQuery } from '@vue/apollo-composable'
 
 export default {

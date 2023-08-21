@@ -30,13 +30,13 @@ Then you can skip to next section: [Basic Usage](../guide-option/usage.md).
 ## Manual installation
 
 ```shell
-npm install --save graphql graphql-tag @apollo/client
+npm install --save graphql @apollo/client
 ```
 
 Or:
 
 ```shell
-yarn add graphql graphql-tag @apollo/client
+yarn add graphql @apollo/client
 ```
 
 In your app, create an `ApolloClient` instance:

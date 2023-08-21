@@ -25,7 +25,7 @@ export default {
 ```vue{3,7-13}
 <script>
 import { useMutation } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export default {
   setup () {
@@ -46,7 +46,7 @@ export default {
 ```vue{7}
 <script>
 import { useMutation } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export default {
   setup () {
@@ -67,7 +67,7 @@ export default {
 ```vue{15-17,22-28}
 <script>
 import { useMutation } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export default {
   setup () {
@@ -215,7 +215,7 @@ sendMessage()
 <script>
 import { ref } from 'vue'
 import { useMutation } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export default {
   setup () {
@@ -313,7 +313,7 @@ editMessage()
 ```vue{33-37}
 <script>
 import { useQuery, useMutation } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 const MESSAGES = gql`
   query getMessages {
@@ -482,7 +482,7 @@ onDone(result => {
 ```vue{22,40-42,55}
 <script>
 import { useQuery, useMutation } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 const MESSAGES = gql`
   query getMessages {

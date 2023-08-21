@@ -17,13 +17,13 @@ vue add apollo
 ## 手动安装
 
 ```
-npm install --save graphql graphql-tag @apollo/client
+npm install --save graphql @apollo/client
 ```
 
 或：
 
 ```
-yarn add graphql graphql-tag @apollo/client
+yarn add graphql @apollo/client
 ```
 
 在你的应用中创建一个 `ApolloClient` 实例：

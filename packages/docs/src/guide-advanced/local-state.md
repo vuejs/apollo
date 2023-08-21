@@ -29,7 +29,7 @@ Now we're ready to add an `Item` type to our local GraphQL schema.
 ```js
 //main.js
 
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client';
 
 export const typeDefs = gql`
   type Item {
@@ -151,7 +151,7 @@ Querying local cache is very similar to [sending GraphQL queries to remote serve
 ```js
 // App.vue
 
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client';
 
 const todoItemsQuery = gql`
   {

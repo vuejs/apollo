@@ -25,7 +25,7 @@ const { fetchMore } = useQuery(...)
 ```vue
 <script>
 import { useQuery } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 const FEED_QUERY = gql`
   query getFeed ($type: FeedType!, $offset: Int, $limit: Int) {
