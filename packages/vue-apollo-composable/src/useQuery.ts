@@ -432,6 +432,7 @@ export function useQueryImpl<
   }
 
   function restart () {
+    if (!started || restarting) return
     if (!isRestartDebounceSetup) updateRestartFn()
     debouncedRestart()
   }
