@@ -1,5 +1,21 @@
 # Changelog
 
+## v4.0.0-beta.9
+
+
+### 🩹 Fixes
+
+  - Don't call debounced restart too much (1adf135)
+
+### 🏡 Chore
+
+  - Update throttle-debounce (500cc49)
+  - Update deps (f47759e)
+
+### ❤️  Contributors
+
+- Guillaume Chau ([@Akryum](http://github.com/Akryum))
+
 ## v4.0.0-beta.8
 
 
