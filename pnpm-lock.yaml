@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -376,8 +376,8 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0(vue@3.2.47)
       throttle-debounce:
-        specifier: ^3.0.1
-        version: 3.0.1
+        specifier: ^5.0.0
+        version: 5.0.0
       ts-essentials:
         specifier: ^9.1.2
         version: 9.3.0(typescript@4.9.5)
@@ -389,8 +389,8 @@ importers:
         specifier: ^3.7.7
         version: 3.7.9(graphql-ws@5.13.1)(graphql@16.6.0)
       '@types/throttle-debounce':
-        specifier: ^2.1.0
-        version: 2.1.0
+        specifier: ^5.0.0
+        version: 5.0.0
       graphql:
         specifier: ^16.6.0
         version: 16.6.0
@@ -672,7 +672,7 @@ packages:
       graphql-ws: ^5.5.5
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-      subscriptions-transport-ws: ^0.9.0 || ^0.11.0
+      subscriptions-transport-ws: ^0.9
     peerDependenciesMeta:
       graphql:
         optional: true
@@ -707,7 +707,7 @@ packages:
       graphql-ws: ^5.5.5
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-      subscriptions-transport-ws: ^0.9.0 || ^0.11.0
+      subscriptions-transport-ws: ^0.9
     peerDependenciesMeta:
       graphql:
         optional: true
@@ -743,7 +743,7 @@ packages:
       graphql-ws: ^5.5.5
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-      subscriptions-transport-ws: ^0.9.0 || ^0.11.0
+      subscriptions-transport-ws: ^0.9
     peerDependenciesMeta:
       graphql:
         optional: true
@@ -3127,8 +3127,8 @@ packages:
     resolution: {integrity: sha512-l42BggppR6zLmpfU6fq9HEa2oGPEI8yrSPL3GITjfRInppYFahObbIQOQK3UGxEnyQpltZLaPe75046NOZQikw==}
     dev: true
 
-  /@types/throttle-debounce@2.1.0:
-    resolution: {integrity: sha512-5eQEtSCoESnh2FsiLTxE121IiE60hnMqcb435fShf4bpLRjEu1Eoekht23y6zXS9Ts3l+Szu3TARnTsA0GkOkQ==}
+  /@types/throttle-debounce@5.0.0:
+    resolution: {integrity: sha512-Pb7k35iCGFcGPECoNE4DYp3Oyf2xcTd3FbFQxXUI9hEYKUl6YX+KLf7HrBmgVcD05nl50LIH6i+80js4iYmWbw==}
     dev: true
 
   /@types/webpack-env@1.18.0:
@@ -13270,6 +13270,11 @@ packages:
   /throttle-debounce@3.0.1:
     resolution: {integrity: sha512-dTEWWNu6JmeVXY0ZYoPuH5cRIwc0MeGbJwah9KUNYSJwommQpCzTySTpEe8Gs1J23aeWEuAobe4Ag7EHVt/LOg==}
     engines: {node: '>=10'}
+    dev: false
+
+  /throttle-debounce@5.0.0:
+    resolution: {integrity: sha512-2iQTSgkkc1Zyk0MeVrt/3BvuOXYPl/R8Z0U2xxo9rjwNciaHDG3R+Lm6dh4EeUci49DanvBnuqI6jshoQQRGEg==}
+    engines: {node: '>=12.22'}
     dev: false
 
   /throttleit@1.0.0:

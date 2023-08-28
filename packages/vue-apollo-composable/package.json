@@ -45,7 +45,7 @@
     "test:types": "tsc -p tests/types/"
   },
   "dependencies": {
-    "throttle-debounce": "^3.0.1",
+    "throttle-debounce": "^5.0.0",
     "ts-essentials": "^9.1.2",
     "vue-demi": "^0.13.1"
   },
@@ -62,7 +62,7 @@
   },
   "devDependencies": {
     "@apollo/client": "^3.7.7",
-    "@types/throttle-debounce": "^2.1.0",
+    "@types/throttle-debounce": "^5.0.0",
     "graphql": "^16.6.0",
     "graphql-tag": "^2.12.6",
     "nodemon": "^1.19.4",
