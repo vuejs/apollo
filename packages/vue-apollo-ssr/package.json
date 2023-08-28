@@ -42,7 +42,7 @@
     "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
-    "serialize-javascript": "^6.0.0"
+    "serialize-javascript": "^6.0.1"
   },
   "devDependencies": {
     "@apollo/client": "^3.7.7",

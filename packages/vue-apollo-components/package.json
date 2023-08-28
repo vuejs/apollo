@@ -41,7 +41,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@vue/apollo-option": "^4.0.0-beta.4"
+    "@vue/apollo-option":"workspace:^"
   },
   "peerDependencies": {
     "vue": "^3.1.0"

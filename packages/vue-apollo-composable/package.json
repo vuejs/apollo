@@ -46,8 +46,8 @@
   },
   "dependencies": {
     "throttle-debounce": "^5.0.0",
-    "ts-essentials": "^9.1.2",
-    "vue-demi": "^0.13.1"
+    "ts-essentials": "^9.4.0",
+    "vue-demi": "^0.14.6"
   },
   "peerDependencies": {
     "@apollo/client": "^3.4.13",
