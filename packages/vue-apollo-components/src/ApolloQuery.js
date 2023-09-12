@@ -15,7 +15,7 @@ export default {
     }
   },
 
-  emits: [ 'loading', 'result', 'error' ],
+  emits: ['loading', 'result', 'error'],
 
   props: {
     query: {

@@ -52,7 +52,7 @@ export default {
     }
   },
 
-  emits: [ 'loading', 'done', 'error' ],
+  emits: ['loading', 'done', 'error'],
 
   watch: {
     loading (value) {
