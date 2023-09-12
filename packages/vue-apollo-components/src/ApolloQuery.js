@@ -15,6 +15,8 @@ export default {
     }
   },
 
+  emits: [ 'loading', 'result', 'error' ],
+
   props: {
     query: {
       type: [Function, Object],

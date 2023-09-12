@@ -35,7 +35,7 @@ export interface UseSubscriptionOptions <
   TVariables = OperationVariables
 > extends Omit<SubscriptionOptions<TVariables>, 'query' | 'variables'> {
   clientId?: string
-  enabled?: boolean
+  enabled?: boolean | Ref<boolean>
   throttle?: number
   debounce?: number
 }
