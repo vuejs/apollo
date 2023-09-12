@@ -1,5 +1,3 @@
-/// <reference types="Cypress" />
-
 describe('nullableQuery', () => {
   beforeEach(() => {
     cy.task('db:reset')

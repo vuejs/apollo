@@ -13,7 +13,7 @@
     "api": "node server.js"
   },
   "dependencies": {
-    "@apollo/client": "^3.7.7",
+    "@apollo/client": "^3.7.16",
     "@vue/apollo-components": "workspace:*",
     "@vue/apollo-option": "workspace:*",
     "apollo-server-express": "^2.25.4",

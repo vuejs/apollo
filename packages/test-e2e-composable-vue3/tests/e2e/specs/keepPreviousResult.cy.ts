@@ -1,5 +1,3 @@
-/// <reference types="Cypress" />
-
 describe('keepPreviousResult', () => {
   beforeEach(() => {
     cy.task('db:reset')
