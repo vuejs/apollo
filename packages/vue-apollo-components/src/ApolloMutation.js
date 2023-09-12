@@ -52,6 +52,8 @@ export default {
     }
   },
 
+  emits: [ 'loading', 'done', 'error' ],
+
   watch: {
     loading (value) {
       this.$emit('loading', value)
