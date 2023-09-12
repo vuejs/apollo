@@ -2,12 +2,13 @@
   "name": "private-vue-apollo-docs",
   "version": "4.0.0-alpha.16",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "vitepress dev src",
     "build": "vitepress build src"
   },
   "devDependencies": {
-    "vitepress": "^0.22.4"
+    "vitepress": "^1.0.0-rc.12"
   },
   "dependencies": {
     "vue-github-button": "^3.0.3"

@@ -1,7 +1,7 @@
-import './styles/index.pcss'
-
-import DefaultTheme from 'vitepress/dist/client/theme-default'
+import DefaultTheme from 'vitepress/theme'
 import SponsorButton from './components/SponsorButton.vue'
+
+import './styles/index.pcss'
 
 export default {
   ...DefaultTheme,

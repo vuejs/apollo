@@ -7,334 +7,335 @@ export default defineConfig({
   head: [
     ['link', { rel: 'icon', href: '/favicon.png' }],
   ],
+  themeConfig: {
+    lastUpdated: true,
+    footer: {
+      message: `Released under the MIT License.`,
+      copyright: `Copyright © 2015-present Guillaume Chau`,
+    },
+    editLink: {
+      pattern: 'https://github.com/vuejs/apollo/edit/v4/packages/docs/src/:path',
+    },
+    nav: [
+      {
+        text: 'Guide',
+        items: [
+          {
+            text: 'Getting started',
+            link: '/guide/',
+          },
+          {
+            text: 'Option API',
+            link: '/guide-option/',
+          },
+          {
+            text: 'Composition API',
+            link: '/guide-composable/',
+          },
+          {
+            text: 'Component API',
+            link: '/guide-components/',
+          },
+          {
+            text: 'Advanced topics',
+            link: '/guide-advanced/',
+          },
+        ],
+      },
+      {
+        text: 'API Reference',
+        link: '/api/',
+      },
+      {
+        text: 'Migration',
+        link: '/migration/',
+      },
+      {
+        text: 'CLI plugin',
+        link: 'https://github.com/Akryum/vue-cli-plugin-apollo',
+      },
+      {
+        text: 'Sponsor',
+        link: 'https://github.com/sponsors/Akryum',
+      },
+    ],
+    sidebar: {
+      '/guide/': [
+        {
+          text: 'Introduction',
+          link: '/guide/',
+        },
+        {
+          text: 'Installation',
+          link: '/guide/installation',
+        },
+      ],
+      '/guide-option/': [
+        {
+          text: 'Option API Guide',
+          collapsable: false,
+          items: [
+            {
+              text: 'Introduction',
+              link: '/guide-option/',
+            },
+            {
+              text: 'Setup',
+              link: '/guide-option/setup',
+            },
+          ],
+        },
+        {
+          text: 'Basics',
+          collapsable: false,
+          items: [
+            {
+              text: 'Usage in Vue components',
+              link: '/guide-option/usage',
+            },
+            {
+              text: 'Queries',
+              link: '/guide-option/queries',
+            },
+            {
+              text: 'Mutations',
+              link: '/guide-option/mutations',
+            },
+            {
+              text: 'Subscriptions',
+              link: '/guide-option/subscriptions',
+            },
+          ],
+        },
+        {
+          text: 'Advanced',
+          collapsable: false,
+          items: [
+            {
+              text: 'Special options',
+              link: '/guide-option/special-options',
+            },
+            {
+              text: 'Pagination',
+              link: '/guide-option/pagination',
+            },
+            {
+              text: 'Multiple clients',
+              link: '/guide-option/multiple-clients',
+            },
+          ],
+        },
+      ],
+      '/guide-composable/': [
+        {
+          text: 'Composition API Guide',
+          collapsable: false,
+          items: [
+            {
+              text: 'Introduction',
+              link: '/guide-composable/',
+            },
+            {
+              text: 'Setup',
+              link: '/guide-composable/setup',
+            },
+          ],
+        },
+        {
+          text: 'Fetching data',
+          collapsable: false,
+          items: [
+            {
+              text: 'Queries',
+              link: '/guide-composable/query',
+            },
+            {
+              text: 'Mutations',
+              link: '/guide-composable/mutation',
+            },
+            {
+              text: 'Subscriptions',
+              link: '/guide-composable/subscription',
+            },
+            {
+              text: 'Pagination',
+              link: '/guide-composable/pagination',
+            },
+            {
+              text: 'Fragments',
+              link: '/guide-composable/fragments',
+            },
+            {
+              text: 'Error handling',
+              link: '/guide-composable/error-handling',
+            },
+          ],
+        },
+      ],
+      '/guide-components/': [
+        {
+          text: 'Components Guide',
+          collapsable: false,
+          items: [
+            {
+              text: 'Introduction',
+              link: '/guide-components/',
+            },
+            {
+              text: 'Setup',
+              link: '/guide-components/setup',
+            },
+          ],
+        },
+        {
+          text: 'Usage',
+          collapsable: false,
+          items: [
+            {
+              text: 'Queries',
+              link: '/guide-components/query',
+            },
+            {
+              text: 'Mutations',
+              link: '/guide-components/mutation',
+            },
+            {
+              text: 'Subscribe to a Query',
+              link: '/guide-components/subscribe-to-more',
+            },
+          ],
+        },
+      ],
+      '/guide-advanced/': [
+        {
+          text: 'Advanced topics',
+          collapsable: false,
+          items: [
+            {
+              text: 'Local state',
+              link: '/guide-advanced/local-state',
+            },
+            {
+              text: 'Server-Side Rendering',
+              link: '/guide-advanced/ssr',
+            },
+            {
+              text: 'Testing',
+              link: '/guide-advanced/testing',
+            },
+          ],
+        },
+      ],
+      '/api/': [
+        {
+          text: 'Option API',
+          collapsable: false,
+          items: [
+            {
+              text: 'createApolloProvider',
+              link: '/api/apollo-provider',
+            },
+            {
+              text: '$apollo',
+              link: '/api/dollar-apollo',
+            },
+            {
+              text: 'Reactive queries',
+              link: '/api/smart-query',
+            },
+            {
+              text: 'Reactive subscriptions',
+              link: '/api/smart-subscription',
+            },
+          ],
+        },
+        {
+          text: 'Composition API',
+          collapsable: false,
+          items: [
+            {
+              text: 'useQuery',
+              link: '/api/use-query',
+            },
+            {
+              text: 'useLazyQuery',
+              link: '/api/use-lazy-query',
+            },
+            {
+              text: 'useMutation',
+              link: '/api/use-mutation',
+            },
+            {
+              text: 'useSubscription',
+              link: '/api/use-subscription',
+            },
+            {
+              text: 'useApolloClient',
+              link: '/api/use-apollo-client',
+            },
+            {
+              text: 'Loading utilities',
+              link: '/api/use-loading',
+            },
+          ],
+        },
+        {
+          text: 'Components',
+          collapsable: false,
+          items: [
+            {
+              text: '<ApolloQuery>',
+              link: '/api/apollo-query',
+            },
+            {
+              text: '<ApolloMutation>',
+              link: '/api/apollo-mutation',
+            },
+            {
+              text: '<ApolloSubscribeToMore>',
+              link: '/api/apollo-subscribe-to-more',
+            },
+          ],
+        },
+        {
+          text: 'Advanced',
+          collapsable: false,
+          items: [
+            {
+              text: 'ApolloSSR',
+              link: '/api/ssr',
+            },
+          ],
+        },
+      ],
+      '/migration/': [
+        {
+          text: 'Migration guide',
+          link: '/migration/',
+        },
+      ],
+    },
+    search: {
+      provider: 'local',
+    },
+  },
+
   locales: {
-    '/': {
+    root: {
+      label: 'English',
       lang: 'en-US',
       title: 'Vue Apollo',
       description: '🚀 Integrate GraphQL in your Vue.js apps!',
     },
-    '/zh-cn/': {
+    'zh-cn': {
+      label: '简体中文',
       lang: 'zh-CN',
       title: 'Vue Apollo',
       description: '🚀 在你的 Vue.js 应用中集成 GraphQL！',
-    },
-  },
-  themeConfig: {
-    repo: 'Akryum/vue-apollo',
-    docsBranch: 'v4',
-    docsDir: 'packages/docs/src',
-    editLinks: true,
-    editLinkText: 'Suggest changes to this page',
-    locales: {
-      '/': {
-        selectText: 'Languages',
-        label: 'English',
-        lastUpdated: 'Last Updated',
-        nav: [
-          {
-            text: 'Guide',
-            items: [
-              {
-                text: 'Getting started',
-                link: '/guide/',
-              },
-              {
-                text: 'Option API',
-                link: '/guide-option/',
-              },
-              {
-                text: 'Composition API',
-                link: '/guide-composable/',
-              },
-              {
-                text: 'Component API',
-                link: '/guide-components/',
-              },
-              {
-                text: 'Advanced topics',
-                link: '/guide-advanced/',
-              },
-            ],
-          },
-          {
-            text: 'API Reference',
-            link: '/api/',
-          },
-          {
-            text: 'Migration',
-            link: '/migration/',
-          },
-          {
-            text: 'CLI plugin',
-            link: 'https://github.com/Akryum/vue-cli-plugin-apollo',
-          },
-          {
-            text: 'Sponsor',
-            link: 'https://github.com/sponsors/Akryum',
-          },
-        ],
-        sidebarDepth: 2,
-        sidebar: {
-          '/guide/': [
-            {
-              text: 'Introduction',
-              link: '/guide/',
-            },
-            {
-              text: 'Installation',
-              link: '/guide/installation',
-            },
-          ],
-          '/guide-option/': [
-            {
-              text: 'Option API Guide',
-              collapsable: false,
-              children: [
-                {
-                  text: 'Introduction',
-                  link: '/guide-option/',
-                },
-                {
-                  text: 'Setup',
-                  link: '/guide-option/setup',
-                },
-              ],
-            },
-            {
-              text: 'Basics',
-              collapsable: false,
-              children: [
-                {
-                  text: 'Usage in Vue components',
-                  link: '/guide-option/usage',
-                },
-                {
-                  text: 'Queries',
-                  link: '/guide-option/queries',
-                },
-                {
-                  text: 'Mutations',
-                  link: '/guide-option/mutations',
-                },
-                {
-                  text: 'Subscriptions',
-                  link: '/guide-option/subscriptions',
-                },
-              ],
-            },
-            {
-              text: 'Advanced',
-              collapsable: false,
-              children: [
-                {
-                  text: 'Special options',
-                  link: '/guide-option/special-options',
-                },
-                {
-                  text: 'Pagination',
-                  link: '/guide-option/pagination',
-                },
-                {
-                  text: 'Multiple clients',
-                  link: '/guide-option/multiple-clients',
-                },
-              ],
-            },
-          ],
-          '/guide-composable/': [
-            {
-              text: 'Composition API Guide',
-              collapsable: false,
-              children: [
-                {
-                  text: 'Introduction',
-                  link: '/guide-composable/',
-                },
-                {
-                  text: 'Setup',
-                  link: '/guide-composable/setup',
-                },
-              ],
-            },
-            {
-              text: 'Fetching data',
-              collapsable: false,
-              children: [
-                {
-                  text: 'Queries',
-                  link: '/guide-composable/query',
-                },
-                {
-                  text: 'Mutations',
-                  link: '/guide-composable/mutation',
-                },
-                {
-                  text: 'Subscriptions',
-                  link: '/guide-composable/subscription',
-                },
-                {
-                  text: 'Pagination',
-                  link: '/guide-composable/pagination',
-                },
-                {
-                  text: 'Fragments',
-                  link: '/guide-composable/fragments',
-                },
-                {
-                  text: 'Error handling',
-                  link: '/guide-composable/error-handling',
-                },
-              ],
-            },
-          ],
-          '/guide-components/': [
-            {
-              text: 'Components Guide',
-              collapsable: false,
-              children: [
-                {
-                  text: 'Introduction',
-                  link: '/guide-components/',
-                },
-                {
-                  text: 'Setup',
-                  link: '/guide-components/setup',
-                },
-              ],
-            },
-            {
-              text: 'Usage',
-              collapsable: false,
-              children: [
-                {
-                  text: 'Queries',
-                  link: '/guide-components/query',
-                },
-                {
-                  text: 'Mutations',
-                  link: '/guide-components/mutation',
-                },
-                {
-                  text: 'Subscribe to a Query',
-                  link: '/guide-components/subscribe-to-more',
-                },
-              ],
-            },
-          ],
-          '/guide-advanced/': [
-            {
-              text: 'Advanced topics',
-              collapsable: false,
-              children: [
-                {
-                  text: 'Local state',
-                  link: '/guide-advanced/local-state',
-                },
-                {
-                  text: 'Server-Side Rendering',
-                  link: '/guide-advanced/ssr',
-                },
-                {
-                  text: 'Testing',
-                  link: '/guide-advanced/testing',
-                },
-              ],
-            },
-          ],
-          '/api/': [
-            {
-              text: 'Option API',
-              collapsable: false,
-              children: [
-                {
-                  text: 'createApolloProvider',
-                  link: '/api/apollo-provider',
-                },
-                {
-                  text: '$apollo',
-                  link: '/api/dollar-apollo',
-                },
-                {
-                  text: 'Reactive queries',
-                  link: '/api/smart-query',
-                },
-                {
-                  text: 'Reactive subscriptions',
-                  link: '/api/smart-subscription',
-                },
-              ],
-            },
-            {
-              text: 'Composition API',
-              collapsable: false,
-              children: [
-                {
-                  text: 'useQuery',
-                  link: '/api/use-query',
-                },
-                {
-                  text: 'useLazyQuery',
-                  link: '/api/use-lazy-query',
-                },
-                {
-                  text: 'useMutation',
-                  link: '/api/use-mutation',
-                },
-                {
-                  text: 'useSubscription',
-                  link: '/api/use-subscription',
-                },
-                {
-                  text: 'useApolloClient',
-                  link: '/api/use-apollo-client',
-                },
-                {
-                  text: 'Loading utilities',
-                  link: '/api/use-loading',
-                },
-              ],
-            },
-            {
-              text: 'Components',
-              collapsable: false,
-              children: [
-                {
-                  text: '<ApolloQuery>',
-                  link: '/api/apollo-query',
-                },
-                {
-                  text: '<ApolloMutation>',
-                  link: '/api/apollo-mutation',
-                },
-                {
-                  text: '<ApolloSubscribeToMore>',
-                  link: '/api/apollo-subscribe-to-more',
-                },
-              ],
-            },
-            {
-              text: 'Advanced',
-              collapsable: false,
-              children: [
-                {
-                  text: 'ApolloSSR',
-                  link: '/api/ssr',
-                },
-              ],
-            },
-          ],
-          '/migration/': [
-            {
-              text: 'Migration guide',
-              link: '/migration/',
-            },
-          ],
+      themeConfig: {
+        lastUpdated: {
+          message: '上次更新时间',
         },
-      },
-      '/zh-cn/': {
-        selectText: '选择语言',
-        label: '简体中文',
-        lastUpdated: '上次更新时间',
         nav: [
           {
             text: '指南',
@@ -378,7 +379,6 @@ export default defineConfig({
             link: 'https://github.com/sponsors/Akryum',
           },
         ],
-        sidebarDepth: 3,
         sidebar: {
           '/zh-cn/guide/': [
             {
@@ -394,7 +394,7 @@ export default defineConfig({
             {
               text: '选项 API 指南',
               collapsable: false,
-              children: [
+              items: [
                 {
                   text: 'Introduction',
                   link: '/zh-cn/guide-option/',
@@ -408,7 +408,7 @@ export default defineConfig({
             {
               text: '基础',
               collapsable: false,
-              children: [
+              items: [
                 {
                   text: 'Usage in Vue components',
                   link: '/zh-cn/guide-option/usage',
@@ -430,7 +430,7 @@ export default defineConfig({
             {
               text: '进阶',
               collapsable: false,
-              children: [
+              items: [
                 {
                   text: 'Special options',
                   link: '/zh-cn/guide-option/special-options',
@@ -450,7 +450,7 @@ export default defineConfig({
             {
               text: '组合 API 指南',
               collapsable: false,
-              children: [
+              items: [
                 {
                   text: 'Introduction',
                   link: '/zh-cn/guide-composable/',
@@ -464,7 +464,7 @@ export default defineConfig({
             {
               text: '获取数据',
               collapsable: false,
-              children: [
+              items: [
                 {
                   text: 'Queries',
                   link: '/zh-cn/guide-composable/query',
@@ -496,7 +496,7 @@ export default defineConfig({
             {
               text: '组件指南',
               collapsable: false,
-              children: [
+              items: [
                 {
                   text: 'Introduction',
                   link: '/zh-cn/guide-components/',
@@ -510,7 +510,7 @@ export default defineConfig({
             {
               text: '用法',
               collapsable: false,
-              children: [
+              items: [
                 {
                   text: 'Queries',
                   link: '/zh-cn/guide-components/query',
@@ -530,7 +530,7 @@ export default defineConfig({
             {
               text: '进阶主题',
               collapsable: false,
-              children: [
+              items: [
                 {
                   text: 'Local state',
                   link: '/zh-cn/guide-advanced/local-state',
@@ -550,7 +550,7 @@ export default defineConfig({
             {
               text: '选项 API',
               collapsable: false,
-              children: [
+              items: [
                 {
                   text: 'createApolloProvider',
                   link: '/zh-cn/api/apollo-provider',
@@ -572,7 +572,7 @@ export default defineConfig({
             {
               text: '组合 API',
               collapsable: false,
-              children: [
+              items: [
                 {
                   text: 'useQuery',
                   link: '/zh-cn/api/use-query',
@@ -602,7 +602,7 @@ export default defineConfig({
             {
               text: '组件',
               collapsable: false,
-              children: [
+              items: [
                 {
                   text: '<ApolloQuery>',
                   link: '/zh-cn/api/apollo-query',
@@ -620,7 +620,7 @@ export default defineConfig({
             {
               text: '进阶',
               collapsable: false,
-              children: [
+              items: [
                 {
                   text: 'ApolloSSR',
                   link: '/zh-cn/api/ssr',
@@ -636,11 +636,6 @@ export default defineConfig({
           ],
         },
       },
-    },
-    algolia: {
-      appId: 'X6FFODVB9N',
-      apiKey: 'cc89b1eff7e2fc6e6c0bbf8b066ab488',
-      indexName: 'apollo-vuejs',
     },
   },
 
