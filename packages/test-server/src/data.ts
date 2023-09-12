@@ -27,4 +27,26 @@ export function resetDatabase (): void {
   ]
 }
 
+export function seedDatabase (): void {
+  channels[0].messages = [
+    {
+      id: '1',
+      channel: channels[0],
+      text: 'Meow?',
+    },
+    {
+      id: '2',
+      channel: channels[0],
+      text: 'Meow!',
+    },
+  ]
+  channels[1].messages = [
+    {
+      id: '3',
+      channel: channels[1],
+      text: 'Hello world!',
+    },
+  ]
+}
+
 resetDatabase()
