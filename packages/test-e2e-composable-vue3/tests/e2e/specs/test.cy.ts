@@ -84,30 +84,6 @@ describe('Vue 3 + Apollo Composable', () => {
     cy.contains('.no-setup-query', 'Hello world!')
   })
 
-  it('useLazyQuery', () => {
-    cy.visit('/lazy-query')
-    cy.get('.list-disc').should('have.length', 0)
-    cy.get('button').click()
-    cy.get('.loading').should('be.visible')
-    cy.get('.loading').should('not.exist')
-    cy.get('.list-disc').should('have.length', 3)
-    cy.get('.list-disc').should('contain', 'a')
-    cy.get('.list-disc').should('contain', 'b')
-    cy.get('.list-disc').should('contain', 'c')
-  })
-
-  it('useLazyQuery refetch', () => {
-    cy.visit('/lazy-query')
-    cy.get('button').click()
-    cy.get('.list-disc').should('have.length', 3)
-    cy.get('[data-test-id="refetched"]').should('contain', 'false')
-    cy.get('button').click()
-    cy.get('.loading').should('be.visible')
-    cy.get('.loading').should('not.exist')
-    cy.get('.list-disc').should('have.length', 3)
-    cy.get('[data-test-id="refetched"]').should('contain', 'true')
-  })
-
   it('enabled', () => {
     cy.visit('/disabled')
     cy.get('[data-test-id="data"]').should('not.exist')

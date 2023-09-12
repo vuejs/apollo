@@ -26,9 +26,28 @@ export function useLazyQuery<
     if (options) {
       Object.assign(isRef(query.options) ? query.options.value : query.options, options)
     }
-    const oldForceDisabled = query.forceDisabled.value
-    query.forceDisabled.value = false
-    return oldForceDisabled
+    const isFirstRun = query.forceDisabled.value
+    if (isFirstRun) {
+      query.forceDisabled.value = false
+
+      return new Promise<TResult>((resolve, reject) => {
+        const { off: offResult } = query.onResult((result) => {
+          if (!result.loading) {
+            console.log('result', result)
+            resolve(result.data)
+            offResult()
+            offError()
+          }
+        })
+        const { off: offError } = query.onError((error) => {
+          reject(error)
+          offResult()
+          offError()
+        })
+      })
+    } else {
+      return false
+    }
   }
 
   return {

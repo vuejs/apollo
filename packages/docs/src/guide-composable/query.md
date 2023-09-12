@@ -825,9 +825,30 @@ export default {
 </template>
 ```
 
+### Getting the result
+
+`load()` returns a Promise to the result of the first request if it's the first time the query is activated.
+
+```js
+const { result, load, refetch } = useLazyQuery(gql`
+  query list {
+    list
+  }
+`)
+// ...
+
+async function myLoad () {
+  try {
+    const result = await load()
+  } catch (e) {
+    // Handle error
+  }
+}
+```
+
 ### Refetch lazy query
 
-`load()` returns `true` if it is the first time the query is activated, `false` otherwise. You can use this to refetch the query with `refetch()` in case the user clicks on the button again, meaning `load()` returns `false`.
+`load()` returns `false` if it is not the first time the query is activated. You can use this to refetch the query with `refetch()` in case the user clicks on the button again, meaning `load()` returns `false`.
 
 ```js
 const { result, load, refetch } = useLazyQuery(gql`
