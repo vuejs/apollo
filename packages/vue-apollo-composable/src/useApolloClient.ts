@@ -1,4 +1,4 @@
-import { getCurrentInstance, inject } from 'vue-demi'
+import { getCurrentInstance, getCurrentScope, inject } from 'vue-demi'
 import { ApolloClient } from '@apollo/client/core/index.js'
 
 export const DefaultApolloClient = Symbol('default-apollo-client')
@@ -35,7 +35,7 @@ export function useApolloClient<TCacheShape = any> (clientId?: ClientId): UseApo
   // Save current client in current closure scope
   const savedCurrentClients = currentApolloClients
 
-  if (!getCurrentInstance()) {
+  if (!getCurrentInstance() && !getCurrentScope()) {
     resolveImpl = (id?: ClientId) => {
       if (id) {
         return resolveClientWithId(savedCurrentClients, id)
@@ -68,7 +68,7 @@ export function useApolloClient<TCacheShape = any> (clientId?: ClientId): UseApo
       throw new Error(
         `Apollo client with id ${
           id ?? 'default'
-        } not found. Use provideApolloClient() if you are outside of a component setup.`,
+        } not found. Use an app.runWithContext() or provideApolloClient() if you are outside of a component setup.`,
       )
     }
     return client

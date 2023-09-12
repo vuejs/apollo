@@ -50,5 +50,19 @@ export const router = createRouter({
       path: '/null-query',
       component: () => import('./components/NullQuery.vue'),
     },
+    {
+      path: '/pinia',
+      component: () => import('./components/ChannelListPinia.vue'),
+      meta: {
+        layout: 'blank',
+      },
+    },
+    {
+      path: '/pinia2',
+      component: () => import('./components/ChannelListPinia2.vue'),
+      meta: {
+        layout: 'blank',
+      },
+    },
   ],
 })
