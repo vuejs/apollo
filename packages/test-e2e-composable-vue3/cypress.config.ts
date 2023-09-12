@@ -8,7 +8,7 @@ export default defineConfig({
   videosFolder: 'tests/e2e/videos',
   downloadsFolder: 'tests/e2e/downloads',
   e2e: {
-    baseUrl: 'http://127.0.0.1:8080',
+    baseUrl: 'http://localhost:8080',
     // We've imported your old cypress plugins here.
     // You may want to clean this up later by importing these.
     setupNodeEvents (on) {
