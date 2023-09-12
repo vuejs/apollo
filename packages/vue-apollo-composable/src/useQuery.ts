@@ -40,7 +40,7 @@ export interface UseQueryOptions<
   TVariables extends OperationVariables = OperationVariables
 > extends Omit<WatchQueryOptions<TVariables>, 'query' | 'variables'> {
   clientId?: string
-  enabled?: boolean
+  enabled?: boolean | Ref<boolean>
   throttle?: number
   debounce?: number
   prefetch?: boolean
