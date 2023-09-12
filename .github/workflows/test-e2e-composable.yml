@@ -56,6 +56,10 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      - name: Build app
+        working-directory: ${{env.dir}}
+        run: pnpm run build
+
       - name: E2E tests
         working-directory: ${{env.dir}}
         run: pnpm run test:e2e
