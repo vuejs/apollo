@@ -7,7 +7,7 @@ import { expressMiddleware } from '@apollo/server/express4'
 import { WebSocketServer } from 'ws'
 import { useServer } from 'graphql-ws/lib/use/ws'
 import { schema } from './schema.js'
-import { resetDatabase } from './data.js'
+import { resetDatabase, seedDatabase } from './data.js'
 import { simulateLatency } from './util.js'
 
 const app = express()
@@ -20,6 +20,11 @@ app.use(bodyParser.json())
 
 app.get('/_reset', (req, res) => {
   resetDatabase()
+  res.status(200).end()
+})
+
+app.get('/_seed', (req, res) => {
+  seedDatabase()
   res.status(200).end()
 })
 

@@ -6,7 +6,7 @@
 [![CircleCI branch](https://img.shields.io/circleci/build/github/vuejs/vue-apollo/v4.svg)](https://circleci.com/gh/vuejs/vue-apollo/tree/v4)
 
 <p align="center">
-  <img src="https://cdn-images-1.medium.com/max/400/1*H9AANoofLqjS10Xd5TwRYw.png">
+  <img src="./packages/docs/src/public/hero.svg" width="512">
 </p>
 
 

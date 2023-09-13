@@ -1,6 +1,6 @@
 {
   "name": "@vue/apollo-components",
-  "version": "4.0.0-beta.5",
+  "version": "4.0.0-beta.10",
   "description": "Apollo GraphQL components for Vue.js",
   "main": "dist/vue-apollo-components.umd.js",
   "module": "dist/vue-apollo-components.esm.js",
@@ -41,13 +41,13 @@
     "access": "public"
   },
   "dependencies": {
-    "@vue/apollo-option": "^4.0.0-beta.4"
+    "@vue/apollo-option": "workspace:^"
   },
   "peerDependencies": {
     "vue": "^3.1.0"
   },
   "devDependencies": {
-    "@apollo/client": "^3.7.7",
+    "@apollo/client": "^3.7.16",
     "@babel/core": "^7.18.5",
     "@babel/plugin-proposal-class-properties": "^7.17.12",
     "@babel/plugin-transform-for-of": "^7.18.1",
@@ -69,9 +69,6 @@
     "uglify-es": "^3.3.9",
     "vue": "^3.2.37",
     "vue-property-decorator": "^8.5.1"
-  },
-  "resolutions": {
-    "js-yaml": "^3.13.1"
   },
   "jest": {
     "testRegex": "tests/unit/.*\\.test.js$"

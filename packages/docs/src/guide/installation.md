@@ -94,7 +94,7 @@ If you are using Webstorm, it's recommended to install the [JS GraphQL extension
 
 Then configure it by creating a `.graphqlconfig` file in the root folder of the Vue project:
 
-```graphqlconfig
+```json
 {
   "name": "Untitled GraphQL Schema",
   "schemaPath": "./path/to/schema.graphql",

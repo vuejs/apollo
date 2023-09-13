@@ -31,6 +31,14 @@ export const router = createRouter({
       component: () => import('./components/LazyQueryImmediately.vue'),
     },
     {
+      path: '/lazy-query-load',
+      component: () => import('./components/LazyQueryLoad.vue'),
+    },
+    {
+      path: '/lazy-query-load-error',
+      component: () => import('./components/LazyQueryLoadError.vue'),
+    },
+    {
       path: '/partial-error',
       component: () => import('./components/PartialError.vue'),
     },
@@ -49,6 +57,20 @@ export const router = createRouter({
     {
       path: '/null-query',
       component: () => import('./components/NullQuery.vue'),
+    },
+    {
+      path: '/pinia',
+      component: () => import('./components/ChannelListPinia.vue'),
+      meta: {
+        layout: 'blank',
+      },
+    },
+    {
+      path: '/pinia2',
+      component: () => import('./components/ChannelListPinia2.vue'),
+      meta: {
+        layout: 'blank',
+      },
     },
   ],
 })

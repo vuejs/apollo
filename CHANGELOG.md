@@ -1,5 +1,71 @@
 # Changelog
 
+## v4.0.0-beta.11
+
+
+### 🩹 Fixes
+
+  - Remove console.log, console log remained in code #1507 (#1507)
+
+### 📖 Documentation
+
+  - Update README.md logo (68addf8)
+  - Update vitepress + fix components API menu (f545763)
+
+### ❤️  Contributors
+
+- Guillaume Chau ([@Akryum](http://github.com/Akryum))
+
+## v4.0.0-beta.10
+
+
+### 🚀 Enhancements
+
+  - Support effect scope outside of component, fix #1505 (#1505)
+  - **useLazyQuery:** Load returns Promise, fix #1486 (#1486)
+
+### 🩹 Fixes
+
+  - Apollo components should have emits (#1504)
+
+### 🌊 Types
+
+  - Extended "enabled" option type (#1492)
+
+### 🏡 Chore
+
+  - Package test-e2e-composable-vue3, update deps, migrate to vite (#1488)
+  - Upgrade vitepress to 1.0 RC (daffd75)
+  - Seq test (995131d)
+
+### ✅ Tests
+
+  - **lint:** Fix (1ac1372)
+  - Ssr (574bd8f)
+
+### ❤️  Contributors
+
+- Guillaume Chau ([@Akryum](http://github.com/Akryum))
+- Viktor ([@websitevirtuoso](http://github.com/websitevirtuoso))
+- Vitaliy 
+- Forgottencsc <forgottencosecant@outlook.com>
+
+## v4.0.0-beta.9
+
+
+### 🩹 Fixes
+
+  - Don't call debounced restart too much (1adf135)
+
+### 🏡 Chore
+
+  - Update throttle-debounce (500cc49)
+  - Update deps (f47759e)
+
+### ❤️  Contributors
+
+- Guillaume Chau ([@Akryum](http://github.com/Akryum))
+
 ## v4.0.0-beta.8
 
 
