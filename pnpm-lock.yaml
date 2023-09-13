@@ -69,8 +69,8 @@ importers:
         version: 3.1.0
     devDependencies:
       vitepress:
-        specifier: ^1.0.0-rc.12
-        version: 1.0.0-rc.12(search-insights@2.8.2)
+        specifier: ^1.0.0-rc.13
+        version: 1.0.0-rc.13(search-insights@2.8.2)
 
   packages/test-e2e:
     dependencies:
@@ -15799,8 +15799,8 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /vitepress@1.0.0-rc.12(search-insights@2.8.2):
-    resolution: {integrity: sha512-mZknN5l9lgbBjXwumwdOQQDM+gPivswFEykEQeenY0tv7eocS+bb801IpFZT3mFV6YRhSddmbutHlFgPPADjEg==}
+  /vitepress@1.0.0-rc.13(search-insights@2.8.2):
+    resolution: {integrity: sha512-TnVydQOZE38rtXu9gHCb7EGdN03jTcmYkDdhCqox6+pfKYgiyfm1qk2Uy8BZatnM9wXpa64f+T5p30R8P/9Z+A==}
     hasBin: true
     dependencies:
       '@docsearch/css': 3.5.2

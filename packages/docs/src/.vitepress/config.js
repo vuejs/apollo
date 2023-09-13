@@ -284,15 +284,15 @@ export default defineConfig({
           collapsable: false,
           items: [
             {
-              text: '<ApolloQuery>',
+              text: 'ApolloQuery',
               link: '/api/apollo-query',
             },
             {
-              text: '<ApolloMutation>',
+              text: 'ApolloMutation',
               link: '/api/apollo-mutation',
             },
             {
-              text: '<ApolloSubscribeToMore>',
+              text: 'ApolloSubscribeToMore',
               link: '/api/apollo-subscribe-to-more',
             },
           ],
@@ -604,15 +604,15 @@ export default defineConfig({
               collapsable: false,
               items: [
                 {
-                  text: '<ApolloQuery>',
+                  text: 'ApolloQuery',
                   link: '/zh-cn/api/apollo-query',
                 },
                 {
-                  text: '<ApolloMutation>',
+                  text: 'ApolloMutation',
                   link: '/zh-cn/api/apollo-mutation',
                 },
                 {
-                  text: '<ApolloSubscribeToMore>',
+                  text: 'ApolloSubscribeToMore',
                   link: '/zh-cn/api/apollo-subscribe-to-more',
                 },
               ],

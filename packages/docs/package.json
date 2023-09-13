@@ -8,7 +8,7 @@
     "build": "vitepress build src"
   },
   "devDependencies": {
-    "vitepress": "^1.0.0-rc.12"
+    "vitepress": "^1.0.0-rc.13"
   },
   "dependencies": {
     "vue-github-button": "^3.0.3"
