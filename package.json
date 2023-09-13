@@ -10,6 +10,9 @@
     "lint": "eslint . --ext js,vue,ts",
     "release": "pnpm run build && pnpm run test && sheep release -b v4"
   },
+  "resolutions": {
+    "js-yaml": "^3.13.1"
+  },
   "devDependencies": {
     "@akryum/sheep": "^0.5.0",
     "@typescript-eslint/eslint-plugin": "^4.33.0",

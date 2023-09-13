@@ -79,9 +79,6 @@
     "vue": "^3.2.37",
     "vue-property-decorator": "^10.0.0-rc.3"
   },
-  "resolutions": {
-    "js-yaml": "^3.13.1"
-  },
   "jest": {
     "testRegex": "tests/unit/.*\\.test.js$"
   }
