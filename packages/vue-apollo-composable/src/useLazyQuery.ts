@@ -33,7 +33,6 @@ export function useLazyQuery<
       return new Promise<TResult>((resolve, reject) => {
         const { off: offResult } = query.onResult((result) => {
           if (!result.loading) {
-            console.log('result', result)
             resolve(result.data)
             offResult()
             offError()
