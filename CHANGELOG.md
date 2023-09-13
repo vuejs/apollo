@@ -1,5 +1,21 @@
 # Changelog
 
+## v4.0.0-beta.11
+
+
+### 🩹 Fixes
+
+  - Remove console.log, console log remained in code #1507 (#1507)
+
+### 📖 Documentation
+
+  - Update README.md logo (68addf8)
+  - Update vitepress + fix components API menu (f545763)
+
+### ❤️  Contributors
+
+- Guillaume Chau ([@Akryum](http://github.com/Akryum))
+
 ## v4.0.0-beta.10
 
 
