@@ -23,9 +23,9 @@ function resolveDefaultClient<T> (providedApolloClients: ClientDict<T> | null, p
 }
 
 function resolveClientWithId<T> (providedApolloClients: ClientDict<T> | null, clientId: ClientId): NullableApolloClient<T> {
-  if (!providedApolloClients) {
-    throw new Error(`No apolloClients injection found, tried to resolve '${clientId}' clientId`)
-  }
+  // if (!providedApolloClients) {
+  //   throw new Error(`No apolloClients injection found, tried to resolve '${clientId}' clientId`)
+  // }
   return providedApolloClients[clientId]
 }
 
