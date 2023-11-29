@@ -8,6 +8,7 @@ import {
   getCurrentInstance,
   onBeforeUnmount,
   nextTick,
+  shallowRef,
 } from 'vue-demi'
 import { DocumentNode } from 'graphql'
 import type {
@@ -218,7 +219,7 @@ export function useQueryImpl<
 
   // Query
 
-  const query: Ref<ObservableQuery<TResult, TVariables> | null | undefined> = ref()
+  const query: Ref<ObservableQuery<TResult, TVariables> | null | undefined> = shallowRef()
   let observer: ObservableSubscription | undefined
   let started = false
   let ignoreNextResult = false
