@@ -47,6 +47,6 @@
 
 - `called`: boolean `Ref` holding `true` if the mutation was already called.
 
-- `onDone`: Event hook called when the mutation successfully completes.
+- `onDone(handler)`: Event hook called when the mutation successfully completes. Handler is called with: `result` (mutation result) and `context` which is an object with `client` (ApolloClient instance).
 
-- `onError`: Event hook called when an error occurs.
+- `onError(handler)`: Event hook called when an error occurs. Handler is called with: `error` and `context` which is an object with `client` (ApolloClient instance).

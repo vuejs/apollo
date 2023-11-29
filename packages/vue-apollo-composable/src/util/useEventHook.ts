@@ -1,23 +1,23 @@
-export function useEventHook<TParam = any> () {
-  const fns: Array<(param: TParam) => void> = []
+export function useEventHook<TParams extends any[] = any[]> () {
+  const fns: Array<(...params: TParams) => void> = []
 
-  function on (fn: (param: TParam) => void) {
+  function on (fn: (...params: TParams) => void) {
     fns.push(fn)
     return {
       off: () => off(fn),
     }
   }
 
-  function off (fn: (param: TParam) => void) {
+  function off (fn: (...params: TParams) => void) {
     const index = fns.indexOf(fn)
     if (index !== -1) {
       fns.splice(index, 1)
     }
   }
 
-  function trigger (param: TParam) {
+  function trigger (...params: TParams) {
     for (const fn of fns) {
-      fn(param)
+      fn(...params)
     }
   }
 

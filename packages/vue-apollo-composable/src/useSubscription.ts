@@ -17,6 +17,7 @@ import type {
   ObservableSubscription,
   TypedDocumentNode,
   ApolloError,
+  ApolloClient,
 } from '@apollo/client/core/index.js'
 import { throttle, debounce } from 'throttle-debounce'
 import { ReactiveFunction } from './util/ReactiveFunction'
@@ -44,6 +45,14 @@ type DocumentParameter<TResult, TVariables> = DocumentNode | Ref<DocumentNode> |
 type VariablesParameter<TVariables> = TVariables | Ref<TVariables> | ReactiveFunction<TVariables>
 type OptionsParameter<TResult, TVariables> = UseSubscriptionOptions<TResult, TVariables> | Ref<UseSubscriptionOptions<TResult, TVariables>> | ReactiveFunction<UseSubscriptionOptions<TResult, TVariables>>
 
+export interface OnResultContext {
+  client: ApolloClient<any>
+}
+
+export interface OnErrorContext {
+  client: ApolloClient<any>
+}
+
 export interface UseSubscriptionReturn<TResult, TVariables> {
   result: Ref<TResult | null | undefined>
   loading: Ref<boolean>
@@ -55,10 +64,10 @@ export interface UseSubscriptionReturn<TResult, TVariables> {
   variables: Ref<TVariables | undefined>
   options: UseSubscriptionOptions<TResult, TVariables> | Ref<UseSubscriptionOptions<TResult, TVariables>>
   subscription: Ref<Observable<FetchResult<TResult, Record<string, any>, Record<string, any>>> | null>
-  onResult: (fn: (param: FetchResult<TResult, Record<string, any>, Record<string, any>>) => void) => {
+  onResult: (fn: (param: FetchResult<TResult, Record<string, any>, Record<string, any>>, context: OnResultContext) => void) => {
     off: () => void
   }
-  onError: (fn: (param: ApolloError) => void) => {
+  onError: (fn: (param: ApolloError, context: OnErrorContext) => void) => {
     off: () => void
   }
 }
@@ -119,9 +128,9 @@ export function useSubscription <
   const optionsRef = paramToReactive(options)
 
   const result = ref<TResult | null | undefined>()
-  const resultEvent = useEventHook<FetchResult<TResult>>()
+  const resultEvent = useEventHook<[FetchResult<TResult>, OnResultContext]>()
   const error = ref<ApolloError | null>(null)
-  const errorEvent = useEventHook<ApolloError>()
+  const errorEvent = useEventHook<[ApolloError, OnErrorContext]>()
 
   const loading = ref(false)
   vm && trackSubscription(loading)
@@ -133,12 +142,16 @@ export function useSubscription <
   let observer: ObservableSubscription | null = null
   let started = false
 
+  function getClient () {
+    return resolveClient(currentOptions.value?.clientId)
+  }
+
   function start () {
     if (started || !isEnabled.value || isServer) return
     started = true
     loading.value = true
 
-    const client = resolveClient(currentOptions.value?.clientId)
+    const client = getClient()
 
     subscription.value = client.subscribe<TResult, TVariables>({
       query: currentDocument,
@@ -155,7 +168,9 @@ export function useSubscription <
   function onNextResult (fetchResult: FetchResult<TResult>) {
     result.value = fetchResult.data
     loading.value = false
-    resultEvent.trigger(fetchResult)
+    resultEvent.trigger(fetchResult, {
+      client: getClient(),
+    })
   }
 
   function onError (fetchError: unknown) {
@@ -163,7 +178,9 @@ export function useSubscription <
 
     error.value = apolloError
     loading.value = false
-    errorEvent.trigger(apolloError)
+    errorEvent.trigger(apolloError, {
+      client: getClient(),
+    })
   }
 
   function stop () {

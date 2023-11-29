@@ -33,7 +33,7 @@
 
 - `variables`: Ref holding the variables object.
 
-- `onResult(handler)`: Event hook called when a new result is available.
+- `onResult(handler)`: Event hook called when a new result is available. Handler is called with: `result` (new result) and `context` which is an object with `client` (ApolloClient instance).
 
-- `onError(handler)`: Event hook called when an error occurs.
+- `onError(handler)`: Event hook called when an error occurs. Handler is called with: `error` and `context` which is an object with `client` (ApolloClient instance).
 

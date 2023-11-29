@@ -22,6 +22,7 @@ import type {
   ObservableSubscription,
   TypedDocumentNode,
   ApolloError,
+  ApolloClient,
 } from '@apollo/client/core/index.js'
 import { throttle, debounce } from 'throttle-debounce'
 import { useApolloClient } from './useApolloClient'
@@ -58,6 +59,14 @@ export type DocumentParameter<TResult, TVariables> = DocumentNode | Ref<Document
 export type VariablesParameter<TVariables> = TVariables | Ref<TVariables> | ReactiveFunction<TVariables>
 export type OptionsParameter<TResult, TVariables extends OperationVariables> = UseQueryOptions<TResult, TVariables> | Ref<UseQueryOptions<TResult, TVariables>> | ReactiveFunction<UseQueryOptions<TResult, TVariables>>
 
+export interface OnResultContext {
+  client: ApolloClient<any>
+}
+
+export interface OnErrorContext {
+  client: ApolloClient<any>
+}
+
 // Return
 export interface UseQueryReturn<TResult, TVariables extends OperationVariables> {
   result: Ref<TResult | undefined>
@@ -75,10 +84,10 @@ export interface UseQueryReturn<TResult, TVariables extends OperationVariables> 
   refetch: (variables?: TVariables) => Promise<ApolloQueryResult<TResult>> | undefined
   fetchMore: (options: FetchMoreQueryOptions<TVariables, TResult> & FetchMoreOptions<TResult, TVariables>) => Promise<ApolloQueryResult<TResult>> | undefined
   subscribeToMore: <TSubscriptionVariables = OperationVariables, TSubscriptionData = TResult>(options: SubscribeToMoreOptions<TResult, TSubscriptionVariables, TSubscriptionData> | Ref<SubscribeToMoreOptions<TResult, TSubscriptionVariables, TSubscriptionData>> | ReactiveFunction<SubscribeToMoreOptions<TResult, TSubscriptionVariables, TSubscriptionData>>) => void
-  onResult: (fn: (param: ApolloQueryResult<TResult>) => void) => {
+  onResult: (fn: (param: ApolloQueryResult<TResult>, context: OnResultContext) => void) => {
     off: () => void
   }
-  onError: (fn: (param: ApolloError) => void) => {
+  onError: (fn: (param: ApolloError, context: OnErrorContext) => void) => {
     off: () => void
   }
 }
@@ -157,9 +166,9 @@ export function useQueryImpl<
    * Result from the query
    */
   const result = ref<TResult | undefined>()
-  const resultEvent = useEventHook<ApolloQueryResult<TResult>>()
+  const resultEvent = useEventHook<[ApolloQueryResult<TResult>, OnResultContext]>()
   const error = ref<ApolloError | null>(null)
-  const errorEvent = useEventHook<ApolloError>()
+  const errorEvent = useEventHook<[ApolloError, OnErrorContext]>()
 
   // Loading
 
@@ -217,6 +226,10 @@ export function useQueryImpl<
   // Apollo Client
   const { resolveClient } = useApolloClient()
 
+  function getClient () {
+    return resolveClient(currentOptions.value?.clientId)
+  }
+
   // Query
 
   const query: Ref<ObservableQuery<TResult, TVariables> | null | undefined> = shallowRef()
@@ -242,7 +255,7 @@ export function useQueryImpl<
     error.value = null
     loading.value = true
 
-    const client = resolveClient(currentOptions.value?.clientId)
+    const client = getClient()
 
     query.value = client.watchQuery<TResult, TVariables>({
       query: currentDocument,
@@ -328,7 +341,9 @@ export function useQueryImpl<
     networkStatus.value = queryResult.networkStatus
     // Wait for handlers to be registered
     nextTick(() => {
-      resultEvent.trigger(queryResult)
+      resultEvent.trigger(queryResult, {
+        client: getClient(),
+      })
     })
   }
 
@@ -357,7 +372,9 @@ export function useQueryImpl<
     networkStatus.value = 8
     // Wait for handlers to be registered
     nextTick(() => {
-      errorEvent.trigger(apolloError)
+      errorEvent.trigger(apolloError, {
+        client: getClient(),
+      })
     })
   }
 
