@@ -82,6 +82,7 @@ We need to either use the `GraphQLWsLink` or the `HttpLink` depending on the ope
 ```js
 import { HttpLink, split } from "@apollo/client/core"
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions"; // <-- This one uses graphql-ws
+import { createClient } from "graphql-ws";
 import { getMainDefinition } from "@apollo/client/utilities"
 
 // Create an http link:
