@@ -1,5 +1,33 @@
 # Changelog
 
+## v4.0.0-beta.12
+
+
+### 🚀 Enhancements
+
+  - New context params in event hook handlers (0be5d9b)
+
+### 🩹 Fixes
+
+  - Use shallowRef for apollo query (76f19f6)
+
+### 📖 Documentation
+
+  - Missing curly brace (#1512)
+  - Added missing createClient import in example when creating Graph… (#1513)
+  - Import createApolloProvider is missing (#1515)
+
+### 🏡 Chore
+
+  - Moved resolutions to the root of the workspace (#1508)
+
+### ❤️  Contributors
+
+- Guillaume Chau ([@Akryum](http://github.com/Akryum))
+- Hassan <hassanfayyaz19@gmail.com>
+- Mekraldi 
+- Vitaliy
+
 ## v4.0.0-beta.11
 
 
