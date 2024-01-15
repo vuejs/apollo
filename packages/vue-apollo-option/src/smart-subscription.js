@@ -1,5 +1,8 @@
 import SmartApollo from './smart-apollo'
 
+const MAX_RETRIES = 5
+const DELAY_MS = 500
+
 export default class SmartSubscription extends SmartApollo {
   type = 'subscription'
   vueApolloSpecialKeys = [
@@ -13,6 +16,8 @@ export default class SmartSubscription extends SmartApollo {
 
   constructor (vm, key, options, autostart = true) {
     super(vm, key, options)
+
+    this.attempts = 0
 
     if (autostart) {
       this.autostart()
@@ -73,6 +78,8 @@ export default class SmartSubscription extends SmartApollo {
   nextResult (data) {
     super.nextResult(data)
 
+    this.attempts = 0
+
     if (typeof this.options.result === 'function') {
       this.options.result.call(this.vm, data, this.key)
     }
@@ -81,9 +88,19 @@ export default class SmartSubscription extends SmartApollo {
   catchError (error) {
     super.catchError(error)
     // Restart the subscription
-    if (!this.skip) {
-      this.stop()
-      this.start()
+    if (this.skip || this.attempts >= MAX_RETRIES) {
+      return
     }
+
+    this.stop()
+
+    // Restart the subscription with exponential backoff
+    this.retryTimeout = setTimeout(this.start.bind(this), Math.pow(2, this.attempts) * DELAY_MS)
+    this.attempts++
+  }
+
+  stop () {
+    super.stop()
+    clearTimeout(this.retryTimeout)
   }
 }
