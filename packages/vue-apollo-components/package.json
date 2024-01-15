@@ -1,6 +1,6 @@
 {
   "name": "@vue/apollo-components",
-  "version": "4.0.0-beta.12",
+  "version": "4.0.0",
   "description": "Apollo GraphQL components for Vue.js",
   "main": "dist/vue-apollo-components.umd.js",
   "module": "dist/vue-apollo-components.esm.mjs",

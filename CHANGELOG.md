@@ -1,5 +1,42 @@
 # Changelog
 
+## v4.0.0
+
+
+### 🚀 Enhancements
+
+  - **useLazyQuery:** Add interface for lazy query return (#1523)
+
+### 🩹 Fixes
+
+  - Improve esm support, fix #1524 (#1524)
+  - Import serializeJs using default import instead of a namespace import (#1485)
+  - **options:** Use exponential backoff on subscribe error retry (b17817e)
+  - **ApolloMutation:** Return result in `mutate` (ddf9aa0)
+  - Prefetch type (f8568e8)
+
+### 📖 Documentation
+
+  - Update vitepress + enable detailed search by default (fb66dce)
+
+### 🏡 Chore
+
+  - Update sheep (9be63fa)
+
+### ✅ Tests
+
+  - Fragment (062f72a)
+
+### 🤖 CI
+
+  - Update node and pnpm (ca3f2f4)
+
+### ❤️  Contributors
+
+- Guillaume Chau ([@Akryum](http://github.com/Akryum))
+- Dawid Kopys <dewke17@gmail.com>
+- Yury Savin <yury@savin.dev>
+
 ## v4.0.0-beta.12
 
 
