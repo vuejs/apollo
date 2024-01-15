@@ -22,12 +22,16 @@ export default defineComponent({
     const { result, loading, refetch } = useQuery(gql`
       query channel ($id: ID!) {
         channel (id: $id) {
+          ...channelView
+        }
+      }
+
+      fragment channelView on Channel {
+        id
+        label
+        messages {
           id
-          label
-          messages {
-            id
-            text
-          }
+          text
         }
       }
     `, () => ({

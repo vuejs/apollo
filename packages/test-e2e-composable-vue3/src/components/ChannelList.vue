@@ -13,9 +13,13 @@ export default defineComponent({
     const { result, loading } = useQuery<{ channels: Channel[] }>(gql`
       query channels {
         channels {
-          id
-          label
+          ...channel
         }
+      }
+
+      fragment channel on Channel {
+        id
+        label
       }
     `)
     const channels = computed(() => result.value?.channels ?? [])
