@@ -15,7 +15,7 @@
     "js-yaml": "^3.13.1"
   },
   "devDependencies": {
-    "@akryum/sheep": "^0.5.0",
+    "@akryum/sheep": "^0.5.1",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
     "@vue/eslint-config-standard": "^6.1.0",

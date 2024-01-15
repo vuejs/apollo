@@ -15,8 +15,8 @@ importers:
   .:
     devDependencies:
       '@akryum/sheep':
-        specifier: ^0.5.0
-        version: 0.5.0
+        specifier: ^0.5.1
+        version: 0.5.1
       '@typescript-eslint/eslint-plugin':
         specifier: ^4.33.0
         version: 4.33.0(@typescript-eslint/parser@4.33.0)(eslint@7.32.0)(typescript@4.9.5)
@@ -596,8 +596,8 @@ packages:
       js-message: 1.0.7
     dev: true
 
-  /@akryum/sheep@0.5.0:
-    resolution: {integrity: sha512-VcJqPUpeAtjiUwuSuwZSkl09LUpcsk7PKgGy4EUMoAM3St05hkT+PaBnQxgBgsJIDl6PfWfq3xRhPxkL0h1REA==}
+  /@akryum/sheep@0.5.1:
+    resolution: {integrity: sha512-MTHR4EzyQJ4bRpDqPTZKZgdoxQRJelwIjcHEykOZAODx8JIuUz93ArO6BgqWCW1/FfhuT+yA+6z+RcBb2zBK6A==}
     hasBin: true
     dev: true
 
@@ -7395,7 +7395,7 @@ packages:
       normalize-path: 3.0.0
       readdirp: 3.6.0
     optionalDependencies:
-      fsevents: 2.3.2
+      fsevents: 2.3.3
     dev: true
 
   /chrome-trace-event@1.0.3:
@@ -10005,14 +10005,6 @@ packages:
     dependencies:
       bindings: 1.5.0
       nan: 2.17.0
-    dev: true
-    optional: true
-
-  /fsevents@2.3.2:
-    resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
-    engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
-    os: [darwin]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -14680,7 +14672,7 @@ packages:
     engines: {node: '>=14.18.0', npm: '>=8.0.0'}
     hasBin: true
     optionalDependencies:
-      fsevents: 2.3.2
+      fsevents: 2.3.3
     dev: true
 
   /rollup@4.9.5:
@@ -16265,7 +16257,7 @@ packages:
       postcss: 8.4.25
       rollup: 3.26.2
     optionalDependencies:
-      fsevents: 2.3.2
+      fsevents: 2.3.3
     dev: true
 
   /vite@5.0.11:
