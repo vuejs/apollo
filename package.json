@@ -8,7 +8,8 @@
     "test:unit": "pnpm run -r test:unit",
     "test:types": "pnpm run -r test:types",
     "lint": "eslint . --ext js,vue,ts",
-    "release": "pnpm run build && pnpm run test && sheep release -b v4"
+    "release": "pnpm run build && pnpm run test && sheep release -b v4",
+    "docs:dev": "pnpm run -r --filter \"private-vue-apollo-docs\" dev"
   },
   "resolutions": {
     "js-yaml": "^3.13.1"
