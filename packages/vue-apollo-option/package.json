@@ -3,13 +3,13 @@
   "version": "4.0.0-beta.12",
   "description": "Use Apollo and GraphQL with Vue.js using the `apollo` option",
   "main": "dist/vue-apollo-option.umd.js",
-  "module": "dist/vue-apollo-option.esm.js",
+  "module": "dist/vue-apollo-option.esm.mjs",
   "unpkg": "dist/vue-apollo-option.min.js",
   "types": "types/index.d.ts",
   "exports": {
     ".": {
       "types": "./types/index.d.ts",
-      "import": "./dist/vue-apollo-option.esm.js",
+      "import": "./dist/vue-apollo-option.esm.mjs",
       "require": "./dist/vue-apollo-option.umd.js"
     },
     "./*": "./*"

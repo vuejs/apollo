@@ -3,11 +3,11 @@
   "version": "4.0.0-beta.12",
   "description": "Apollo GraphQL components for Vue.js",
   "main": "dist/vue-apollo-components.umd.js",
-  "module": "dist/vue-apollo-components.esm.js",
+  "module": "dist/vue-apollo-components.esm.mjs",
   "unpkg": "dist/vue-apollo-components.min.js",
   "exports": {
     ".": {
-      "import": "./dist/vue-apollo-components.esm.js",
+      "import": "./dist/vue-apollo-components.esm.mjs",
       "require": "./dist/vue-apollo-components.umd.js"
     },
     "./*": "./*"

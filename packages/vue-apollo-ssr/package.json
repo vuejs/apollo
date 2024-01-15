@@ -38,7 +38,7 @@
   ],
   "scripts": {
     "dev": "pnpm run build --watch",
-    "build": "rm -rf dist && tsc --outDir dist/esm -d && tsc --outDir dist/cjs --module commonjs --target ES2015",
+    "build": "rm -rf dist && tsc --outDir dist/esm -d && tsc --outDir dist/cjs --module commonjs --target ES2015 && node ./build.mjs",
     "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
