@@ -1,7 +1,7 @@
 import { DocumentNode } from 'graphql'
 import { isRef } from 'vue-demi'
 import { useQueryImpl, DocumentParameter, VariablesParameter, OptionsParameter, UseQueryOptions, UseQueryReturn } from './useQuery'
-import type { OperationVariables } from '@apollo/client/core/index.js'
+import type { OperationVariables } from '@apollo/client/core'
 
 export interface UseLazyQueryReturn<TResult, TVariables extends OperationVariables> extends UseQueryReturn<TResult, TVariables> {
   load: (document?: DocumentNode | null, variables?: TVariables | null, options?: UseQueryOptions | null) => false | Promise<TResult>
