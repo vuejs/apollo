@@ -119,4 +119,9 @@ describe('Vue 3 + Apollo Composable', () => {
     cy.get('[data-test-id="global-loading"]').should('not.contain', 'Global loading...')
     cy.contains('#app', 'Currently viewing # General')
   })
+
+  it('supports queries outside of setup but within scope', () => {
+    cy.visit('/no-setup-scope-query')
+    cy.contains('.no-setup-scope-query', 'Hello world!')
+  })
 })
