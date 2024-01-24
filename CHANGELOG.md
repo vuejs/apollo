@@ -1,5 +1,28 @@
 # Changelog
 
+## v4.0.1
+
+
+### 🩹 Fixes
+
+  - Use hasInjectionContext in useApolloClient before calling inject (#1529)
+  - **useLazyQuery:** Load() on server, fix #1495 (#1495)
+
+### ✅ Tests
+
+  - Split into outsideComponent.cy.ts (48d0ac2)
+  - Build test app in test command (500d6e4)
+
+### 🤖 CI
+
+  - Use GITHUB_OUTPUT envvar instead of set-output command (#1530)
+
+### ❤️  Contributors
+
+- Guillaume Chau ([@Akryum](http://github.com/Akryum))
+- Arun Sathiya <arun@arun.blog>
+- Dawid Kopys <dewke17@gmail.com>
+
 ## v4.0.0
 
 
