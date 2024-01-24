@@ -72,5 +72,12 @@ export const router = createRouter({
         layout: 'blank',
       },
     },
+    {
+      path: '/no-setup-scope-query',
+      component: () => import('./components/NoSetupScopeQuery.vue'),
+      meta: {
+        layout: 'blank',
+      },
+    },
   ],
 })
