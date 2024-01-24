@@ -28,8 +28,6 @@
     - `network-only`: return result from network, fail if network call doesn't succeed, save to cache.
     - `no-cache`: return result from network, fail if network call doesn't succeed, don't save to cache.
 
-  - `fetchResults`: Whether or not to fetch results.
-
   - `metadata`: Arbitrary metadata stored in the store with this query. Designed for debugging, developer tools, etc.
 
   - `notifyOnNetworkStatusChange`: Whether or not updates to the network status should trigger next on the observer of this query.
