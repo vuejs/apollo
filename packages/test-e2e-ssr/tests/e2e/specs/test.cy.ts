@@ -35,4 +35,9 @@ describe('Vue 3 + Apollo Composable', () => {
     cy.get('.message').should('have.lengthOf', 1)
     cy.contains('.message', 'Hello world!')
   })
+
+  it('loads lazy query with load call', () => {
+    cy.visit('/lazy-query-immediately')
+    cy.contains('.message', 'Meow!')
+  })
 })

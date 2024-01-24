@@ -251,6 +251,13 @@ export function useQueryImpl<
       return
     }
 
+    // On server the watchers on document, variables and options are not triggered
+    if (isServer) {
+      applyDocument(documentRef.value)
+      applyVariables(variablesRef.value)
+      applyOptions(unref(optionsRef))
+    }
+
     started = true
     error.value = null
     loading.value = true
@@ -465,7 +472,12 @@ export function useQueryImpl<
   const isEnabled = computed(() => enabledOption.value && !forceDisabled.value && !!documentRef.value)
 
   // Applying options first (in case it disables the query)
-  watch(() => unref(optionsRef), value => {
+  watch(() => unref(optionsRef), applyOptions, {
+    deep: true,
+    immediate: true,
+  })
+
+  function applyOptions (value: UseQueryOptions<TResult, TVariables>) {
     if (currentOptions.value && (
       currentOptions.value.throttle !== value.throttle ||
       currentOptions.value.debounce !== value.debounce
@@ -474,16 +486,15 @@ export function useQueryImpl<
     }
     currentOptions.value = value
     restart()
-  }, {
-    deep: true,
-    immediate: true,
-  })
+  }
 
   // Applying document
-  watch(documentRef, value => {
+  watch(documentRef, applyDocument)
+
+  function applyDocument (value: DocumentNode | null | undefined) {
     currentDocument = value
     restart()
-  })
+  }
 
   // Applying variables
   let currentVariables: TVariables | undefined
@@ -494,17 +505,19 @@ export function useQueryImpl<
     } else {
       return undefined
     }
-  }, (value) => {
+  }, applyVariables, {
+    deep: true,
+    immediate: true,
+  })
+
+  function applyVariables (value?: TVariables) {
     const serialized = JSON.stringify([value, isEnabled.value])
     if (serialized !== currentVariablesSerialized) {
       currentVariables = value
       restart()
     }
     currentVariablesSerialized = serialized
-  }, {
-    deep: true,
-    immediate: true,
-  })
+  }
 
   // Refetch
 
