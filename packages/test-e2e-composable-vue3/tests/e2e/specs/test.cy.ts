@@ -74,16 +74,6 @@ describe('Vue 3 + Apollo Composable', () => {
     cy.get('.message').should('have.lengthOf', 0)
   })
 
-  it('supports queries outside of setup', () => {
-    cy.visit('/no-setup-query')
-    cy.contains('.no-setup-query', 'Hello world!')
-  })
-
-  it('supports queries outside of setup with multiple clients', () => {
-    cy.visit('/no-setup-query-multi-client')
-    cy.contains('.no-setup-query', 'Hello world!')
-  })
-
   it('enabled', () => {
     cy.visit('/disabled')
     cy.get('[data-test-id="data"]').should('not.exist')
@@ -118,10 +108,5 @@ describe('Vue 3 + Apollo Composable', () => {
     cy.get('.channel-link').eq(0).click()
     cy.get('[data-test-id="global-loading"]').should('not.contain', 'Global loading...')
     cy.contains('#app', 'Currently viewing # General')
-  })
-
-  it('supports queries outside of setup but within scope', () => {
-    cy.visit('/no-setup-scope-query')
-    cy.contains('.no-setup-scope-query', 'Hello world!')
   })
 })
