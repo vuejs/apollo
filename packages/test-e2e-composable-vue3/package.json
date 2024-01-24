@@ -6,7 +6,7 @@
     "dev": "vite --port 8080",
     "build": "vite build",
     "preview": "vite preview --port 8080",
-    "test": "pnpm run test:e2e",
+    "test": "pnpm run build && pnpm run test:e2e",
     "test:e2e": "start-server-and-test preview http://localhost:8080 test:e2e:run",
     "test:e2e:run": "start-server-and-test api 'http-get://localhost:4042/graphql?query=%7B__typename%7D' test:e2e:cy",
     "test:e2e:cy": "cypress run --headless",
