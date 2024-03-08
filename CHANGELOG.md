@@ -1,5 +1,20 @@
 # Changelog
 
+## v4.0.2
+
+
+### 🩹 Fixes
+
+  - Use shallowRef on result & error (08f0fcd)
+
+### 📖 Documentation
+
+  - Remove mentions of fetchResults, fix #1060 (#1060)
+
+### ❤️  Contributors
+
+- Guillaume Chau ([@Akryum](http://github.com/Akryum))
+
 ## v4.0.1
 
 
