@@ -8,6 +8,7 @@ import {
   getCurrentInstance,
   onBeforeUnmount,
   nextTick,
+  shallowRef,
 } from 'vue-demi'
 import type {
   OperationVariables,
@@ -127,9 +128,9 @@ export function useSubscription <
   const variablesRef = paramToRef(variables)
   const optionsRef = paramToReactive(options)
 
-  const result = ref<TResult | null | undefined>()
+  const result = shallowRef<TResult | null | undefined>()
   const resultEvent = useEventHook<[FetchResult<TResult>, OnResultContext]>()
-  const error = ref<ApolloError | null>(null)
+  const error = shallowRef<ApolloError | null>(null)
   const errorEvent = useEventHook<[ApolloError, OnErrorContext]>()
 
   const loading = ref(false)

@@ -165,9 +165,9 @@ export function useQueryImpl<
   /**
    * Result from the query
    */
-  const result = ref<TResult | undefined>()
+  const result = shallowRef<TResult | undefined>()
   const resultEvent = useEventHook<[ApolloQueryResult<TResult>, OnResultContext]>()
-  const error = ref<ApolloError | null>(null)
+  const error = shallowRef<ApolloError | null>(null)
   const errorEvent = useEventHook<[ApolloError, OnErrorContext]>()
 
   // Loading

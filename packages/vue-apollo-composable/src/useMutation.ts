@@ -1,6 +1,6 @@
 import { DocumentNode } from 'graphql'
 import { MutationOptions, OperationVariables, FetchResult, TypedDocumentNode, ApolloError, ApolloClient } from '@apollo/client/core/index.js'
-import { ref, onBeforeUnmount, isRef, Ref, getCurrentInstance } from 'vue-demi'
+import { ref, onBeforeUnmount, isRef, Ref, getCurrentInstance, shallowRef } from 'vue-demi'
 import { useApolloClient } from './useApolloClient'
 import { ReactiveFunction } from './util/ReactiveFunction'
 import { useEventHook } from './util/useEventHook'
@@ -56,7 +56,7 @@ export function useMutation<
   const vm = getCurrentInstance()
   const loading = ref<boolean>(false)
   vm && trackMutation(loading)
-  const error = ref<ApolloError | null>(null)
+  const error = shallowRef<ApolloError | null>(null)
   const called = ref<boolean>(false)
 
   const doneEvent = useEventHook<[FetchResult<TResult, Record<string, any>, Record<string, any>>, OnDoneContext]>()
