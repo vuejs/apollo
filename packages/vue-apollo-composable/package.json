@@ -50,7 +50,7 @@
     "vue-demi": "^0.14.6"
   },
   "peerDependencies": {
-    "@apollo/client": "^3.4.13",
+    "@apollo/client": "^3.9.6",
     "@vue/composition-api": "^1.0.0",
     "graphql": ">=15",
     "vue": "^2.6.0 || ^3.1.0"
@@ -61,9 +61,9 @@
     }
   },
   "devDependencies": {
-    "@apollo/client": "^3.7.16",
+    "@apollo/client": "^3.9.6",
     "@types/throttle-debounce": "^5.0.0",
-    "graphql": "^16.7.1",
+    "graphql": "^16.8.1",
     "graphql-tag": "^2.12.6",
     "nodemon": "^1.19.4",
     "rimraf": "^5.0.1",
