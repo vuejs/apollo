@@ -15,10 +15,10 @@
     "api:dev": "test-server --simulate-latency 500"
   },
   "dependencies": {
-    "@apollo/client": "^3.7.16",
+    "@apollo/client": "^3.9.6",
     "@vue/apollo-composable": "workspace:*",
     "@vue/apollo-util": "workspace:*",
-    "graphql": "^16.7.1",
+    "graphql": "^16.8.1",
     "graphql-tag": "^2.12.6",
     "pinia": "^2.1.6",
     "test-server": "workspace:*",
