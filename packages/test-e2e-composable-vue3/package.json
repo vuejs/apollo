@@ -20,6 +20,7 @@
     "@vue/apollo-util": "workspace:*",
     "graphql": "^16.7.1",
     "graphql-tag": "^2.12.6",
+    "graphql-ws": "^5.15.0",
     "pinia": "^2.1.6",
     "test-server": "workspace:*",
     "vue": "^3.3.4",

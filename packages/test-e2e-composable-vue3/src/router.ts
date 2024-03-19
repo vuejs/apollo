@@ -79,5 +79,12 @@ export const router = createRouter({
         layout: 'blank',
       },
     },
+    {
+      path: '/subscriptions',
+      component: () => import('./components/Subscriptions.vue'),
+      meta: {
+        layout: 'blank',
+      },
+    },
   ],
 })
