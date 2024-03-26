@@ -6,7 +6,7 @@ import {
   isRef,
   computed,
   getCurrentInstance,
-  onBeforeUnmount,
+  onScopeDispose,
   nextTick,
   shallowRef,
 } from 'vue-demi'
@@ -298,7 +298,7 @@ export function useSubscription <
   })
 
   // Teardown
-  vm && onBeforeUnmount(stop)
+  vm && onScopeDispose(stop)
 
   return {
     result,

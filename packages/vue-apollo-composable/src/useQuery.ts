@@ -6,7 +6,7 @@ import {
   watch,
   onServerPrefetch,
   getCurrentInstance,
-  onBeforeUnmount,
+  onScopeDispose,
   nextTick,
   shallowRef,
 } from 'vue-demi'
@@ -615,7 +615,7 @@ export function useQueryImpl<
   }
 
   // Teardown
-  vm && onBeforeUnmount(() => {
+  vm && onScopeDispose(() => {
     stop()
     subscribeToMoreItems.length = 0
   })

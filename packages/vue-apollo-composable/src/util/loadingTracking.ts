@@ -1,4 +1,4 @@
-import { Ref, watch, onUnmounted, ref, getCurrentInstance, onBeforeUnmount } from 'vue-demi'
+import { Ref, watch, onUnmounted, ref, getCurrentInstance, onScopeDispose } from 'vue-demi'
 import { isServer } from './env.js'
 
 export interface LoadingTracking {
@@ -61,7 +61,7 @@ function track (loading: Ref<boolean>, type: keyof LoadingTracking) {
     immediate: true,
   })
 
-  onBeforeUnmount(() => {
+  onScopeDispose(() => {
     if (loading.value) {
       if (tracking) tracking[type].value--
       globalTracking[type].value--

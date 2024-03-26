@@ -1,6 +1,6 @@
 import { DocumentNode } from 'graphql'
 import { MutationOptions, OperationVariables, FetchResult, TypedDocumentNode, ApolloError, ApolloClient } from '@apollo/client/core/index.js'
-import { ref, onBeforeUnmount, isRef, Ref, getCurrentInstance, shallowRef } from 'vue-demi'
+import { ref, onScopeDispose, isRef, Ref, getCurrentInstance, shallowRef } from 'vue-demi'
 import { useApolloClient } from './useApolloClient'
 import { ReactiveFunction } from './util/ReactiveFunction'
 import { useEventHook } from './util/useEventHook'
@@ -118,7 +118,7 @@ export function useMutation<
     return null
   }
 
-  vm && onBeforeUnmount(() => {
+  vm && onScopeDispose(() => {
     loading.value = false
   })
 
