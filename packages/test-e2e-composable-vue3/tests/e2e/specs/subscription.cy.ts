@@ -9,6 +9,7 @@ describe('Subscription', () => {
     cy.get('input').type('Meow{enter}')
     cy.get('.message').should('have.length', 3)
     cy.get('.message').should('contain', 'Meow')
+    cy.get('input').should('have.value', '')
     cy.get('input').type('Waf{enter}')
     cy.get('.message').should('have.length', 6)
     cy.get('.message').should('contain', 'Waf')
