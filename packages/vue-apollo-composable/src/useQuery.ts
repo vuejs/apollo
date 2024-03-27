@@ -5,8 +5,8 @@ import {
   computed,
   watch,
   onServerPrefetch,
-  getCurrentInstance,
-  onBeforeUnmount,
+  getCurrentScope,
+  onScopeDispose,
   nextTick,
   shallowRef,
 } from 'vue-demi'
@@ -33,8 +33,6 @@ import { useEventHook } from './util/useEventHook'
 import { trackQuery } from './util/loadingTracking'
 import { resultErrorsToApolloError, toApolloError } from './util/toApolloError'
 import { isServer } from './util/env'
-
-import type { CurrentInstance } from './util/types'
 
 export interface UseQueryOptions<
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -152,8 +150,7 @@ export function useQueryImpl<
   options: OptionsParameter<TResult, TVariables> = {},
   lazy = false,
 ): UseQueryReturn<TResult, TVariables> {
-  // Is on server?
-  const vm = getCurrentInstance() as CurrentInstance | null
+  const currentScope = getCurrentScope()
 
   const currentOptions = ref<UseQueryOptions<TResult, TVariables>>()
 
@@ -176,7 +173,7 @@ export function useQueryImpl<
    * Indicates if a network request is pending
    */
   const loading = ref(false)
-  vm && trackQuery(loading)
+  currentScope && trackQuery(loading)
   const networkStatus = ref<number>()
 
   // SSR
@@ -202,7 +199,7 @@ export function useQueryImpl<
     firstRejectError = undefined
   }
 
-  vm && onServerPrefetch?.(() => {
+  currentScope && onServerPrefetch?.(() => {
     if (!isEnabled.value || (isServer && currentOptions.value?.prefetch === false)) return
 
     return new Promise<void>((resolve, reject) => {
@@ -615,10 +612,14 @@ export function useQueryImpl<
   }
 
   // Teardown
-  vm && onBeforeUnmount(() => {
-    stop()
-    subscribeToMoreItems.length = 0
-  })
+  if (currentScope) {
+    onScopeDispose(() => {
+      stop()
+      subscribeToMoreItems.length = 0
+    })
+  } else {
+    console.warn('[Vue apollo] useQuery() is called outside of an active effect scope and the query will not be automatically stopped.')
+  }
 
   return {
     result,

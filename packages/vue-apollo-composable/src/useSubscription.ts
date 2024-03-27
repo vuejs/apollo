@@ -5,8 +5,8 @@ import {
   watch,
   isRef,
   computed,
-  getCurrentInstance,
-  onBeforeUnmount,
+  getCurrentScope,
+  onScopeDispose,
   nextTick,
   shallowRef,
 } from 'vue-demi'
@@ -27,7 +27,6 @@ import { paramToReactive } from './util/paramToReactive'
 import { useApolloClient } from './useApolloClient'
 import { useEventHook } from './util/useEventHook'
 import { trackSubscription } from './util/loadingTracking'
-import type { CurrentInstance } from './util/types'
 import { toApolloError } from './util/toApolloError'
 import { isServer } from './util/env'
 
@@ -121,8 +120,7 @@ export function useSubscription <
   variables: VariablesParameter<TVariables> | undefined = undefined,
   options: OptionsParameter<TResult, TVariables> = {},
 ): UseSubscriptionReturn<TResult, TVariables> {
-  // Is on server?
-  const vm = getCurrentInstance() as CurrentInstance | null
+  const currentScope = getCurrentScope()
 
   const documentRef = paramToRef(document)
   const variablesRef = paramToRef(variables)
@@ -134,7 +132,7 @@ export function useSubscription <
   const errorEvent = useEventHook<[ApolloError, OnErrorContext]>()
 
   const loading = ref(false)
-  vm && trackSubscription(loading)
+  currentScope && trackSubscription(loading)
 
   // Apollo Client
   const { resolveClient } = useApolloClient()
@@ -298,7 +296,11 @@ export function useSubscription <
   })
 
   // Teardown
-  vm && onBeforeUnmount(stop)
+  if (currentScope) {
+    onScopeDispose(stop)
+  } else {
+    console.warn('[Vue apollo] useSubscription() is called outside of an active effect scope and the subscription will not be automatically stopped.')
+  }
 
   return {
     result,

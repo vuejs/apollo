@@ -1,5 +1,7 @@
-import { Ref, watch, onUnmounted, ref, getCurrentInstance, onBeforeUnmount } from 'vue-demi'
+import { Ref, watch, onUnmounted, ref, getCurrentScope, onScopeDispose } from 'vue-demi'
 import { isServer } from './env.js'
+
+import type { EffectScope } from 'vue-demi'
 
 export interface LoadingTracking {
   queries: Ref<number>
@@ -8,7 +10,7 @@ export interface LoadingTracking {
 }
 
 export interface AppLoadingTracking extends LoadingTracking {
-  components: Map<any, LoadingTracking>
+  components: Map<EffectScope, LoadingTracking>
 }
 
 export const globalTracking: AppLoadingTracking = {
@@ -19,26 +21,26 @@ export const globalTracking: AppLoadingTracking = {
 }
 
 export function getCurrentTracking () {
-  const vm = getCurrentInstance()
-  if (!vm) {
+  const currentScope = getCurrentScope()
+  if (!currentScope) {
     return {}
   }
 
   let tracking: LoadingTracking
 
-  if (!globalTracking.components.has(vm)) {
+  if (!globalTracking.components.has(currentScope)) {
     // Add per-component tracking
-    globalTracking.components.set(vm, tracking = {
+    globalTracking.components.set(currentScope, tracking = {
       queries: ref(0),
       mutations: ref(0),
       subscriptions: ref(0),
     })
     // Cleanup
     onUnmounted(() => {
-      globalTracking.components.delete(vm)
+      globalTracking.components.delete(currentScope)
     })
   } else {
-    tracking = globalTracking.components.get(vm) as LoadingTracking
+    tracking = globalTracking.components.get(currentScope) as LoadingTracking
   }
 
   return {
@@ -61,7 +63,7 @@ function track (loading: Ref<boolean>, type: keyof LoadingTracking) {
     immediate: true,
   })
 
-  onBeforeUnmount(() => {
+  onScopeDispose(() => {
     if (loading.value) {
       if (tracking) tracking[type].value--
       globalTracking[type].value--
