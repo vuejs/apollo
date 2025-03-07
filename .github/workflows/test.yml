@@ -20,33 +20,16 @@ jobs:
     name: Build and test
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Install node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4.0.0
-
-      - name: Get pnpm store directory
-        id: pnpm-cache
+      - name: Set alternate npm integrity keys
         run: |
-          echo "pnpm_cache_dir=$(pnpm store path)" >> "$GITHUB_OUTPUT"
-
-      - name: Cache pnpm modules
-        uses: actions/cache@v4
+          echo COREPACK_INTEGRITY_KEYS="$(curl https://registry.npmjs.org/-/npm/v1/keys | jq -c '{npm: .keys}')" >> $GITHUB_ENV
+      - uses: actions/checkout@v4
+      - run: corepack enable
+      - uses: actions/setup-node@v4
         with:
-          path: |
-            ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
-            ~/.cache/Cypress
-          key: pnpm-v1-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            pnpm-v1-${{ runner.os }}-
-
-      - name: Install dependencies
-        run: pnpm install
+          node-version: 23
+          cache: pnpm
+      - run: pnpm install
 
       - name: Lint
         run: pnpm run lint
