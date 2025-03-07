@@ -109,6 +109,7 @@ export function useMutation<
       const apolloError = toApolloError(e)
       error.value = apolloError
       loading.value = false
+      await nextTick()
       errorEvent.trigger(apolloError, {
         client,
       })
