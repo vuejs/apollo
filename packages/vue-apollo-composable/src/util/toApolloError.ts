@@ -1,5 +1,5 @@
 import { ApolloError, isApolloError } from '@apollo/client/core/index.js'
-import { GraphQLErrors } from '@apollo/client/errors/index.js'
+import type { GraphQLFormattedError } from 'graphql'
 
 export function toApolloError (error: unknown): ApolloError {
   if (!(error instanceof Error)) {
@@ -16,7 +16,7 @@ export function toApolloError (error: unknown): ApolloError {
   return new ApolloError({ networkError: error, errorMessage: error.message })
 }
 
-export function resultErrorsToApolloError (errors: GraphQLErrors): ApolloError {
+export function resultErrorsToApolloError (errors: ReadonlyArray<GraphQLFormattedError>): ApolloError {
   return new ApolloError({
     graphQLErrors: errors,
     errorMessage: `GraphQL response contains errors: ${errors.map((e: any) => e.message).join(' | ')}`,

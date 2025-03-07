@@ -23,7 +23,7 @@
     "dev": "nodemon --exec 'pnpm run build:es && pnpm run build:umd' --watch src --watch lib",
     "test": "pnpm run test:types && pnpm run test:unit",
     "test:types": "tsc -p types/test",
-    "test:unit": "jest"
+    "test:unit": "vitest run"
   },
   "repository": {
     "type": "git",
@@ -66,7 +66,6 @@
     "cross-env": "^6.0.3",
     "graphql": "^15.8.0",
     "graphql-tag": "^2.12.6",
-    "jest": "^24.9.0",
     "nodemon": "^1.19.4",
     "rimraf": "^3.0.2",
     "rollup": "^1.32.1",
@@ -76,10 +75,8 @@
     "rollup-plugin-replace": "^2.2.0",
     "rollup-plugin-uglify": "^6.0.4",
     "uglify-es": "^3.3.9",
+    "vitest": "^3.0.8",
     "vue": "^3.2.37",
     "vue-property-decorator": "^10.0.0-rc.3"
-  },
-  "jest": {
-    "testRegex": "tests/unit/.*\\.test.js$"
   }
 }

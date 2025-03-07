@@ -22,17 +22,17 @@
     "@vue/eslint-config-typescript": "^7.0.0",
     "conventional-changelog-cli": "^2.2.2",
     "core-js": "^3.23.2",
-    "esbuild": "^0.8.57",
-    "esbuild-node-externals": "^1.4.1",
+    "esbuild": "^0.25.0",
+    "esbuild-node-externals": "^1.18.0",
     "eslint": "^7.32.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.3.1",
     "eslint-plugin-standard": "^5.0.0",
     "eslint-plugin-vue": "^7.20.0",
-    "typescript": "^4.7.4"
+    "typescript": "^5.8.2"
   },
-  "packageManager": "pnpm@9.7.1",
+  "packageManager": "pnpm@10.6.1+sha512.40ee09af407fa9fbb5fbfb8e1cb40fbb74c0af0c3e10e9224d7b53c7658528615b2c92450e74cfad91e3a2dcafe3ce4050d80bda71d757756d2ce2b66213e9a3",
   "pnpm": {
     "overrides": {
       "eslint-scope": "^5",

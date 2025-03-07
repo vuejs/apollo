@@ -1,2 +1,10 @@
 packages:
-  - 'packages/*'
+  - packages/*
+onlyBuiltDependencies:
+  - '@apollo/protobufjs'
+  - core-js
+  - core-js-pure
+  - cypress
+  - esbuild
+  - nodemon
+  - vue-demi

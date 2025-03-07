@@ -57,7 +57,6 @@
     "babel-core": "^7.0.0-bridge.0",
     "cross-env": "^6.0.3",
     "graphql": "^15.8.0",
-    "jest": "^24.9.0",
     "nodemon": "^1.19.4",
     "rimraf": "^3.0.2",
     "rollup": "^1.32.1",
@@ -69,8 +68,5 @@
     "uglify-es": "^3.3.9",
     "vue": "^3.2.37",
     "vue-property-decorator": "^8.5.1"
-  },
-  "jest": {
-    "testRegex": "tests/unit/.*\\.test.js$"
   }
 }

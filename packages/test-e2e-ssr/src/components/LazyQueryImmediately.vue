@@ -46,7 +46,11 @@ export default defineComponent({
       <div>Loaded channel: {{ channel.label }}</div>
       <div>Messages: {{ channel.messages.length }}</div>
 
-      <div v-for="message in channel.messages" :key="message.id" class="message">
+      <div
+        v-for="message in channel.messages"
+        :key="message.id"
+        class="message"
+      >
         {{ message.text }}
       </div>
     </div>
