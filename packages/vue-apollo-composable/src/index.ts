@@ -6,6 +6,7 @@ export {
 
 export {
   useLazyQuery,
+  UseLazyQueryReturn,
 } from './useLazyQuery'
 
 export {
