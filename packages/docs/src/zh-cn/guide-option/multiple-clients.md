@@ -19,8 +19,8 @@ const defaultOptions = {
 }
 
 const clientAOptions = {
-    // 你可以使用 `https` 进行安全连接（在生产环境中推荐）
-    httpEndpoint: 'http://localhost:4000/graphql',
+  // 你可以使用 `https` 进行安全连接（在生产环境中推荐）
+  httpEndpoint: 'http://localhost:4000/graphql',
 }
 
 const clientBOptions = {
@@ -28,28 +28,29 @@ const clientBOptions = {
 }
 
 // 在 Vue 应用程序文件中调用此方法
-export function createProvider (options = {}) {
-  const createA= createApolloClient({
+export function createProvider(options = {}) {
+  const createA = createApolloClient({
     ...defaultOptions,
     ...clientAOptions,
-  });
+  })
 
   const createB = createApolloClient({
     ...defaultOptions,
     ...clientBOptions,
-  });
+  })
 
-  const a = createA.apolloClient;
-  const b = createB.apolloClient;
+  const a = createA.apolloClient
+  const b = createB.apolloClient
 
   // 创建 vue apollo provider
   const apolloProvider = createApolloProvider({
     clients: {
       a,
       b
-    }
+    },
     defaultClient: a,
-})
+  })
+}
 ```
 
 在组件的 `apollo` 选项中，你可以使用 `$client` 为所有的查询、订阅和变更定义要使用的客户端（仅限在此组件内）：
@@ -65,8 +66,12 @@ export default {
 你也可以在单个查询，订阅和变更的选项中使用 `client` 属性来指定客户端：
 
 ```js
-tags: {
-  query: gql`...`,
-  client: 'b',
+export default {
+  apollo: {
+    tags: {
+      query: gql`...`,
+      client: 'b',
+    }
+  }
 }
 ```

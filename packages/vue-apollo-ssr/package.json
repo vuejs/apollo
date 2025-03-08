@@ -2,10 +2,16 @@
   "name": "@vue/apollo-ssr",
   "version": "4.0.0",
   "description": "Apollo GraphQL for Vue - Server Side Rendering utilities",
+  "author": "Guillaume Chau <guillaume.b.chau@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://apollo.vuejs.org/",
   "repository": {
     "type": "git",
     "url": "https://github.com/vuejs/vue-apollo.git",
     "directory": "packages/vue-apollo-ssr"
+  },
+  "bugs": {
+    "url": "https://github.com/vuejs/vue-apollo/issues"
   },
   "keywords": [
     "vue",
@@ -13,18 +19,9 @@
     "graphql",
     "ssr"
   ],
-  "author": "Guillaume Chau <guillaume.b.chau@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/vuejs/vue-apollo/issues"
-  },
-  "homepage": "https://apollo.vuejs.org/",
   "publishConfig": {
     "access": "public"
   },
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/esm/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/esm/index.d.ts",
@@ -33,6 +30,9 @@
     },
     "./*": "./*"
   },
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
   "files": [
     "dist"
   ],

@@ -19,8 +19,8 @@ const defaultOptions = {
 }
 
 const clientAOptions = {
-    // You can use `https` for secure connection (recommended in production)
-    httpEndpoint: 'http://localhost:4000/graphql',
+  // You can use `https` for secure connection (recommended in production)
+  httpEndpoint: 'http://localhost:4000/graphql',
 }
 
 const clientBOptions = {
@@ -28,28 +28,29 @@ const clientBOptions = {
 }
 
 // Call this in the Vue app file
-export function createProvider (options = {}) {
-  const createA= createApolloClient({
+export function createProvider(options = {}) {
+  const createA = createApolloClient({
     ...defaultOptions,
     ...clientAOptions,
-  });
+  })
 
   const createB = createApolloClient({
     ...defaultOptions,
     ...clientBOptions,
-  });
+  })
 
-  const a = createA.apolloClient;
-  const b = createB.apolloClient;
+  const a = createA.apolloClient
+  const b = createB.apolloClient
 
   // Create vue apollo provider
   const apolloProvider = createApolloProvider({
     clients: {
       a,
       b
-    }
+    },
     defaultClient: a,
-})
+  })
+}
 ```
 
 In the component `apollo` option, you can define the client for all the queries, subscriptions and mutations with `$client` (only for this component):
@@ -65,8 +66,12 @@ export default {
 You can also specify the client in individual queries, subscriptions and mutations with the `client` property in the options:
 
 ```js
-tags: {
-  query: gql`...`,
-  client: 'b',
+export default {
+  apollo: {
+    tags: {
+      query: gql`...`,
+      client: 'b',
+    }
+  }
 }
 ```

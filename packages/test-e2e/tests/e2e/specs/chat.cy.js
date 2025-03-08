@@ -1,6 +1,6 @@
 // https://docs.cypress.io/api/introduction/api.html
 
-function login () {
+function login() {
   cy.visit('/')
   cy.get('input[name="email"]').clear().type('a@b.c')
   cy.get('input[name="password"]').clear().type('abc')
@@ -19,8 +19,7 @@ describe('test', () => {
     cy.get('input[name="email"]').type('a@b.c')
     cy.get('input[name="password"]').type('abc')
     cy.get('input[name="nickname"]').type('Naomi')
-    cy.get('[data-id="submit-new-account"]').click()
-      .should('be.disabled')
+    cy.get('[data-id="submit-new-account"]').click().should('be.disabled')
     cy.get('[data-id="submit-new-account"]').should('not.to.exist')
   })
 
@@ -46,8 +45,7 @@ describe('test', () => {
   it('sends a message', () => {
     login()
     cy.contains('#general').click()
-    cy.get('.form-input').type('Hello!{enter}')
-      .should('be.disabled')
+    cy.get('.form-input').type('Hello!{enter}').should('be.disabled')
     cy.get('.channel-view .body .message-item')
       .should('have.length', 2)
     cy.get('.message-item').contains('Hello!')
@@ -102,8 +100,7 @@ describe('test', () => {
   it('redirects to login', () => {
     cy.visit('/chan/general')
     cy.contains('#general').should('not.to.exist')
-    cy.url().should('not.include', '/chan/general')
-      .should('include', '/login')
+    cy.url().should('not.include', '/chan/general').should('include', '/login')
     cy.get('[data-id="create-account"]')
   })
 })

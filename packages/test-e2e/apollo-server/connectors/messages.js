@@ -1,7 +1,7 @@
 const shortid = require('shortid')
 const triggers = require('../triggers')
 
-function createDefaultMessages () {
+function createDefaultMessages() {
   return [
     {
       id: '__bot:1',
@@ -15,7 +15,7 @@ function createDefaultMessages () {
 
 let messages = createDefaultMessages()
 
-function publishChange ({ type, message }, context) {
+function publishChange({ type, message }, context) {
   context.pubsub.publish(triggers.MESSAGE_CHANGED, {
     messageChanged: {
       type,
@@ -42,8 +42,8 @@ exports.add = ({ channelId, content }, context) => {
       const message = {
         id: shortid(),
         userId: context.userId,
-        channelId: channelId,
-        content: content,
+        channelId,
+        content,
         dateAdded: Date.now(),
       }
       messages.push(message)
@@ -58,7 +58,8 @@ exports.add = ({ channelId, content }, context) => {
 
 exports.update = ({ id, content }, context) => {
   const message = exports.getOne(id, context)
-  if (!message) throw new Error('Message not found')
+  if (!message)
+    throw new Error('Message not found')
   Object.assign(message, {
     content,
     dateUpdated: Date.now(),
@@ -72,7 +73,8 @@ exports.update = ({ id, content }, context) => {
 
 exports.remove = (id, context) => {
   const index = messages.findIndex(m => m.id === id)
-  if (index === -1) throw new Error('Message not found')
+  if (index === -1)
+    throw new Error('Message not found')
   const message = messages[index]
   messages.splice(index, 1)
   publishChange({

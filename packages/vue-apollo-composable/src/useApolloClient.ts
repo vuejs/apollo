@@ -1,5 +1,5 @@
+import type { ApolloClient } from '@apollo/client/core/index.js'
 import { hasInjectionContext, inject } from 'vue-demi'
-import { ApolloClient } from '@apollo/client/core/index.js'
 
 export const DefaultApolloClient = Symbol('default-apollo-client')
 export const ApolloClients = Symbol('apollo-clients')
@@ -15,18 +15,18 @@ export interface UseApolloClientReturn<TCacheShape> {
   readonly client: ApolloClient<TCacheShape>
 }
 
-function resolveDefaultClient<T> (providedApolloClients: ClientDict<T> | null, providedApolloClient: ApolloClient<T> | null): NullableApolloClient<T> {
+function resolveDefaultClient<T>(providedApolloClients: ClientDict<T> | null, providedApolloClient: ApolloClient<T> | null): NullableApolloClient<T> {
   const resolvedClient = providedApolloClients
     ? providedApolloClients.default
     : (providedApolloClient ?? undefined)
   return resolvedClient
 }
 
-function resolveClientWithId<T> (providedApolloClients: ClientDict<T> | null, clientId: ClientId): NullableApolloClient<T> {
+function resolveClientWithId<T>(providedApolloClients: ClientDict<T> | null, clientId: ClientId): NullableApolloClient<T> {
   return providedApolloClients?.[clientId]
 }
 
-export function useApolloClient<TCacheShape = any> (clientId?: ClientId): UseApolloClientReturn<TCacheShape> {
+export function useApolloClient<TCacheShape = any>(clientId?: ClientId): UseApolloClientReturn<TCacheShape> {
   let resolveImpl: ResolveClient<TCacheShape, NullableApolloClient<TCacheShape>>
 
   // Save current client in current closure scope
@@ -39,7 +39,8 @@ export function useApolloClient<TCacheShape = any> (clientId?: ClientId): UseApo
       }
       return resolveDefaultClient(savedCurrentClients, savedCurrentClients.default)
     }
-  } else {
+  }
+  else {
     const providedApolloClients: ClientDict<TCacheShape> | null = inject(ApolloClients, null)
     const providedApolloClient: ApolloClient<TCacheShape> | null = inject(DefaultApolloClient, null)
 
@@ -59,7 +60,7 @@ export function useApolloClient<TCacheShape = any> (clientId?: ClientId): UseApo
     }
   }
 
-  function resolveClient (id: ClientId | undefined = clientId) {
+  function resolveClient(id: ClientId | undefined = clientId) {
     const client = resolveImpl(id)
     if (!client) {
       throw new Error(
@@ -73,7 +74,7 @@ export function useApolloClient<TCacheShape = any> (clientId?: ClientId): UseApo
 
   return {
     resolveClient,
-    get client () {
+    get client() {
       return resolveClient()
     },
   }
@@ -81,7 +82,7 @@ export function useApolloClient<TCacheShape = any> (clientId?: ClientId): UseApo
 
 let currentApolloClients: ClientDict<any> = {}
 
-export function provideApolloClient<TCacheShape = any> (client: ApolloClient<TCacheShape>) {
+export function provideApolloClient<TCacheShape = any>(client: ApolloClient<TCacheShape>) {
   currentApolloClients = {
     default: client,
   }
@@ -92,7 +93,7 @@ export function provideApolloClient<TCacheShape = any> (client: ApolloClient<TCa
   }
 }
 
-export function provideApolloClients<TCacheShape = any> (clients: ClientDict<TCacheShape>) {
+export function provideApolloClients<TCacheShape = any>(clients: ClientDict<TCacheShape>) {
   currentApolloClients = clients
   return function <TFnResult = any> (fn: () => TFnResult) {
     const result = fn()

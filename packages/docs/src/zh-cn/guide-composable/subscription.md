@@ -60,7 +60,7 @@ subscription onMessageAdded($channelId: ID!) {
 首先，初始化 GraphQL websocket 连接：
 
 ```js
-import { WebSocketLink } from "@apollo/client/link/ws"
+import { WebSocketLink } from '@apollo/client/link/ws'
 
 const wsLink = new WebSocketLink({
   uri: `ws://localhost:5000/`,
@@ -73,13 +73,13 @@ const wsLink = new WebSocketLink({
 We need to either use the `WebSocketLink` or the `HttpLink` depending on the operation type:
 
 ```js
-import { HttpLink, split } from "@apollo/client/core"
-import { WebSocketLink } from "@apollo/client/link/ws"
-import { getMainDefinition } from "@apollo/client/utilities"
+import { HttpLink, split } from '@apollo/client/core'
+import { WebSocketLink } from '@apollo/client/link/ws'
+import { getMainDefinition } from '@apollo/client/utilities'
 
 // 创建一个 http 连接：
 const httpLink = new HttpLink({
-  uri: "http://localhost:3000/graphql"
+  uri: 'http://localhost:3000/graphql'
 })
 
 // 创建一个 WebSocket 连接：
@@ -96,8 +96,8 @@ const link = split(
   ({ query }) => {
     const definition = getMainDefinition(query)
     return (
-      definition.kind === "OperationDefinition" &&
-      definition.operation === "subscription"
+      definition.kind === 'OperationDefinition'
+      && definition.operation === 'subscription'
     )
   },
   wsLink,
@@ -234,7 +234,7 @@ export default {
 
 ```js
 const variables = ref({
-  channelId: "abc"
+  channelId: 'abc'
 })
 
 const { result } = useSubscription(
@@ -254,7 +254,7 @@ const { result } = useSubscription(
 
 ```js
 const variables = reactive({
-  channelId: "abc"
+  channelId: 'abc'
 })
 
 const { result } = useSubscription(
@@ -273,7 +273,7 @@ const { result } = useSubscription(
 使用函数（将会是响应式的）：
 
 ```js
-const channelId = ref("abc")
+const channelId = ref('abc')
 
 const { result } = useSubscription(
   gql`
@@ -306,7 +306,7 @@ const { result } = useSubscription(
   `,
   null,
   {
-    fetchPolicy: "no-cache"
+    fetchPolicy: 'no-cache'
   }
 )
 ```
@@ -325,7 +325,7 @@ const { result } = useSubscription(
   `,
   null,
   () => ({
-    fetchPolicy: "no-cache"
+    fetchPolicy: 'no-cache'
   })
 )
 ```
@@ -359,7 +359,7 @@ function enableSub() {
 你可以从 `useSubscription` 中检索加载和错误状态：
 
 ```js
-const { loading, error } = useSubscription(...)
+const { loading, error } = useSubscription(/* ... */)
 ```
 
 ### 事件钩子
@@ -369,9 +369,9 @@ const { loading, error } = useSubscription(...)
 从服务端收到新结果时调用。
 
 ```js
-const { onResult } = useSubscription(...)
+const { onResult } = useSubscription(/* ... */)
 
-onResult(result => {
+onResult((result) => {
   console.log(result.data)
 })
 ```
@@ -383,9 +383,9 @@ onResult(result => {
 ```js
 import { logErrorMessages } from '@vue/apollo-util'
 
-const { onError } = useSubscription(...)
+const { onError } = useSubscription(/* ... */)
 
-onError(error => {
+onError((error) => {
   logErrorMessages(error)
 })
 ```
@@ -483,7 +483,7 @@ subscribeToMore(() => ({
 
 在后一种情况下，订阅将随着选项的更改自动重新启动。
 
-现在你可以为 GraphQL 文档放置​​相关的订阅，并在必要时添加变量：
+现在你可以为 GraphQL 文档放置相关的订阅，并在必要时添加变量：
 
 ```vue{21-33}
 <script>
@@ -555,18 +555,19 @@ subscribeToMore(() => ({
 在很多情况下，在允许客户端接收订阅结果之前，有必要对客户端进行身份验证。为此 `SubscriptionClient` 构造函数接受一个 `connectionParams` 字段，该字段传递一个自定义对象，服务端可以在设置任何订阅之前使用该对象来验证连接。
 
 ```js
-import { WebSocketLink } from "@apollo/client/link/ws"
+import { WebSocketLink } from '@apollo/client/link/ws'
 
 const wsLink = new WebSocketLink({
   uri: `ws://localhost:5000/`,
   options: {
     reconnect: true,
     connectionParams: {
-        authToken: user.authToken,
+      authToken: user.authToken,
     },
+  },
 })
 ```
 
 ::: tip
-`connectionParams` 可以用于可能需要的任何其他用途，不仅可以进行身份​​验证，还可以使用 [SubscriptionsServer](https://www.apollographql.com/docs/graphql-subscriptions/authentication) 在服务端检查负载。
+`connectionParams` 可以用于可能需要的任何其他用途，不仅可以进行身份验证，还可以使用 [SubscriptionsServer](https://www.apollographql.com/docs/graphql-subscriptions/authentication) 在服务端检查负载。
 :::

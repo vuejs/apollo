@@ -1,27 +1,39 @@
 export {
-  useQuery,
-  UseQueryOptions,
-  UseQueryReturn,
-} from './useQuery'
+  ApolloClients,
+  DefaultApolloClient,
+  provideApolloClient,
+  provideApolloClients,
+  useApolloClient,
+  UseApolloClientReturn,
+} from './useApolloClient'
 
 export {
   useLazyQuery,
 } from './useLazyQuery'
 
 export {
-  useMutation,
-  UseMutationOptions,
-  UseMutationReturn,
+  useGlobalMutationLoading,
+  useGlobalQueryLoading,
+  useGlobalSubscriptionLoading,
+  useMutationLoading,
+  useQueryLoading,
+  useSubscriptionLoading,
+} from './useLoading'
+
+export {
   MutateFunction,
   MutateOverrideOptions,
   MutateResult,
+  useMutation,
+  UseMutationOptions,
+  UseMutationReturn,
 } from './useMutation'
 
 export {
-  useSubscription,
-  UseSubscriptionOptions,
-  UseSubscriptionReturn,
-} from './useSubscription'
+  useQuery,
+  UseQueryOptions,
+  UseQueryReturn,
+} from './useQuery'
 
 export {
   useResult,
@@ -29,19 +41,7 @@ export {
 } from './useResult'
 
 export {
-  useQueryLoading,
-  useGlobalQueryLoading,
-  useMutationLoading,
-  useGlobalMutationLoading,
-  useSubscriptionLoading,
-  useGlobalSubscriptionLoading,
-} from './useLoading'
-
-export {
-  DefaultApolloClient,
-  ApolloClients,
-  useApolloClient,
-  UseApolloClientReturn,
-  provideApolloClient,
-  provideApolloClients,
-} from './useApolloClient'
+  useSubscription,
+  UseSubscriptionOptions,
+  UseSubscriptionReturn,
+} from './useSubscription'

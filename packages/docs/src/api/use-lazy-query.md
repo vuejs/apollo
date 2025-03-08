@@ -11,15 +11,16 @@ Extends [useQuery](./use-query.md)
     ```js
     const { load, refetch } = useLazyQuery(query, variables, options)
 
-    function fetchOrRefetch () {
+    function fetchOrRefetch() {
       load() || refetch()
     }
 
-    function waitForLoad () {
+    async function waitForLoad() {
       try {
         const result = await load()
         // do something with result
-      } catch (error) {
+      }
+      catch (error) {
         // handle error
       }
     }

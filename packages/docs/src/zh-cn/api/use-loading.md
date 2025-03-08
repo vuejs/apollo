@@ -12,8 +12,8 @@ import { useQuery, useQueryLoading } from '@vue/apollo-composable'
 
 export default {
   setup () {
-    const { result: one } = useQuery(...)
-    const { result: two } = useQuery(...)
+    const { result: one } = useQuery(/* ... */)
+    const { result: two } = useQuery(/* ... */)
     const loading = useQueryLoading()
 
     return {

@@ -23,12 +23,14 @@ import gql from 'graphql-tag'
 Put the [gql](https://github.com/apollographql/graphql-tag) query directly as the value:
 
 ```js
-apollo: {
+export default {
+  apollo: {
   // Simple query that will update the 'hello' vue property
-  hello: gql`query {
+    hello: gql`query {
     hello
   }`,
-},
+  },
+}
 ```
 
 You can then access the smart query with `this.$apollo.queries.<name>`.
@@ -36,12 +38,14 @@ You can then access the smart query with `this.$apollo.queries.<name>`.
 You can initialize the property in your vue component's `data` hook:
 
 ```js
-data () {
-  return {
+export default {
+  data() {
+    return {
     // Initialize your apollo data
-    hello: '',
+      hello: '',
+    }
   },
-},
+}
 ```
 
 Server-side, add the corresponding schema and resolver:
@@ -59,7 +63,7 @@ schema {
 
 export const resolvers = {
   Query: {
-    hello (root, args, context) {
+    hello(root, args, context) {
       return 'Hello world!'
     },
   },
@@ -86,22 +90,26 @@ You can then use your property as usual in your vue component:
 Please note that a common beginner's mistake is to use a data name different from the field name in the query, e.g.:
 
 ```js
-apollo: {
-  world: gql`query {
+export default {
+  apollo: {
+    world: gql`query {
     hello
   }`
+  }
 }
 ```
 
 Notice how `world` is different from `hello`; `vue-apollo` won't guess which data you want to put in the component from the query result. By default, it will just try the name you are using for the data in the component (which is the key in the `apollo` object), in this case `world`. If the names don't match, you can use `update` option to tell `vue-apollo` what to use as data from the result:
 
 ```js
-apollo: {
-  world: {
-    query: gql`query {
+export default {
+  apollo: {
+    world: {
+      query: gql`query {
       hello
     }`,
-    update: data => data.hello
+      update: data => data.hello
+    }
   }
 }
 ```
@@ -109,10 +117,12 @@ apollo: {
 You can also rename the field in the GraphQL document directly:
 
 ```js
-apollo: {
-  world: gql`query {
+export default {
+  apollo: {
+    world: gql`query {
     world: hello
   }`
+  }
 }
 ```
 
@@ -123,20 +133,22 @@ In this example, we rename the `hello` field to `world` so that `vue-apollo` can
 You can add variables (and other parameters) to your `gql` query by declaring `query` and `variables` in an object instead of just the GraphQL query:
 
 ```js
+export default {
 // Apollo-specific options
-apollo: {
+  apollo: {
   // Query with parameters
-  ping: {
+    ping: {
     // gql query
-    query: gql`query PingMessage($message: String!) {
+      query: gql`query PingMessage($message: String!) {
       ping(message: $message)
     }`,
-    // Static parameters
-    variables: {
-      message: 'Meow',
+      // Static parameters
+      variables: {
+        message: 'Meow',
+      },
     },
   },
-},
+}
 ```
 
 You can use the apollo `watchQuery` options in the object, like:
@@ -149,30 +161,34 @@ See the [apollo doc](https://www.apollographql.com/docs/react/api/core/apolloCli
 For example, you could add the `fetchPolicy` apollo option like this:
 
 ```js
-apollo: {
+export default {
+  apollo: {
   // Query with parameters
-  ping: {
-    query: gql`query PingMessage($message: String!) {
+    ping: {
+      query: gql`query PingMessage($message: String!) {
       ping(message: $message)
     }`,
-    variables: {
-      message: 'Meow'
+      variables: {
+        message: 'Meow'
+      },
+      // Additional options here
+      fetchPolicy: 'cache-and-network',
     },
-    // Additional options here
-    fetchPolicy: 'cache-and-network',
   },
-},
+}
 ```
 
 Again, you can initialize your property in your vue component:
 
 ```js
-data () {
-  return {
+export default {
+  data() {
+    return {
     // Initialize your apollo data
-    ping: '',
-  }
-},
+      ping: '',
+    }
+  },
+}
 ```
 
 Server-side, add the corresponding schema and resolver:
@@ -190,7 +206,7 @@ schema {
 
 export const resolvers = {
   Query: {
-    ping (root, { message }, context) {
+    ping(root, { message }, context) {
       return `Answering ${message}`
     },
   },
@@ -215,22 +231,24 @@ And then use it in your vue component:
 Use a function instead to make the parameters reactive with vue properties:
 
 ```js
+export default {
 // Apollo-specific options
-apollo: {
+  apollo: {
   // Query with parameters
-  ping: {
-    query: gql`query PingMessage($message: String!) {
+    ping: {
+      query: gql`query PingMessage($message: String!) {
       ping(message: $message)
     }`,
-    // Reactive parameters
-    variables () {
+      // Reactive parameters
+      variables() {
       // Use vue reactive properties here
-      return {
+        return {
           message: this.pingInput,
-      }
+        }
+      },
     },
   },
-},
+}
 ```
 
 This will re-fetch the query each time a parameter changes, for example:
@@ -266,24 +284,26 @@ Or for this specific `ping` query:
 You can use a function which will be called once when the component is created and it must return the option object:
 
 ```js
+export default {
 // Apollo-specific options
-apollo: {
+  apollo: {
   // Query with parameters
-  ping () {
+    ping() {
     // This is called once when the component is created
     // It must return the option object
-    return {
+      return {
       // gql query
-      query: gql`query PingMessage($message: String!) {
+        query: gql`query PingMessage($message: String!) {
         ping(message: $message)
       }`,
-      // Static parameters
-      variables: {
-        message: 'Meow',
-      },
-    }
+        // Static parameters
+        variables: {
+          message: 'Meow',
+        },
+      }
+    },
   },
-},
+}
 ```
 
 ::: tip
@@ -295,31 +315,36 @@ This also works for [subscriptions](./subscriptions.md).
 You can use a function for the `query` option. This will update the graphql query definition automatically:
 
 ```js
-// The featured tag can be either a random tag or the last added tag
-featuredTag: {
-  query () {
-    // Here you can access the component instance with 'this'
-    if (this.showTag === 'random') {
-      return gql`{
+export default {
+  apollo: {
+    // The featured tag can be either a random tag or the last added tag
+    featuredTag: {
+      query() {
+        // Here you can access the component instance with 'this'
+        if (this.showTag === 'random') {
+          return gql`{
         randomTag {
           id
           label
           type
         }
       }`
-    } else if (this.showTag === 'last') {
-      return gql`{
+        }
+        else if (this.showTag === 'last') {
+          return gql`{
         lastTag {
           id
           label
           type
         }
       }`
-    }
-  },
-  // We need this to assign the value of the 'featuredTag' component property
-  update: data => data.randomTag || data.lastTag,
-},
+        }
+      },
+      // We need this to assign the value of the 'featuredTag' component property
+      update: data => data.randomTag || data.lastTag,
+    },
+  }
+}
 ```
 
 ::: tip
@@ -331,28 +356,30 @@ This also works for [subscriptions](./subscriptions.md).
 If the query is skipped, it will disable it and the result will not be updated anymore. You can use the `skip` option:
 
 ```js
+export default {
 // Apollo-specific options
-apollo: {
-  tags: {
+  apollo: {
+    tags: {
     // GraphQL Query
-    query: gql`query tagList ($type: String!) {
+      query: gql`query tagList ($type: String!) {
       tags(type: $type) {
         id
         label
       }
     }`,
-    // Reactive variables
-    variables () {
-      return {
-        type: this.type,
-      }
-    },
-    // Disable the query
-    skip () {
-      return this.skipQuery
+      // Reactive variables
+      variables() {
+        return {
+          type: this.type,
+        }
+      },
+      // Disable the query
+      skip() {
+        return this.skipQuery
+      },
     },
   },
-},
+}
 ```
 
 Here, `skip` will be called automatically when the `skipQuery` component property changes.
@@ -370,24 +397,29 @@ If the query `skip` becomes `false`, the query will automatically execute again.
 Here is a reactive query example using polling:
 
 ```js
+export default {
 // Apollo-specific options
-apollo: {
+  apollo: {
   // 'tags' data property on vue instance
-  tags: {
-    query: gql`query tagList {
+    tags: {
+      query: gql`query tagList {
       tags {
         id,
         label
       }
     }`,
-    pollInterval: 300, // ms
+      pollInterval: 300, // ms
+    },
   },
-},
+}
 ```
 
 Here is how the server-side looks like:
 
 ```js
+// Fake word generator
+import casual from 'casual'
+
 export const schema = `
 type Tag {
   id: Int
@@ -403,18 +435,15 @@ schema {
 }
 `
 
-// Fake word generator
-import casual from 'casual'
-
 // Let's generate some tags
-var id = 0
-var tags = []
+let id = 0
+const tags = []
 for (let i = 0; i < 42; i++) {
   addTag(casual.word)
 }
 
-function addTag (label) {
-  let t = {
+function addTag(label) {
+  const t = {
     id: id++,
     label,
   }
@@ -436,10 +465,12 @@ export const resolvers = {
 You can manually add a smart query with the `$apollo.addSmartQuery(key, options)` method:
 
 ```js
-created () {
-  this.$apollo.addSmartQuery('comments', {
+export default {
+  created() {
+    this.$apollo.addSmartQuery('comments', {
     // Same options like above
-  })
+    })
+  }
 }
 ```
 

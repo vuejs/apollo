@@ -1,9 +1,11 @@
-import { OperationVariables } from '@apollo/client/core'
+import type { OperationVariables } from '@apollo/client/core'
+import type {
+  ExampleUpdatedSubscription,
+  ExampleUpdatedSubscriptionVariables,
+} from '../fixtures/graphql-example-types'
 import { useSubscription } from '../../src'
 import {
   ExampleDocument,
-  ExampleUpdatedSubscription,
-  ExampleUpdatedSubscriptionVariables,
   ExampleTypedSubscriptionDocument,
 } from '../fixtures/graphql-example-types'
 import { assertExactType } from './assertions'
@@ -41,15 +43,15 @@ import { assertExactType } from './assertions'
   )
 
   // Result type should match the passed in subscription type
-  const useSubscription_OnlySubscriptionTypeResult =
-    useSubscription_OnlySubscriptionType.result.value
+  const useSubscription_OnlySubscriptionTypeResult
+    = useSubscription_OnlySubscriptionType.result.value
   assertExactType<typeof useSubscription_OnlySubscriptionTypeResult, ExampleUpdatedSubscription | null | undefined>(
     useSubscription_OnlySubscriptionTypeResult,
   )
 
   // Variables type should be `undefined`
-  const useSubscription_OnlySubscriptionTypeVariables =
-    useSubscription_OnlySubscriptionType.variables.value
+  const useSubscription_OnlySubscriptionTypeVariables
+    = useSubscription_OnlySubscriptionType.variables.value
   assertExactType<typeof useSubscription_OnlySubscriptionTypeVariables, undefined>(
     useSubscription_OnlySubscriptionTypeVariables,
   )
@@ -91,8 +93,8 @@ import { assertExactType } from './assertions'
 // =============================================================================
 {
   const useSubscription_AllTyped = useSubscription<
-  ExampleUpdatedSubscription,
-  ExampleUpdatedSubscriptionVariables
+    ExampleUpdatedSubscription,
+    ExampleUpdatedSubscriptionVariables
   >(ExampleDocument, { id: 'k3x47b' })
 
   // Result type should match the passed in subscription type
@@ -118,8 +120,8 @@ import { assertExactType } from './assertions'
 // =============================================================================
 {
   const useSubscription_AllTyped = useSubscription<
-  ExampleUpdatedSubscription,
-  ExampleUpdatedSubscriptionVariables
+    ExampleUpdatedSubscription,
+    ExampleUpdatedSubscriptionVariables
   >(ExampleDocument)
 
   // Result type should match the passed in subscription type
@@ -145,22 +147,22 @@ import { assertExactType } from './assertions'
 // =============================================================================
 {
   const useSubscription_OnlySubscriptionType_NoVarsWithOptions = useSubscription<
-  ExampleUpdatedSubscription
+    ExampleUpdatedSubscription
   >(ExampleDocument, undefined, {
     clientId: '89E3Yh',
   })
 
   // Result type should match the passed in subscription type
-  const useSubscription_OnlySubscriptionType_NoVarsWithOptionsResult =
-    useSubscription_OnlySubscriptionType_NoVarsWithOptions.result.value
+  const useSubscription_OnlySubscriptionType_NoVarsWithOptionsResult
+    = useSubscription_OnlySubscriptionType_NoVarsWithOptions.result.value
   assertExactType<
     typeof useSubscription_OnlySubscriptionType_NoVarsWithOptionsResult,
   ExampleUpdatedSubscription | null | undefined
   >(useSubscription_OnlySubscriptionType_NoVarsWithOptionsResult)
 
   // Variables type should be `undefined`
-  const useSubscription_OnlySubscriptionType_NoVarsWithOptionsVariables =
-    useSubscription_OnlySubscriptionType_NoVarsWithOptions.variables.value
+  const useSubscription_OnlySubscriptionType_NoVarsWithOptionsVariables
+    = useSubscription_OnlySubscriptionType_NoVarsWithOptions.variables.value
   assertExactType<
     typeof useSubscription_OnlySubscriptionType_NoVarsWithOptionsVariables,
   null | undefined
@@ -179,8 +181,8 @@ import { assertExactType } from './assertions'
 // =============================================================================
 {
   const useSubscription_WithOptions = useSubscription<
-  ExampleUpdatedSubscription,
-  ExampleUpdatedSubscriptionVariables
+    ExampleUpdatedSubscription,
+    ExampleUpdatedSubscriptionVariables
   >(
     ExampleDocument,
     { id: '4E79Lq' },

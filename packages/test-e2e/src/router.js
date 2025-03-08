@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import ChannelView from './components/ChannelView.vue'
+import ManualAddSmartQuery from './components/ManualAddSmartQuery.vue'
+import PartialError from './components/PartialError.vue'
 import UserLogin from './components/UserLogin.vue'
 import WelcomeView from './components/WelcomeView.vue'
-import ChannelView from './components/ChannelView.vue'
-import PartialError from './components/PartialError.vue'
-import ManualAddSmartQuery from './components/ManualAddSmartQuery.vue'
 
 export default createRouter({
   history: createWebHistory(),

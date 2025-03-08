@@ -1,9 +1,12 @@
-import { useQuery, useResult, UseResultReturn } from '../../src'
-import {
-  ExampleDocument,
+import type { UseResultReturn } from '../../src'
+import type {
   ExampleQueryVariables,
   MultiKeyExampleQuery,
   SingleKeyExampleQuery,
+} from '../fixtures/graphql-example-types'
+import { useQuery, useResult } from '../../src'
+import {
+  ExampleDocument,
 } from '../fixtures/graphql-example-types'
 import { assertExactType } from './assertions'
 
@@ -27,7 +30,7 @@ const { result: multiKeyResult } = multiKeyQuery
 
   assertExactType<
     typeof useResult_JustDocument_SingleKey,
-  UseResultReturn<SingleKeyExampleQuery['example'] | undefined>
+    UseResultReturn<SingleKeyExampleQuery['example'] | undefined>
   >(useResult_JustDocument_SingleKey)
 
   if (useResult_JustDocument_SingleKey.value) {
@@ -45,7 +48,7 @@ const { result: multiKeyResult } = multiKeyQuery
 
   assertExactType<
     typeof useResult_JustDocument_MultiKey,
-  UseResultReturn<MultiKeyExampleQuery | undefined>
+    UseResultReturn<MultiKeyExampleQuery | undefined>
   >(useResult_JustDocument_MultiKey)
 
   if (useResult_JustDocument_MultiKey.value) {
@@ -64,14 +67,15 @@ const { result: multiKeyResult } = multiKeyQuery
 
   assertExactType<
     typeof useResult_WithDefaultValue_SingleKey,
-  UseResultReturn<SingleKeyExampleQuery['example'] | 'secret'>
+    UseResultReturn<SingleKeyExampleQuery['example'] | 'secret'>
   >(useResult_WithDefaultValue_SingleKey)
 
   if (typeof useResult_WithDefaultValue_SingleKey.value === 'string') {
     const result = useResult_WithDefaultValue_SingleKey.value
     assertExactType<typeof result, 'secret'>(result)
     useResult_WithDefaultValue_SingleKey.value
-  } else {
+  }
+  else {
     useResult_WithDefaultValue_SingleKey.value?.__typename
   }
 }
@@ -86,14 +90,15 @@ const { result: multiKeyResult } = multiKeyQuery
 
   assertExactType<
     typeof useResult_WithDefaultValue_MultiKey,
-  UseResultReturn<MultiKeyExampleQuery | 'secret'>
+    UseResultReturn<MultiKeyExampleQuery | 'secret'>
   >(useResult_WithDefaultValue_MultiKey)
 
   if (typeof useResult_WithDefaultValue_MultiKey.value === 'string') {
     const result = useResult_WithDefaultValue_MultiKey.value
     assertExactType<typeof result, 'secret'>(result)
     useResult_WithDefaultValue_MultiKey.value
-  } else {
+  }
+  else {
     useResult_WithDefaultValue_MultiKey.value?.example?.__typename
     useResult_WithDefaultValue_MultiKey.value?.otherExample?.__typename
   }
@@ -112,13 +117,14 @@ const { result: multiKeyResult } = multiKeyQuery
 
   assertExactType<
     typeof useResult_WithPickFunction,
-  UseResultReturn<'OtherExample' | []>
+    UseResultReturn<'OtherExample' | []>
   >(useResult_WithPickFunction)
 
   if (typeof useResult_WithPickFunction.value === 'string') {
     useResult_WithPickFunction.value.toLowerCase()
-  } else if (useResult_WithPickFunction.value) {
-    useResult_WithPickFunction.value.some(() => {})
+  }
+  else if (useResult_WithPickFunction.value) {
+    useResult_WithPickFunction.value.some(() => undefined)
   }
 }
 

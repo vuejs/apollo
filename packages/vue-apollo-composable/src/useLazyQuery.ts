@@ -1,7 +1,8 @@
-import { DocumentNode } from 'graphql'
-import { isRef } from 'vue-demi'
-import { useQueryImpl, DocumentParameter, VariablesParameter, OptionsParameter, UseQueryOptions, UseQueryReturn } from './useQuery'
 import type { OperationVariables } from '@apollo/client/core'
+import type { DocumentNode } from 'graphql'
+import type { DocumentParameter, OptionsParameter, UseQueryOptions, UseQueryReturn, VariablesParameter } from './useQuery'
+import { isRef } from 'vue-demi'
+import { useQueryImpl } from './useQuery'
 import { isServer } from './util/env.js'
 
 export interface UseLazyQueryReturn<TResult, TVariables extends OperationVariables> extends UseQueryReturn<TResult, TVariables> {
@@ -18,14 +19,14 @@ export interface UseLazyQueryReturn<TResult, TVariables extends OperationVariabl
 export function useLazyQuery<
   TResult = any,
   TVariables extends Record<string, unknown> = any,
-> (
+>(
   document: DocumentParameter<TResult, TVariables>,
   variables?: VariablesParameter<TVariables>,
   options?: OptionsParameter<TResult, TVariables>,
 ): UseLazyQueryReturn<TResult, TVariables> {
   const query = useQueryImpl<TResult, TVariables>(document, variables, options, true)
 
-  function load (
+  function load(
     document?: DocumentNode | null,
     variables?: TVariables | null,
     options?: UseQueryOptions | null,
@@ -62,7 +63,8 @@ export function useLazyQuery<
           offError()
         })
       })
-    } else {
+    }
+    else {
       return false
     }
   }

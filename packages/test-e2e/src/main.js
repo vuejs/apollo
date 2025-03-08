@@ -1,5 +1,5 @@
-import { createApp } from 'vue'
 import VueApolloComponents from '@vue/apollo-components'
+import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'

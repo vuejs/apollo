@@ -422,7 +422,7 @@ function selectUser (id) {
 export default {
   props: ['id'],
 
-  setup (props) {
+  setup(props) {
     const { result } = useQuery(gql`
       query getUserById ($id: ID!) {
         user (id: $id) {
@@ -486,7 +486,7 @@ const { result } = useQuery(gql`
   id: id.value
 }))
 
-function selectUser (id) {
+function selectUser(id) {
   id.value = id
 }
 ```
@@ -563,7 +563,7 @@ const { result } = useQuery(gql`
   enabled: enabled.value,
 }))
 
-function enableQuery () {
+function enableQuery() {
   enabled.value = true
 }
 ```
@@ -670,9 +670,9 @@ export default {
 将在有新结果可用时调用。
 
 ```js
-const { onResult } = useQuery(...)
+const { onResult } = useQuery(/* ... */)
 
-onResult(queryResult => {
+onResult((queryResult) => {
   console.log(queryResult.data)
   console.log(queryResult.loading)
   console.log(queryResult.networkStatus)
@@ -695,9 +695,9 @@ useQuery(gql`
 发生错误时触发：
 
 ```js
-const { onError } = useQuery(...)
+const { onError } = useQuery(/* ... */)
 
-onError(error => {
+onError((error) => {
   console.log(error.graphQLErrors)
   console.log(error.networkError)
 })
@@ -708,9 +708,9 @@ onError(error => {
 ```js
 import { logErrorMessages } from '@vue/apollo-util'
 
-const { onError } = useQuery(...)
+const { onError } = useQuery(/* ... */)
 
-onError(error => {
+onError((error) => {
   logErrorMessages(error)
 })
 ```
@@ -724,9 +724,9 @@ onError(error => {
 ```js
 import { logErrorMessages } from '@vue/apollo-util'
 
-const { onError } = useQuery(...)
+const { onError } = useQuery(/* ... */)
 
-onError(error => {
+onError((error) => {
   if (process.env.NODE_ENV !== 'production') {
     logErrorMessages(error)
   }

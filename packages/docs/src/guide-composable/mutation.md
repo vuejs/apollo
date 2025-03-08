@@ -487,9 +487,9 @@ const { mutate: sendMessage, error: sendMessageError } = useMutation(gql`
 This is called when the mutation successfully completes.
 
 ```js
-const { onDone } = useMutation(...)
+const { onDone } = useMutation(/* ... */)
 
-onDone(result => {
+onDone((result) => {
   console.log(result.data)
 })
 ```
@@ -575,9 +575,9 @@ This is triggered when an error occurs during the mutation.
 ```js
 import { logErrorMessages } from '@vue/apollo-util'
 
-const { onError } = useMutation(...)
+const { onError } = useMutation(/* ... */)
 
-onError(error => {
+onError((error) => {
   logErrorMessages(error)
 })
 ```

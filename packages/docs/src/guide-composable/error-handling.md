@@ -61,14 +61,16 @@ When using Apollo Link, the ability to handle network errors is way more powerfu
 import { onError } from '@apollo/client/link/error'
 
 const link = onError(({ graphQLErrors, networkError }) => {
-  if (graphQLErrors)
+  if (graphQLErrors) {
     graphQLErrors.map(({ message, locations, path }) =>
       console.log(
         `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
       ),
     )
+  }
 
-  if (networkError) console.log(`[Network error]: ${networkError}`)
+  if (networkError)
+    console.log(`[Network error]: ${networkError}`)
 })
 ```
 
@@ -78,7 +80,7 @@ You can also use the `logErrorMessages` function from the `@vue/apollo-util` pac
 import { onError } from '@apollo/client/link/error'
 import { logErrorMessages } from '@vue/apollo-util'
 
-const link = onError(error => {
+const link = onError((error) => {
   logErrorMessages(error)
 })
 ```
@@ -93,7 +95,7 @@ If you are using Webpack or Vue CLI, it's a good idea to only use it in developm
 import { onError } from '@apollo/client/link/error'
 import { logErrorMessages } from '@vue/apollo-util'
 
-const link = onError(error => {
+const link = onError((error) => {
   if (process.env.NODE_ENV !== 'production') {
     logErrorMessages(error)
   }
@@ -105,19 +107,19 @@ That way it will be dropped when compiling the project for production.
 Full example:
 
 ```js
-import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client/core'
+import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client/core'
 import { onError } from '@apollo/client/link/error'
 import { logErrorMessages } from '@vue/apollo-util'
 
 const cache = new InMemoryCache()
 
 // HTTP connection to the API
-let httpLink = createHttpLink({
+const httpLink = createHttpLink({
   uri: 'http://localhost:4242/graphql',
 })
 
 // Handle errors
-const errorLink = onError(error => {
+const errorLink = onError((error) => {
   if (process.env.NODE_ENV !== 'production') {
     logErrorMessages(error)
   }

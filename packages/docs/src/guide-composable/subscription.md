@@ -60,42 +60,42 @@ The GraphQL spec does not define a specific protocol for sending subscription re
 Apollo Client supports both *graphql-ws* and *subscriptions-transport-ws*. Apollo [documentation](https://www.apollographql.com/docs/react/data/subscriptions/#choosing-a-subscription-library) suggest to use the newer library *graphql-ws*, but in case you need it, here its explained how to do it with both.
 
 ### The new library: **graphql-ws**
-Let's look at how to add support for this transport to Apollo Client using a link set up for newest library [graphql-ws](https://github.com/enisdenjo/graphql-ws). First, install: 
+Let's look at how to add support for this transport to Apollo Client using a link set up for newest library [graphql-ws](https://github.com/enisdenjo/graphql-ws). First, install:
 ```bash
 npm install graphql-ws
 ```
 Then initialize a GraphQL web socket link:
 
 ```js
-import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
-import { createClient } from "graphql-ws";
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
+import { createClient } from 'graphql-ws'
 
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: "ws://localhost:4000/graphql",
+    url: 'ws://localhost:4000/graphql',
   })
-);
+)
 ```
 
 We need to either use the `GraphQLWsLink` or the `HttpLink` depending on the operation type:
 
 ```js
-import { HttpLink, split } from "@apollo/client/core"
-import { GraphQLWsLink } from "@apollo/client/link/subscriptions"; // <-- This one uses graphql-ws
-import { createClient } from "graphql-ws";
-import { getMainDefinition } from "@apollo/client/utilities"
+import { HttpLink, split } from '@apollo/client/core'
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions' // <-- This one uses graphql-ws
+import { getMainDefinition } from '@apollo/client/utilities'
+import { createClient } from 'graphql-ws'
 
 // Create an http link:
 const httpLink = new HttpLink({
-  uri: "http://localhost:3000/graphql"
+  uri: 'http://localhost:3000/graphql'
 })
 
 // Create a GraphQLWsLink link:
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: "ws://localhost:5000/",
+    url: 'ws://localhost:5000/',
   })
-);
+)
 
 // using the ability to split links, you can send data to each link
 // depending on what kind of operation is being sent
@@ -104,8 +104,8 @@ const link = split(
   ({ query }) => {
     const definition = getMainDefinition(query)
     return (
-      definition.kind === "OperationDefinition" &&
-      definition.operation === "subscription"
+      definition.kind === 'OperationDefinition'
+      && definition.operation === 'subscription'
     )
   },
   wsLink,
@@ -116,7 +116,7 @@ const link = split(
 const apolloClient = new ApolloClient({
   link,
   cache: new InMemoryCache(),
-});
+})
 ```
 The apollo client is the one that will be provided to the vue app, see the [setup section](https://v4.apollo.vuejs.org/guide-composable/setup.html) for more details.
 
@@ -128,7 +128,7 @@ npm install subscriptions-transport-ws
 ```
 And then initialize a GraphQL web socket link:
 ```js
-import { WebSocketLink } from "@apollo/client/link/ws" // <-- This one uses subscriptions-transport-ws
+import { WebSocketLink } from '@apollo/client/link/ws' // <-- This one uses subscriptions-transport-ws
 
 const wsLink = new WebSocketLink({
   uri: `ws://localhost:5000/`,
@@ -266,7 +266,7 @@ With a ref:
 
 ```js
 const variables = ref({
-  channelId: "abc"
+  channelId: 'abc'
 })
 
 const { result } = useSubscription(
@@ -286,7 +286,7 @@ With a reactive object:
 
 ```js
 const variables = reactive({
-  channelId: "abc"
+  channelId: 'abc'
 })
 
 const { result } = useSubscription(
@@ -305,7 +305,7 @@ const { result } = useSubscription(
 With a function (which will automatically be made reactive):
 
 ```js
-const channelId = ref("abc")
+const channelId = ref('abc')
 
 const { result } = useSubscription(
   gql`
@@ -338,7 +338,7 @@ const { result } = useSubscription(
   `,
   null,
   {
-    fetchPolicy: "no-cache"
+    fetchPolicy: 'no-cache'
   }
 )
 ```
@@ -357,7 +357,7 @@ const { result } = useSubscription(
   `,
   null,
   () => ({
-    fetchPolicy: "no-cache"
+    fetchPolicy: 'no-cache'
   })
 )
 ```
@@ -391,7 +391,7 @@ function enableSub() {
 You can retrieve the loading and error stats from `useSubscription`:
 
 ```js
-const { loading, error } = useSubscription(...)
+const { loading, error } = useSubscription(/* ... */)
 ```
 
 ### Event hooks
@@ -401,7 +401,7 @@ const { loading, error } = useSubscription(...)
 This is called when a new result is received from the server:
 
 ```js
-const { onResult } = useSubscription(...)
+const { onResult } = useSubscription(/* ... */)
 
 onResult((result, context) => {
   console.log(result.data)
@@ -415,7 +415,7 @@ This is triggered when an error occurs:
 ```js
 import { logErrorMessages } from '@vue/apollo-util'
 
-const { onError } = useSubscription(...)
+const { onError } = useSubscription(/* ... */)
 
 onError((error, context) => {
   logErrorMessages(error)
@@ -427,7 +427,7 @@ onError((error, context) => {
 Using `onResult`, you can update the Apollo cache with the new data:
 
 ```js
-const { onResult } = useSubscription(...)
+const { onResult } = useSubscription(/* ... */)
 
 onResult((result, { client }) => {
   const query = {
@@ -613,7 +613,7 @@ subscribeToMore(() => ({
     channelId: props.channelId
   },
   updateQuery: (previousResult, { subscriptionData }) => {
-    const tmp = [...previousResult] 
+    const tmp = [...previousResult]
     tmp.messages.push(subscriptionData.data.messageAdded)
     return tmp
   }
@@ -625,14 +625,14 @@ subscribeToMore(() => ({
 In many cases it is necessary to authenticate clients before allowing them to receive subscription results. To do this, the `SubscriptionClient` constructor accepts a `connectionParams` field, which passes a custom object that the server can use to validate the connection before setting up any subscriptions.
 
 ```js
-import { WebSocketLink } from "@apollo/client/link/ws"
+import { WebSocketLink } from '@apollo/client/link/ws'
 
 const wsLink = new WebSocketLink({
   uri: `ws://localhost:5000/`,
   options: {
     reconnect: true,
     connectionParams: {
-        authToken: user.authToken,
+      authToken: user.authToken,
     },
   }
 })

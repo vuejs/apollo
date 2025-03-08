@@ -71,7 +71,7 @@ export default {
           description
         }
       }`,
-      variables () {
+      variables() {
         return {
           id: this.id,
         }

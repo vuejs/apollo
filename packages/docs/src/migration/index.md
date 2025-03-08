@@ -23,19 +23,19 @@ npm install --save @vue/apollo-option @apollo/client
 Before:
 
 ```js
-import Vue from 'vue'
+import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
-import { InMemoryCache } from 'apollo-cache-inmemory'
+import Vue from 'vue'
 import VueApollo from 'vue-apollo'
 ```
 
 After:
 
 ```js
-import Vue from 'vue'
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client/core'
 import { createApolloProvider } from '@vue/apollo-option'
+import Vue from 'vue'
 ```
 
 ### Apollo Setup
@@ -89,8 +89,8 @@ const link = split(
   // split based on operation type
   ({ query }) => {
     const { kind, operation } = getMainDefinition(query)
-    return kind === 'OperationDefinition' &&
-      operation === 'subscription'
+    return kind === 'OperationDefinition'
+      && operation === 'subscription'
   },
   wsLink,
   httpLink

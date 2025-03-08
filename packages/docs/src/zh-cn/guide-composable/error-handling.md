@@ -61,14 +61,16 @@ export default {
 import { onError } from '@apollo/client/link/error'
 
 const link = onError(({ graphQLErrors, networkError }) => {
-  if (graphQLErrors)
+  if (graphQLErrors) {
     graphQLErrors.map(({ message, locations, path }) =>
       console.log(
         `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
       ),
     )
+  }
 
-  if (networkError) console.log(`[Network error]: ${networkError}`)
+  if (networkError)
+    console.log(`[Network error]: ${networkError}`)
 })
 ```
 
@@ -78,7 +80,7 @@ const link = onError(({ graphQLErrors, networkError }) => {
 import { onError } from '@apollo/client/link/error'
 import { logErrorMessages } from '@vue/apollo-util'
 
-const link = onError(error => {
+const link = onError((error) => {
   logErrorMessages(error)
 })
 ```
@@ -93,7 +95,7 @@ const link = onError(error => {
 import { onError } from '@apollo/client/link/error'
 import { logErrorMessages } from '@vue/apollo-util'
 
-const link = onError(error => {
+const link = onError((error) => {
   if (process.env.NODE_ENV !== 'production') {
     logErrorMessages(error)
   }

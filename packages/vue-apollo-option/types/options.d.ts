@@ -1,12 +1,12 @@
-import {
-  WatchQueryOptions,
-  OperationVariables,
-  SubscriptionOptions,
-  SubscribeToMoreOptions,
-  ApolloQueryResult,
+import type {
   ApolloError,
+  ApolloQueryResult,
+  OperationVariables,
+  SubscribeToMoreOptions,
+  SubscriptionOptions,
+  WatchQueryOptions,
 } from '@apollo/client/core/index.js'
-import { DocumentNode } from 'graphql'
+import type { DocumentNode } from 'graphql'
 // import { DeepApplyThisType } from './utils'
 
 /* Component options */
@@ -28,8 +28,8 @@ export type VueApolloComponentSpecialOptions =
   Partial<AllVueApolloComponentSpecialOptions>
 
 interface PrivateVueApolloComponentOptions extends VueApolloComponentSpecialOptions {
-  [key: string] : VueApolloQueryProperty |
-  VueApolloComponentSpecialOptions[keyof VueApolloComponentSpecialOptions]
+  [key: string]: VueApolloQueryProperty |
+    VueApolloComponentSpecialOptions[keyof VueApolloComponentSpecialOptions]
 }
 
 // DeepApplyThisType is buggy: https://github.com/microsoft/TypeScript/issues/33392

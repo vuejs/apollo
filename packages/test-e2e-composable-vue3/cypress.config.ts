@@ -1,6 +1,6 @@
+import axios from 'axios'
 import { defineConfig } from 'cypress'
 import vitePreprocessor from 'cypress-vite'
-import axios from 'axios'
 
 export default defineConfig({
   fixturesFolder: 'tests/e2e/fixtures',
@@ -11,9 +11,9 @@ export default defineConfig({
     baseUrl: 'http://localhost:8080',
     // We've imported your old cypress plugins here.
     // You may want to clean this up later by importing these.
-    setupNodeEvents (on) {
+    setupNodeEvents(on) {
       on('task', {
-        async 'db:reset' () {
+        'db:reset': async function () {
           await axios.get('http://localhost:4042/_reset')
           return true
         },

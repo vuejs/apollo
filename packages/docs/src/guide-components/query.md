@@ -1,6 +1,6 @@
 # ApolloQuery
 
-You can use the `ApolloQuery` (or `apollo-query`) component to have watched Apollo queries directly in your template. 
+You can use the `ApolloQuery` (or `apollo-query`) component to have watched Apollo queries directly in your template.
 After reading this page, see the [API Reference](../api/apollo-query.md) for all the possible options.
 
 ## Query gql tag
@@ -95,19 +95,19 @@ If you are not using [vue-cli-plugin-apollo](https://github.com/Akryum/vue-cli-p
 // vue.config.js
 
 module.exports = {
-  chainWebpack: config => {
+  chainWebpack: (config) => {
     config.module
       .rule('vue')
       .use('vue-loader')
-        .loader('vue-loader')
-        .tap(options => {
-          options.transpileOptions = {
-            transforms: {
-              dangerousTaggedTemplateString: true,
-            },
-          }
-          return options
-        })
+      .loader('vue-loader')
+      .tap((options) => {
+        options.transpileOptions = {
+          transforms: {
+            dangerousTaggedTemplateString: true,
+          },
+        }
+        return options
+      })
   }
 }
 ```

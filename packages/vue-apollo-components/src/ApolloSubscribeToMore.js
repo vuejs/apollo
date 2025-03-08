@@ -32,26 +32,26 @@ export default {
     variables: 'refresh',
   },
 
-  created () {
+  created() {
     this.$_key = `sub_component_${uid++}`
   },
 
-  mounted () {
+  mounted() {
     this.refresh()
   },
 
-  beforeUnmount () {
+  beforeUnmount() {
     this.destroy()
   },
 
   methods: {
-    destroy () {
+    destroy() {
       if (this.$_sub) {
         this.$_sub.destroy()
       }
     },
 
-    refresh () {
+    refresh() {
       this.destroy()
 
       let document = this.document
@@ -68,7 +68,7 @@ export default {
     },
   },
 
-  render () {
+  render() {
     return null
   },
 }

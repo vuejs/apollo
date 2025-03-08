@@ -2,14 +2,15 @@ import { reapply } from '../lib/utils'
 import { DollarApollo } from './dollar-apollo'
 import { isServer } from './env'
 
-function hasProperty (holder, key) {
+function hasProperty(holder, key) {
   return typeof holder !== 'undefined' && Object.prototype.hasOwnProperty.call(holder, key)
 }
 
-function launch () {
+function launch() {
   const apolloProvider = this.$apolloProvider
 
-  if (this._apolloLaunched || !apolloProvider) return
+  if (this._apolloLaunched || !apolloProvider)
+    return
   this._apolloLaunched = true
 
   // Prepare properties
@@ -68,26 +69,27 @@ function launch () {
   }
 }
 
-function defineReactiveSetter ($apollo, key, value, deep) {
+function defineReactiveSetter($apollo, key, value, deep) {
   if (typeof value !== 'undefined') {
     if (typeof value === 'function') {
       $apollo.defineReactiveSetter(key, value, deep)
-    } else {
+    }
+    else {
       $apollo[key] = value
     }
   }
 }
 
-function destroy () {
+function destroy() {
   if (this.$apollo) {
     this.$apollo.destroy()
     this.$apollo = null
   }
 }
 
-export function installMixin (app, provider) {
+export function installMixin(app, provider) {
   app.mixin({
-    data () {
+    data() {
       const result = {
         $apolloData: {
           queries: {},
@@ -110,13 +112,15 @@ export function installMixin (app, provider) {
       return result
     },
 
-    beforeCreate () {
+    beforeCreate() {
       this.$apollo = new DollarApollo(this, provider)
       if (isServer) {
         // Patch render function to cleanup apollo
         const render = this.$options.ssrRender
-        if (!render) return
-        if (render.__IS_VUE_APOLLO_WRAPPED) return
+        if (!render)
+          return
+        if (render.__IS_VUE_APOLLO_WRAPPED)
+          return
         this.$options.ssrRender = (h) => {
           const result = render.call(this, h)
           destroy.call(this)
@@ -126,7 +130,7 @@ export function installMixin (app, provider) {
       }
     },
 
-    serverPrefetch () {
+    serverPrefetch() {
       if (this.$_apolloPromises) {
         return Promise.all(this.$_apolloPromises).then(() => {
           // Mock `$apollo` for the render function
@@ -139,7 +143,7 @@ export function installMixin (app, provider) {
           }
           destroy.call(this)
           this.$apollo = mocked
-        }).catch(e => {
+        }).catch((e) => {
           destroy.call(this)
           return Promise.reject(e)
         })

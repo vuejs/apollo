@@ -1,11 +1,11 @@
-const GraphQLJSON = require('graphql-type-json')
 const { withFilter } = require('apollo-server-express')
-// Subs
-const triggers = require('./triggers')
+const GraphQLJSON = require('graphql-type-json')
 // Connectors
 const channels = require('./connectors/channels')
 const messages = require('./connectors/messages')
 const users = require('./connectors/users')
+// Subs
+const triggers = require('./triggers')
 
 module.exports = {
   JSON: GraphQLJSON,

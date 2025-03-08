@@ -1,4 +1,5 @@
-import { useApolloClient, UseApolloClientReturn } from '../../src'
+import type { UseApolloClientReturn } from '../../src'
+import { useApolloClient } from '../../src'
 import { assertExactType } from './assertions'
 
 // =============================================================================

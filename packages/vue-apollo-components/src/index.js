@@ -1,10 +1,10 @@
+import CApolloMutation from './ApolloMutation'
 import CApolloQuery from './ApolloQuery'
 import CApolloSubscribeToMore from './ApolloSubscribeToMore'
-import CApolloMutation from './ApolloMutation'
 
 const plugin = {}
 
-export function install (app, options) {
+export function install(app, options) {
   app.component('ApolloQuery', CApolloQuery)
   app.component('ApolloSubscribeToMore', CApolloSubscribeToMore)
   app.component('ApolloMutation', CApolloMutation)
@@ -27,8 +27,9 @@ export const ApolloMutation = CApolloMutation
 let GlobalVue = null
 if (typeof window !== 'undefined') {
   GlobalVue = window.Vue
-} else if (typeof global !== 'undefined') {
-  GlobalVue = global.Vue
+}
+else if (typeof globalThis !== 'undefined') {
+  GlobalVue = globalThis.Vue
 }
 if (GlobalVue) {
   GlobalVue.use(plugin)

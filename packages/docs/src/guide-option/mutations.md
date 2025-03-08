@@ -11,69 +11,74 @@ You shouldn't send the `__typename` fields in the variables, so it is not recomm
 :::
 
 ```js
-methods: {
-  addTag() {
+export default {
+  methods: {
+    addTag() {
     // We save the user input in case of an error
-    const newTag = this.newTag
-    // We clear it early to give the UI a snappy feel
-    this.newTag = ''
-    // Call to the graphql mutation
-    this.$apollo.mutate({
+      const newTag = this.newTag
+      // We clear it early to give the UI a snappy feel
+      this.newTag = ''
+      // Call to the graphql mutation
+      this.$apollo.mutate({
       // Query
-      mutation: gql`mutation ($label: String!) {
+        mutation: gql`mutation ($label: String!) {
         addTag(label: $label) {
           id
           label
         }
       }`,
-      // Parameters
-      variables: {
-        label: newTag,
-      },
-      // Update the cache with the result
-      // The query will be updated with the optimistic response
-      // and then with the real result of the mutation
-      update: (store, { data: { addTag } }) => {
-        // Read the data from our cache for this query.
-        let data = store.readQuery({ query: TAGS_QUERY })
-        // Add our tag from the mutation to the end
-        data = {
-          ...data,
-          tags: [
-            ...data.tags,
-            addTag,
-          ],
-        }
-        // Write our data back to the cache.
-        store.writeQuery({ query: TAGS_QUERY, data })
-      },
-      // Optimistic UI
-      // Will be treated as a 'fake' result as soon as the request is made
-      // so that the UI can react quickly and the user be happy
-      optimisticResponse: {
-        __typename: 'Mutation',
-        addTag: {
-          __typename: 'Tag',
-          id: -1,
+        // Parameters
+        variables: {
           label: newTag,
         },
-      },
-    }).then((data) => {
+        // Update the cache with the result
+        // The query will be updated with the optimistic response
+        // and then with the real result of the mutation
+        update: (store, { data: { addTag } }) => {
+        // Read the data from our cache for this query.
+          let data = store.readQuery({ query: TAGS_QUERY })
+          // Add our tag from the mutation to the end
+          data = {
+            ...data,
+            tags: [
+              ...data.tags,
+              addTag,
+            ],
+          }
+          // Write our data back to the cache.
+          store.writeQuery({ query: TAGS_QUERY, data })
+        },
+        // Optimistic UI
+        // Will be treated as a 'fake' result as soon as the request is made
+        // so that the UI can react quickly and the user be happy
+        optimisticResponse: {
+          __typename: 'Mutation',
+          addTag: {
+            __typename: 'Tag',
+            id: -1,
+            label: newTag,
+          },
+        },
+      }).then((data) => {
       // Result
-      console.log(data)
-    }).catch((error) => {
+        console.log(data)
+      }).catch((error) => {
       // Error
-      console.error(error)
-      // We restore the initial user input
-      this.newTag = newTag
-    })
+        console.error(error)
+        // We restore the initial user input
+        this.newTag = newTag
+      })
+    },
   },
-},
+}
 ```
 
 ## Server-side example
 
 ```js
+// Fake word generator
+import faker from 'faker'
+
 export const schema = `
 type Tag {
   id: Int
@@ -94,18 +99,15 @@ schema {
 }
 `
 
-// Fake word generator
-import faker from 'faker'
-
 // Let's generate some tags
-var id = 0
-var tags = []
+let id = 0
+const tags = []
 for (let i = 0; i < 42; i++) {
   addTag(faker.random.word())
 }
 
-function addTag (label) {
-  let t = {
+function addTag(label) {
+  const t = {
     id: id++,
     label,
   }
@@ -115,12 +117,12 @@ function addTag (label) {
 
 export const resolvers = {
   Query: {
-    tags (root, args, context) {
+    tags(root, args, context) {
       return tags
     },
   },
   Mutation: {
-    addTag (root, { label }, context) {
+    addTag(root, { label }, context) {
       console.log(`adding tag '${label}'`)
       return addTag(label)
     },

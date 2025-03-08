@@ -26,12 +26,12 @@ const apolloProvider = createApolloProvider({
   },
   // Watch loading state for all queries
   // See 'Smart Query > options > watchLoading' for detail
-  watchLoading (isLoading, countModifier) {
+  watchLoading(isLoading, countModifier) {
     loading += countModifier
     console.log('Global loading', loading, countModifier)
   },
   // Global error handler for all smart queries and subscriptions
-  errorHandler (error) {
+  errorHandler(error) {
     console.log('Global error handler')
     console.error(error)
   },

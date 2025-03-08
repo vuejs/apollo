@@ -1,14 +1,14 @@
 import gql from 'graphql-tag'
 import { h } from 'vue'
 
-function isDataFilled (data) {
+function isDataFilled(data) {
   return data && Object.keys(data).length > 0
 }
 
 export default {
   name: 'ApolloQuery',
 
-  provide () {
+  provide() {
     return {
       getDollarApollo: this.getDollarApollo,
       getApolloQuery: this.getApolloQuery,
@@ -94,7 +94,7 @@ export default {
     },
   },
 
-  data () {
+  data() {
     return {
       result: {
         data: null,
@@ -107,55 +107,55 @@ export default {
   },
 
   watch: {
-    fetchPolicy (value) {
+    fetchPolicy(value) {
       this.$apollo.queries.query.setOptions({
         fetchPolicy: value,
       })
     },
 
-    pollInterval (value) {
+    pollInterval(value) {
       this.$apollo.queries.query.setOptions({
         pollInterval: value,
       })
     },
 
-    notifyOnNetworkStatusChange (value) {
+    notifyOnNetworkStatusChange(value) {
       this.$apollo.queries.query.setOptions({
         notifyOnNetworkStatusChange: value,
       })
     },
 
-    '$data.$apolloData.loading' (value) {
+    '$data.$apolloData.loading': function (value) {
       this.$emit('loading', !!value)
     },
   },
 
   apollo: {
-    $client () {
+    $client() {
       return this.clientId
     },
 
-    query () {
+    query() {
       return {
-        query () {
+        query() {
           if (typeof this.query === 'function') {
             return this.query(gql)
           }
           return this.query
         },
-        variables () { return this.variables },
+        variables() { return this.variables },
         fetchPolicy: this.fetchPolicy,
         pollInterval: this.pollInterval,
         debounce: this.debounce,
         throttle: this.throttle,
         notifyOnNetworkStatusChange: this.notifyOnNetworkStatusChange,
-        context () { return this.context },
-        skip () { return this.skip },
+        context() { return this.context },
+        skip() { return this.skip },
         deep: this.deep,
         prefetch: this.prefetch,
         ...this.options,
         manual: true,
-        result (result) {
+        result(result) {
           const { errors, loading, networkStatus } = result
           let { error } = result
           result = Object.assign({}, result)
@@ -169,9 +169,11 @@ export default {
 
           if (loading) {
             Object.assign(data, this.$_previousData, result.data)
-          } else if (error) {
+          }
+          else if (error) {
             Object.assign(data, this.$apollo.queries.query.observer.getLastResult() || {}, result.data)
-          } else {
+          }
+          else {
             data = result.data
             this.$_previousData = result.data
           }
@@ -190,7 +192,7 @@ export default {
 
           this.$emit('result', this.result)
         },
-        error (error) {
+        error(error) {
           this.result.loading = false
           this.result.error = error
           this.$emit('error', error)
@@ -199,21 +201,21 @@ export default {
     },
   },
 
-  created () {
+  created() {
     this.$_times = 0
   },
 
   methods: {
-    getDollarApollo () {
+    getDollarApollo() {
       return this.$apollo
     },
 
-    getApolloQuery () {
+    getApolloQuery() {
       return this.$apollo.queries.query
     },
   },
 
-  render () {
+  render() {
     const result = this.$slots.default({
       result: this.result,
       times: this.times,

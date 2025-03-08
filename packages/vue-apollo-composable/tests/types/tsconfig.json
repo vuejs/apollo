@@ -2,10 +2,10 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "commonjs",
+    "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "skipLibCheck": true,
-    "strict": true
+    "skipLibCheck": true
   },
   "include": [
     "*.test.ts"

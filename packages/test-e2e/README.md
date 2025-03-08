@@ -2,7 +2,6 @@
 
 Demo app: Vue + Apollo + Graphql + vue-cli 3
 
-
 ### Setup project
 
 ```

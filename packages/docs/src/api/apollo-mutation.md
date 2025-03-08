@@ -209,7 +209,7 @@ See [apollo context](https://www.apollographql.com/docs/react/api/link/apollo-li
 Signature:
 
 ```ts
-mutate(options = null): Promise<FetchResult>
+function mutate(options = null): Promise<FetchResult>
 ```
 
 - `options`: [mutation options](https://www.apollographql.com/docs/react/api/core/ApolloClient/#ApolloClient.mutate).

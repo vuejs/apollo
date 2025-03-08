@@ -7,41 +7,41 @@ The GraphQL spec does not define a specific protocol for sending subscription re
 Apollo Client supports both *graphql-ws* and *subscriptions-transport-ws*. Apollo [documentation](https://www.apollographql.com/docs/react/data/subscriptions/#choosing-a-subscription-library) suggest to use the newer library *graphql-ws*, but in case you need it, here its explained how to do it with both.
 
 ### The new library: **graphql-ws**
-Let's look at how to add support for this transport to Apollo Client using a link set up for newest library [graphql-ws](https://github.com/enisdenjo/graphql-ws). First, install: 
+Let's look at how to add support for this transport to Apollo Client using a link set up for newest library [graphql-ws](https://github.com/enisdenjo/graphql-ws). First, install:
 ```bash
 npm install graphql-ws
 ```
 Then initialize a GraphQL web socket link:
 
 ```js
-import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
-import { createClient } from "graphql-ws";
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
+import { createClient } from 'graphql-ws'
 
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: "ws://localhost:4000/graphql",
+    url: 'ws://localhost:4000/graphql',
   })
-);
+)
 ```
 
 We need to either use the `GraphQLWsLink` or the `HttpLink` depending on the operation type:
 
 ```js
-import { HttpLink, split } from "@apollo/client/core"
-import { GraphQLWsLink } from "@apollo/client/link/subscriptions"; // <-- This one uses graphql-ws
-import { getMainDefinition } from "@apollo/client/utilities"
+import { HttpLink, split } from '@apollo/client/core'
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions' // <-- This one uses graphql-ws
+import { getMainDefinition } from '@apollo/client/utilities'
 
 // Create an http link:
 const httpLink = new HttpLink({
-  uri: "http://localhost:3000/graphql"
+  uri: 'http://localhost:3000/graphql'
 })
 
 // Create a GraphQLWsLink link:
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: "ws://localhost:5000/",
+    url: 'ws://localhost:5000/',
   })
-);
+)
 
 // using the ability to split links, you can send data to each link
 // depending on what kind of operation is being sent
@@ -50,8 +50,8 @@ const link = split(
   ({ query }) => {
     const definition = getMainDefinition(query)
     return (
-      definition.kind === "OperationDefinition" &&
-      definition.operation === "subscription"
+      definition.kind === 'OperationDefinition'
+      && definition.operation === 'subscription'
     )
   },
   wsLink,
@@ -62,7 +62,7 @@ const link = split(
 const apolloClient = new ApolloClient({
   link,
   cache: new InMemoryCache(),
-});
+})
 ```
 The apollo client is the one that will be provided to the vue app, see the [setup section](https://v4.apollo.vuejs.org/guide-composable/setup.html) for more details.
 
@@ -74,7 +74,7 @@ npm install subscriptions-transport-ws
 ```
 And then initialize a GraphQL web socket link:
 ```js
-import { WebSocketLink } from "@apollo/client/link/ws" // <-- This one uses subscriptions-transport-ws
+import { WebSocketLink } from '@apollo/client/link/ws' // <-- This one uses subscriptions-transport-ws
 
 const wsLink = new WebSocketLink({
   uri: `ws://localhost:5000/`,
@@ -90,27 +90,29 @@ The rest of the configuration (creating a httpLink and link) is the same as desc
 If you need to update a smart query result from a subscription, the best way is using the `subscribeToMore` smart query method. It will create [Smart Subscriptions](../api/smart-subscription.md) that are linked to the smart query. Just add a `subscribeToMore` to your smart query:
 
 ```js
-apollo: {
-  tags: {
-    query: TAGS_QUERY,
-    subscribeToMore: {
-      document: gql`subscription name($param: String!) {
+export default {
+  apollo: {
+    tags: {
+      query: TAGS_QUERY,
+      subscribeToMore: {
+        document: gql`subscription name($param: String!) {
         itemAdded(param: $param) {
           id
           label
         }
       }`,
-      // Variables passed to the subscription. Since we're using a function,
-      // they are reactive
-      variables () {
-        return {
-          param: this.param,
-        }
-      },
-      // Mutate the previous result
-      updateQuery: (previousResult, { subscriptionData }) => {
+        // Variables passed to the subscription. Since we're using a function,
+        // they are reactive
+        variables() {
+          return {
+            param: this.param,
+          }
+        },
+        // Mutate the previous result
+        updateQuery: (previousResult, { subscriptionData }) => {
         // Here, return the new result from the previous with the new data
-      },
+        },
+      }
     }
   }
 }
@@ -206,35 +208,37 @@ The methods below are suitable for a 'notify' use case.
 You can declare [Smart Subscriptions](../api/smart-subscription.md) in the `apollo` option with the `$subscribe` keyword:
 
 ```js
-apollo: {
+export default {
+  apollo: {
   // Subscriptions
-  $subscribe: {
+    $subscribe: {
     // When a tag is added
-    tagAdded: {
-      query: gql`subscription tags($type: String!) {
+      tagAdded: {
+        query: gql`subscription tags($type: String!) {
         tagAdded(type: $type) {
           id
           label
           type
         }
       }`,
-      // Reactive variables
-      variables () {
+        // Reactive variables
+        variables() {
         // This works just like regular queries
         // and will re-subscribe with the right variables
         // each time the values change
-        return {
-          type: this.type,
-        }
-      },
-      // Result hook
-      // Don't forget to destructure `data`
-      result ({ data }) {
-        console.log(data.tagAdded)
+          return {
+            type: this.type,
+          }
+        },
+        // Result hook
+        // Don't forget to destructure `data`
+        result({ data }) {
+          console.log(data.tagAdded)
+        },
       },
     },
   },
-},
+}
 ```
 
 You can then access the subscription with `this.$apollo.subscriptions.<name>`.
@@ -247,27 +251,29 @@ When server supports live queries and uses subscriptions to update them, like [H
 use simple subscriptions for reactive queries:
 
 ```js
-data () {
-  return {
-    tags: [],
-  };
-},
-apollo: {
-  $subscribe: {
-    tags: {
-      query: gql`subscription {
+export default {
+  data() {
+    return {
+      tags: [],
+    }
+  },
+  apollo: {
+    $subscribe: {
+      tags: {
+        query: gql`subscription {
         tags {
           id
           label
           type
         }
       }`,
-      result ({ data }) {
-        this.tags = data.tags;
+        result({ data }) {
+          this.tags = data.tags
+        },
       },
     },
   },
-},
+}
 ```
 
 ## Skipping the subscription
@@ -275,37 +281,39 @@ apollo: {
 If the subscription is skipped, it will disable it and it will not be updated anymore. You can use the `skip` option:
 
 ```js
+export default {
 // Apollo-specific options
-apollo: {
+  apollo: {
   // Subscriptions
-  $subscribe: {
+    $subscribe: {
     // When a tag is added
-    tags: {
-      query: gql`subscription tags($type: String!) {
+      tags: {
+        query: gql`subscription tags($type: String!) {
         tagAdded(type: $type) {
           id
           label
           type
         }
       }`,
-      // Reactive variables
-      variables () {
-        return {
-          type: this.type,
+        // Reactive variables
+        variables() {
+          return {
+            type: this.type,
+          }
+        },
+        // Result hook
+        result(data) {
+        // Let's update the local data
+          this.tags.push(data.tagAdded)
+        },
+        // Skip the subscription
+        skip() {
+          return this.skipSubscription
         }
       },
-      // Result hook
-      result (data) {
-        // Let's update the local data
-        this.tags.push(data.tagAdded)
-      },
-      // Skip the subscription
-      skip () {
-        return this.skipSubscription
-      }
     },
   },
-},
+}
 ```
 
 Here, `skip` will be called automatically when the `skipSubscription` component property changes.
@@ -321,10 +329,12 @@ this.$apollo.subscriptions.tags.skip = true
 You can manually add a smart subscription with the `$apollo.addSmartSubscription(key, options)` method:
 
 ```js
-created () {
-  this.$apollo.addSmartSubscription('tagAdded', {
+export default {
+  created() {
+    this.$apollo.addSmartSubscription('tagAdded', {
     // Same options like '$subscribe' above
-  })
+    })
+  }
 }
 ```
 
@@ -337,8 +347,9 @@ Internally, this method is called for each entry of the `$subscribe` object in t
 Use the `$apollo.subscribe()` method to subscribe to a GraphQL subscription that will get killed automatically when the component is destroyed. It will **NOT** create a Smart Subscription.
 
 ```js
-mounted () {
-  const subQuery = gql`subscription tags($type: String!) {
+export default {
+  mounted() {
+    const subQuery = gql`subscription tags($type: String!) {
     tagAdded(type: $type) {
       id
       label
@@ -346,20 +357,21 @@ mounted () {
     }
   }`
 
-  const observer = this.$apollo.subscribe({
-    query: subQuery,
-    variables: {
-      type: 'City',
-    },
-  })
+    const observer = this.$apollo.subscribe({
+      query: subQuery,
+      variables: {
+        type: 'City',
+      },
+    })
 
-  observer.subscribe({
-    next (data) {
-      console.log(data)
-    },
-    error (error) {
-      console.error(error)
-    },
-  })
-},
+    observer.subscribe({
+      next(data) {
+        console.log(data)
+      },
+      error(error) {
+        console.error(error)
+      },
+    })
+  },
+}
 ```

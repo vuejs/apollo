@@ -1,4 +1,4 @@
-import { throttle, debounce, omit, addGqlError } from '../lib/utils'
+import { addGqlError, debounce, omit, throttle } from '../lib/utils'
 import { isServer } from './env'
 
 const skippAllKeys = {
@@ -7,10 +7,12 @@ const skippAllKeys = {
 }
 
 export default class SmartApollo {
+  // eslint-disable-next-line no-undef
   type = null
+  // eslint-disable-next-line no-undef
   vueApolloSpecialKeys = []
 
-  constructor (vm, key, options) {
+  constructor(vm, key, options) {
     this.vm = vm
     this.key = key
     this.initialOptions = options
@@ -22,15 +24,17 @@ export default class SmartApollo {
     this.lastApolloOptions = null
   }
 
-  autostart () {
+  autostart() {
     if (typeof this.options.skip === 'function') {
       this._skipWatcher = this.vm.$watch(() => this.options.skip.call(this.vm, this.vm, this.key), this.skipChanged.bind(this), {
         immediate: true,
         deep: this.options.deep,
       })
-    } else if (!this.options.skip && !this.allSkip) {
+    }
+    else if (!this.options.skip && !this.allSkip) {
       this.start()
-    } else {
+    }
+    else {
       this._skip = true
     }
 
@@ -39,57 +43,59 @@ export default class SmartApollo {
     }
   }
 
-  pollIntervalChanged (value, oldValue) {
+  pollIntervalChanged(value, oldValue) {
     if (value !== oldValue) {
       this.pollInterval = value
 
       if (value == null) {
         this.stopPolling()
-      } else {
+      }
+      else {
         this.startPolling(value)
       }
     }
   }
 
-  skipChanged (value, oldValue) {
+  skipChanged(value, oldValue) {
     if (value !== oldValue) {
       this.skip = value
     }
   }
 
-  get pollInterval () {
+  get pollInterval() {
     return this._pollInterval
   }
 
-  set pollInterval (value) {
+  set pollInterval(value) {
     this._pollInterval = value
   }
 
-  get skip () {
+  get skip() {
     return this._skip
   }
 
-  set skip (value) {
+  set skip(value) {
     if (value || this.allSkip) {
       this.stop()
-    } else {
+    }
+    else {
       this.start()
     }
     this._skip = value
   }
 
-  get allSkip () {
+  get allSkip() {
     return this.vm.$apollo[skippAllKeys[this.type]]
   }
 
-  refresh () {
+  refresh() {
     if (!this._skip) {
       this.stop()
       this.start()
     }
   }
 
-  start () {
+  start() {
     this.starting = true
 
     // Reactive options
@@ -97,8 +103,9 @@ export default class SmartApollo {
       if (typeof this.initialOptions[prop] === 'function') {
         const queryCb = this.initialOptions[prop].bind(this.vm)
         this.options[prop] = queryCb()
-        let cb = query => {
-          if (this._destroyed) return
+        let cb = (query) => {
+          if (this._destroyed)
+            return
           this.options[prop] = query
           this.refresh()
         }
@@ -131,12 +138,13 @@ export default class SmartApollo {
           },
         ),
       )
-    } else {
+    }
+    else {
       this.executeApollo(this.options.variables)
     }
   }
 
-  stop () {
+  stop() {
     for (const unwatch of this._watchers) {
       unwatch()
     }
@@ -147,23 +155,24 @@ export default class SmartApollo {
     }
   }
 
-  generateApolloOptions (variables) {
+  generateApolloOptions(variables) {
     const apolloOptions = omit(this.options, this.vueApolloSpecialKeys)
     apolloOptions.variables = variables
     this.lastApolloOptions = apolloOptions
     return apolloOptions
   }
 
-  executeApollo (variables) {
+  executeApollo(variables) {
     this.starting = false
   }
 
-  nextResult (result) {
+  nextResult(result) {
     const { error } = result
-    if (error) addGqlError(error)
+    if (error)
+      addGqlError(error)
   }
 
-  callHandlers (handlers, ...args) {
+  callHandlers(handlers, ...args) {
     let catched = false
     for (const handler of handlers) {
       if (handler) {
@@ -177,7 +186,7 @@ export default class SmartApollo {
     return catched
   }
 
-  errorHandler (...args) {
+  errorHandler(...args) {
     return this.callHandlers([
       this.options.error,
       this.vm.$apollo.error,
@@ -185,32 +194,37 @@ export default class SmartApollo {
     ], ...args)
   }
 
-  catchError (error) {
+  catchError(error) {
     addGqlError(error)
 
     const catched = this.errorHandler(error, this.vm, this.key, this.type, this.lastApolloOptions)
 
-    if (catched) return
+    if (catched)
+      return
 
     if (error.graphQLErrors && error.graphQLErrors.length !== 0) {
       console.error(`GraphQL execution errors for ${this.type} '${this.key}'`)
       for (const e of error.graphQLErrors) {
         console.error(e)
       }
-    } else if (error.networkError) {
+    }
+    else if (error.networkError) {
       console.error(`Error sending the ${this.type} '${this.key}'`, error.networkError)
-    } else {
+    }
+    else {
       console.error(`[vue-apollo] An error has occurred for ${this.type} '${this.key}'`)
       if (Array.isArray(error)) {
         console.error(...error)
-      } else {
+      }
+      else {
         console.error(error)
       }
     }
   }
 
-  destroy () {
-    if (this._destroyed) return
+  destroy() {
+    if (this._destroyed)
+      return
 
     this._destroyed = true
     this.stop()

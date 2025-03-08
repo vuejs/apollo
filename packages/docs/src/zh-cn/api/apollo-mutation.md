@@ -209,7 +209,7 @@ export default {
 签名：
 
 ```ts
-mutate(options = null): Promise<FetchResult>
+function mutate(options = null): Promise<FetchResult>
 ```
 
 - `options`: [变更选项](https://www.apollographql.com/docs/react/api/core/ApolloClient/#ApolloClient.mutate).

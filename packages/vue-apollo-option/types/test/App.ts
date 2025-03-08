@@ -1,11 +1,11 @@
 /* eslint-disable vue/one-component-per-file */
 
+import type { ApolloQueryResult, OperationVariables } from '@apollo/client/core'
+import type { DocumentNode } from 'graphql'
+import type { VueApolloQueryDefinition } from '../options'
 // this example src is https://github.com/Akryum/vue-apollo-example
 import gql from 'graphql-tag'
 import { defineComponent } from 'vue'
-import { OperationVariables, ApolloQueryResult } from '@apollo/client/core'
-import { VueApolloQueryDefinition } from '../options'
-import { DocumentNode } from 'graphql'
 
 const pageSize = 10
 
@@ -36,7 +36,7 @@ export const hey = defineComponent({
     meow: String,
   },
 
-  data () {
+  data() {
     return {
       waf: 'waf',
       loading: 0,
@@ -52,7 +52,7 @@ export const hey = defineComponent({
     message: {
       query: gql`query`,
       // https://vuejs.org/v2/guide/typescript.html#Annotating-Return-Types
-      variables (): HelloVars {
+      variables(): HelloVars {
         this.hello.toUpperCase()
         this.meow
         return {
@@ -60,25 +60,25 @@ export const hey = defineComponent({
         }
       },
       update: (data: FooResult) => data.foo.bar,
-      result (result: ApolloQueryResult<FooResult>, key) {
+      result(result: ApolloQueryResult<FooResult>, key) {
         this.meow
         console.log(result.data.foo.bar.toUpperCase())
         console.log(this.hello.toUpperCase())
         console.log(key)
       },
-      error (error) {
+      error(error) {
         console.error(error.graphQLErrors, error.networkError)
       },
       manual: false,
       loadingKey: 'loading',
-      watchLoading (isLoading, countModifier) {
+      watchLoading(isLoading, countModifier) {
         this.loading += countModifier
         if (isLoading) {
           console.log('isLoading')
         }
       },
       // https://vuejs.org/v2/guide/typescript.html#Annotating-Return-Types
-      skip (): boolean {
+      skip(): boolean {
         return this.meow === 'meow'
       },
       prefetch: true,
@@ -92,12 +92,12 @@ export const hey = defineComponent({
       subscribeToMore: {
         document: gql`subscription`,
         // https://vuejs.org/v2/guide/typescript.html#Annotating-Return-Types
-        variables (): OperationVariables {
+        variables(): OperationVariables {
           return {
             foo: this.hello,
           }
         },
-        updateQuery (previousResult, options) {
+        updateQuery(previousResult, options) {
           return {
             ...previousResult,
             foo: options.subscriptionData.data.foo,
@@ -108,7 +108,7 @@ export const hey = defineComponent({
 
     testMultiSubs: {
       query: gql`query`,
-      variables (): HelloVars {
+      variables(): HelloVars {
         return {
           hello: this.hello,
         }
@@ -119,7 +119,7 @@ export const hey = defineComponent({
           variables: {
             foo: 'bar',
           },
-          updateQuery (previousResult, options) {
+          updateQuery(previousResult, options) {
             return {
               ...previousResult,
               foo: options.subscriptionData.data.foo,
@@ -129,7 +129,7 @@ export const hey = defineComponent({
         {
           document: gql`subscription`,
           // https://vuejs.org/v2/guide/typescript.html#Annotating-Return-Types
-          variables (): HelloVars {
+          variables(): HelloVars {
             return {
               // Typescript Bug: https://github.com/microsoft/TypeScript/issues/33392
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -137,7 +137,7 @@ export const hey = defineComponent({
               hello: this.hello,
             }
           },
-          updateQuery (previousResult, options) {
+          updateQuery(previousResult, options) {
             return {
               ...previousResult,
               foo: options.subscriptionData.data.foo,
@@ -147,7 +147,7 @@ export const hey = defineComponent({
       ],
     },
 
-    tags (): VueApolloQueryDefinition<FooResult, HelloVars> {
+    tags(): VueApolloQueryDefinition<FooResult, HelloVars> {
       this.hello.toUpperCase()
       this.meow
       return {
@@ -178,7 +178,7 @@ export const hey = defineComponent({
     $subscribe: {
       tagAdded: {
         query: gql`subscription`,
-        variables (): OperationVariables {
+        variables(): OperationVariables {
           return {
             foo: this.meow,
           }
@@ -190,12 +190,12 @@ export const hey = defineComponent({
 
   computed: {
     // https://vuejs.org/v2/guide/typescript.html#Annotating-Return-Types
-    hello (): string {
+    hello(): string {
       return this.waf === 'waf' ? 'waf waf' : 'hello'
     },
   },
 
-  async created () {
+  async created() {
     const { data } = await this.$apollo.mutate<Foo, HelloVars>({
       mutation: gql`mutation {}`,
       variables: {
@@ -211,7 +211,7 @@ export const hey = defineComponent({
 })
 
 export default defineComponent({
-  data () {
+  data() {
     return {
       newTag: null,
       updateCount: 0,
@@ -232,7 +232,7 @@ export default defineComponent({
       loadingKey: 'loading',
       fetchPolicy: 'cache-first',
     },
-    tags (): VueApolloQueryDefinition {
+    tags(): VueApolloQueryDefinition {
       return {
         query: gql`query tagList ($type: String!) {
           tags(type: $type) {
@@ -278,7 +278,7 @@ export default defineComponent({
       }
     },
     randomTag: {
-      query (): DocumentNode | null {
+      query(): DocumentNode | null {
         if (this.showTag === 'random') {
           return gql`{
             randomTag {
@@ -287,7 +287,8 @@ export default defineComponent({
               type
             }
           }`
-        } else if (this.showTag === 'last') {
+        }
+        else if (this.showTag === 'last') {
           return gql`{
             randomTag: lastTag {
               id
@@ -315,13 +316,13 @@ export default defineComponent({
         page: 0,
         pageSize,
       },
-      result (result) {
+      result(result) {
         console.log(result)
         console.log(this.loading)
       },
     },
   },
-  mounted () {
+  mounted() {
     const observer = this.$apollo.subscribe({
       query: SUB_QUERY,
       variables: {
@@ -329,7 +330,7 @@ export default defineComponent({
       },
     })
     observer.subscribe({
-      next (data) {
+      next(data) {
         console.log('this.$apollo.subscribe', data)
       },
     })
@@ -338,7 +339,7 @@ export default defineComponent({
     this.$apollo.query({ query: gql`query mockQuery { id }`, client: 'test' })
   },
   methods: {
-    addTag () {
+    addTag() {
       const newTag = this.newTag
       this.$apollo.mutate({
         mutation: gql`mutation ($type: String!, $label: String!) {
@@ -374,7 +375,7 @@ export default defineComponent({
         this.newTag = newTag
       })
     },
-    showMore () {
+    showMore() {
       this.page++
       this.$apollo.queries.tagsPage.fetchMore({
         variables: {
@@ -401,7 +402,7 @@ export default defineComponent({
         },
       })
     },
-    refetchTags () {
+    refetchTags() {
       this.$apollo.queries.tags.refetch()
     },
   },

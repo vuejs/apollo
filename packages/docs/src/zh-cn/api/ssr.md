@@ -17,7 +17,7 @@ const states = ApolloSSR.getStates(apolloProvider, options)
 `options` 的默认值是：
 
 ```js
-{
+const defaultOptions = {
   // 每个 apollo 客户端状态的 key 的前缀
   exportNamespace: '',
 }
@@ -34,7 +34,7 @@ const js = ApolloSSR.exportStates(apolloProvider, options)
 `options` 的默认值是：
 
 ```js
-{
+const defaultOptions = {
   // 全局变量名
   globalName: '__APOLLO_STATE__',
   // 变量设置到的全局对象

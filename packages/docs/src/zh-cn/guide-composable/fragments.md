@@ -120,8 +120,8 @@ export const entryFragment = gql`
 如果我们的片段包含子片段，那么我们可以将它们传递到 `gql` 中：
 
 ```js
-import { entryFragment as VoteButtonsEntryFragment } from './VoteButtons.vue'
 import { entryFragment as RepoInfoEntryFragment } from './RepoInfo.vue'
+import { entryFragment as VoteButtonsEntryFragment } from './VoteButtons.vue'
 
 export const entryFragment = gql`
   fragment FeedEntry on Entry {
@@ -216,11 +216,11 @@ query {
 2. 在构建过程中，使用 `possibleTypes.json` 来配置缓存。然后，将新配置的缓存传递给 `ApolloClient` 以完成这个过程。
 
 ```js
-import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client/core'
+import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client/core'
 import possibleTypes from './possibleTypes.json'
 
 const cache = new InMemoryCache({ possibleTypes })
-const httpLink = createHttpLink({ uri });
+const httpLink = createHttpLink({ uri })
 
 const client = new ApolloClient({
   cache,

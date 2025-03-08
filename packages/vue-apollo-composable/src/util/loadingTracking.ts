@@ -1,7 +1,7 @@
-import { Ref, watch, ref, getCurrentScope, onScopeDispose } from 'vue-demi'
-import { isServer } from './env.js'
+import type { EffectScope, Ref } from 'vue-demi'
+import { getCurrentScope, onScopeDispose, ref, watch } from 'vue-demi'
 
-import type { EffectScope } from 'vue-demi'
+import { isServer } from './env.js'
 
 export interface LoadingTracking {
   queries: Ref<number>
@@ -20,7 +20,7 @@ export const globalTracking: AppLoadingTracking = {
   components: new Map(),
 }
 
-export function getCurrentTracking () {
+export function getCurrentTracking() {
   const currentScope = getCurrentScope()
   if (!currentScope) {
     return {}
@@ -48,7 +48,8 @@ export function getCurrentTracking () {
     onScopeDispose(() => {
       globalTracking.components.delete(currentScope)
     })
-  } else {
+  }
+  else {
     tracking = globalTracking.components.get(currentScope) as LoadingTracking
   }
 
@@ -57,15 +58,17 @@ export function getCurrentTracking () {
   }
 }
 
-function track (loading: Ref<boolean>, type: keyof LoadingTracking) {
-  if (isServer) return
+function track(loading: Ref<boolean>, type: keyof LoadingTracking) {
+  if (isServer)
+    return
 
   const { tracking } = getCurrentTracking()
 
   watch(loading, (value, oldValue) => {
     if (oldValue != null && value !== oldValue) {
       const mod = value ? 1 : -1
-      if (tracking) tracking[type].value += mod
+      if (tracking)
+        tracking[type].value += mod
       globalTracking[type].value += mod
     }
   }, {
@@ -74,20 +77,21 @@ function track (loading: Ref<boolean>, type: keyof LoadingTracking) {
 
   onScopeDispose(() => {
     if (loading.value) {
-      if (tracking) tracking[type].value--
+      if (tracking)
+        tracking[type].value--
       globalTracking[type].value--
     }
   })
 }
 
-export function trackQuery (loading: Ref<boolean>) {
+export function trackQuery(loading: Ref<boolean>) {
   track(loading, 'queries')
 }
 
-export function trackMutation (loading: Ref<boolean>) {
+export function trackMutation(loading: Ref<boolean>) {
   track(loading, 'mutations')
 }
 
-export function trackSubscription (loading: Ref<boolean>) {
+export function trackSubscription(loading: Ref<boolean>) {
   track(loading, 'subscriptions')
 }

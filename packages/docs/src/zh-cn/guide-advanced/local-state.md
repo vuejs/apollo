@@ -13,7 +13,7 @@
 让我们创建一个本地 schema 来描述将在 todo 列表中作为单个事项的元素。在这个事项中应该有一些文本、一些定义它是否已经完成的属性、以及一个 ID 来区分不同的待办事项。所以，它应该是一个具有三个属性的对象：
 
 ```js
-{
+const item = {
   id: 'uniqueId',
   text: 'some text',
   done: false
@@ -23,9 +23,9 @@
 现在我们可以将 `Item` 类型添加到本地 GraphQL schema 中。
 
 ```js
-//main.js
+// main.js
 
-import gql from 'graphql-tag';
+import gql from 'graphql-tag'
 
 export const typeDefs = gql`
   type Item {
@@ -33,7 +33,7 @@ export const typeDefs = gql`
     text: String!
     done: Boolean!
   }
-`;
+`
 ```
 
 这里的 `gql` 代表解析 GraphQL 查询字符串的 JavaScript 模板字符串标签。
@@ -59,7 +59,7 @@ const apolloClient = new ApolloClient({
 
 想象我们的远程 schema 中有一个 `User` 类型：
 
-```js
+```gql
 type User {
   name: String!
   age: Int!
@@ -73,7 +73,7 @@ export const schema = gql`
   extend type User {
     twitter: String
   }
-`;
+`
 ```
 
 现在，在查询用户时，我们需要指定 `twitter` 是本地字段：
@@ -85,7 +85,7 @@ const userQuery = gql`
     age
     twitter @client
   }
-`;
+`
 ```
 
 ## 初始化 Apollo 缓存
@@ -147,7 +147,7 @@ cache.writeData({
 ```js
 // App.vue
 
-import gql from 'graphql-tag';
+import gql from 'graphql-tag'
 
 const todoItemsQuery = gql`
   {
@@ -157,7 +157,7 @@ const todoItemsQuery = gql`
       done
     }
   }
-`;
+`
 ```
 
 `@client` 指令是与发送到远程 API 的查询的主要区别。该指令指定 Apollo 客户端不应在远程 GraqhQL API 上执行此查询，而是应该从本地缓存中获取结果。
@@ -165,13 +165,13 @@ const todoItemsQuery = gql`
 现在，我们可以在 Vue 组件中像普通的 Apollo 查询一样使用此查询：
 
 ```js
-// App.vue
-
-apollo: {
-  todoItems: {
-    query: todoItemsQuery
-  }
-},
+export default {
+  apollo: {
+    todoItems: {
+      query: todoItemsQuery
+    }
+  },
+}
 ```
 
 ## 使用变更修改本地数据
@@ -209,7 +209,7 @@ const checkItemMutation = gql`
   mutation($id: ID!) {
     checkItem(id: $id) @client
   }
-`;
+`
 ```
 
 我们定义了一个**本地**变更（因为在这里写了一个 `@client` 指令），它将接受一个唯一的标识符作为参数。现在，我们需要一个**解析器**：一个解析 schema 中类型或字段的值的函数。
@@ -224,13 +224,14 @@ const checkItemMutation = gql`
 const resolvers = {
   Mutation: {
     checkItem: (_, { id }, { cache }) => {
-      const data = cache.readQuery({ query: todoItemsQuery });
-      const currentItem = data.todoItems.find(item => item.id === id);
-      currentItem.done = !currentItem.done;
-      cache.writeQuery({ query: todoItemsQuery, data });
-      return currentItem.done;
+      const data = cache.readQuery({ query: todoItemsQuery })
+      const currentItem = data.todoItems.find(item => item.id === id)
+      currentItem.done = !currentItem.done
+      cache.writeQuery({ query: todoItemsQuery, data })
+      return currentItem.done
     },
-};
+  }
+}
 ```
 
 在这里我们做了什么？
@@ -255,6 +256,7 @@ const resolvers = {
       cache.writeQuery({ query: todoItemsQuery, data });
       return currentItem.done;
     },
+  }
 };
 
 const apolloClient = new ApolloClient({
@@ -267,14 +269,14 @@ const apolloClient = new ApolloClient({
 现在，我们可以在 Vue 组件中像普通的 Apollo [变更](../guide-option/mutations.md) 一样使用此变更：
 
 ```js
-// App.vue
-
-methods: {
-  checkItem(id) {
-    this.$apollo.mutate({
-      mutation: checkItemMutation,
-      variables: { id }
-    });
-  },
+export default {
+  methods: {
+    checkItem(id) {
+      this.$apollo.mutate({
+        mutation: checkItemMutation,
+        variables: { id }
+      })
+    },
+  }
 }
 ```

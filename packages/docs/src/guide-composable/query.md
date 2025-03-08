@@ -461,7 +461,7 @@ This also means you can pass `props` from `setup` directly, since `props` is alr
 export default {
   props: ['id'],
 
-  setup (props) {
+  setup(props) {
     const { result } = useQuery(gql`
       query getUserById ($id: ID!) {
         user (id: $id) {
@@ -525,7 +525,7 @@ const { result } = useQuery(gql`
   id: id.value
 }))
 
-function selectUser (id) {
+function selectUser(id) {
   id.value = id
 }
 ```
@@ -602,7 +602,7 @@ const { result } = useQuery(gql`
   enabled: enabled.value,
 }))
 
-function enableQuery () {
+function enableQuery() {
   enabled.value = true
 }
 ```
@@ -766,9 +766,9 @@ If you provide new values for **some** of your original query's variables but no
 This is called whenever a new result is available.
 
 ```js
-const { onResult } = useQuery(...)
+const { onResult } = useQuery(/* ... */)
 
-onResult(queryResult => {
+onResult((queryResult) => {
   console.log(queryResult.data)
   console.log(queryResult.loading)
   console.log(queryResult.networkStatus)
@@ -791,9 +791,9 @@ useQuery(gql`
 It is triggered when an error occurs:
 
 ```js
-const { onError } = useQuery(...)
+const { onError } = useQuery(/* ... */)
 
-onError(error => {
+onError((error) => {
   console.log(error.graphQLErrors)
   console.log(error.networkError)
 })
@@ -804,9 +804,9 @@ You can use the `logErrorMessages` function from the `@vue/apollo-util` package 
 ```js
 import { logErrorMessages } from '@vue/apollo-util'
 
-const { onError } = useQuery(...)
+const { onError } = useQuery(/* ... */)
 
-onError(error => {
+onError((error) => {
   logErrorMessages(error)
 })
 ```
@@ -820,9 +820,9 @@ If you are using Webpack or Vue CLI, it's a good idea to only use it in developm
 ```js
 import { logErrorMessages } from '@vue/apollo-util'
 
-const { onError } = useQuery(...)
+const { onError } = useQuery(/* ... */)
 
-onError(error => {
+onError((error) => {
   if (process.env.NODE_ENV !== 'production') {
     logErrorMessages(error)
   }
@@ -894,10 +894,11 @@ const { result, load, refetch } = useLazyQuery(gql`
 `)
 // ...
 
-async function myLoad () {
+async function myLoad() {
   try {
     const result = await load()
-  } catch (e) {
+  }
+  catch (e) {
     // Handle error
   }
 }
@@ -915,7 +916,7 @@ const { result, load, refetch } = useLazyQuery(gql`
 `)
 // ...
 
-function loadOrRefetch () {
+function loadOrRefetch() {
   load() || refetch()
 }
 ```

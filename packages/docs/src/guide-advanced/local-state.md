@@ -17,7 +17,7 @@ Just how creating a GraphQL schema is the first step toward defining our data mo
 Let's create a local schema to describe an item that will serve as a single element of todo-items list. This item should have some text, some property to define if it's already done or not and also an ID to distinguish one todo-item from another. So, it should be an object with three properties:
 
 ```js
-{
+const obj = {
   id: 'uniqueId',
   text: 'some text',
   done: false
@@ -27,9 +27,9 @@ Let's create a local schema to describe an item that will serve as a single elem
 Now we're ready to add an `Item` type to our local GraphQL schema.
 
 ```js
-//main.js
+// main.js
 
-import gql from 'graphql-tag';
+import gql from 'graphql-tag'
 
 export const typeDefs = gql`
   type Item {
@@ -37,7 +37,7 @@ export const typeDefs = gql`
     text: String!
     done: Boolean!
   }
-`;
+`
 ```
 
 `gql` here stands for the JavaScript template literal tag that parses GraphQL query strings.
@@ -63,7 +63,7 @@ You can not only create a local schema from scratch but also add a local **virtu
 
 Imagine we have a type `User` in our remote schema:
 
-```js
+```gql
 type User {
   name: String!
   age: Int!
@@ -77,7 +77,7 @@ export const schema = gql`
   extend type User {
     twitter: String
   }
-`;
+`
 ```
 
 Now, when querying a user, we will need to specify `twitter` field is local:
@@ -89,7 +89,7 @@ const userQuery = gql`
     age
     twitter @client
   }
-`;
+`
 ```
 
 ## Initializing an Apollo cache
@@ -151,7 +151,7 @@ Querying local cache is very similar to [sending GraphQL queries to remote serve
 ```js
 // App.vue
 
-import gql from 'graphql-tag';
+import gql from 'graphql-tag'
 
 const todoItemsQuery = gql`
   {
@@ -161,7 +161,7 @@ const todoItemsQuery = gql`
       done
     }
   }
-`;
+`
 ```
 
 The main difference with queries to remote API is `@client` directive. This directive specifies that this query should not be executed against remote GraqhQL API. Instead, Apollo client should fetch results from the local cache.
@@ -169,13 +169,13 @@ The main difference with queries to remote API is `@client` directive. This dire
 Now, we can use this query in our Vue component as a usual Apollo query:
 
 ```js
-// App.vue
-
-apollo: {
-  todoItems: {
-    query: todoItemsQuery
-  }
-},
+export default {
+  apollo: {
+    todoItems: {
+      query: todoItemsQuery
+    }
+  },
+}
 ```
 
 ## Change local data with mutations
@@ -213,7 +213,7 @@ const checkItemMutation = gql`
   mutation($id: ID!) {
     checkItem(id: $id) @client
   }
-`;
+`
 ```
 
 We defined a _local_ mutation (because we have a `@client` directive here) that will accept a unique identifier as a parameter. Now, we need a _resolver_: a function that resolves a value for a type or field in a schema.
@@ -228,13 +228,14 @@ Let's add a resolver to our main file:
 const resolvers = {
   Mutation: {
     checkItem: (_, { id }, { cache }) => {
-      const data = cache.readQuery({ query: todoItemsQuery });
-      const currentItem = data.todoItems.find(item => item.id === id);
-      currentItem.done = !currentItem.done;
-      cache.writeQuery({ query: todoItemsQuery, data });
-      return currentItem.done;
+      const data = cache.readQuery({ query: todoItemsQuery })
+      const currentItem = data.todoItems.find(item => item.id === id)
+      currentItem.done = !currentItem.done
+      cache.writeQuery({ query: todoItemsQuery, data })
+      return currentItem.done
     },
-};
+  }
+}
 ```
 
 What are we doing here?
@@ -259,26 +260,27 @@ const resolvers = {
       cache.writeQuery({ query: todoItemsQuery, data });
       return currentItem.done;
     },
-};
+  },
+}
 
 const apolloClient = new ApolloClient({
   cache,
   typeDefs,
   resolvers,
-});
+})
 ```
 
 After this, we can use the mutation in our Vue component like normal [mutations](../guide-option/mutations.md):
 
 ```js
-// App.vue
-
-methods: {
-  checkItem(id) {
-    this.$apollo.mutate({
-      mutation: checkItemMutation,
-      variables: { id }
-    });
-  },
+export default {
+  methods: {
+    checkItem(id) {
+      this.$apollo.mutate({
+        mutation: checkItemMutation,
+        variables: { id }
+      })
+    },
+  }
 }
 ```

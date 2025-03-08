@@ -28,8 +28,8 @@ const link = split(
   // 根据操作类型分割
   ({ query }) => {
     const definition = getMainDefinition(query)
-    return definition.kind === 'OperationDefinition' &&
-      definition.operation === 'subscription'
+    return definition.kind === 'OperationDefinition'
+      && definition.operation === 'subscription'
   },
   wsLink,
   httpLink
@@ -48,27 +48,29 @@ const apolloClient = new ApolloClient({
 如果你需要更新一个来自订阅的智能查询结果，最好的方式是使用 `subscribeToMore` 查询方法。它将创建链接到智能查询的 [智能订阅](../api/smart-subscription.md)。你只需要将 `subscribeToMore` 添加到智能查询中：
 
 ```js
-apollo: {
-  tags: {
-    query: TAGS_QUERY,
-    subscribeToMore: {
-      document: gql`subscription name($param: String!) {
+export default {
+  apollo: {
+    tags: {
+      query: TAGS_QUERY,
+      subscribeToMore: {
+        document: gql`subscription name($param: String!) {
         itemAdded(param: $param) {
           id
           label
         }
       }`,
-      // 传递给订阅的变量
-      // 由于我们使用了函数，因此它们是响应式的
-      variables () {
-        return {
-          param: this.param,
-        }
-      },
-      // 变更之前的结果
-      updateQuery: (previousResult, { subscriptionData }) => {
+        // 传递给订阅的变量
+        // 由于我们使用了函数，因此它们是响应式的
+        variables() {
+          return {
+            param: this.param,
+          }
+        },
+        // 变更之前的结果
+        updateQuery: (previousResult, { subscriptionData }) => {
         // 在这里用之前的结果和新数据组合成新的结果
-      },
+        },
+      }
     }
   }
 }
@@ -164,34 +166,36 @@ this.$watch(() => this.type, (type, oldType) => {
 你可以在 `apollo` 选项中使用 `$subscribe` 关键字来声明 [智能订阅](../api/smart-subscription.md)：
 
 ```js
-apollo: {
+export default {
+  apollo: {
   // 订阅
-  $subscribe: {
+    $subscribe: {
     // 当添加一个标签时
-    tagAdded: {
-      query: gql`subscription tags($type: String!) {
+      tagAdded: {
+        query: gql`subscription tags($type: String!) {
         tagAdded(type: $type) {
           id
           label
           type
         }
       }`,
-      // 响应式变量
-      variables () {
+        // 响应式变量
+        variables() {
         // 像常规查询一样运作
         // 在每次改变值时都会使用正确的变量重新订阅
-        return {
-          type: this.type,
-        }
-      },
-      // 结果钩子
-      // 不要忘记对 `data` 进行解构
-      result ({ data }) {
-        console.log(data.tagAdded)
+          return {
+            type: this.type,
+          }
+        },
+        // 结果钩子
+        // 不要忘记对 `data` 进行解构
+        result({ data }) {
+          console.log(data.tagAdded)
+        },
       },
     },
   },
-},
+}
 ```
 
 你可以使用 `this.$apollo.subscriptions.<name>` 访问这个订阅。
@@ -203,27 +207,29 @@ apollo: {
 当服务端支持实时查询并使用订阅更新它们时，例如 [Hasura](https://hasura.io/)，你可以使用简单订阅来实现响应式查询：
 
 ```js
-data () {
-  return {
-    tags: [],
-  };
-},
-apollo: {
-  $subscribe: {
-    tags: {
-      query: gql`subscription {
+export default {
+  data() {
+    return {
+      tags: [],
+    }
+  },
+  apollo: {
+    $subscribe: {
+      tags: {
+        query: gql`subscription {
         tags {
           id
           label
           type
         }
       }`,
-      result ({ data }) {
-        this.tags = data.tags;
+        result({ data }) {
+          this.tags = data.tags
+        },
       },
     },
   },
-},
+}
 ```
 
 ## 跳过订阅
@@ -231,37 +237,39 @@ apollo: {
 如果订阅被跳过，它将被禁用且不再被更新。你可以使用 `skip` 选项：
 
 ```js
+export default {
 // Apollo 具体选项
-apollo: {
+  apollo: {
   // 订阅
-  $subscribe: {
+    $subscribe: {
     // 当添加一个标签时
-    tags: {
-      query: gql`subscription tags($type: String!) {
+      tags: {
+        query: gql`subscription tags($type: String!) {
         tagAdded(type: $type) {
           id
           label
           type
         }
       }`,
-      // 响应式变量
-      variables () {
-        return {
-          type: this.type,
+        // 响应式变量
+        variables() {
+          return {
+            type: this.type,
+          }
+        },
+        // 结果钩子
+        result(data) {
+        // 更新本地数据
+          this.tags.push(data.tagAdded)
+        },
+        // 跳过这个订阅
+        skip() {
+          return this.skipSubscription
         }
       },
-      // 结果钩子
-      result (data) {
-        // 更新本地数据
-        this.tags.push(data.tagAdded)
-      },
-      // 跳过这个订阅
-      skip () {
-        return this.skipSubscription
-      }
     },
   },
-},
+}
 ```
 
 在这里，当 `skipSubscription` 组件属性改变时，`skip` 将被自动调用。
@@ -277,10 +285,12 @@ this.$apollo.subscriptions.tags.skip = true
 你可以使用 `$apollo.addSmartSubscription(key, options)` 方法手动添加智能订阅：
 
 ```js
-created () {
-  this.$apollo.addSmartSubscription('tagAdded', {
+export default {
+  created() {
+    this.$apollo.addSmartSubscription('tagAdded', {
     // 选项同 '$subscribe'
-  })
+    })
+  }
 }
 ```
 
@@ -293,8 +303,9 @@ created () {
 使用 `$apollo.subscribe()` 方法来创建一个 GraphQL 订阅，当组件被销毁时将自动终止。它**不会**创建智能订阅。
 
 ```js
-mounted () {
-  const subQuery = gql`subscription tags($type: String!) {
+export default {
+  mounted() {
+    const subQuery = gql`subscription tags($type: String!) {
     tagAdded(type: $type) {
       id
       label
@@ -302,20 +313,21 @@ mounted () {
     }
   }`
 
-  const observer = this.$apollo.subscribe({
-    query: subQuery,
-    variables: {
-      type: 'City',
-    },
-  })
+    const observer = this.$apollo.subscribe({
+      query: subQuery,
+      variables: {
+        type: 'City',
+      },
+    })
 
-  observer.subscribe({
-    next (data) {
-      console.log(data)
-    },
-    error (error) {
-      console.error(error)
-    },
-  })
-},
+    observer.subscribe({
+      next(data) {
+        console.log(data)
+      },
+      error(error) {
+        console.error(error)
+      },
+    })
+  },
+}
 ```

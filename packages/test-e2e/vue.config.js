@@ -25,7 +25,7 @@ module.exports = {
   //       })
   // }
 
-  chainWebpack: config => {
+  chainWebpack: (config) => {
     config.module.rule('graphql')
       .test(/\.gql$/)
       .use('graphql-tag/loader')

@@ -1,6 +1,7 @@
-import { Ref, computed } from 'vue-demi'
-import { ExtractSingleKey } from './util/ExtractSingleKey'
 import type { DeepNonNullable, DeepRequired } from 'ts-essentials'
+import type { Ref } from 'vue-demi'
+import type { ExtractSingleKey } from './util/ExtractSingleKey'
+import { computed } from 'vue-demi'
 
 export type UseResultReturn<T> = Readonly<Ref<Readonly<T>>>
 
@@ -10,7 +11,7 @@ export type UseResultReturn<T> = Readonly<Ref<Readonly<T>>>
  * `undefined` until it is resolved.
  *
  * @example
- * const { result } = useQuery(...)
+ * const { result } = useQuery({})
  * const user = useResult(result)
  * // user is `undefined` until the query resolves
  *
@@ -18,7 +19,7 @@ export type UseResultReturn<T> = Readonly<Ref<Readonly<T>>>
  * @returns Readonly ref with `undefined` or the resolved `result`.
  * @deprecated Use `computed` instead. Before: `const items = useResult(result, [], data => data.someField.myItems)` After: `const items = computed(() => result.value?.someField.myItems ?? [])`
  */
-export function useResult<TResult, TResultKey extends keyof NonNullable<TResult> = keyof NonNullable<TResult>> (
+export function useResult<TResult, TResultKey extends keyof NonNullable<TResult> = keyof NonNullable<TResult>>(
   result: Ref<TResult>
 ): UseResultReturn<undefined | ExtractSingleKey<NonNullable<TResult>, TResultKey>>
 
@@ -28,7 +29,7 @@ export function useResult<TResult, TResultKey extends keyof NonNullable<TResult>
  * `defaultValue` until it is resolved.
  *
  * @example
- * const { result } = useQuery(...)
+ * const { result } = useQuery({})
  * const profile = useResult(result, {})
  * // profile is `{}` until the query resolves
  *
@@ -37,7 +38,7 @@ export function useResult<TResult, TResultKey extends keyof NonNullable<TResult>
  * @returns Readonly ref with the `defaultValue` or the resolved `result`.
  * @deprecated Use `computed` instead. Before: `const items = useResult(result, [], data => data.someField.myItems)` After: `const items = computed(() => result.value?.someField.myItems ?? [])`
  */
-export function useResult<TResult, TDefaultValue, TResultKey extends keyof NonNullable<TResult> = keyof NonNullable<TResult>> (
+export function useResult<TResult, TDefaultValue, TResultKey extends keyof NonNullable<TResult> = keyof NonNullable<TResult>>(
   result: Ref<TResult>,
   defaultValue: TDefaultValue
 ): UseResultReturn<TDefaultValue | ExtractSingleKey<NonNullable<TResult>, TResultKey>>
@@ -47,7 +48,7 @@ export function useResult<TResult, TDefaultValue, TResultKey extends keyof NonNu
  * The `value` of the ref will be `defaultValue` until it is resolved.
  *
  * @example
- * const { result } = useQuery(...)
+ * const { result } = useQuery({})
  * const comments = useResult(result, undefined, (data) => data.comments)
  * // user is `undefined`, then resolves to the result's `comments`
  *
@@ -61,7 +62,7 @@ export function useResult<
   TResult,
   TDefaultValue,
   TReturnValue,
-> (
+>(
   result: Ref<TResult>,
   defaultValue: TDefaultValue | undefined,
   pick: (data: DeepRequired<DeepNonNullable<TResult>>) => TReturnValue
@@ -74,7 +75,7 @@ export function useResult<
   TResult,
   TDefaultValue,
   TReturnValue,
-> (
+>(
   result: Ref<TResult>,
   defaultValue?: TDefaultValue,
   pick?: (data: DeepRequired<DeepNonNullable<TResult>>) => TReturnValue,
@@ -90,15 +91,18 @@ const items = computed(() => result.value?.someField.myItems ?? [])`)
       if (pick) {
         try {
           return pick(value as DeepRequired<DeepNonNullable<TResult>>)
-        } catch (e) {
+        }
+        catch (e) {
           // Silent error
         }
-      } else {
+      }
+      else {
         const keys = Object.keys(value)
         if (keys.length === 1) {
           // Automatically take the only key in result data
           return value[keys[0] as keyof TResult]
-        } else {
+        }
+        else {
           // Return entire result data
           return value
         }

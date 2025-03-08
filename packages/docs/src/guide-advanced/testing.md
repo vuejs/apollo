@@ -68,7 +68,6 @@ const sourceSchema = `
     twitter: String
   }
 
-
   type Query {
     allHeroes: [VueHero]
   }
@@ -76,14 +75,14 @@ const sourceSchema = `
   type Mutation {
     addHero(hero: HeroInput!): VueHero!
     deleteHero(name: String!): Boolean
-  } 
+  }
 `
 ```
 Next step is to create an executable schema with `graphql-tools` method:
 
 ```js
 import { makeExecutableSchema } from 'graphql-tools'
-...
+// ...
 const schema = makeExecutableSchema({
   typeDefs: sourceSchema,
 })
@@ -92,7 +91,7 @@ After this you need to add mock functions to schema:
 
 ```js
 import { addMockFunctionsToSchema } from 'graphql-tools'
-...
+// ...
 addMockFunctionsToSchema({
   schema,
 })
@@ -115,7 +114,7 @@ const query = `
 Call GraphQL query in the test case, save response to component data and then check if rendered component matches a snapshot:
 
 ```js
-graphql(schema, query).then(result => {
+graphql(schema, query).then((result) => {
   wrapper.setData(result.data)
   expect(wrapper.element).toMatchSnapshot()
 })

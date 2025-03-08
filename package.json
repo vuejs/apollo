@@ -2,20 +2,19 @@
   "name": "vue-apollo-monorepo",
   "version": "4.2.1",
   "private": true,
+  "packageManager": "pnpm@10.6.1+sha512.40ee09af407fa9fbb5fbfb8e1cb40fbb74c0af0c3e10e9224d7b53c7658528615b2c92450e74cfad91e3a2dcafe3ce4050d80bda71d757756d2ce2b66213e9a3",
   "scripts": {
     "build": "pnpm run -r --filter \"vue-apollo*\" --filter \"@vue/apollo*\" build",
     "test": "pnpm run -r --sequential test",
     "test:unit": "pnpm run -r test:unit",
     "test:types": "pnpm run -r test:types",
-    "lint": "eslint . --ext js,vue,ts",
+    "lint": "eslint . --cache",
     "release": "pnpm run build && pnpm run test && sheep release -b v4",
     "docs:dev": "pnpm run -r --filter \"private-vue-apollo-docs\" dev"
   },
-  "resolutions": {
-    "js-yaml": "^3.13.1"
-  },
   "devDependencies": {
     "@akryum/sheep": "^0.5.1",
+    "@antfu/eslint-config": "^4.7.0",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
     "@vue/eslint-config-standard": "^6.1.0",
@@ -24,15 +23,9 @@
     "core-js": "^3.23.2",
     "esbuild": "^0.25.0",
     "esbuild-node-externals": "^1.18.0",
-    "eslint": "^7.32.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.3.1",
-    "eslint-plugin-standard": "^5.0.0",
-    "eslint-plugin-vue": "^7.20.0",
+    "eslint": "^9.21.0",
     "typescript": "^5.8.2"
   },
-  "packageManager": "pnpm@10.6.1+sha512.40ee09af407fa9fbb5fbfb8e1cb40fbb74c0af0c3e10e9224d7b53c7658528615b2c92450e74cfad91e3a2dcafe3ce4050d80bda71d757756d2ce2b66213e9a3",
   "pnpm": {
     "overrides": {
       "eslint-scope": "^5",
@@ -58,5 +51,8 @@
         "vue": "*"
       }
     }
+  },
+  "resolutions": {
+    "js-yaml": "^3.13.1"
   }
 }

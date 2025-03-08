@@ -23,10 +23,12 @@ import gql from 'graphql-tag'
 直接将 [gql](https://github.com/apollographql/graphql-tag) 查询作为值：
 
 ```js
-apollo: {
+export default {
+  apollo: {
   // 简单的查询，将更新 'hello' 这个 vue 属性
-  hello: gql`{hello}`,
-},
+    hello: gql`{hello}`,
+  },
+}
 ```
 
 接下来你可以通过 `this.$apollo.queries.<name>` 访问这个查询。
@@ -34,12 +36,14 @@ apollo: {
 你可以在 vue 组件的 `data` 钩子中初始化属性：
 
 ```js
-data () {
-  return {
+export default {
+  data() {
+    return {
     // 初始化你的 apollo 数据
-    hello: '',
+      hello: '',
+    }
   },
-},
+}
 ```
 
 在服务端添加相应的 schema 和解析器：
@@ -57,7 +61,7 @@ schema {
 
 export const resolvers = {
   Query: {
-    hello (root, args, context) {
+    hello(root, args, context) {
       return 'Hello world!'
     },
   },
@@ -84,22 +88,26 @@ export const resolvers = {
 请注意，初学者常见的错误是使用与查询中的字段名不相同的数据名称，例如：
 
 ```js
-apollo: {
-  world: gql`query {
+export default {
+  apollo: {
+    world: gql`query {
     hello
   }`
+  }
 }
 ```
 
 注意 `world` 与 `hello` 的不同之处：`vue-apollo` 不会去猜测你想要将哪些数据从查询结果中放入组件中。默认情况下，它只会尝试你在组件中使用的数据名称（即 `apollo` 对象中的键），在本例中为 `world`。如果名称不匹配，你可以使用 `update` 选项来告诉 `vue-apollo` 在结果中使用什么样的数据：
 
 ```js
-apollo: {
-  world: {
-    query: gql`query {
+export default {
+  apollo: {
+    world: {
+      query: gql`query {
       hello
     }`,
-    update: data => data.hello
+      update: data => data.hello
+    }
   }
 }
 ```
@@ -107,10 +115,12 @@ apollo: {
 你也可以直接在 GraphQL 文档中重命名该字段：
 
 ```js
-apollo: {
-  world: gql`query {
+export default {
+  apollo: {
+    world: gql`query {
     world: hello
   }`
+  }
 }
 ```
 
@@ -121,20 +131,22 @@ apollo: {
 你可以通过在对象中声明 `query` 和 `variables` 将变量（及其他参数）添加到 `gql` 查询中：
 
 ```js
+export default {
 // Apollo 具体选项
-apollo: {
+  apollo: {
   // 带参数的查询
-  ping: {
+    ping: {
     // gql 查询
-    query: gql`query PingMessage($message: String!) {
+      query: gql`query PingMessage($message: String!) {
       ping(message: $message)
     }`,
-    // 静态参数
-    variables: {
-      message: 'Meow',
+      // 静态参数
+      variables: {
+        message: 'Meow',
+      },
     },
   },
-},
+}
 ```
 
 你可以在这个对象中使用 apollo 的 `watchQuery` 中的选项，比如：
@@ -147,30 +159,34 @@ apollo: {
 例如，你可以像这样添加 `fetchPolicy` apollo 选项：
 
 ```js
-apollo: {
+export default {
+  apollo: {
   // 带参数的查询
-  ping: {
-    query: gql`query PingMessage($message: String!) {
+    ping: {
+      query: gql`query PingMessage($message: String!) {
       ping(message: $message)
     }`,
-    variables: {
-      message: 'Meow'
+      variables: {
+        message: 'Meow'
+      },
+      // 在这里加入其他选项
+      fetchPolicy: 'cache-and-network',
     },
-    // 在这里加入其他选项
-    fetchPolicy: 'cache-and-network',
   },
-},
+}
 ```
 
 同样的，你可以在 vue 组件中初始化属性：
 
 ```js
-data () {
-  return {
+export default {
+  data() {
+    return {
     // 初始化你的 apollo 数据
-    ping: '',
-  }
-},
+      ping: '',
+    }
+  },
+}
 ```
 
 在服务端添加相应的 schema 和解析器：
@@ -188,7 +204,7 @@ schema {
 
 export const resolvers = {
   Query: {
-    ping (root, { message }, context) {
+    ping(root, { message }, context) {
       return `Answering ${message}`
     },
   },
@@ -227,24 +243,26 @@ export const resolvers = {
 你可以使用将在创建组件时被调用一次的函数，并且它必须返回选项对象：
 
 ```js
+export default {
 // Apollo 具体选项
-apollo: {
+  apollo: {
   // 带参数的查询
-  ping () {
+    ping() {
     // 它将在创建组件时被调用一次
     // 必须返回选项对象
-    return {
+      return {
       // gql 查询
-      query: gql`query PingMessage($message: String!) {
+        query: gql`query PingMessage($message: String!) {
         ping(message: $message)
       }`,
-      // 静态参数
-      variables: {
-        message: 'Meow',
-      },
-    }
+        // 静态参数
+        variables: {
+          message: 'Meow',
+        },
+      }
+    },
   },
-},
+}
 ```
 
 ::: tip
@@ -256,31 +274,36 @@ apollo: {
 你可以使用函数定义 `query` 选项。这将自动更新 graphql 查询的定义：
 
 ```js
-// 特定标签可以是随机标签或最后添加的标签
-featuredTag: {
-  query () {
-    // 这里你可以用'this' 访问组件实例
-    if (this.showTag === 'random') {
-      return gql`{
+export default {
+  apollo: {
+    // 特定标签可以是随机标签或最后添加的标签
+    featuredTag: {
+      query() {
+        // 这里你可以用'this' 访问组件实例
+        if (this.showTag === 'random') {
+          return gql`{
         randomTag {
           id
           label
           type
         }
       }`
-    } else if (this.showTag === 'last') {
-      return gql`{
+        }
+        else if (this.showTag === 'last') {
+          return gql`{
         lastTag {
           id
           label
           type
         }
       }`
-    }
-  },
-  // 为 'featuredTag' 这个组件属性赋值
-  update: data => data.randomTag || data.lastTag,
-},
+        }
+      },
+      // 为 'featuredTag' 这个组件属性赋值
+      update: data => data.randomTag || data.lastTag,
+    },
+  }
+}
 ```
 
 ::: tip
@@ -292,22 +315,24 @@ featuredTag: {
 使用函数使 vue 属性能够响应式的提供给参数：
 
 ```js
+export default {
 // Apollo 具体选项
-apollo: {
+  apollo: {
   // 带参数的查询
-  ping: {
-    query: gql`query PingMessage($message: String!) {
+    ping: {
+      query: gql`query PingMessage($message: String!) {
       ping(message: $message)
     }`,
-    // 响应式参数
-    variables () {
+      // 响应式参数
+      variables() {
       // 在这里使用 vue 响应式属性
-      return {
+        return {
           message: this.pingInput,
-      }
+        }
+      },
     },
   },
-},
+}
 ```
 
 在每次参数更改时，将重新获取查询，例如：
@@ -329,28 +354,30 @@ apollo: {
 如果查询被跳过，它将被禁用且结果将不再被更新。你可以使用 `skip` 选项：
 
 ```js
+export default {
 // Apollo 具体选项
-apollo: {
-  tags: {
+  apollo: {
+    tags: {
     // GraphQL 查询
-    query: gql`query tagList ($type: String!) {
+      query: gql`query tagList ($type: String!) {
       tags(type: $type) {
         id
         label
       }
     }`,
-    // 响应式变量
-    variables () {
-      return {
-        type: this.type,
-      }
-    },
-    // 禁用这个查询
-    skip () {
-      return this.skipQuery
+      // 响应式变量
+      variables() {
+        return {
+          type: this.type,
+        }
+      },
+      // 禁用这个查询
+      skip() {
+        return this.skipQuery
+      },
     },
   },
-},
+}
 ```
 
 在这里，当 `skipQuery` 组件属性改变时，`skip` 将被自动调用。
@@ -368,24 +395,29 @@ this.$apollo.queries.tags.skip = true
 这里是一个使用轮询的响应式查询示例：
 
 ```js
+export default {
 // Apollo 具体选项
-apollo: {
+  apollo: {
   // vue 实例上的 'tags' 数据属性
-  tags: {
-    query: gql`query tagList {
+    tags: {
+      query: gql`query tagList {
       tags {
         id,
         label
       }
     }`,
-    pollInterval: 300, // 毫秒
+      pollInterval: 300, // 毫秒
+    },
   },
-},
+}
 ```
 
 这里是服务端的定义：
 
 ```js
+// 假数据生成器
+import casual from 'casual'
+
 export const schema = `
 type Tag {
   id: Int
@@ -401,18 +433,15 @@ schema {
 }
 `
 
-// 假数据生成器
-import casual from 'casual'
-
 // 生成一些标签
-var id = 0
-var tags = []
+let id = 0
+const tags = []
 for (let i = 0; i < 42; i++) {
   addTag(casual.word)
 }
 
-function addTag (label) {
-  let t = {
+function addTag(label) {
+  const t = {
     id: id++,
     label,
   }
@@ -422,7 +451,7 @@ function addTag (label) {
 
 export const resolvers = {
   Query: {
-    tags (root, args, context) {
+    tags(root, args, context) {
       return tags
     },
   },
@@ -434,10 +463,12 @@ export const resolvers = {
 你可以使用 `$apollo.addSmartQuery(key, options)` 方法手动添加智能查询：
 
 ```js
-created () {
-  this.$apollo.addSmartQuery('comments', {
+export default {
+  created() {
+    this.$apollo.addSmartQuery('comments', {
     // 选项同上文
-  })
+    })
+  }
 }
 ```
 

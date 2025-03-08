@@ -5,7 +5,7 @@ import './styles/index.pcss'
 
 export default {
   ...DefaultTheme,
-  enhanceApp ({ app }) {
+  enhanceApp({ app }) {
     app.component('SponsorButton', SponsorButton)
   },
 }

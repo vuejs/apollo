@@ -25,7 +25,6 @@ const apolloClient = new ApolloClient({
   cache,
   uri: 'http://localhost:4042/graphql',
 })
-
 ```
 
 ::: warning

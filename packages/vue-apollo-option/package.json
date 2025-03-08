@@ -2,10 +2,24 @@
   "name": "@vue/apollo-option",
   "version": "4.2.0",
   "description": "Use Apollo and GraphQL with Vue.js using the `apollo` option",
-  "main": "dist/vue-apollo-option.umd.js",
-  "module": "dist/vue-apollo-option.esm.mjs",
-  "unpkg": "dist/vue-apollo-option.min.js",
-  "types": "types/index.d.ts",
+  "author": "Guillaume Chau <guillaume.b.chau@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://apollo.vuejs.org/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vuejs/vue-apollo.git",
+    "directory": "packages/vue-apollo-option"
+  },
+  "bugs": {
+    "url": "https://github.com/vuejs/vue-apollo/issues"
+  },
+  "keywords": [
+    "vue",
+    "apollo",
+    "graphql",
+    "option",
+    "classic"
+  ],
   "exports": {
     ".": {
       "types": "./types/index.d.ts",
@@ -14,6 +28,10 @@
     },
     "./*": "./*"
   },
+  "main": "dist/vue-apollo-option.umd.js",
+  "module": "dist/vue-apollo-option.esm.mjs",
+  "unpkg": "dist/vue-apollo-option.min.js",
+  "types": "types/index.d.ts",
   "scripts": {
     "build": "pnpm run build:browser && pnpm run build:es && pnpm run build:umd",
     "build:browser": "rollup --config build/rollup.config.browser.js",
@@ -25,24 +43,6 @@
     "test:types": "tsc -p types/test",
     "test:unit": "vitest run"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/vuejs/vue-apollo.git",
-    "directory": "packages/vue-apollo-option"
-  },
-  "keywords": [
-    "vue",
-    "apollo",
-    "graphql",
-    "option",
-    "classic"
-  ],
-  "author": "Guillaume Chau <guillaume.b.chau@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/vuejs/vue-apollo/issues"
-  },
-  "homepage": "https://apollo.vuejs.org/",
   "publishConfig": {
     "access": "public"
   },

@@ -9,7 +9,6 @@
   <img src="https://cdn-images-1.medium.com/max/400/1*H9AANoofLqjS10Xd5TwRYw.png">
 </p>
 
-
 :book: Documentation [**for Vue 3**](http://v4.apollo.vuejs.org) | [for Vue 2](https://apollo.vuejs.org/)
 
 [:pen: Contributing guide](./CONTRIBUTING.md)

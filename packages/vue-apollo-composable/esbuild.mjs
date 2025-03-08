@@ -1,5 +1,5 @@
+import path from 'node:path'
 import esbuild from 'esbuild'
-import path from 'path'
 import { nodeExternalsPlugin } from 'esbuild-node-externals'
 
 /** @typedef {import('esbuild').BuildOptions} BuildOptions */

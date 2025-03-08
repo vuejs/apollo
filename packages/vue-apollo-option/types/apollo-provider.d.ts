@@ -1,11 +1,11 @@
 /* eslint no-unused-vars: 0 */
 
-import { ComponentOptions, AsyncComponentOptions, App } from 'vue'
-import { ApolloClient } from '@apollo/client/core/index.js'
-import {
+import type { ApolloClient } from '@apollo/client/core/index.js'
+import type { App, AsyncComponentOptions, ComponentOptions } from 'vue'
+import type {
+  ErrorHandler,
   VueApolloComponentOptions,
   WatchLoading,
-  ErrorHandler,
 } from './options'
 
 export type VueApolloComponent<V extends ComponentOptions = ComponentOptions> = VueApolloComponentOptions<V> | AsyncComponentOptions
@@ -19,9 +19,9 @@ export interface ApolloProviderOptions<TCacheShape = any> {
   prefetch?: boolean
 }
 
-export class ApolloProvider<TCacheShape=any> {
-  constructor (options: ApolloProviderOptions<TCacheShape>)
-  install (app: App): void
+export class ApolloProvider<TCacheShape = any> {
+  constructor(options: ApolloProviderOptions<TCacheShape>)
+  install(app: App): void
 
   clients: { [key: string]: ApolloClient<TCacheShape> }
   defaultClient: ApolloClient<TCacheShape>

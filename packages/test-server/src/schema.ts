@@ -1,7 +1,7 @@
 import { makeExecutableSchema } from '@graphql-tools/schema'
 import { PubSub, withFilter } from 'graphql-subscriptions'
-import shortid from 'shortid'
 import gql from 'graphql-tag'
+import shortid from 'shortid'
 import { channels } from './data.js'
 import { GraphQLErrorWithCode } from './util.js'
 
@@ -82,7 +82,7 @@ const resolvers = {
       }
       const message = {
         id: shortid(),
-        channel: channel,
+        channel,
         text: input.text,
       }
       channel.messages.push(message)

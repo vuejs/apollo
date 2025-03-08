@@ -1,5 +1,5 @@
-import gql from 'graphql-tag'
 import { useQuery } from '@vue/apollo-composable'
+import gql from 'graphql-tag'
 import { defineStore } from 'pinia'
 import { computed, watch } from 'vue'
 
@@ -20,7 +20,7 @@ export const useChannels = defineStore('channel', () => {
 
   const channels = computed(() => query.result.value?.channels ?? [])
 
-  watch(query.loading, value => {
+  watch(query.loading, (value) => {
     console.log('loading', value)
   }, {
     immediate: true,

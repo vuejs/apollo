@@ -1,18 +1,19 @@
-import { DocumentNode } from 'graphql'
-import { MutationOptions, OperationVariables, FetchResult, TypedDocumentNode, ApolloError, ApolloClient } from '@apollo/client/core/index.js'
-import { ref, onScopeDispose, isRef, Ref, getCurrentScope, shallowRef, nextTick } from 'vue-demi'
+import type { ApolloClient, ApolloError, FetchResult, MutationOptions, OperationVariables, TypedDocumentNode } from '@apollo/client/core/index.js'
+import type { DocumentNode } from 'graphql'
+import type { Ref } from 'vue-demi'
+import type { ReactiveFunction } from './util/ReactiveFunction'
+import { getCurrentScope, isRef, nextTick, onScopeDispose, ref, shallowRef } from 'vue-demi'
 import { useApolloClient } from './useApolloClient'
-import { ReactiveFunction } from './util/ReactiveFunction'
-import { useEventHook } from './util/useEventHook'
 import { trackMutation } from './util/loadingTracking'
 import { toApolloError } from './util/toApolloError'
+import { useEventHook } from './util/useEventHook'
 
 /**
  * `useMutation` options for mutations that don't require `variables`.
  */
 export interface UseMutationOptions<
   TResult = any,
-  TVariables = OperationVariables
+  TVariables = OperationVariables,
 > extends Omit<MutationOptions<TResult, TVariables>, 'mutation'> {
   clientId?: string
   throws?: 'auto' | 'always' | 'never'
@@ -48,8 +49,8 @@ export interface UseMutationReturn<TResult, TVariables> {
 
 export function useMutation<
   TResult = any,
-  TVariables extends OperationVariables = OperationVariables
-> (
+  TVariables extends OperationVariables = OperationVariables,
+>(
   document: DocumentParameter<TResult, TVariables>,
   options: OptionsParameter<TResult, TVariables> = {},
 ): UseMutationReturn<TResult, TVariables> {
@@ -65,22 +66,26 @@ export function useMutation<
   // Apollo Client
   const { resolveClient } = useApolloClient()
 
-  async function mutate (variables?: TVariables | null, overrideOptions: Omit<UseMutationOptions<TResult, TVariables>, 'variables'> = {}) {
+  async function mutate(variables?: TVariables | null, overrideOptions: Omit<UseMutationOptions<TResult, TVariables>, 'variables'> = {}) {
     let currentDocument: DocumentNode
     if (typeof document === 'function') {
       currentDocument = document()
-    } else if (isRef(document)) {
+    }
+    else if (isRef(document)) {
       currentDocument = document.value
-    } else {
+    }
+    else {
       currentDocument = document
     }
 
     let currentOptions: UseMutationOptions<TResult, TVariables>
     if (typeof options === 'function') {
       currentOptions = options()
-    } else if (isRef(options)) {
+    }
+    else if (isRef(options)) {
       currentOptions = options.value
-    } else {
+    }
+    else {
       currentOptions = options
     }
     const client = resolveClient(currentOptions.clientId)
@@ -94,9 +99,9 @@ export function useMutation<
         ...overrideOptions,
         variables: (variables ?? currentOptions.variables)
           ? {
-            ...(currentOptions.variables as TVariables),
-            ...(variables as TVariables),
-          }
+              ...(currentOptions.variables as TVariables),
+              ...(variables as TVariables),
+            }
           : undefined,
       })
       loading.value = false
@@ -105,7 +110,8 @@ export function useMutation<
         client,
       })
       return result
-    } catch (e) {
+    }
+    catch (e) {
       const apolloError = toApolloError(e)
       error.value = apolloError
       loading.value = false

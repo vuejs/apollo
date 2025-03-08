@@ -327,7 +327,7 @@ export default defineConfig({
   },
 
   locales: {
-    root: {
+    'root': {
       label: 'English',
       lang: 'en-US',
       title: 'Vue Apollo',

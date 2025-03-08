@@ -1,6 +1,6 @@
 const TD = require('throttle-debounce')
 
-function factory (action) {
+function factory(action) {
   return (cb, time) => action(time, cb)
 }
 

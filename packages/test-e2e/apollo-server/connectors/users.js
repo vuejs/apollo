@@ -1,6 +1,6 @@
 const shortid = require('shortid')
 
-function createDefaultUsers () {
+function createDefaultUsers() {
   return [
     {
       id: '__bot',
@@ -38,7 +38,8 @@ exports.login = ({ email, password }, context) => {
   const user = users.find(
     u => u.email === email && u.password === password,
   )
-  if (!user) throw new Error('User not found')
+  if (!user)
+    throw new Error('User not found')
   const token = {
     id: shortid(),
     userId: user.id,
@@ -56,7 +57,8 @@ exports.logout = (context) => {
     const user = exports.getOne(context.userId)
     if (user) {
       const index = user.tokens.findIndex(t => t.id === context.token.id)
-      if (index !== -1) user.tokens.splice(index, 1)
+      if (index !== -1)
+        user.tokens.splice(index, 1)
     }
   }
   return true
@@ -78,7 +80,8 @@ exports.validateToken = (token) => {
 }
 
 exports.current = (context) => {
-  if (!context.userId) throw new Error('Unauthorized')
+  if (!context.userId)
+    throw new Error('Unauthorized')
   return exports.getOne(context.userId, context)
 }
 

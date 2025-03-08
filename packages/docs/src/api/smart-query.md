@@ -24,61 +24,63 @@ Each query declared in the `apollo` definition (that is, which doesn't start wit
 Example:
 
 ```js
+export default {
 // Apollo-specific options
-apollo: {
+  apollo: {
   // Advanced query with parameters
   // The 'variables' method is watched by vue
-  pingMessage: {
-    query: gql`query PingMessage($message: String!) {
+    pingMessage: {
+      query: gql`query PingMessage($message: String!) {
       ping(message: $message)
     }`,
-    // Reactive parameters
-    variables () {
+      // Reactive parameters
+      variables() {
       // Use vue reactive properties here
-      return {
-        message: this.pingInput,
-      }
-    },
-    // Polling interval in milliseconds
-    pollInterval: 10000,
-    // Or, set polling interval as a vue reactive property
-    pollInterval() {
-      return this.pollInterval;
-    },
-    // Variables: deep object watch
-    deep: false,
-    // We use a custom update callback because
-    // the field names don't match
-    // By default, the 'pingMessage' attribute
-    // would be used on the 'data' result object
-    // Here we know the result is in the 'ping' attribute
-    // considering the way the apollo server works
-    update (data) {
-      console.log(data)
-      // The returned value will update
-      // the vue property 'pingMessage'
-      return data.ping
-    },
-    // Optional result hook
-    result ({ data, loading, networkStatus }) {
-      console.log('We got some result!')
-    },
-    // Error handling
-    error (error) {
-      console.error('We\'ve got an error!', error)
-    },
-    // Loading state
-    // loadingKey is the name of the data property
-    // that will be incremented when the query is loading
-    // and decremented when it no longer is.
-    loadingKey: 'loadingQueriesCount',
-    // watchLoading will be called whenever the loading state changes
-    watchLoading (isLoading, countModifier) {
+        return {
+          message: this.pingInput,
+        }
+      },
+      // Polling interval in milliseconds
+      pollInterval: 10000,
+      // Or, set polling interval as a vue reactive property
+      pollInterval() {
+        return this.pollInterval
+      },
+      // Variables: deep object watch
+      deep: false,
+      // We use a custom update callback because
+      // the field names don't match
+      // By default, the 'pingMessage' attribute
+      // would be used on the 'data' result object
+      // Here we know the result is in the 'ping' attribute
+      // considering the way the apollo server works
+      update(data) {
+        console.log(data)
+        // The returned value will update
+        // the vue property 'pingMessage'
+        return data.ping
+      },
+      // Optional result hook
+      result({ data, loading, networkStatus }) {
+        console.log('We got some result!')
+      },
+      // Error handling
+      error(error) {
+        console.error('We\'ve got an error!', error)
+      },
+      // Loading state
+      // loadingKey is the name of the data property
+      // that will be incremented when the query is loading
+      // and decremented when it no longer is.
+      loadingKey: 'loadingQueriesCount',
+      // watchLoading will be called whenever the loading state changes
+      watchLoading(isLoading, countModifier) {
       // isLoading is a boolean
       // countModifier is either 1 or -1
+      },
     },
   },
-},
+}
 ```
 
 If you use `ES2015`, you can also write the `update` like this:
@@ -90,14 +92,18 @@ update: data => data.ping
 Manual mode example:
 
 ```js
-{
-  query: gql`...`,
-  manual: true,
-  result ({ data, loading }) {
-    if (!loading) {
-      this.items = data.items
+export default {
+  apollo: {
+    myQuery: {
+      query: gql`...`,
+      manual: true,
+      result({ data, loading }) {
+        if (!loading) {
+          this.items = data.items
+        }
+      },
     }
-  },
+  }
 }
 ```
 

@@ -1,9 +1,10 @@
-import SmartQuery from './smart-query'
-import SmartSubscription from './smart-subscription'
 import { reapply } from '../lib/utils'
 import { isServer } from './env'
+import SmartQuery from './smart-query'
+import SmartSubscription from './smart-subscription'
+
 export class DollarApollo {
-  constructor (vm, provider) {
+  constructor(vm, provider) {
     this._apolloSubscriptions = []
     this._watchers = []
 
@@ -16,7 +17,7 @@ export class DollarApollo {
     this.error = undefined
   }
 
-  getClient (options = null) {
+  getClient(options = null) {
     if (!options || !options.client) {
       if (typeof this.client === 'object') {
         return this.client
@@ -24,7 +25,8 @@ export class DollarApollo {
       if (this.client) {
         if (!this.provider.clients) {
           throw new Error(`[vue-apollo] Missing 'clients' options in 'apolloProvider'`)
-        } else {
+        }
+        else {
           const client = this.provider.clients[this.client]
           if (!client) {
             throw new Error(`[vue-apollo] Missing client '${this.client}' in 'apolloProvider'`)
@@ -41,11 +43,11 @@ export class DollarApollo {
     return client
   }
 
-  query (options) {
+  query(options) {
     return this.getClient(options).query(options)
   }
 
-  watchQuery (options) {
+  watchQuery(options) {
     const observable = this.getClient(options).watchQuery(options)
     const _subscribe = observable.subscribe.bind(observable)
     observable.subscribe = (options) => {
@@ -56,11 +58,11 @@ export class DollarApollo {
     return observable
   }
 
-  mutate (options) {
+  mutate(options) {
     return this.getClient(options).mutate(options)
   }
 
-  subscribe (options) {
+  subscribe(options) {
     if (!isServer) {
       const observable = this.getClient(options).subscribe(options)
       const _subscribe = observable.subscribe.bind(observable)
@@ -73,15 +75,15 @@ export class DollarApollo {
     }
   }
 
-  get loading () {
+  get loading() {
     return this.vm.$data.$apolloData.loading !== 0
   }
 
-  get data () {
+  get data() {
     return this.vm.$data.$apolloData.data
   }
 
-  addSmartQuery (key, options) {
+  addSmartQuery(key, options) {
     let finalOptions = reapply(options, this.vm)
 
     // Simple query
@@ -128,7 +130,8 @@ export class DollarApollo {
               linkedQuery: smart,
             })
           })
-        } else {
+        }
+        else {
           this.addSmartSubscription(key, {
             ...subs,
             linkedQuery: smart,
@@ -140,7 +143,7 @@ export class DollarApollo {
     return smart
   }
 
-  addSmartSubscription (key, options) {
+  addSmartSubscription(key, options) {
     if (!isServer) {
       options = reapply(options, this.vm)
 
@@ -152,7 +155,8 @@ export class DollarApollo {
         const index = options.linkedQuery._linkedSubscriptions.findIndex(x => x.key === key)
         if (index !== -1) {
           options.linkedQuery._linkedSubscriptions[index] = smart
-        } else {
+        }
+        else {
           options.linkedQuery._linkedSubscriptions.push(smart)
         }
       }
@@ -161,8 +165,8 @@ export class DollarApollo {
     }
   }
 
-  defineReactiveSetter (key, func, deep) {
-    this._watchers.push(this.vm.$watch(func, value => {
+  defineReactiveSetter(key, func, deep) {
+    this._watchers.push(this.vm.$watch(func, (value) => {
       this[key] = value
     }, {
       immediate: true,
@@ -170,26 +174,26 @@ export class DollarApollo {
     }))
   }
 
-  set skipAllQueries (value) {
+  set skipAllQueries(value) {
     this._skipAllQueries = value
     for (const key in this.queries) {
       this.queries[key].skip = value
     }
   }
 
-  set skipAllSubscriptions (value) {
+  set skipAllSubscriptions(value) {
     this._skipAllSubscriptions = value
     for (const key in this.subscriptions) {
       this.subscriptions[key].skip = value
     }
   }
 
-  set skipAll (value) {
+  set skipAll(value) {
     this.skipAllQueries = value
     this.skipAllSubscriptions = value
   }
 
-  destroy () {
+  destroy() {
     for (const unwatch of this._watchers) {
       unwatch()
     }

@@ -45,7 +45,7 @@ export default {
     },
   },
 
-  data () {
+  data() {
     return {
       loading: false,
       error: null,
@@ -55,13 +55,13 @@ export default {
   emits: ['loading', 'done', 'error'],
 
   watch: {
-    loading (value) {
+    loading(value) {
       this.$emit('loading', value)
     },
   },
 
   methods: {
-    mutate (options) {
+    mutate(options) {
       this.loading = true
       this.error = null
 
@@ -79,11 +79,11 @@ export default {
         refetchQueries: this.refetchQueries,
         context: this.context,
         ...options,
-      }).then(result => {
+      }).then((result) => {
         this.$emit('done', result)
         this.loading = false
         return result
-      }).catch(e => {
+      }).catch((e) => {
         addGqlError(e)
         this.error = e
         this.$emit('error', e)
@@ -92,7 +92,7 @@ export default {
     },
   },
 
-  render () {
+  render() {
     const result = this.$slots.default({
       mutate: this.mutate,
       loading: this.loading,

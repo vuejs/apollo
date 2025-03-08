@@ -304,7 +304,7 @@ editMessage()
 
 ### 更新所有其他缓存
 
-如果某个变更修改了多个实体，或者它创建或删除了一个或多个实体，Apollo Client 将**不会**自​​动更新缓存以反映该变更所做的更改。相反，你应该使用选项中的 `update` 函数来更新缓存。
+如果某个变更修改了多个实体，或者它创建或删除了一个或多个实体，Apollo Client 将**不会**自动更新缓存以反映该变更所做的更改。相反，你应该使用选项中的 `update` 函数来更新缓存。
 
 这个 `update` 函数的目的是修改缓存的数据，以匹配服务端变更所做出的更改。
 
@@ -470,9 +470,9 @@ const { mutate: sendMessage, error: sendMessageError } = useMutation(gql`
 在变更成功完成时调用。
 
 ```js
-const { onDone } = useMutation(...)
+const { onDone } = useMutation(/* ... */)
 
-onDone(result => {
+onDone((result) => {
   console.log(result.data)
 })
 ```
@@ -552,9 +552,9 @@ export default {
 ```js
 import { logErrorMessages } from '@vue/apollo-util'
 
-const { onError } = useMutation(...)
+const { onError } = useMutation(/* ... */)
 
-onError(error => {
+onError((error) => {
   logErrorMessages(error)
 })
 ```

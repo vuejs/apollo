@@ -1,11 +1,11 @@
-import { createApp } from 'vue'
 import { DefaultApolloClient } from '@vue/apollo-composable'
+import { createApp } from 'vue'
 import { createApollo } from './apollo'
 import App from './components/App.vue'
 import { createMyRouter } from './router'
 import '@/assets/styles/tailwind.css'
 
-export function createMyApp () {
+export function createMyApp() {
   const app = createApp(App)
 
   const { apolloClient } = createApollo()

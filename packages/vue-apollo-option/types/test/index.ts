@@ -1,11 +1,11 @@
-import { createApp, h } from 'vue'
-
-import 'isomorphic-fetch'
 import { ApolloClient, HttpLink } from '@apollo/client/core'
 
+import { createApp, h } from 'vue'
 import { createApolloProvider } from '../index'
+
 import App from './App'
 import Decorator from './Decorator'
+import 'isomorphic-fetch'
 
 const httpLink = new HttpLink({ uri: 'https://dummy.test.com' })
 const cache: any = 'dummy cache'

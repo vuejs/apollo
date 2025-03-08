@@ -1,11 +1,11 @@
 {
   "name": "test-server",
+  "type": "module",
   "version": "4.0.0-alpha.16",
   "private": true,
   "bin": {
     "test-server": "./bin.mjs"
   },
-  "type": "module",
   "scripts": {
     "build": "tsc -d",
     "prepare": "pnpm run build"

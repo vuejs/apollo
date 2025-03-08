@@ -16,12 +16,12 @@
       "es2015.symbol.wellknown",
       "esnext.asynciterable"
     ],
+    "experimentalDecorators": true,
     "module": "es2015",
     "moduleResolution": "node",
-    "experimentalDecorators": true,
+    "allowJs": true,
     "strict": true,
     "noImplicitAny": true,
-    "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true
   },

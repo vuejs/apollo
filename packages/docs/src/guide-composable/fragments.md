@@ -120,8 +120,8 @@ export const entryFragment = gql`
 If our fragments include sub-fragments then we can pass them into the `gql` helper:
 
 ```js
-import { entryFragment as VoteButtonsEntryFragment } from './VoteButtons.vue'
 import { entryFragment as RepoInfoEntryFragment } from './RepoInfo.vue'
+import { entryFragment as VoteButtonsEntryFragment } from './VoteButtons.vue'
 
 export const entryFragment = gql`
   fragment FeedEntry on Entry {
@@ -216,11 +216,11 @@ Read the documentation about how to [extract possibleTypes automatically](https:
 2. Use `possibleTypes.json` to configure your cache during construction. Then, you pass your newly configured cache to `ApolloClient` to complete the process.
 
 ```js
-import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client/core'
+import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client/core'
 import possibleTypes from './possibleTypes.json'
 
 const cache = new InMemoryCache({ possibleTypes })
-const httpLink = createHttpLink({ uri });
+const httpLink = createHttpLink({ uri })
 
 const client = new ApolloClient({
   cache,

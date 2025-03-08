@@ -1,4 +1,3 @@
-
 # Special options
 
 The special options begin with `$` in the `apollo` object.
@@ -59,17 +58,21 @@ this.$apollo.skipAll = true
 You can also declare these properties in the `apollo` option of the component. They can be booleans:
 
 ```js
-apollo: {
-  $skipAll: true
+export default {
+  apollo: {
+    $skipAll: true
+  }
 }
 ```
 
 Or reactive functions:
 
 ```js
-apollo: {
-  $skipAll () {
-    return this.foo === 42
+export default {
+  apollo: {
+    $skipAll() {
+      return this.foo === 42
+    }
   }
 }
 ```

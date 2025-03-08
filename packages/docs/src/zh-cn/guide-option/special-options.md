@@ -58,17 +58,21 @@ this.$apollo.skipAll = true
 你也可以在组件的 `apollo` 选项中声明这些属性。它们可以是布尔值：
 
 ```js
-apollo: {
-  $skipAll: true
+export default {
+  apollo: {
+    $skipAll: true
+  }
 }
 ```
 
 或是响应式函数：
 
 ```js
-apollo: {
-  $skipAll () {
-    return this.foo === 42
+export default {
+  apollo: {
+    $skipAll() {
+      return this.foo === 42
+    }
   }
 }
 ```

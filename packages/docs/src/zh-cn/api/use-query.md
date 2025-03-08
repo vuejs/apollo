@@ -59,4 +59,3 @@
 - `onResult(handler)`：有新结果可用时调用的事件钩子。
 
 - `onError(handler)`：发生错误时调用的事件钩子。
-

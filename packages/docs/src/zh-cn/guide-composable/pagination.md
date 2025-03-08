@@ -11,7 +11,7 @@
 在 Apollo 中，最简单的分页方法是使用由 `useQuery` 组合函数返回的 `fetchMore` 函数。这基本上可以使你执行新的 GraphQL 查询并将结果合并到原始结果中。
 
 ```js
-const { fetchMore } = useQuery(...)
+const { fetchMore } = useQuery(/* ... */)
 ```
 
 你可以指定要用于新查询的查询和变量，以及如何将新查询结果与客户端上的现有数据合并。具体的操作将决定你要实现什么样的分页。

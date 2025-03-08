@@ -1,9 +1,11 @@
-import { OperationVariables } from '@apollo/client/core'
+import type { OperationVariables } from '@apollo/client/core'
+import type {
+  ExampleQuery,
+  ExampleQueryVariables,
+} from '../fixtures/graphql-example-types'
 import { useQuery } from '../../src'
 import {
   ExampleDocument,
-  ExampleQuery,
-  ExampleQueryVariables,
   ExampleTypedQueryDocument,
 } from '../fixtures/graphql-example-types'
 import { assertExactType } from './assertions'
@@ -103,14 +105,14 @@ import { assertExactType } from './assertions'
     },
   )
 
-  const useQueryOnlyQueryTypeNoVarsWithOptionsResult =
-    useQueryOnlyQueryTypeNoVarsWithOptions.result.value
+  const useQueryOnlyQueryTypeNoVarsWithOptionsResult
+    = useQueryOnlyQueryTypeNoVarsWithOptions.result.value
   assertExactType<typeof useQueryOnlyQueryTypeNoVarsWithOptionsResult, ExampleQuery | null | undefined>(
     useQueryOnlyQueryTypeNoVarsWithOptionsResult,
   )
 
-  const useQueryOnlyQueryTypeNoVarsWithOptionsVariables =
-    useQueryOnlyQueryTypeNoVarsWithOptions.variables.value
+  const useQueryOnlyQueryTypeNoVarsWithOptionsVariables
+    = useQueryOnlyQueryTypeNoVarsWithOptions.variables.value
   assertExactType<typeof useQueryOnlyQueryTypeNoVarsWithOptionsVariables, Record<string, never> | undefined>(
     useQueryOnlyQueryTypeNoVarsWithOptionsVariables,
   )
@@ -124,14 +126,14 @@ import { assertExactType } from './assertions'
     },
   )
 
-  const useQueryOnlyQueryTypeNoVarsWithOptionsResult =
-    useQueryOnlyQueryTypeNoVarsWithOptions.result.value
+  const useQueryOnlyQueryTypeNoVarsWithOptionsResult
+    = useQueryOnlyQueryTypeNoVarsWithOptions.result.value
   assertExactType<typeof useQueryOnlyQueryTypeNoVarsWithOptionsResult, ExampleQuery | undefined>(
     useQueryOnlyQueryTypeNoVarsWithOptionsResult,
   )
 
-  const useQueryOnlyQueryTypeNoVarsWithOptionsVariables =
-    useQueryOnlyQueryTypeNoVarsWithOptions.variables.value
+  const useQueryOnlyQueryTypeNoVarsWithOptionsVariables
+    = useQueryOnlyQueryTypeNoVarsWithOptions.variables.value
   assertExactType<typeof useQueryOnlyQueryTypeNoVarsWithOptionsVariables, Record<string, never> | undefined>(
     useQueryOnlyQueryTypeNoVarsWithOptionsVariables,
   )

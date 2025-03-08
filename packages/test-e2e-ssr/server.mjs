@@ -1,7 +1,7 @@
-import express from 'express'
 import fs from 'node:fs'
-import { createServer } from 'vite'
 import { uneval } from 'devalue'
+import express from 'express'
+import { createServer } from 'vite'
 
 const server = express()
 
@@ -30,7 +30,8 @@ server.get('*', async (req, res) => {
       .replace('<!--app-render-->', html)
 
     res.send(template)
-  } catch (e) {
+  }
+  catch (e) {
     console.error(e)
     res.send(e.stack)
   }

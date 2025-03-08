@@ -21,11 +21,11 @@ yarn add @vue/apollo-composable
 In your root instance, you need to provide a default Apollo Client instance:
 
 ```js
-import { provide } from '@vue/composition-api'
 import { DefaultApolloClient } from '@vue/apollo-composable'
+import { provide } from '@vue/composition-api'
 
 const app = new Vue({
-  setup () {
+  setup() {
     provide(DefaultApolloClient, apolloClient)
   },
 
@@ -40,11 +40,11 @@ In the rest of the guide, we will show code examples with Vue 3. If you need Vue
 ### Vue 3
 
 ```js
-import { createApp, provide, h } from 'vue'
 import { DefaultApolloClient } from '@vue/apollo-composable'
+import { createApp, h, provide } from 'vue'
 
 const app = createApp({
-  setup () {
+  setup() {
     provide(DefaultApolloClient, apolloClient)
   },
 
@@ -57,11 +57,11 @@ const app = createApp({
 You can also provide multiple Apollo Client instances to be used in your application. In this case, it's recommended to provide a `default` one:
 
 ```js
-import { provide } from 'vue'
 import { ApolloClients } from '@vue/apollo-composable'
+import { provide } from 'vue'
 
 const app = new Vue({
-  setup () {
+  setup() {
     provide(ApolloClients, {
       default: apolloClient,
     })
@@ -90,7 +90,7 @@ When using e.g. `useQuery` outside of vue contexts, the clients cannot be inject
 Use `provideApolloClient` for a single default client:
 
 ```js
-import { provideApolloClient } from "@vue/apollo-composable";
+import { provideApolloClient } from '@vue/apollo-composable'
 
 const query = provideApolloClient(apolloClient)(() => useQuery(gql`
   query hello {
@@ -103,7 +103,7 @@ const hello = computed(() => query.result.value?.hello ?? '')
 Use `provideApolloClients` for multiple clients:
 
 ```js
-import { provideApolloClients } from "@vue/apollo-composable";
+import { provideApolloClients } from '@vue/apollo-composable'
 
 provideApolloClients({
   default: apolloClient,

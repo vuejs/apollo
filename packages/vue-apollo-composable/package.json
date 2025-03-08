@@ -2,10 +2,16 @@
   "name": "@vue/apollo-composable",
   "version": "4.2.1",
   "description": "Apollo GraphQL for Vue Composition API",
+  "author": "Guillaume Chau <guillaume.b.chau@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://apollo.vuejs.org/",
   "repository": {
     "type": "git",
     "url": "https://github.com/vuejs/vue-apollo.git",
     "directory": "packages/vue-apollo-composable"
+  },
+  "bugs": {
+    "url": "https://github.com/vuejs/vue-apollo/issues"
   },
   "keywords": [
     "vue",
@@ -13,18 +19,9 @@
     "graphql",
     "composition"
   ],
-  "author": "Guillaume Chau <guillaume.b.chau@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/vuejs/vue-apollo/issues"
-  },
-  "homepage": "https://apollo.vuejs.org/",
   "publishConfig": {
     "access": "public"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "module": "dist/index.mjs",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -33,6 +30,9 @@
     },
     "./*": "./*"
   },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -44,11 +44,6 @@
     "test": "pnpm run test:types",
     "test:types": "tsc -p tests/types/"
   },
-  "dependencies": {
-    "throttle-debounce": "^5.0.0",
-    "ts-essentials": "^9.4.0",
-    "vue-demi": "^0.14.6"
-  },
   "peerDependencies": {
     "@apollo/client": "^3.4.13",
     "@vue/composition-api": "^1.0.0",
@@ -59,6 +54,11 @@
     "@vue/composition-api": {
       "optional": true
     }
+  },
+  "dependencies": {
+    "throttle-debounce": "^5.0.0",
+    "ts-essentials": "^9.4.0",
+    "vue-demi": "^0.14.6"
   },
   "devDependencies": {
     "@apollo/client": "^3.7.16",

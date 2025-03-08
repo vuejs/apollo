@@ -1,10 +1,10 @@
-const ssr = require('../../../vue-apollo-ssr')
+import * as ssr from '../../../vue-apollo-ssr'
 
 describe('ssr states', () => {
-  function buildClient (cache) {
+  function buildClient(cache) {
     return {
       cache: {
-        extract () {
+        extract() {
           return cache
         },
       },

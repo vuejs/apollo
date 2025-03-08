@@ -12,7 +12,7 @@ export interface Message {
 
 export let channels: Channel[] = []
 
-export function resetDatabase (): void {
+export function resetDatabase(): void {
   channels = [
     {
       id: 'general',
@@ -27,7 +27,7 @@ export function resetDatabase (): void {
   ]
 }
 
-export function seedDatabase (): void {
+export function seedDatabase(): void {
   channels[0].messages = [
     {
       id: '1',

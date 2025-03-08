@@ -63,15 +63,17 @@ export default {
 将新项添加到缓存中：
 
 ```js
-methods: {
-  onMessageAdded (previousResult, { subscriptionData }) {
+export default {
+  methods: {
+    onMessageAdded(previousResult, { subscriptionData }) {
     // 之前的结果是不可变的
-    const newResult = {
-      messages: [...previousResult.messages],
+      const newResult = {
+        messages: [...previousResult.messages],
+      }
+      // 添加问题到列表中
+      newResult.messages.push(subscriptionData.data.messageAdded)
+      return newResult
     }
-    // 添加问题到列表中
-    newResult.messages.push(subscriptionData.data.messageAdded)
-    return newResult
   }
 }
 ```
@@ -79,22 +81,25 @@ methods: {
 从缓存中删除一项：
 
 ```js
-methods: {
-  onMessageAdded (previousResult, { subscriptionData }) {
-    const removedMessage = subscriptionData.data.messageRemoved
-    const index = previousResult.messages.findIndex(
-      m => m.id === removedMessage.id
-    )
+export default {
+  methods: {
+    onMessageAdded(previousResult, { subscriptionData }) {
+      const removedMessage = subscriptionData.data.messageRemoved
+      const index = previousResult.messages.findIndex(
+        m => m.id === removedMessage.id
+      )
 
-    if (index === -1) return previousResult
+      if (index === -1)
+        return previousResult
 
-    // 之前的结果是不可变的
-    const newResult = {
-      messages: [...previousResult.messages],
+      // 之前的结果是不可变的
+      const newResult = {
+        messages: [...previousResult.messages],
+      }
+      // 从列表中移除问题
+      newResult.messages.splice(index, 1)
+      return newResult
     }
-    // 从列表中移除问题
-    newResult.messages.splice(index, 1)
-    return newResult
   }
 }
 ```

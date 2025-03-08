@@ -1,16 +1,19 @@
-import SmartApollo from './smart-apollo'
 import { VUE_APOLLO_QUERY_KEYWORDS } from '../lib/consts'
 import { isServer } from './env'
+import SmartApollo from './smart-apollo'
 
 export default class SmartQuery extends SmartApollo {
+  // eslint-disable-next-line no-undef
   type = 'query'
+  // eslint-disable-next-line no-undef
   vueApolloSpecialKeys = VUE_APOLLO_QUERY_KEYWORDS
+  // eslint-disable-next-line no-undef
   _loading = false
+  // eslint-disable-next-line no-undef
   _linkedSubscriptions = []
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  constructor (vm, key, options, autostart = true) {
+  constructor(vm, key, options, autostart = true) {
     // Add reactive data related to the query
     if (vm.$data.$apolloData && !vm.$data.$apolloData.queries[key]) {
       vm.$data.$apolloData.queries[key] = {
@@ -39,7 +42,8 @@ export default class SmartQuery extends SmartApollo {
           enumerable: true,
           configurable: true,
         })
-      } else {
+      }
+      else {
         Object.defineProperty(this.vm.$data, key, {
           get: () => this.vm.$data.$apolloData.data[key],
           enumerable: true,
@@ -53,15 +57,15 @@ export default class SmartQuery extends SmartApollo {
     }
   }
 
-  get client () {
+  get client() {
     return this.vm.$apollo.getClient(this.options)
   }
 
-  get loading () {
+  get loading() {
     return this.vm.$data.$apolloData && this.vm.$data.$apolloData.queries[this.key] ? this.vm.$data.$apolloData.queries[this.key].loading : this._loading
   }
 
-  set loading (value) {
+  set loading(value) {
     if (this._loading !== value) {
       this._loading = value
       if (this.vm.$data.$apolloData && this.vm.$data.$apolloData.queries[this.key]) {
@@ -71,7 +75,7 @@ export default class SmartQuery extends SmartApollo {
     }
   }
 
-  stop () {
+  stop() {
     super.stop()
 
     this.loadingDone()
@@ -82,7 +86,7 @@ export default class SmartQuery extends SmartApollo {
     }
   }
 
-  generateApolloOptions (variables) {
+  generateApolloOptions(variables) {
     const apolloOptions = super.generateApolloOptions(variables)
 
     if (this.vm.$isServer) {
@@ -93,8 +97,9 @@ export default class SmartQuery extends SmartApollo {
     return apolloOptions
   }
 
-  executeApollo (variables) {
-    if (this._destroyed) return
+  executeApollo(variables) {
+    if (this._destroyed)
+      return
 
     const variablesJson = JSON.stringify(variables)
 
@@ -120,9 +125,9 @@ export default class SmartQuery extends SmartApollo {
     if (this.options.fetchPolicy !== 'no-cache' || this.options.notifyOnNetworkStatusChange) {
       const currentResult = this.retrieveCurrentResult()
 
-      if (this.options.notifyOnNetworkStatusChange ||
+      if (this.options.notifyOnNetworkStatusChange
         // Initial call of next result when it's not loading (for Apollo Client 3)
-        (this.observer.getCurrentResult && !currentResult.loading)) {
+        || (this.observer.getCurrentResult && !currentResult.loading)) {
         this.nextResult(currentResult)
       }
     }
@@ -135,8 +140,9 @@ export default class SmartQuery extends SmartApollo {
     }
   }
 
-  startQuerySubscription () {
-    if (this.sub && !this.sub.closed) return
+  startQuerySubscription() {
+    if (this.sub && !this.sub.closed)
+      return
 
     // Create subscription
     this.sub = this.observer.subscribe({
@@ -148,7 +154,7 @@ export default class SmartQuery extends SmartApollo {
   /**
    * May update loading state
    */
-  retrieveCurrentResult (force = false) {
+  retrieveCurrentResult(force = false) {
     const currentResult = this.observer.getCurrentResult ? this.observer.getCurrentResult() : this.observer.currentResult()
     if (force || currentResult.loading) {
       if (!this.loading) {
@@ -159,7 +165,7 @@ export default class SmartQuery extends SmartApollo {
     return currentResult
   }
 
-  nextResult (result) {
+  nextResult(result) {
     super.nextResult(result)
 
     const { data, loading, error, errors } = result
@@ -197,15 +203,19 @@ export default class SmartQuery extends SmartApollo {
 
     if (data == null) {
       // No result
-    } else if (!this.options.manual) {
+    }
+    else if (!this.options.manual) {
       if (typeof this.options.update === 'function') {
         this.setData(this.options.update.call(this.vm, data))
-      } else if (typeof data[this.key] === 'undefined' && Object.keys(data).length) {
+      }
+      else if (typeof data[this.key] === 'undefined' && Object.keys(data).length) {
         console.error(`Missing ${this.key} attribute on result`, data)
-      } else {
+      }
+      else {
         this.setData(data[this.key])
       }
-    } else if (!hasResultCallback) {
+    }
+    else if (!hasResultCallback) {
       console.error(`${this.key} query must have a 'result' hook in manual mode`)
     }
 
@@ -214,12 +224,12 @@ export default class SmartQuery extends SmartApollo {
     }
   }
 
-  setData (value) {
+  setData(value) {
     const target = this.hasDataField ? this.vm.$data : this.vm.$data.$apolloData.data
     target[this.key] = value
   }
 
-  catchError (error) {
+  catchError(error) {
     super.catchError(error)
     this.firstRunReject(error)
     this.loadingDone(error)
@@ -228,7 +238,7 @@ export default class SmartQuery extends SmartApollo {
     this.resubscribeToQuery()
   }
 
-  resubscribeToQuery () {
+  resubscribeToQuery() {
     const lastError = this.observer.getLastError()
     const lastResult = this.observer.getLastResult()
     this.observer.resetLastResults()
@@ -236,11 +246,11 @@ export default class SmartQuery extends SmartApollo {
     Object.assign(this.observer, { lastError, lastResult })
   }
 
-  get loadingKey () {
+  get loadingKey() {
     return this.options.loadingKey || this.vm.$apollo.loadingKey
   }
 
-  watchLoading (...args) {
+  watchLoading(...args) {
     return this.callHandlers([
       this.options.watchLoading,
       this.vm.$apollo.watchLoading,
@@ -248,7 +258,7 @@ export default class SmartQuery extends SmartApollo {
     ], ...args, this)
   }
 
-  applyLoadingModifier (value) {
+  applyLoadingModifier(value) {
     const loadingKey = this.loadingKey
     if (loadingKey && typeof this.vm[loadingKey] === 'number') {
       this.vm[loadingKey] += value
@@ -257,7 +267,7 @@ export default class SmartQuery extends SmartApollo {
     this.watchLoading(value === 1, value)
   }
 
-  loadingDone (error = null) {
+  loadingDone(error = null) {
     if (this.loading) {
       this.applyLoadingModifier(-1)
     }
@@ -268,10 +278,10 @@ export default class SmartQuery extends SmartApollo {
     }
   }
 
-  fetchMore (...args) {
+  fetchMore(...args) {
     if (this.observer) {
       this.retrieveCurrentResult(true)
-      return this.observer.fetchMore(...args).then(result => {
+      return this.observer.fetchMore(...args).then((result) => {
         if (!result.loading) {
           this.loadingDone()
         }
@@ -280,7 +290,7 @@ export default class SmartQuery extends SmartApollo {
     }
   }
 
-  subscribeToMore (...args) {
+  subscribeToMore(...args) {
     if (this.observer) {
       return {
         unsubscribe: this.observer.subscribeToMore(...args),
@@ -288,7 +298,7 @@ export default class SmartQuery extends SmartApollo {
     }
   }
 
-  refetch (variables) {
+  refetch(variables) {
     variables && (this.options.variables = variables)
     if (this.observer) {
       const result = this.observer.refetch(variables).then((result) => {
@@ -302,7 +312,7 @@ export default class SmartQuery extends SmartApollo {
     }
   }
 
-  setVariables (variables, tryFetch) {
+  setVariables(variables, tryFetch) {
     this.options.variables = variables
     if (this.observer) {
       const result = this.observer.setVariables(variables, tryFetch)
@@ -311,7 +321,7 @@ export default class SmartQuery extends SmartApollo {
     }
   }
 
-  setOptions (options) {
+  setOptions(options) {
     Object.assign(this.options, options)
     if (this.observer) {
       const result = this.observer.setOptions(options)
@@ -320,33 +330,33 @@ export default class SmartQuery extends SmartApollo {
     }
   }
 
-  startPolling (...args) {
+  startPolling(...args) {
     if (this.observer) {
       return this.observer.startPolling(...args)
     }
   }
 
-  stopPolling (...args) {
+  stopPolling(...args) {
     if (this.observer) {
       return this.observer.stopPolling(...args)
     }
   }
 
-  firstRunResolve () {
+  firstRunResolve() {
     if (this._firstRunResolve) {
       this._firstRunResolve()
       this._firstRunResolve = null
     }
   }
 
-  firstRunReject (error) {
+  firstRunReject(error) {
     if (this._firstRunReject) {
       this._firstRunReject(error)
       this._firstRunReject = null
     }
   }
 
-  destroy () {
+  destroy() {
     super.destroy()
 
     if (this.loading) {

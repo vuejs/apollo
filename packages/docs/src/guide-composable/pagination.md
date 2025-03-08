@@ -11,7 +11,7 @@ In this article, we'll cover the technical details of using Apollo to implement 
 In Apollo, the easiest way to do pagination is with a function called `fetchMore`, which is returned by the `useQuery` composition function. This basically allows you to do a new GraphQL query and merge the result into the original result.
 
 ```js
-const { fetchMore } = useQuery(...)
+const { fetchMore } = useQuery(/* ... */)
 ```
 
 You can specify what query and variables to use for the new query, and how to merge the new query result with the existing data on the client. How exactly you do that will determine what kind of pagination you are implementing.

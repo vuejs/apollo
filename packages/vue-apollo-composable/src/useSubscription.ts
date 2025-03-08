@@ -1,39 +1,40 @@
-import { DocumentNode } from 'graphql'
-import {
-  Ref,
-  ref,
-  watch,
-  isRef,
-  computed,
-  getCurrentScope,
-  onScopeDispose,
-  nextTick,
-  shallowRef,
-} from 'vue-demi'
 import type {
-  OperationVariables,
-  SubscriptionOptions,
+  ApolloClient,
+  ApolloError,
   FetchResult,
   Observable,
   ObservableSubscription,
+  OperationVariables,
+  SubscriptionOptions,
   TypedDocumentNode,
-  ApolloError,
-  ApolloClient,
 } from '@apollo/client/core/index.js'
-import { throttle, debounce } from 'throttle-debounce'
-import { ReactiveFunction } from './util/ReactiveFunction'
-import { paramToRef } from './util/paramToRef'
-import { paramToReactive } from './util/paramToReactive'
+import type { DocumentNode } from 'graphql'
+import type {
+  Ref,
+} from 'vue-demi'
+import type { ReactiveFunction } from './util/ReactiveFunction'
+import { debounce, throttle } from 'throttle-debounce'
+import {
+  computed,
+  getCurrentScope,
+  isRef,
+  nextTick,
+  onScopeDispose,
+  ref,
+  shallowRef,
+  watch,
+} from 'vue-demi'
 import { useApolloClient } from './useApolloClient'
-import { useEventHook } from './util/useEventHook'
-import { trackSubscription } from './util/loadingTracking'
-import { toApolloError } from './util/toApolloError'
 import { isServer } from './util/env'
+import { trackSubscription } from './util/loadingTracking'
+import { paramToReactive } from './util/paramToReactive'
+import { paramToRef } from './util/paramToRef'
+import { toApolloError } from './util/toApolloError'
+import { useEventHook } from './util/useEventHook'
 
-export interface UseSubscriptionOptions <
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+export interface UseSubscriptionOptions<
   TResult = any,
-  TVariables = OperationVariables
+  TVariables = OperationVariables,
 > extends Omit<SubscriptionOptions<TVariables>, 'query' | 'variables'> {
   clientId?: string
   enabled?: boolean | Ref<boolean>
@@ -74,15 +75,15 @@ export interface UseSubscriptionReturn<TResult, TVariables> {
 
 /**
  * Use a subscription that does not require variables or options.
- * */
-export function useSubscription<TResult = any> (
+ */
+export function useSubscription<TResult = any>(
   document: DocumentParameter<TResult, undefined>
 ): UseSubscriptionReturn<TResult, undefined>
 
 /**
  * Use a subscription that requires options but not variables.
  */
-export function useSubscription<TResult = any> (
+export function useSubscription<TResult = any>(
   document: DocumentParameter<TResult, undefined>,
   variables: undefined | null,
   options: OptionsParameter<TResult, null>
@@ -91,7 +92,7 @@ export function useSubscription<TResult = any> (
 /**
  * Use a subscription that requires variables.
  */
-export function useSubscription<TResult = any, TVariables extends OperationVariables = OperationVariables> (
+export function useSubscription<TResult = any, TVariables extends OperationVariables = OperationVariables>(
   document: DocumentParameter<TResult, TVariables>,
   variables: VariablesParameter<TVariables>
 ): UseSubscriptionReturn<TResult, TVariables>
@@ -99,23 +100,23 @@ export function useSubscription<TResult = any, TVariables extends OperationVaria
 /**
  * Use a subscription that has optional variables.
  */
-export function useSubscription<TResult = any, TVariables extends OperationVariables = OperationVariables> (
+export function useSubscription<TResult = any, TVariables extends OperationVariables = OperationVariables>(
   document: DocumentParameter<TResult, TVariables>,
 ): UseSubscriptionReturn<TResult, TVariables>
 
 /**
  * Use a subscription that requires variables and options.
  */
-export function useSubscription<TResult = any, TVariables extends OperationVariables = OperationVariables> (
+export function useSubscription<TResult = any, TVariables extends OperationVariables = OperationVariables>(
   document: DocumentParameter<TResult, TVariables>,
   variables: VariablesParameter<TVariables>,
   options: OptionsParameter<TResult, TVariables>
 ): UseSubscriptionReturn<TResult, TVariables>
 
-export function useSubscription <
+export function useSubscription<
   TResult,
-  TVariables extends Record<string, unknown>
-> (
+  TVariables extends Record<string, unknown>,
+>(
   document: DocumentParameter<TResult, TVariables>,
   variables: VariablesParameter<TVariables> | undefined = undefined,
   options: OptionsParameter<TResult, TVariables> = {},
@@ -141,12 +142,13 @@ export function useSubscription <
   let observer: ObservableSubscription | null = null
   let started = false
 
-  function getClient () {
+  function getClient() {
     return resolveClient(currentOptions.value?.clientId)
   }
 
-  function start () {
-    if (started || !isEnabled.value || isServer) return
+  function start() {
+    if (started || !isEnabled.value || isServer)
+      return
     started = true
     loading.value = true
 
@@ -164,7 +166,7 @@ export function useSubscription <
     })
   }
 
-  function onNextResult (fetchResult: FetchResult<TResult>) {
+  function onNextResult(fetchResult: FetchResult<TResult>) {
     result.value = fetchResult.data
     loading.value = false
     resultEvent.trigger(fetchResult, {
@@ -172,7 +174,7 @@ export function useSubscription <
     })
   }
 
-  function onError (fetchError: unknown) {
+  function onError(fetchError: unknown) {
     const apolloError = toApolloError(fetchError)
 
     error.value = apolloError
@@ -182,8 +184,9 @@ export function useSubscription <
     })
   }
 
-  function stop () {
-    if (!started) return
+  function stop() {
+    if (!started)
+      return
     started = false
     loading.value = false
 
@@ -202,10 +205,10 @@ export function useSubscription <
   /**
    * Queue a restart of the query (on next tick) if it is already active
    */
-  function baseRestart () {
-    if (!started || restarting) return
+  function baseRestart() {
+    if (!started || restarting)
+      return
     restarting = true
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     nextTick(() => {
       if (started) {
         stop()
@@ -216,27 +219,30 @@ export function useSubscription <
   }
 
   let debouncedRestart: typeof baseRestart
-  function updateRestartFn () {
+  function updateRestartFn() {
     if (currentOptions.value?.throttle) {
       debouncedRestart = throttle(currentOptions.value.throttle, baseRestart)
-    } else if (currentOptions.value?.debounce) {
+    }
+    else if (currentOptions.value?.debounce) {
       debouncedRestart = debounce(currentOptions.value.debounce, baseRestart)
-    } else {
+    }
+    else {
       debouncedRestart = baseRestart
     }
   }
 
-  function restart () {
-    if (!debouncedRestart) updateRestartFn()
+  function restart() {
+    if (!debouncedRestart)
+      updateRestartFn()
     debouncedRestart()
   }
 
   // Applying options
   const currentOptions = ref<UseSubscriptionOptions<TResult, TVariables>>()
-  watch(() => isRef(optionsRef) ? optionsRef.value : optionsRef, value => {
+  watch(() => isRef(optionsRef) ? optionsRef.value : optionsRef, (value) => {
     if (currentOptions.value && (
-      currentOptions.value.throttle !== value.throttle ||
-      currentOptions.value.debounce !== value.debounce
+      currentOptions.value.throttle !== value.throttle
+      || currentOptions.value.debounce !== value.debounce
     )) {
       updateRestartFn()
     }
@@ -249,7 +255,7 @@ export function useSubscription <
 
   // Applying document
   let currentDocument: DocumentNode
-  watch(documentRef, value => {
+  watch(documentRef, (value) => {
     currentDocument = value
     restart()
   }, {
@@ -285,10 +291,11 @@ export function useSubscription <
   // })
 
   // Auto start & stop
-  watch(isEnabled, value => {
+  watch(isEnabled, (value) => {
     if (value) {
       start()
-    } else {
+    }
+    else {
       stop()
     }
   }, {
@@ -298,7 +305,8 @@ export function useSubscription <
   // Teardown
   if (currentScope) {
     onScopeDispose(stop)
-  } else {
+  }
+  else {
     console.warn('[Vue apollo] useSubscription() is called outside of an active effect scope and the subscription will not be automatically stopped.')
   }
 

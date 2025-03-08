@@ -1,6 +1,6 @@
-import { DollarApollo } from './vue-apollo'
-import { VueApolloComponentOptions } from './options'
-import { ApolloProvider } from './apollo-provider'
+import type { ApolloProvider } from './apollo-provider'
+import type { VueApolloComponentOptions } from './options'
+import type { DollarApollo } from './vue-apollo'
 
 declare module 'vue' {
   interface ComponentOptionsBase<
@@ -13,8 +13,7 @@ declare module 'vue' {
     Extends extends ComponentOptionsMixin,
     E extends EmitsOptions,
     EE extends string = string,
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    Defaults = {}
+    Defaults = object,
   > {
     apolloProvider?: ApolloProvider
     apollo?: VueApolloComponentOptions<CreateComponentPublicInstance<Props, RawBindings, D, C, M, Mixin, Extends, E, Props, Defaults, false>>

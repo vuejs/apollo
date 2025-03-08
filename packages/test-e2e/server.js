@@ -1,12 +1,12 @@
-const http = require('http')
-const express = require('express')
-const cors = require('cors')
+const http = require('node:http')
 const { ApolloServer, PubSub } = require('apollo-server-express')
+const cors = require('cors')
+const express = require('express')
 
-const typeDefs = require('./apollo-server/type-defs')
-const resolvers = require('./apollo-server/resolvers')
-const schemaDirectives = require('./apollo-server/directives')
 const context = require('./apollo-server/context')
+const schemaDirectives = require('./apollo-server/directives')
+const resolvers = require('./apollo-server/resolvers')
+const typeDefs = require('./apollo-server/type-defs')
 
 const pubsub = new PubSub()
 
@@ -28,10 +28,12 @@ const server = new ApolloServer({
     try {
       if (connection) {
         contextData = await context({ connection })
-      } else {
+      }
+      else {
         contextData = await context({ req })
       }
-    } catch (e) {
+    }
+    catch (e) {
       console.error(e)
       throw e
     }
@@ -47,7 +49,8 @@ const server = new ApolloServer({
           websocket,
         })
         contextData = Object.assign({}, contextData, { pubsub })
-      } catch (e) {
+      }
+      catch (e) {
         console.error(e)
         throw e
       }

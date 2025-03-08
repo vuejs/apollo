@@ -1,5 +1,6 @@
+import type { ApolloProviderOptions } from './apollo-provider'
+import { ApolloProvider } from './apollo-provider'
 import './vue'
-import { ApolloProvider, ApolloProviderOptions } from './apollo-provider'
 
 export { ApolloProvider }
-export function createApolloProvider (options: ApolloProviderOptions): ApolloProvider
+export function createApolloProvider(options: ApolloProviderOptions): ApolloProvider

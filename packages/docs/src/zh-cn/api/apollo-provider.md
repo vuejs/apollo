@@ -24,12 +24,12 @@ const apolloProvider = createApolloProvider({
   },
   // 查看所有查询的加载状态
   // 详见 '智能查询 > 选项 > watchLoading'
-  watchLoading (isLoading, countModifier) {
+  watchLoading(isLoading, countModifier) {
     loading += countModifier
     console.log('Global loading', loading, countModifier)
   },
   // 所有智能查询和订阅的全局错误处理函数
-  errorHandler (error) {
+  errorHandler(error) {
     console.log('Global error handler')
     console.error(error)
   },

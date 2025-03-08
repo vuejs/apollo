@@ -66,18 +66,20 @@ See [API Reference](../api/apollo-subscribe-to-more.md) for all the available op
 Add a new item to the cache:
 
 ```js
-methods: {
-  onMessageAdded (previousResult, { subscriptionData }) {
-    // The previous result is immutable
-    const newResult = {
-      ...previousResult,
-      messages: [
-        ...previousResult.messages,
-        // Add the question to the list
-        subscriptionData.data.messageAdded,
-      ],
+export default {
+  methods: {
+    onMessageAdded(previousResult, { subscriptionData }) {
+      // The previous result is immutable
+      const newResult = {
+        ...previousResult,
+        messages: [
+          ...previousResult.messages,
+          // Add the question to the list
+          subscriptionData.data.messageAdded,
+        ],
+      }
+      return newResult
     }
-    return newResult
   }
 }
 ```
@@ -85,23 +87,26 @@ methods: {
 Remove an item from the cache:
 
 ```js
-methods: {
-  onMessageAdded (previousResult, { subscriptionData }) {
-    const removedMessage = subscriptionData.data.messageRemoved
-    const index = previousResult.messages.findIndex(
-      m => m.id === removedMessage.id
-    )
+export default {
+  methods: {
+    onMessageAdded(previousResult, { subscriptionData }) {
+      const removedMessage = subscriptionData.data.messageRemoved
+      const index = previousResult.messages.findIndex(
+        m => m.id === removedMessage.id
+      )
 
-    if (index === -1) return previousResult
+      if (index === -1)
+        return previousResult
 
-    // The previous result is immutable
-    const newResult = {
-      ...previousResult,
-      messages: [...previousResult.messages],
+      // The previous result is immutable
+      const newResult = {
+        ...previousResult,
+        messages: [...previousResult.messages],
+      }
+      // Remove the question from the list
+      newResult.messages.splice(index, 1)
+      return newResult
     }
-    // Remove the question from the list
-    newResult.messages.splice(index, 1)
-    return newResult
   }
 }
 ```

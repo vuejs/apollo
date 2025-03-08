@@ -4,7 +4,9 @@ const MAX_RETRIES = 5
 const DELAY_MS = 500
 
 export default class SmartSubscription extends SmartApollo {
+  // eslint-disable-next-line no-undef
   type = 'subscription'
+  // eslint-disable-next-line no-undef
   vueApolloSpecialKeys = [
     'variables',
     'result',
@@ -14,7 +16,7 @@ export default class SmartSubscription extends SmartApollo {
     'linkedQuery',
   ]
 
-  constructor (vm, key, options, autostart = true) {
+  constructor(vm, key, options, autostart = true) {
     super(vm, key, options)
 
     this.attempts = 0
@@ -24,7 +26,7 @@ export default class SmartSubscription extends SmartApollo {
     }
   }
 
-  generateApolloOptions (variables) {
+  generateApolloOptions(variables) {
     const apolloOptions = super.generateApolloOptions(variables)
 
     apolloOptions.onError = this.catchError.bind(this)
@@ -32,8 +34,9 @@ export default class SmartSubscription extends SmartApollo {
     return apolloOptions
   }
 
-  executeApollo (variables) {
-    if (this._destroyed) return
+  executeApollo(variables) {
+    if (this._destroyed)
+      return
 
     const variablesJson = JSON.stringify(variables)
     if (this.sub) {
@@ -61,7 +64,8 @@ export default class SmartSubscription extends SmartApollo {
         }
       }
       this.sub = this.options.linkedQuery.subscribeToMore(apolloOptions)
-    } else {
+    }
+    else {
       // Create observer
       this.observer = this.vm.$apollo.subscribe(apolloOptions)
 
@@ -75,7 +79,7 @@ export default class SmartSubscription extends SmartApollo {
     super.executeApollo(variables)
   }
 
-  nextResult (data) {
+  nextResult(data) {
     super.nextResult(data)
 
     this.attempts = 0
@@ -85,7 +89,7 @@ export default class SmartSubscription extends SmartApollo {
     }
   }
 
-  catchError (error) {
+  catchError(error) {
     super.catchError(error)
     // Restart the subscription
     if (this.skip || this.attempts >= MAX_RETRIES) {
@@ -95,11 +99,11 @@ export default class SmartSubscription extends SmartApollo {
     this.stop()
 
     // Restart the subscription with exponential backoff
-    this.retryTimeout = setTimeout(this.start.bind(this), Math.pow(2, this.attempts) * DELAY_MS)
+    this.retryTimeout = setTimeout(this.start.bind(this), 2 ** this.attempts * DELAY_MS)
     this.attempts++
   }
 
-  stop () {
+  stop() {
     super.stop()
     clearTimeout(this.retryTimeout)
   }

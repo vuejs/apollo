@@ -2,9 +2,23 @@
   "name": "@vue/apollo-components",
   "version": "4.0.0",
   "description": "Apollo GraphQL components for Vue.js",
-  "main": "dist/vue-apollo-components.umd.js",
-  "module": "dist/vue-apollo-components.esm.mjs",
-  "unpkg": "dist/vue-apollo-components.min.js",
+  "author": "Guillaume Chau <guillaume.b.chau@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://apollo.vuejs.org/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vuejs/vue-apollo.git",
+    "directory": "packages/vue-apollo-components"
+  },
+  "bugs": {
+    "url": "https://github.com/vuejs/vue-apollo/issues"
+  },
+  "keywords": [
+    "vue",
+    "apollo",
+    "graphql",
+    "component"
+  ],
   "exports": {
     ".": {
       "import": "./dist/vue-apollo-components.esm.mjs",
@@ -12,6 +26,9 @@
     },
     "./*": "./*"
   },
+  "main": "dist/vue-apollo-components.umd.js",
+  "module": "dist/vue-apollo-components.esm.mjs",
+  "unpkg": "dist/vue-apollo-components.min.js",
   "scripts": {
     "build": "pnpm run build:browser && pnpm run build:es && pnpm run build:umd",
     "build:browser": "rollup --config build/rollup.config.browser.js",
@@ -20,31 +37,14 @@
     "prepublishOnly": "pnpm run build",
     "dev": "nodemon --exec 'pnpm run build:es && pnpm run build:umd' --watch src --watch lib"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/vuejs/vue-apollo.git",
-    "directory": "packages/vue-apollo-components"
-  },
-  "keywords": [
-    "vue",
-    "apollo",
-    "graphql",
-    "component"
-  ],
-  "author": "Guillaume Chau <guillaume.b.chau@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/vuejs/vue-apollo/issues"
-  },
-  "homepage": "https://apollo.vuejs.org/",
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {
-    "@vue/apollo-option": "workspace:^"
-  },
   "peerDependencies": {
     "vue": "^3.1.0"
+  },
+  "dependencies": {
+    "@vue/apollo-option": "workspace:^"
   },
   "devDependencies": {
     "@apollo/client": "^3.7.16",

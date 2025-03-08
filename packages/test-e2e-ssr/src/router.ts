@@ -1,7 +1,7 @@
-import { createRouter, createWebHistory, createMemoryHistory } from 'vue-router'
+import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
 import { isServer } from './env.js'
 
-export function createMyRouter () {
+export function createMyRouter() {
   const router = createRouter({
     history: isServer ? createMemoryHistory() : createWebHistory(),
     routes: [

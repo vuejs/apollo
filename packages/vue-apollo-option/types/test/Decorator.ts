@@ -1,13 +1,13 @@
-import { Options, Vue } from 'vue-property-decorator'
+import type { OperationVariables } from '@apollo/client/core'
+import type { VueApolloComponentOptions } from '../options'
 import gql from 'graphql-tag'
-import { OperationVariables } from '@apollo/client/core'
-import { VueApolloComponentOptions } from '../options'
+import { Options, Vue } from 'vue-property-decorator'
 
 @Options({
   apollo: {
     allFilms: {
       query: gql``,
-      variables (): OperationVariables {
+      variables(): OperationVariables {
         return {
           foo: this.foo,
         }

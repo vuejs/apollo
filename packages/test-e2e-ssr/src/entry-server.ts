@@ -1,9 +1,9 @@
-import 'isomorphic-fetch'
+import type { Context } from '@apollo/client'
 import { renderToString } from 'vue/server-renderer'
 import { createMyApp } from './app.js'
-import { Context } from '@apollo/client'
+import 'isomorphic-fetch'
 
-export async function render (url: string) {
+export async function render(url: string) {
   const {
     app,
     router,

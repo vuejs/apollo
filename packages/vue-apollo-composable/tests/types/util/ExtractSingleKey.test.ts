@@ -1,5 +1,5 @@
-import { ExtractSingleKey, IsUnion } from '../../../src/util/ExtractSingleKey'
-import { MultiKeyExampleQuery, SingleKeyExampleQuery } from '../../fixtures/graphql-example-types'
+import type { ExtractSingleKey, IsUnion } from '../../../src/util/ExtractSingleKey'
+import type { MultiKeyExampleQuery, SingleKeyExampleQuery } from '../../fixtures/graphql-example-types'
 import { assertExactType } from '../assertions'
 
 // IsUnion

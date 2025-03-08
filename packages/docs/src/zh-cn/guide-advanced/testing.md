@@ -64,7 +64,6 @@ const sourceSchema = `
     twitter: String
   }
 
-
   type Query {
     allHeroes: [VueHero]
   }
@@ -72,14 +71,14 @@ const sourceSchema = `
   type Mutation {
     addHero(hero: HeroInput!): VueHero!
     deleteHero(name: String!): Boolean
-  } 
+  }
 `
 ```
 下一步是使用 `graphql-tools` 方法创建可执行的 schema：
 
 ```js
 import { makeExecutableSchema } from 'graphql-tools'
-...
+// ...
 const schema = makeExecutableSchema({
   typeDefs: sourceSchema,
 })
@@ -88,7 +87,7 @@ const schema = makeExecutableSchema({
 
 ```js
 import { addMockFunctionsToSchema } from 'graphql-tools'
-...
+// ...
 addMockFunctionsToSchema({
   schema,
 })
@@ -111,7 +110,7 @@ const query = `
 在测试用例中调用 GraphQL 查询，保存响应到组件数据中，然后检查渲染完成的组件是否与快照匹配：
 
 ```js
-graphql(schema, query).then(result => {
+graphql(schema, query).then((result) => {
   wrapper.setData(result.data)
   expect(wrapper.element).toMatchSnapshot()
 })

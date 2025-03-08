@@ -1,12 +1,12 @@
-import { installMixin } from './mixin'
 import { omit } from '../lib/utils'
+import { installMixin } from './mixin'
 
 const keywords = [
   '$subscribe',
 ]
 
 export class ApolloProvider {
-  constructor (options) {
+  constructor(options) {
     if (!options) {
       throw new Error('Options argument required')
     }
@@ -20,11 +20,13 @@ export class ApolloProvider {
     this.prefetch = options.prefetch
   }
 
-  install (app) {
+  install(app) {
     // Options merging
     app.config.optionMergeStrategies.apollo = function (toVal, fromVal, vm) {
-      if (!toVal) return fromVal
-      if (!fromVal) return toVal
+      if (!toVal)
+        return fromVal
+      if (!fromVal)
+        return toVal
 
       const toData = Object.assign({}, omit(toVal, keywords), toVal.data)
       const fromData = Object.assign({}, omit(fromVal, keywords), fromVal.data)
@@ -44,6 +46,6 @@ export class ApolloProvider {
   }
 }
 
-function mergeObjectOptions (to, from) {
+function mergeObjectOptions(to, from) {
   return to ? Object.assign(Object.assign(Object.create(null), to), from) : from
 }

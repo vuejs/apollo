@@ -1,9 +1,9 @@
-import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client/core'
+import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client/core'
 import { onError } from '@apollo/client/link/error'
 import { logErrorMessages } from '@vue/apollo-util'
 import { isServer } from './env.js'
 
-export function createApollo () {
+export function createApollo() {
   const cache = new InMemoryCache()
 
   const restoreCache = !isServer && !!window._INITIAL_STATE_?.apollo
@@ -18,7 +18,7 @@ export function createApollo () {
   })
 
   // Handle errors
-  const errorLink = onError(error => {
+  const errorLink = onError((error) => {
     logErrorMessages(error)
   })
 

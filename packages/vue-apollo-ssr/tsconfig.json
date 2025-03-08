@@ -3,10 +3,10 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "node",
-    "sourceMap": true,
-    "skipLibCheck": true,
     "strict": true,
-    "esModuleInterop": true
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
   "include": [
     "src/**/*"

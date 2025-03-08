@@ -1,37 +1,35 @@
-import {
+import type {
   ApolloClient,
-  ObservableQuery,
   ApolloQueryResult,
-  QueryOptions,
-  WatchQueryOptions,
-  MutationOptions,
-  SubscriptionOptions,
-  OperationVariables,
   FetchResult,
+  MutationOptions,
   Observable,
+  ObservableQuery,
+  OperationVariables,
+  QueryOptions,
+  SubscriptionOptions,
+  WatchQueryOptions,
 } from '@apollo/client/core/index.js'
-import { ApolloProvider } from './apollo-provider'
-import {
+import type { ApolloProvider } from './apollo-provider'
+import type {
   VueApolloQueryDefinition,
   VueApolloSubscriptionDefinition,
 } from './options'
 
 interface SmartApollo<V> {
   skip: boolean
-  refresh(): void
-  start(): void
-  stop(): void
+  refresh: () => void
+  start: () => void
+  stop: () => void
 }
 
-type PickedObservableQuery = Pick<ObservableQuery,
-'fetchMore' |
-'subscribeToMore' |
-'refetch' |
-'setVariables' |
-'setOptions' |
-'startPolling' |
-'stopPolling'
->
+type PickedObservableQuery = Pick<ObservableQuery, 'fetchMore' |
+  'subscribeToMore' |
+  'refetch' |
+  'setVariables' |
+  'setOptions' |
+  'startPolling' |
+  'stopPolling'>
 
 export interface SmartQuery<V> extends SmartApollo<V>, PickedObservableQuery {
   loading: boolean
@@ -44,10 +42,10 @@ interface ClientOptions {
 }
 
 interface ApolloClientMethods {
-  query<R = any, TVariables = OperationVariables>(options: QueryOptions<TVariables> & ClientOptions): Promise<ApolloQueryResult<R>>
-  watchQuery<R = any, TVariables = OperationVariables>(options: WatchQueryOptions<TVariables> & ClientOptions): ObservableQuery<R, TVariables>
-  mutate<R = any, TVariables = OperationVariables>(options: MutationOptions<R, TVariables> & ClientOptions): Promise<FetchResult<R>>
-  subscribe<R = any, TVariables = OperationVariables>(options: SubscriptionOptions<TVariables> & ClientOptions): Observable<FetchResult<R>>
+  query: <R = any, TVariables = OperationVariables>(options: QueryOptions<TVariables> & ClientOptions) => Promise<ApolloQueryResult<R>>
+  watchQuery: <R = any, TVariables = OperationVariables>(options: WatchQueryOptions<TVariables> & ClientOptions) => ObservableQuery<R, TVariables>
+  mutate: <R = any, TVariables = OperationVariables>(options: MutationOptions<R, TVariables> & ClientOptions) => Promise<FetchResult<R>>
+  subscribe: <R = any, TVariables = OperationVariables>(options: SubscriptionOptions<TVariables> & ClientOptions) => Observable<FetchResult<R>>
 }
 
 export interface DollarApollo<V> extends ApolloClientMethods {
@@ -62,8 +60,8 @@ export interface DollarApollo<V> extends ApolloClientMethods {
   /* writeonly */ skipAllSubscriptions: boolean
   /* writeonly */ skipAll: boolean
 
-  getClient<R = any>(): ApolloClient<R>
+  getClient: <R = any>() => ApolloClient<R>
 
-  addSmartQuery<R = any>(key: string, options: VueApolloQueryDefinition<R>): SmartQuery<V>
-  addSmartSubscription<R = any>(key: string, options: VueApolloSubscriptionDefinition): SmartSubscription<V>
+  addSmartQuery: <R = any>(key: string, options: VueApolloQueryDefinition<R>) => SmartQuery<V>
+  addSmartSubscription: <R = any>(key: string, options: VueApolloSubscriptionDefinition) => SmartSubscription<V>
 }

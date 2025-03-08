@@ -1,17 +1,17 @@
-import { ApolloClient, InMemoryCache, HttpLink, split } from '@apollo/client/core'
+import { ApolloClient, HttpLink, InMemoryCache, split } from '@apollo/client/core'
 import { setContext } from '@apollo/client/link/context'
-import { getMainDefinition } from '@apollo/client/utilities'
-import { SubscriptionClient } from 'subscriptions-transport-ws'
-import MessageTypes from 'subscriptions-transport-ws/dist/message-types'
 import { WebSocketLink } from '@apollo/client/link/ws'
+import { getMainDefinition } from '@apollo/client/utilities'
 import { createApolloProvider } from '@vue/apollo-option'
 import { print } from 'graphql'
+import { SubscriptionClient } from 'subscriptions-transport-ws'
+import MessageTypes from 'subscriptions-transport-ws/dist/message-types'
 import router from './router'
 
 // Name of the localStorage item
 const AUTH_TOKEN = 'apollo-token'
 
-function getAuth () {
+function getAuth() {
   return localStorage.getItem(AUTH_TOKEN) || ''
 }
 
@@ -46,8 +46,8 @@ link = split(
   // split based on operation type
   ({ query }) => {
     const { kind, operation } = getMainDefinition(query)
-    return kind === 'OperationDefinition' &&
-      operation === 'subscription'
+    return kind === 'OperationDefinition'
+      && operation === 'subscription'
   },
   wsLink,
   link,
@@ -66,7 +66,7 @@ export const apolloProvider = createApolloProvider({
       notifyOnNetworkStatusChange: true,
     },
   },
-  errorHandler (error, vm, key, type, options) {
+  errorHandler(error, vm, key, type, options) {
     console.log(router.currentRoute)
     if (isUnauthorizedError(error) && router.currentRoute.value.matched.some(m => m.meta.private)) {
       // Redirect to login page
@@ -78,20 +78,25 @@ export const apolloProvider = createApolloProvider({
           },
         })
       }
-    } else {
+    }
+    else {
       console.log(
         '%cError',
         'background: red; color: white; padding: 2px 4px; border-radius: 3px; font-weight: bold;',
-        type, key, vm.$el,
-        error.message, '\n\n',
-        print(options.query), `\n`,
+        type,
+        key,
+        vm.$el,
+        error.message,
+        '\n\n',
+        print(options.query),
+        `\n`,
         options,
       )
     }
   },
 })
 
-function restartWebsockets () {
+function restartWebsockets() {
   // Copy current operations
   const operations = Object.assign({}, wsClient.operations)
 
@@ -102,7 +107,7 @@ function restartWebsockets () {
   wsClient.connect()
 
   // Push all current operations to the new connection
-  Object.keys(operations).forEach(id => {
+  Object.keys(operations).forEach((id) => {
     wsClient.sendMessage(
       id,
       MessageTypes.GQL_START,
@@ -112,12 +117,13 @@ function restartWebsockets () {
 }
 
 // Manually call this when user log in
-export async function onLogin (apolloClient, token) {
+export async function onLogin(apolloClient, token) {
   localStorage.setItem(AUTH_TOKEN, JSON.stringify(token))
   restartWebsockets()
   try {
     await apolloClient.resetStore()
-  } catch (e) {
+  }
+  catch (e) {
     if (!isUnauthorizedError(e)) {
       console.log('%cError on cache reset (login)', 'color: orange;', e.message)
     }
@@ -125,19 +131,20 @@ export async function onLogin (apolloClient, token) {
 }
 
 // Manually call this when user log out
-export async function onLogout (apolloClient) {
+export async function onLogout(apolloClient) {
   localStorage.removeItem(AUTH_TOKEN)
   restartWebsockets()
   try {
     await apolloClient.resetStore()
-  } catch (e) {
+  }
+  catch (e) {
     if (!isUnauthorizedError(e)) {
       console.log('%cError on cache reset (logout)', 'color: orange;', e.message)
     }
   }
 }
 
-function isUnauthorizedError (error) {
+function isUnauthorizedError(error) {
   const { graphQLErrors } = error
   return (graphQLErrors && graphQLErrors.some(e => e.message === 'Unauthorized'))
 }

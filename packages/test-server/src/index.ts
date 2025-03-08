@@ -1,13 +1,13 @@
 import { createServer } from 'node:http'
-import express from 'express'
-import cors from 'cors'
-import bodyParser from 'body-parser'
 import { ApolloServer } from '@apollo/server'
 import { expressMiddleware } from '@apollo/server/express4'
-import { WebSocketServer } from 'ws'
+import bodyParser from 'body-parser'
+import cors from 'cors'
+import express from 'express'
 import { useServer } from 'graphql-ws/lib/use/ws'
-import { schema } from './schema.js'
+import { WebSocketServer } from 'ws'
 import { resetDatabase, seedDatabase } from './data.js'
+import { schema } from './schema.js'
 import { simulateLatency } from './util.js'
 
 const app = express()
@@ -33,9 +33,9 @@ const server = new ApolloServer({
   plugins: [
     // Proper shutdown for the WebSocket server.
     {
-      async serverWillStart () {
+      async serverWillStart() {
         return {
-          async drainServer () {
+          async drainServer() {
             await serverCleanup.dispose()
           },
         }
