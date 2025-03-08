@@ -45,13 +45,13 @@ jobs:
         working-directory: ${{env.dir}}
         run: pnpm run test:e2e
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: cypress-screenshots
           path: ${{env.dir}}/tests/e2e/screenshots
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: cypress-videos
