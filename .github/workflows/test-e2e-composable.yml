@@ -26,12 +26,21 @@ jobs:
       - name: Set alternate npm integrity keys
         run: |
           echo COREPACK_INTEGRITY_KEYS="$(curl https://registry.npmjs.org/-/npm/v1/keys | jq -c '{npm: .keys}')" >> $GITHUB_ENV
+
       - uses: actions/checkout@v4
+
       - run: corepack enable
+
       - uses: actions/setup-node@v4
         with:
           node-version: 23
           cache: pnpm
+
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/Cypress
+          key: cypress-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
       - run: pnpm install
 
       - name: Build
