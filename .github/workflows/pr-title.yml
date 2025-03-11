@@ -10,6 +10,7 @@ on:
 jobs:
   check-pr-title:
     runs-on: ubuntu-latest
+    name: Check PR title
     steps:
       # Please look up the latest version from
       # https://github.com/amannn/action-semantic-pull-request/releases
