@@ -1,5 +1,43 @@
 # Changelog
 
+## v4.2.2
+
+[compare changes](https://github.com/vuejs/apollo/compare/v4.2.1...v4.2.2)
+
+### 🩹 Fixes
+
+- Memory leak in SSR caused by global tracking ([#1582](https://github.com/vuejs/apollo/pull/1582))
+- Augment `vue` rather than `@vue/runtime-core` ([#1576](https://github.com/vuejs/apollo/pull/1576))
+- UseMutations onError Event hook gets triggered too early ([#1585](https://github.com/vuejs/apollo/pull/1585))
+
+### 📖 Documentation
+
+- Fix $skipAll mention ([#1573](https://github.com/vuejs/apollo/pull/1573))
+
+### 🏡 Chore
+
+- Update deps + jest to vitest ([d421887](https://github.com/vuejs/apollo/commit/d421887))
+
+### ✅ Tests
+
+- **lint:** Switch to eslint 9 and antfu config ([99ca23b](https://github.com/vuejs/apollo/commit/99ca23b))
+
+### 🤖 CI
+
+- Update gh actions to use corepack ([f2578cb](https://github.com/vuejs/apollo/commit/f2578cb))
+- Update upload artifact ([35fb59c](https://github.com/vuejs/apollo/commit/35fb59c))
+- Fix cypress ([df96345](https://github.com/vuejs/apollo/commit/df96345))
+- Rename job ([d99865f](https://github.com/vuejs/apollo/commit/d99865f))
+- Add name to pr title job ([6bfd0ec](https://github.com/vuejs/apollo/commit/6bfd0ec))
+
+### ❤️ Contributors
+
+- Guillaume Chau ([@Akryum](http://github.com/Akryum))
+- Jeroen De Jong ([@thumbnail](http://github.com/thumbnail))
+- Mark Florian <markrian@gmail.com>
+- ChatonDeAru (Romain) ([@chatondearu](http://github.com/chatondearu))
+- Kristaps Fabians Geikins <fabis94@live.com>
+
 ## v4.2.1
 
 

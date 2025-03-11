@@ -1,6 +1,6 @@
 {
   "name": "@vue/apollo-composable",
-  "version": "4.2.1",
+  "version": "4.2.2",
   "description": "Apollo GraphQL for Vue Composition API",
   "author": "Guillaume Chau <guillaume.b.chau@gmail.com>",
   "license": "MIT",

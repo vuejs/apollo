@@ -1,6 +1,6 @@
 {
   "name": "@vue/apollo-components",
-  "version": "4.0.0",
+  "version": "4.2.2",
   "description": "Apollo GraphQL components for Vue.js",
   "author": "Guillaume Chau <guillaume.b.chau@gmail.com>",
   "license": "MIT",

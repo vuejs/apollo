@@ -1,6 +1,6 @@
 {
   "name": "@vue/apollo-util",
-  "version": "4.0.0-beta.6",
+  "version": "4.2.2",
   "description": "Apollo GraphQL for Vue - Utilities",
   "author": "Guillaume Chau <guillaume.b.chau@gmail.com>",
   "license": "MIT",
