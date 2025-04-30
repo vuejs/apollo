@@ -8,9 +8,19 @@ Apollo Client supports both *graphql-ws* and *subscriptions-transport-ws*. Apoll
 
 ### The new library: **graphql-ws**
 Let's look at how to add support for this transport to Apollo Client using a link set up for newest library [graphql-ws](https://github.com/enisdenjo/graphql-ws). First, install:
-```bash
-npm install graphql-ws
+
+::: code-group
+
+```bash [npm]
+$ npm install graphql-ws
 ```
+
+```bash [Bun]
+$ bun add graphql-ws
+```
+
+:::
+
 Then initialize a GraphQL web socket link:
 
 ```js

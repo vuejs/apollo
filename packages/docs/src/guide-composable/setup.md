@@ -4,15 +4,20 @@ Make sure you have [installed Apollo Client](../guide/installation.md).
 
 ## 1. Install @vue/apollo-composable
 
-```shell
-npm install --save @vue/apollo-composable
+::: code-group
+
+```shell [npm]
+$ npm install @vue/apollo-composable
 ```
 
-Or:
-
-```shell
-yarn add @vue/apollo-composable
+```shell [Yarn]
+$ yarn add @vue/apollo-composable
 ```
+
+```shell [Bun]
+$ bun add @vue/apollo-composable
+```
+:::
 
 ## 2. Connect Apollo Client to Vue
 
