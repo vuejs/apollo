@@ -24,15 +24,21 @@ vue add @akryum/ssr
 
 Install the SSR utils with:
 
-```shell
-npm install --save @vue/apollo-ssr
+::: code-group
+
+```shell [npm]
+$ npm install @vue/apollo-ssr
 ```
 
-Or:
-
-```shell
-yarn add @vue/apollo-ssr
+```shell [Yarn]
+$ yarn add @vue/apollo-ssr
 ```
+
+```shell [Bun]
+$ bun add @vue/apollo-ssr
+```
+
+:::
 
 ::: tip
 Follow the [offical SSR guide](https://ssr.vuejs.org) to learn more about Server-Side Rendering with Vue.

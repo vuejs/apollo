@@ -4,15 +4,20 @@ Make sure you have [installed Apollo Client](../guide/installation.md).
 
 ## 1. Install @vue/apollo-option
 
-```
-npm install --save @vue/apollo-option
+::: code-group
+
+```shell [npm]
+$ npm install @vue/apollo-option
 ```
 
-Or:
+```shell [Yarn]
+$ yarn add @vue/apollo-option
+```
 
+```shell [Bun]
+$ bun add @vue/apollo-option
 ```
-yarn add @vue/apollo-option
-```
+:::
 
 ## 2. Create the Apollo client
 

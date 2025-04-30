@@ -29,15 +29,21 @@ Then you can skip to next section: [Basic Usage](../guide-option/usage.md).
 
 ## Manual installation
 
-```shell
-npm install --save graphql graphql-tag @apollo/client
+::: code-group
+
+```shell [npm]
+$ npm install graphql graphql-tag @apollo/client
 ```
 
-Or:
-
-```shell
-yarn add graphql graphql-tag @apollo/client
+```shell [Yarn]
+$ yarn add graphql graphql-tag @apollo/client
 ```
+
+```shell [Bun]
+$ bun add graphql graphql-tag @apollo/client
+```
+
+:::
 
 In your app, create an `ApolloClient` instance:
 
