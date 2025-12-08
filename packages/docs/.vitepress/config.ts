@@ -23,7 +23,11 @@ export default defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Guide', link: '/guide/' },
-      { text: 'API', link: '/api/' },
+      { text: 'API Reference', link: '/api/' },
+      {
+        text: 'Sponsor',
+        link: 'https://github.com/sponsors/Akryum',
+      },
     ],
 
     sidebar: {
