@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - '**'
+      - '!v5' # Temporarily disabled for v5 branch
     tags:
       - '!**'
 
