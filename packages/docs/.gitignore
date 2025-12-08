@@ -1,0 +1,9 @@
+# VitePress
+.vitepress/cache
+.vitepress/dist
+
+# API Extractor temp files
+temp/
+
+# Local API Extracted files
+apollo-composable.api.json

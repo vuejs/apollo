@@ -1,0 +1,66 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/api-extractor/v7/api-extractor.schema.json",
+  "projectFolder": "./packages/vue-apollo-composable",
+  "mainEntryPointFilePath": "<projectFolder>/dist/index.d.ts",
+  "bundledPackages": ["@vue/apollo-composable"],
+  "newlineKind": "lf",
+  "enumMemberOrder": "preserve",
+
+  "compiler": {
+    "tsconfigFilePath": "<projectFolder>/tsconfig.lib.json",
+    "overrideTsconfig": {},
+    "skipLibCheck": false
+  },
+
+  "apiReport": {
+    "enabled": true,
+    "reportFileName": "<unscopedPackageName>.api.md",
+    "reportFolder": "<projectFolder>/.api-reports/",
+    "reportTempFolder": "<projectFolder>/.api-reports/temp/",
+    "includeForgottenExports": true
+  },
+
+  "docModel": {
+    "enabled": false,
+    "apiJsonFilePath": "./packages/docs/apollo-composable.api.json",
+    "includeForgottenExports": true
+  },
+
+  "dtsRollup": {
+    "enabled": false
+  },
+
+  "tsdocMetadata": {
+    "enabled": false
+  },
+
+  "messages": {
+    "compilerMessageReporting": {
+      "default": {
+        "logLevel": "warning"
+      }
+    },
+    "extractorMessageReporting": {
+      "default": {
+        "logLevel": "warning"
+      },
+      "ae-missing-release-tag": {
+        "logLevel": "none"
+      },
+      "ae-internal-missing-underscore": {
+        "logLevel": "none",
+        "addToApiReportFile": false
+      },
+      "ae-unresolved-link": {
+        "logLevel": "warning",
+        "addToApiReportFile": true
+      }
+    },
+    "tsdocMessageReporting": {
+      "tsdoc-escape-greater-than": {
+        "logLevel": "none",
+        "addToApiReportFile": false
+      }
+    }
+  }
+}

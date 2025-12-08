@@ -1,0 +1,4 @@
+{
+  "extends": "../vue-apollo-composable/tsconfig.lib.json",
+  "include": ["api-types.d.ts", "../vue-apollo-composable/dist/**/*.d.ts"]
+}

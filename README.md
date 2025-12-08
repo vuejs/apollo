@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./packages/docs/src/public/hero.svg" width="256">
+  <img src="./packages/docs/public/hero.svg" width="256">
 </p>
 
 # Apollo and GraphQL for Vue.js
@@ -9,7 +9,7 @@
 [![vue3](https://img.shields.io/badge/vue-3-brightgreen.svg)](https://vuejs.org/)
 ![GitHub branch check runs](https://img.shields.io/github/check-runs/vuejs/apollo/v4)
 
-:book: Documentation [**for Vue 3**](http://v4.apollo.vuejs.org) | [for Vue 2](https://apollo.vuejs.org/)
+:book: [Documentation](http://apollo.vuejs.org)
 
 [:pen: Contributing guide](./CONTRIBUTING.md)
 

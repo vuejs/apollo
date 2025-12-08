@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - v4
+      - v5
       - feat/*
       - fix/*
   pull_request:
@@ -27,7 +28,7 @@ jobs:
       - run: corepack enable
       - uses: actions/setup-node@v4
         with:
-          node-version: 23
+          node-version: 24
           cache: pnpm
       - run: pnpm install
 
@@ -37,8 +38,5 @@ jobs:
       - name: Build
         run: pnpm run build
 
-      - name: Types
-        run: pnpm run test:types
-
-      - name: Unit tests
-        run: pnpm run test:unit
+      - name: Tests
+        run: pnpm run test

@@ -1,4 +1,0 @@
-fragment channel on Channel {
-  id
-  name
-}

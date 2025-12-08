@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "noUncheckedSideEffectImports": true,
+    "target": "esnext",
+    "lib": [
+      "DOM",
+      "ES2024"
+    ],
+    "moduleDetection": "force",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "allowImportingTsExtensions": true,
+    "strict": true,
+    "exactOptionalPropertyTypes": true,
+    "noUncheckedIndexedAccess": true,
+    "noEmit": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "erasableSyntaxOnly": true,
+    "skipLibCheck": true
+  }
+}

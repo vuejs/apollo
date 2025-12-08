@@ -1,20 +1,8 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "lib": [
-      "DOM",
-      "ES2020",
-      "ES2020.Symbol.WellKnown"
-    ],
-    "moduleResolution": "node",
-    "strict": true,
-    "declaration": true,
-    "outDir": "dist",
-    "sourceMap": true,
-    "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true
-  },
-  "include": [
-    "src/**/*"
-  ]
+  "references": [
+    { "path": "./tsconfig.lib.json" },
+    { "path": "./tsconfig.test.json" },
+    { "path": "./tsconfig.node.json" }
+  ],
+  "files": []
 }

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "name": "@vue/apollo-composable",
+  "entryPoints": ["./api-types.d.ts"],
+  "tsconfig": "./tsconfig.json",
+  "out": "./api",
+  "plugin": ["typedoc-plugin-markdown", "typedoc-vitepress-theme", "./typedoc-plugin-hide-inheritance.ts"],
+  "readme": "none",
+  "excludePrivate": true,
+  "excludeInternal": true,
+  "includeVersion": false,
+  "disableSources": true,
+  "categorizeByGroup": true,
+  "categoryOrder": ["Functions", "Namespaces", "Variables", "Types", "*"],
+  "groupOrder": ["Functions", "Namespaces", "Variables", "Type Aliases", "*"],
+  "externalSymbolLinkMappings": {
+    "@apollo/client": {
+      "ApolloClient": "https://www.apollographql.com/docs/react/api/core/ApolloClient"
+    },
+    "@vue/reactivity": {
+      "MaybeRefOrGetter": "https://vuejs.org/api/utility-types.html#maybereforgetter",
+      "Ref": "https://vuejs.org/api/reactivity-core.html#ref"
+    },
+    "@vueuse/core": {
+      "EventHookOn": "https://vueuse.org/shared/createEventHook/#type-declarations"
+    },
+    "@vueuse/shared": {
+      "EventHookOn": "https://vueuse.org/shared/createEventHook/#type-declarations"
+    }
+  }
+}

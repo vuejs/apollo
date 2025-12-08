@@ -4,13 +4,9 @@ export {
   provideApolloClient,
   provideApolloClients,
   useApolloClient,
-  UseApolloClientReturn,
-} from './useApolloClient'
-
-export {
-  useLazyQuery,
-} from './useLazyQuery'
-
+} from './useApolloClient.ts'
+export { useFragment } from './useFragment.ts'
+export { useLazyQuery } from './useLazyQuery.ts'
 export {
   useGlobalMutationLoading,
   useGlobalQueryLoading,
@@ -18,30 +14,8 @@ export {
   useMutationLoading,
   useQueryLoading,
   useSubscriptionLoading,
-} from './useLoading'
-
-export {
-  MutateFunction,
-  MutateOverrideOptions,
-  MutateResult,
-  useMutation,
-  UseMutationOptions,
-  UseMutationReturn,
-} from './useMutation'
-
-export {
-  useQuery,
-  UseQueryOptions,
-  UseQueryReturn,
-} from './useQuery'
-
-export {
-  useResult,
-  UseResultReturn,
-} from './useResult'
-
-export {
-  useSubscription,
-  UseSubscriptionOptions,
-  UseSubscriptionReturn,
-} from './useSubscription'
+} from './useLoading.ts'
+export { useMutation } from './useMutation.ts'
+export { useQuery } from './useQuery.ts'
+export { useSubscription } from './useSubscription.ts'
+export type { RenameKey } from './util/types.ts'

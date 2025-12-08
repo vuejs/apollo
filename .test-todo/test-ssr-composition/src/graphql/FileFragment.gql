@@ -1,7 +1,0 @@
-fragment file on File {
-  id
-  path
-  filename
-  mimetype
-  encoding
-}

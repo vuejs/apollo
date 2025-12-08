@@ -1,16 +1,26 @@
 {
   "name": "private-vue-apollo-docs",
   "type": "module",
-  "version": "4.0.0-alpha.16",
+  "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "vitepress dev src",
-    "build": "vitepress build src"
+    "dev": "vitepress dev",
+    "build": "pnpm run api:generate && vitepress build",
+    "preview": "vitepress preview",
+    "api:generate": "typedoc"
   },
   "dependencies": {
-    "vue-github-button": "^3.0.3"
+    "@vue/apollo-composable": "workspace:*",
+    "vue-github-button": "catalog:"
   },
   "devDependencies": {
-    "vitepress": "^1.0.0-rc.36"
+    "@apollo/client": "catalog:",
+    "@shikijs/vitepress-twoslash": "catalog:",
+    "graphql": "catalog:",
+    "graphql-tag": "catalog:",
+    "typedoc": "catalog:",
+    "typedoc-plugin-markdown": "catalog:",
+    "typedoc-vitepress-theme": "catalog:",
+    "vitepress": "catalog:"
   }
 }

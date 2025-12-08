@@ -4,64 +4,25 @@
   "private": true,
   "packageManager": "pnpm@10.6.2+sha512.47870716bea1572b53df34ad8647b42962bc790ce2bf4562ba0f643237d7302a3d6a8ecef9e4bdfc01d23af1969aa90485d4cebb0b9638fa5ef1daef656f6c1b",
   "scripts": {
+    "api:extract": "pnpm build:packages-docs && api-extractor run --local",
+    "api:generate": "pnpm build:packages-docs && pnpm -C packages/docs api:generate",
+    "build:packages-docs": "pnpm build && node scripts/inlineInheritDoc.ts",
     "build": "pnpm run -r --filter \"vue-apollo*\" --filter \"@vue/apollo*\" build",
-    "test": "pnpm run -r --sequential test",
-    "test:unit": "pnpm run -r test:unit",
-    "test:types": "pnpm run -r test:types",
+    "docs:dev": "pnpm run -r --filter \"private-vue-apollo-docs\" dev",
     "lint": "eslint . --cache",
-    "release": "pnpm run build && pnpm run test && sheep release -b v4",
-    "docs:dev": "pnpm run -r --filter \"private-vue-apollo-docs\" dev"
+    "release": "pnpm run build && pnpm run test && sheep release -b v5",
+    "test": "pnpm run -r --sequential test"
   },
   "devDependencies": {
-    "@akryum/sheep": "^0.5.1",
-    "@antfu/eslint-config": "^4.7.0",
-    "@typescript-eslint/eslint-plugin": "^4.33.0",
-    "@typescript-eslint/parser": "^4.33.0",
-    "@vue/eslint-config-standard": "^6.1.0",
-    "@vue/eslint-config-typescript": "^7.0.0",
-    "conventional-changelog-cli": "^2.2.2",
-    "core-js": "^3.23.2",
-    "esbuild": "^0.25.0",
-    "esbuild-node-externals": "^1.18.0",
-    "eslint": "^9.21.0",
-    "typescript": "^5.8.2"
-  },
-  "pnpm": {
-    "overrides": {
-      "eslint-scope": "^5",
-      "serialize-javascript": "^6.0.0",
-      "subscriptions-transport-ws": "^0.9"
-    },
-    "peerDependencyRules": {
-      "ignoreMissing": [
-        "webpack",
-        "@types/react",
-        "react",
-        "react-dom",
-        "eslint",
-        "typescript",
-        "vue-template-compiler",
-        "graphql",
-        "vue-class-component",
-        "@algolia/client-search"
-      ],
-      "allowedVersions": {
-        "eslint": "*",
-        "esbuild": "*",
-        "vue": "*"
-      }
-    },
-    "onlyBuiltDependencies": [
-      "@apollo/protobufjs",
-      "core-js",
-      "core-js-pure",
-      "cypress",
-      "esbuild",
-      "nodemon",
-      "vue-demi"
-    ]
-  },
-  "resolutions": {
-    "js-yaml": "^3.13.1"
+    "@akryum/sheep": "catalog:",
+    "@antfu/eslint-config": "catalog:",
+    "@microsoft/api-extractor": "catalog:",
+    "@microsoft/api-extractor-model": "catalog:",
+    "@microsoft/tsdoc": "catalog:",
+    "@parcel/watcher": "catalog:",
+    "eslint": "catalog:",
+    "jiti": "catalog:",
+    "nodemon": "catalog:",
+    "typescript": "catalog:"
   }
 }
