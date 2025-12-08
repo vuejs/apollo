@@ -47,7 +47,6 @@ export declare namespace useMutation {
     export interface Options<
       TData = unknown,
       TVariables extends OperationVariables = OperationVariables,
-      TCache extends ApolloCache = ApolloCache,
     > {
       /**
        * By providing either an object or a callback function that, when invoked after
@@ -58,7 +57,7 @@ export declare namespace useMutation {
        *
        * @group 1. Operation options
        */
-      optimisticResponse?: ApolloClient.MutateOptions<TData, TVariables, TCache>['optimisticResponse']
+      optimisticResponse?: ApolloClient.MutateOptions<TData, TVariables>['optimisticResponse']
 
       /**
        * A `MutationQueryReducersMap`, which is map from query names to
@@ -68,7 +67,7 @@ export declare namespace useMutation {
        *
        * @group 3. Caching options
        */
-      updateQueries?: ApolloClient.MutateOptions<TData, TVariables, TCache>['updateQueries']
+      updateQueries?: ApolloClient.MutateOptions<TData, TVariables>['updateQueries']
 
       /**
        * An array (or a function that _returns_ an array) that specifies which queries
@@ -82,7 +81,7 @@ export declare namespace useMutation {
        *
        * @group 3. Caching options
        */
-      refetchQueries?: ApolloClient.MutateOptions<TData, TVariables, TCache>['refetchQueries']
+      refetchQueries?: ApolloClient.MutateOptions<TData, TVariables>['refetchQueries']
 
       /**
        * If `true`, makes sure all queries included in `refetchQueries` are completed
@@ -91,14 +90,14 @@ export declare namespace useMutation {
        * @default false
        * @group 3. Caching options
        */
-      awaitRefetchQueries?: ApolloClient.MutateOptions<TData, TVariables, TCache>['awaitRefetchQueries']
+      awaitRefetchQueries?: ApolloClient.MutateOptions<TData, TVariables>['awaitRefetchQueries']
 
       /**
        * A function used to update the Apollo Client cache after the mutation completes.
        *
        * @group 3. Caching options
        */
-      update?: ApolloClient.MutateOptions<TData, TVariables, TCache>['update']
+      update?: ApolloClient.MutateOptions<TData, TVariables>['update']
 
       /**
        * Optional callback for intercepting queries whose cache data has been updated
@@ -111,7 +110,7 @@ export declare namespace useMutation {
        *
        * @group 3. Caching options
        */
-      onQueryUpdated?: ApolloClient.MutateOptions<TData, TVariables, TCache>['onQueryUpdated']
+      onQueryUpdated?: ApolloClient.MutateOptions<TData, TVariables>['onQueryUpdated']
 
       /**
        * Specifies how the mutation handles a response that returns both GraphQL errors
@@ -158,7 +157,7 @@ export declare namespace useMutation {
        *
        * @group 3. Caching options
        */
-      keepRootFields?: ApolloClient.MutateOptions<TData, TVariables, TCache>['keepRootFields']
+      keepRootFields?: ApolloClient.MutateOptions<TData, TVariables>['keepRootFields']
 
       /**
        * ID of a named Apollo client to use instead of the default.
@@ -186,7 +185,6 @@ export declare namespace useMutation {
     export interface Result<
       TData = unknown,
       TVariables extends OperationVariables = OperationVariables,
-      TCache extends ApolloCache = ApolloCache,
     > {
       /**
        * Call the mutation with optional variables and override options.
@@ -212,7 +210,7 @@ export declare namespace useMutation {
        *
        * @group 1. Mutation
        */
-      mutate: _self.MutateFunction<TData, TVariables, TCache>
+      mutate: _self.MutateFunction<TData, TVariables>
 
       /**
        * The data returned from your mutation. Can be `undefined` if `errorPolicy`
@@ -279,7 +277,7 @@ export declare namespace useMutation {
        *
        * @group 6. Refs
        */
-      options: Readonly<Ref<_self.Options<TData, TVariables, TCache> | undefined>>
+      options: Readonly<Ref<_self.Options<TData, TVariables> | undefined>>
     }
   }
 
@@ -287,15 +285,13 @@ export declare namespace useMutation {
   export type Options<
     TData = unknown,
     TVariables extends OperationVariables = OperationVariables,
-    TCache extends ApolloCache = ApolloCache,
-  > = Base.Options<TData, TVariables, TCache>
+  > = Base.Options<TData, TVariables>
 
   /** Options when calling the mutate function. */
   export type MutateOptions<
     TData = unknown,
     TVariables extends OperationVariables = OperationVariables,
-    TCache extends ApolloCache = ApolloCache,
-  > = Omit<Options<TData, TVariables, TCache>, 'clientId' | 'throws' | 'variables'> & {
+  > = Omit<Options<TData, TVariables>, 'clientId' | 'throws' | 'variables'> & {
     /**
      * Variables for this mutation call. Not reactive - pass plain values.
      *
@@ -316,17 +312,13 @@ export declare namespace useMutation {
   export type MutateFunction<
     TData = unknown,
     TVariables extends OperationVariables = OperationVariables,
-    TCache extends ApolloCache = ApolloCache,
-  > = {} extends TVariables
-    ? (options?: MutateOptions<TData, TVariables, TCache>) => Promise<ApolloClient.MutateResult<MaybeMasked<TData>>>
-    : (options: MutateOptions<TData, TVariables, TCache> & { variables: TVariables }) => Promise<ApolloClient.MutateResult<MaybeMasked<TData>>>
+  > = (options?: MutateOptions<TData, TVariables> & { variables?: TVariables }) => Promise<ApolloClient.MutateResult<MaybeMasked<TData>>>
 
   /** {@inheritDoc @vue/apollo-composable!useMutation.Base.Result:interface} */
   export interface Result<
     TData = unknown,
     TVariables extends OperationVariables = OperationVariables,
-    TCache extends ApolloCache = ApolloCache,
-  > extends Base.Result<TData, TVariables, TCache> {}
+  > extends Base.Result<TData, TVariables> {}
 
   export namespace DocumentationTypes {
     /** @group Composables Namespaces */
@@ -494,16 +486,15 @@ export declare namespace useMutation {
 export function useMutation<
   TData = unknown,
   TVariables extends OperationVariables = OperationVariables,
-  TCache extends ApolloCache = ApolloCache,
 >(
   mutation: MaybeRefOrGetter<DocumentNode | TypedDocumentNode<TData, TVariables>>,
-  options?: MaybeRefOrGetter<useMutation.Options<TData, TVariables, TCache>>,
-): useMutation.Result<TData, TVariables, TCache> {
+  options?: MaybeRefOrGetter<useMutation.Options<TData, TVariables>>,
+): useMutation.Result<TData, TVariables> {
   const currentScope = getCurrentScope()
 
   // #region Input Normalization
   const document = toRef(mutation)
-  const hookOptions = toRef(options) as Ref<useMutation.Options<TData, TVariables, TCache> | undefined>
+  const hookOptions = toRef(options) as Ref<useMutation.Options<TData, TVariables> | undefined>
   // #endregion
 
   // #region Apollo Client
@@ -574,7 +565,7 @@ export function useMutation<
 
   // #region Mutate Function
   async function mutate(
-    executeOptions?: useMutation.MutateOptions<TData, TVariables, TCache>,
+    executeOptions?: useMutation.MutateOptions<TData, TVariables>,
   ): Promise<ApolloClient.MutateResult<MaybeMasked<TData>>> {
     const client = getClient()
     const currentMutationId = ++mutationId
@@ -586,7 +577,7 @@ export function useMutation<
     const { clientId: _clientId, throws: _throws, variables: _hookVars, ...apolloHookOptions } = currentHookOptions
 
     // Build merged options for Apollo
-    const mergedOptions: ApolloClient.MutateOptions<TData, TVariables, TCache> = {
+    const mergedOptions: ApolloClient.MutateOptions<TData, TVariables> = {
       mutation: document.value,
       ...apolloHookOptions,
       ...executeOptions,
@@ -601,7 +592,7 @@ export function useMutation<
       context: typeof executeOptions?.context === 'function'
         ? executeOptions.context(currentHookOptions.context)
         : (executeOptions?.context ?? currentHookOptions.context),
-    } as ApolloClient.MutateOptions<TData, TVariables, TCache>
+    } as ApolloClient.MutateOptions<TData, TVariables>
 
     // Reset error and set loading
     error.value = undefined
@@ -609,7 +600,7 @@ export function useMutation<
     called.value = true
 
     try {
-      const mutationResult = await client.mutate<TData, TVariables, TCache>(mergedOptions)
+      const mutationResult = await client.mutate<TData, TVariables>(mergedOptions)
 
       // Ignore stale results from previous mutations
       if (currentMutationId !== mutationId) {
@@ -679,7 +670,7 @@ export function useMutation<
 
   // #region Public API
   return {
-    mutate: mutate as useMutation.MutateFunction<TData, TVariables, TCache>,
+    mutate: mutate as useMutation.MutateFunction<TData, TVariables>,
     result,
     error,
     loading,
