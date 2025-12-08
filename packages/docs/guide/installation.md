@@ -1,214 +1,146 @@
 # Installation
 
-## Compatibility
+## Step 1: Install Dependencies
 
-- Vue 3
-- Apollo Client 4.1+
-
-::: warning Apollo Client 4.1 Required
-Vue Apollo requires `@apollo/client` version 4.1.0 or higher, which is currently in alpha. Make sure to install the alpha version explicitly:
-
-```
-@apollo/client@^4.1.0-alpha.8
-```
-
-This version includes important features like improved TypeScript support and array support in `watchFragment` that Vue Apollo depends on.
-:::
-
-## Manual installation
+Install Apollo Client and Vue Apollo:
 
 ::: code-group
 
 ```shell [npm]
-npm install --save graphql graphql-tag @apollo/client@^4.1.0-alpha.8
+npm install @apollo/client@next @vue/apollo-composable@next graphql
 ```
 
 ```shell [yarn]
-yarn add graphql graphql-tag @apollo/client@^4.1.0-alpha.8
+yarn add @apollo/client@next @vue/apollo-composable@next graphql
 ```
 
 ```shell [pnpm]
-pnpm add graphql graphql-tag @apollo/client@^4.1.0-alpha.8
+pnpm add @apollo/client@next @vue/apollo-composable@next graphql
 ```
 
 :::
 
-## Creating an Apollo Client
+::: warning Pre-release Versions
+Vue Apollo v5 requires Apollo Client 4.1+, both currently in pre-release. The `@next` tag installs the latest pre-release version.
+:::
 
-In your app, create an `ApolloClient` instance. Apollo Client uses a modular link system to handle network requests. For an in-depth guide on links, see the [Apollo Link documentation](https://www.apollographql.com/docs/react/api/link/introduction).
+## Step 2: Create an Apollo Client
 
-### Basic HTTP Link
-
-The simplest setup uses `HttpLink` for standard GraphQL over HTTP:
+Create a file to configure your Apollo Client instance:
 
 ```ts twoslash
+// src/apollo.ts
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
 
-// HTTP connection to the API
-const httpLink = new HttpLink({
-  uri: 'http://localhost:4000/graphql',
-})
-
-// Cache implementation
-const cache = new InMemoryCache()
-
-// Create the apollo client
-const apolloClient = new ApolloClient({
-  link: httpLink,
-  cache,
+export const apolloClient = new ApolloClient({
+  link: new HttpLink({ uri: 'http://localhost:4000/graphql' }),
+  cache: new InMemoryCache(),
 })
 ```
 
-### SSE Link (Server-Sent Events)
+## Step 3: Provide Apollo Client to Vue
 
-For real-time features like subscriptions or streaming responses (`@defer`, `@stream`), you can use Server-Sent Events with the `graphql-sse` package:
-
-::: code-group
-
-```shell [npm]
-npm install --save graphql-sse
-```
-
-```shell [yarn]
-yarn add graphql-sse
-```
-
-```shell [pnpm]
-pnpm add graphql-sse
-```
-
-:::
-
-Then create a custom SSE link:
+Use Vue's provide/inject system to make Apollo Client available to all components:
 
 ```ts twoslash
-import type { Client, ClientOptions } from 'graphql-sse'
-import { ApolloClient, ApolloLink, InMemoryCache, Observable } from '@apollo/client'
-import { print } from 'graphql'
-import { createClient } from 'graphql-sse'
+// @filename: apollo.d.ts
+import type { ApolloClient } from '@apollo/client'
 
-class SSELink extends ApolloLink {
-  private client: Client
+export const apolloClient: ApolloClient
 
-  constructor(options: ClientOptions) {
-    super()
-    this.client = createClient(options)
-  }
+// @filename: App.vue.d.ts
+import type { Component } from 'vue'
 
-  public request(operation: ApolloLink.Operation): Observable<ApolloLink.Result> {
-    return new Observable((sink) => {
-      return this.client.subscribe<ApolloLink.Result>(
-        {
-          query: print(operation.query),
-          variables: operation.variables,
-          extensions: operation.extensions,
-          ...(operation.operationName && { operationName: operation.operationName }),
-        },
-        {
-          next: data => sink.next(data as ApolloLink.Result),
-          complete: sink.complete.bind(sink),
-          error: sink.error.bind(sink),
-        },
-      )
-    })
-  }
+declare const comp: Component
 
-  public dispose() {
-    this.client.dispose()
-  }
-}
+export default comp
 
-// Create the SSE link
-const sseLink = new SSELink({
-  url: 'http://localhost:4000/graphql',
-})
+// @filename: main.ts
+// ---cut---
+// src/main.ts
+import { DefaultApolloClient } from '@vue/apollo-composable'
+import { createApp } from 'vue'
+import { apolloClient } from './apollo'
+import App from './App.vue'
 
-// Create the apollo client
-const apolloClient = new ApolloClient({
-  link: sseLink,
-  cache: new InMemoryCache(),
-})
+const app = createApp(App)
+app.provide(DefaultApolloClient, apolloClient)
+app.mount('#app')
 ```
 
-### Enabling `@defer` and `@stream` Support
+That's it! You can now use [`useQuery`](/api/composable/functions/useQuery.md), [`useMutation`](/api/composable/functions/useMutation.md), and other composables in any component.
 
-To use the `@defer` and `@stream` GraphQL directives for incremental data delivery, you need to configure the `incrementalHandler` option:
+## Step 4: Your First Query
 
-```ts
-import { ApolloClient, InMemoryCache } from '@apollo/client'
-import { Defer20220824Handler } from '@apollo/client/incremental'
+Test your setup with a simple query:
 
-const apolloClient = new ApolloClient({
-  link: sseLink, // or httpLink with multipart support
-  cache: new InMemoryCache(),
-  incrementalHandler: new Defer20220824Handler(),
-})
+```vue twoslash
+<script setup lang="ts">
+import { TypedDocumentNode } from '@apollo/client'
+import { useQuery } from '@vue/apollo-composable'
+
+declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ hello: string }, {}>
+// ---cut---
+const { result, loading, error } = useQuery(gql`
+  query Hello {
+    hello
+  }
+`)
+</script>
+
+<template>
+  <div v-if="loading">
+    Loading...
+  </div>
+  <div v-else-if="error">
+    Error: {{ error.message }}
+  </div>
+  <div v-else>
+    {{ result?.hello }}
+  </div>
+</template>
 ```
 
-::: tip Learn more about @defer
-The `@defer` directive allows you to mark parts of your query as deferrable, meaning they can be streamed to the client as they become available. This is useful for optimizing perceived loading times.
+## IDE Integration
 
-See the [Apollo @defer documentation](https://www.apollographql.com/docs/react/data/defer) for more details on usage and server requirements.
-:::
+### VS Code
 
-Continue installation in [Next Steps](#next-steps).
-
-## IDE integration
-
-### Visual Studio Code
-
-If you are using VS Code, it's recommended to install the [Apollo GraphQL extension](https://marketplace.visualstudio.com/items?itemName=apollographql.vscode-apollo).
-
-Then configure it by creating a `apollo.config.js` file in the root folder of the Vue project:
+Install the [Apollo GraphQL extension](https://marketplace.visualstudio.com/items?itemName=apollographql.vscode-apollo) and create `apollo.config.js`:
 
 ```js
-// apollo.config.js
-module.exports = {
+export default {
   client: {
     service: {
       name: 'my-app',
-      // URL to the GraphQL API
-      url: 'http://localhost:3000/graphql',
+      url: 'http://localhost:4000/graphql',
+      // localSchemaFile: './path/to/schema.graphql', - instead of url
     },
-    // Files processed by the extension
-    includes: [
-      'src/**/*.vue',
-      'src/**/*.js',
-      'src/**/*.ts',
-    ],
+    includes: ['src/**/*.vue', 'src/**/*.ts'],
   },
 }
 ```
 
-### Webstorm
+### WebStorm
 
-If you are using Webstorm, it's recommended to install the [JS GraphQL extension](https://plugins.jetbrains.com/plugin/8097-js-graphql/).
-
-Then configure it by creating a `.graphqlconfig` file in the root folder of the Vue project:
+Install the  [JS GraphQL plugin](https://plugins.jetbrains.com/plugin/8097-js-graphql/) and create `.graphqlconfig`:
 
 ```json
 {
-  "name": "Untitled GraphQL Schema",
-  "schemaPath": "./path/to/schema.graphql",
+  "name": "My App",
+  "schemaPath": "./schema.graphql",
   "extensions": {
     "endpoints": {
-      "Default GraphQL Endpoint": {
-        "url": "http://url/to/the/graphql/api",
-        "headers": {
-          "user-agent": "JS GraphQL"
-        },
-        "introspect": false
+      "Default": {
+        "url": "http://localhost:4000/graphql",
+        "introspect": true
       }
     }
   }
 }
 ```
 
-## Next steps
+## Next Steps
 
-Continue with one of those guides:
+Now that Apollo Client is set up, learn how to fetch data:
 
-- [Option (Classic) API](../guide-option/setup.md)
-- [Composition (Advanced) API](../guide-composable/setup.md)
-- [Components API](../guide-components/setup.md)
-- [Advanced topics](../guide-advanced/)
+[Queries →](/data/queries)

@@ -3,7 +3,7 @@
   "name": "@vue/apollo-composable",
   "entryPoints": ["./api-types.d.ts"],
   "tsconfig": "./tsconfig.json",
-  "out": "./api",
+  "out": "./api/composable",
   "plugin": ["typedoc-plugin-markdown", "typedoc-vitepress-theme", "./typedoc-plugin-hide-inheritance.ts"],
   "readme": "none",
   "excludePrivate": true,

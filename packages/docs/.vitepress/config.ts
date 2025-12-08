@@ -1,13 +1,94 @@
 import { transformerTwoslash } from '@shikijs/vitepress-twoslash'
 import { defineConfig } from 'vitepress'
-import typedocSidebar from '../api/typedoc-sidebar.json'
+import typedocSidebar from '../api/composable/typedoc-sidebar.json'
+
+// Shared sidebar for guide sections
+const guideSidebar = [
+  {
+    text: 'Getting Started',
+    items: [
+      { text: 'Introduction', link: '/guide/' },
+      { text: 'Why Apollo Client?', link: '/guide/why-apollo' },
+      { text: 'Installation', link: '/guide/installation' },
+    ],
+  },
+  {
+    text: 'Core Concepts',
+    items: [
+      { text: 'Queries', link: '/data/queries' },
+      { text: 'Mutations', link: '/data/mutations' },
+      { text: 'Subscriptions', link: '/data/subscriptions' },
+      { text: 'Fragments', link: '/data/fragments' },
+      { text: 'Data Masking', link: '/data/data-masking' },
+      { text: 'Error Handling', link: '/data/error-handling' },
+      { text: 'TypeScript', link: '/data/typescript' },
+    ],
+  },
+  {
+    text: 'Caching',
+    items: [
+      { text: 'Overview', link: '/caching/overview' },
+      { text: 'Reading & Writing', link: '/caching/interaction' },
+      { text: 'Cache Updates', link: '/caching/cache-updates' },
+      { text: 'Optimistic UI', link: '/caching/optimistic-ui' },
+    ],
+  },
+  {
+    text: 'Pagination',
+    items: [
+      { text: 'Overview', link: '/pagination/overview' },
+      { text: 'Offset-based', link: '/pagination/offset-based' },
+      { text: 'Cursor-based', link: '/pagination/cursor-based' },
+    ],
+  },
+  {
+    text: 'Local State',
+    items: [
+      { text: 'Overview', link: '/local-state/overview' },
+      { text: 'Reactive Variables', link: '/local-state/reactive-variables' },
+    ],
+  },
+  {
+    text: 'Advanced',
+    items: [
+      { text: 'Lazy Queries', link: '/advanced/lazy-queries' },
+      { text: 'Streaming & @defer', link: '/advanced/streaming' },
+      { text: 'Loading States', link: '/advanced/loading-states' },
+      { text: 'Multiple Clients', link: '/advanced/multiple-clients' },
+      { text: 'Outside Components', link: '/advanced/outside-components' },
+    ],
+  },
+  {
+    text: 'Networking',
+    items: [
+      { text: 'Basic HTTP', link: '/networking/basic-http' },
+      { text: 'Authentication', link: '/networking/authentication' },
+      { text: 'WebSocket', link: '/networking/websocket' },
+    ],
+  },
+  {
+    text: 'Server-Side Rendering',
+    items: [
+      { text: 'Nuxt', link: '/ssr/nuxt' },
+    ],
+  },
+]
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: 'Vue Apollo',
   description: 'Apollo/GraphQL integration for VueJS',
   markdown: {
-    codeTransformers: [transformerTwoslash() as any],
+    codeTransformers: [
+      transformerTwoslash({
+        twoslashOptions: {
+          extraFiles: {
+            'shims.d.ts': `
+            `,
+          },
+        },
+      }) as any,
+    ],
   },
   head: [['link', { rel: 'icon', href: '/favicon.png' }]],
   themeConfig: {
@@ -18,12 +99,12 @@ export default defineConfig({
     },
     editLink: {
       pattern:
-        'https://github.com/vuejs/apollo/edit/v4/packages/docs/src/:path',
+        'https://github.com/vuejs/apollo/edit/v4/packages/docs/:path',
     },
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Guide', link: '/guide/' },
-      { text: 'API Reference', link: '/api/' },
+      { text: 'API Reference', link: '/api/composable/' },
       {
         text: 'Sponsor',
         link: 'https://github.com/sponsors/Akryum',
@@ -31,57 +112,18 @@ export default defineConfig({
     ],
 
     sidebar: {
-      '/guide/': [
-        {
-          text: 'Getting Started',
-          items: [
-            { text: 'Introduction', link: '/guide/' },
-            { text: 'Installation', link: '/guide/installation' },
-          ],
-        },
-        {
-          text: 'Next Steps',
-          items: [
-            { text: 'Composition API', link: '/guide-composable/setup' },
-          ],
-        },
-      ],
-      '/guide-composable/': [
-        {
-          text: 'Composition API',
-          items: [
-            { text: 'Setup', link: '/guide-composable/setup' },
-          ],
-        },
-      ],
-      '/guide-option/': [
-        {
-          text: 'Option API',
-          items: [
-            { text: 'Setup', link: '/guide-option/setup' },
-          ],
-        },
-      ],
-      '/guide-components/': [
-        {
-          text: 'Components',
-          items: [
-            { text: 'Setup', link: '/guide-components/setup' },
-          ],
-        },
-      ],
-      '/guide-advanced/': [
-        {
-          text: 'Advanced',
-          items: [
-            { text: 'Overview', link: '/guide-advanced/' },
-          ],
-        },
-      ],
-      '/api/': [
+      '/guide/': guideSidebar,
+      '/data/': guideSidebar,
+      '/caching/': guideSidebar,
+      '/pagination/': guideSidebar,
+      '/local-state/': guideSidebar,
+      '/advanced/': guideSidebar,
+      '/networking/': guideSidebar,
+      '/ssr/': guideSidebar,
+      '/api/composable/': [
         {
           text: '@vue/apollo-composable',
-          link: '/api/',
+          link: '/api/composable/',
           items: typedocSidebar,
         },
       ],
