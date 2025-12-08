@@ -1,7 +1,6 @@
 import type { Client, ClientOptions } from 'graphql-sse'
-import { ApolloClient, ApolloLink, HttpLink, InMemoryCache, Observable } from '@apollo/client'
+import { ApolloClient, ApolloLink, InMemoryCache, Observable } from '@apollo/client'
 import { Defer20220824Handler } from '@apollo/client/incremental'
-import { getMainDefinition } from '@apollo/client/utilities'
 import { print } from 'graphql'
 import { createClient } from 'graphql-sse'
 
@@ -38,19 +37,9 @@ class SSELink extends ApolloLink {
 
 export function createApolloClient(port = 4000) {
   const sseLink = new SSELink({ url: `http://localhost:${port}/graphql` })
-  const httpLink = new HttpLink({ uri: `http://localhost:${port}/graphql` })
-
-  const splitLink = ApolloLink.split(
-    ({ query }) => {
-      const definition = getMainDefinition(query)
-      return definition.kind === 'OperationDefinition' && definition.operation === 'subscription'
-    },
-    sseLink,
-    httpLink,
-  )
 
   return new ApolloClient({
-    link: splitLink,
+    link: sseLink,
     cache: new InMemoryCache(),
     incrementalHandler: new Defer20220824Handler(),
   })
