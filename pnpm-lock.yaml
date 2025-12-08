@@ -150,6 +150,9 @@ importers:
       graphql:
         specifier: 'catalog:'
         version: 16.12.0
+      graphql-sse:
+        specifier: 'catalog:'
+        version: 2.6.0(graphql@16.12.0)
       graphql-tag:
         specifier: 'catalog:'
         version: 2.12.6(graphql@16.12.0)

@@ -17,6 +17,7 @@
     "@apollo/client": "catalog:",
     "@shikijs/vitepress-twoslash": "catalog:",
     "graphql": "catalog:",
+    "graphql-sse": "catalog:",
     "graphql-tag": "catalog:",
     "typedoc": "catalog:",
     "typedoc-plugin-markdown": "catalog:",

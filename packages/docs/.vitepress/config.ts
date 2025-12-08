@@ -9,8 +9,8 @@ export default defineConfig({
   markdown: {
     codeTransformers: [transformerTwoslash() as any],
   },
+  head: [['link', { rel: 'icon', href: '/favicon.png' }]],
   themeConfig: {
-    lastUpdated: true,
     socialLinks: [{ icon: 'github', link: 'https://github.com/vuejs/apollo' }],
     footer: {
       message: `Released under the MIT License.`,
@@ -22,10 +22,58 @@ export default defineConfig({
     },
     nav: [
       { text: 'Home', link: '/' },
+      { text: 'Guide', link: '/guide/' },
       { text: 'API', link: '/api/' },
     ],
 
     sidebar: {
+      '/guide/': [
+        {
+          text: 'Getting Started',
+          items: [
+            { text: 'Introduction', link: '/guide/' },
+            { text: 'Installation', link: '/guide/installation' },
+          ],
+        },
+        {
+          text: 'Next Steps',
+          items: [
+            { text: 'Composition API', link: '/guide-composable/setup' },
+          ],
+        },
+      ],
+      '/guide-composable/': [
+        {
+          text: 'Composition API',
+          items: [
+            { text: 'Setup', link: '/guide-composable/setup' },
+          ],
+        },
+      ],
+      '/guide-option/': [
+        {
+          text: 'Option API',
+          items: [
+            { text: 'Setup', link: '/guide-option/setup' },
+          ],
+        },
+      ],
+      '/guide-components/': [
+        {
+          text: 'Components',
+          items: [
+            { text: 'Setup', link: '/guide-components/setup' },
+          ],
+        },
+      ],
+      '/guide-advanced/': [
+        {
+          text: 'Advanced',
+          items: [
+            { text: 'Overview', link: '/guide-advanced/' },
+          ],
+        },
+      ],
       '/api/': [
         {
           text: '@vue/apollo-composable',
