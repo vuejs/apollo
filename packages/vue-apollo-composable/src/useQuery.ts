@@ -252,21 +252,6 @@ export declare namespace useQuery {
       TData = unknown,
       TVariables extends OperationVariables = OperationVariables,
     > {
-      /**
-       * Current state as a discriminated union type.
-       *
-       * @group 1. Operation data
-       */
-      current: Readonly<Ref<_self.Current<TData>>>
-
-      /**
-       * An object containing the result of your GraphQL query after it completes.
-       *
-       * This value might be `undefined` if a query results in one or more errors (depending on the query's `errorPolicy`).
-       *
-       * @group 1. Operation data
-       */
-      result: Readonly<Ref<_self.Current<TData>['result']>>
 
       /**
        * If `true`, the query is still in flight.
@@ -293,16 +278,6 @@ export declare namespace useQuery {
        * @group 1. Operation data
        */
       error: Readonly<Ref<ErrorLike | undefined>>
-
-      /**
-       * Event triggered when the query state changes.
-       *
-       * This is the most granular event - it fires on every state update including
-       * loading states, network status changes, and result updates.
-       *
-       * @group 6. Events
-       */
-      onNextState: EventHookOn<_self.Current<TData>>
 
       /**
        * Event triggered when query result data is received.
@@ -570,19 +545,35 @@ export declare namespace useQuery {
     }
   }
 
-  /** {@inheritDoc @vue/apollo-composable!useQuery.Base.Result#result:member} */
   export interface Result<
     TData = unknown,
     TVariables extends OperationVariables = OperationVariables,
     TStates extends DataState<TData>['dataState'] = DataState<TData>['dataState'],
   > extends Omit<Base.Result<TData, TVariables>, 'current' | 'result' | 'onNextState'> {
-    /** {@inheritDoc @vue/apollo-composable!useQuery.Base.Result#current:member} */
+    /**
+     * Current state as a discriminated union type.
+     *
+     * @group 1. Operation data
+     */
     current: Readonly<Ref<Current<MaybeMasked<TData>, TStates>>>
 
-    /** {@inheritDoc @vue/apollo-composable!useQuery.Base.Result#result:member} */
+    /**
+     * An object containing the result of your GraphQL query after it completes.
+     *
+     * This value might be `undefined` if a query results in one or more errors (depending on the query's `errorPolicy`).
+     *
+     * @group 1. Operation data
+     */
     result: Readonly<Ref<Current<MaybeMasked<TData>, TStates>['result']>>
 
-    /** {@inheritDoc @vue/apollo-composable!useQuery.Base.Result#onNextState:member} */
+    /**
+     * Event triggered when the query state changes.
+     *
+     * This is the most granular event - it fires on every state update including
+     * loading states, network status changes, and result updates.
+     *
+     * @group 6. Events
+     */
     onNextState: EventHookOn<Current<MaybeMasked<TData>, TStates>>
   }
 
@@ -778,10 +769,10 @@ export declare namespace useQuery {
 
       /** {@inheritDoc @vue/apollo-composable!useQuery.Base.Result:interface} */
       export interface Result extends Omit<_self.Base.Result, 'current' | 'result' | 'onNextState' | 'onResult' | 'onCompleteResult' | 'onPartialResult' | 'onStreamingResult' | 'document' | 'variables' | 'options' | 'query' | 'fetchMore' | 'updateQuery' | 'subscribeToMore'> {
-        /** {@inheritDoc @vue/apollo-composable!useQuery.Base.Result#current:member} */
+        /** {@inheritDoc @vue/apollo-composable!useQuery.Result#current:member} */
         current: Ref<Current>
 
-        /** {@inheritDoc @vue/apollo-composable!useQuery.Base.Result#result:member} */
+        /** {@inheritDoc @vue/apollo-composable!useQuery.Result#result:member} */
         result: Ref<object | null>
 
         /** {@inheritDoc @vue/apollo-composable!useQuery.Base.Result#error:member} */
@@ -793,7 +784,7 @@ export declare namespace useQuery {
         /** {@inheritDoc @vue/apollo-composable!useQuery.Base.Result#networkStatus:member} */
         networkStatus: Ref<NetworkStatus>
 
-        /** {@inheritDoc @vue/apollo-composable!useQuery.Base.Result#onNextState:member} */
+        /** {@inheritDoc @vue/apollo-composable!useQuery.Result#onNextState:member} */
         onNextState: EventHookOn<Current>
 
         /** {@inheritDoc @vue/apollo-composable!useQuery.Base.Result#onResult:member} */
@@ -1327,7 +1318,6 @@ export function useQuery<
   & useQuery.Result<TData, TVariables, 'empty' | 'complete' | 'streaming' | 'partial'>
   & PromiseLike<useQuery.Result<TData, TVariables, 'empty' | 'complete' | 'streaming' | 'partial'>>
 
-/** {@inheritDoc @vue/apollo-composable!useQuery:function(1)} */
 export function useQuery<
   TData = unknown,
   TVariables extends OperationVariables = OperationVariables,
@@ -1340,7 +1330,6 @@ export function useQuery<
   & useQuery.Result<TData, TVariables, 'empty' | 'complete' | 'streaming' | 'partial'>
   & PromiseLike<useQuery.Result<TData, TVariables, 'empty' | 'complete' | 'streaming' | 'partial'>>
 
-/** {@inheritDoc @vue/apollo-composable!useQuery:function(1)} */
 export function useQuery<
   TData = unknown,
   TVariables extends OperationVariables = OperationVariables,
@@ -1351,7 +1340,6 @@ export function useQuery<
   & useQuery.Result<TData, TVariables, 'empty' | 'complete' | 'streaming'>
   & PromiseLike<useQuery.Result<TData, TVariables, 'empty' | 'complete' | 'streaming'>>
 
-/** {@inheritDoc @vue/apollo-composable!useQuery:function(1)} */
 export function useQuery<
   TData = unknown,
   TVariables extends OperationVariables = OperationVariables,
