@@ -20,6 +20,7 @@ const guideSidebar = [
       { text: 'Subscriptions', link: '/data/subscriptions' },
       { text: 'Fragments', link: '/data/fragments' },
       { text: 'Data Masking', link: '/data/data-masking' },
+      { text: 'Suspense', link: '/data/suspense' },
       { text: 'Error Handling', link: '/data/error-handling' },
       { text: 'TypeScript', link: '/data/typescript' },
     ],
@@ -63,6 +64,7 @@ const guideSidebar = [
     items: [
       { text: 'Basic HTTP', link: '/networking/basic-http' },
       { text: 'Authentication', link: '/networking/authentication' },
+      { text: 'SSE', link: '/networking/sse' },
       { text: 'WebSocket', link: '/networking/websocket' },
     ],
   },
@@ -80,14 +82,7 @@ export default defineConfig({
   description: 'Apollo/GraphQL integration for VueJS',
   markdown: {
     codeTransformers: [
-      transformerTwoslash({
-        twoslashOptions: {
-          extraFiles: {
-            'shims.d.ts': `
-            `,
-          },
-        },
-      }) as any,
+      transformerTwoslash() as any,
     ],
   },
   head: [['link', { rel: 'icon', href: '/favicon.png' }]],

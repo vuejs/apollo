@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "@apollo/client": "catalog:",
+    "@graphql-codegen/cli": "catalog:",
     "@shikijs/vitepress-twoslash": "catalog:",
     "graphql": "catalog:",
     "graphql-sse": "catalog:",

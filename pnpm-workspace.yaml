@@ -19,6 +19,7 @@ catalog:
   '@akryum/sheep': ^0.5.1
   '@antfu/eslint-config': ^6.5.1
   '@apollo/client': ^4.1.0-alpha.8
+  '@graphql-codegen/cli': ^6.1.0
   '@graphql-yoga/plugin-defer-stream': ^3.17.1
   '@microsoft/api-extractor': ^7.55.2
   '@microsoft/api-extractor-model': ^7.32.2
