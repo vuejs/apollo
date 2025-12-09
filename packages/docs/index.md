@@ -13,7 +13,7 @@ hero:
       link: /guide/
     - theme: alt
       text: API Reference
-      link: /api/
+      link: /api/composable/
 features:
 - title: Automatic updates
   details: Don't think about updating the UI or refetching the queries!
