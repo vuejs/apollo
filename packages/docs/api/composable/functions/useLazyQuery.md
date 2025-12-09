@@ -46,10 +46,14 @@ async function search(term: string) {
 </script>
 
 <template>
-  <input @keyup.enter="search($event.target.value)" />
-  <div v-if="loading">Searching...</div>
+  <input @keyup.enter="search($event.target.value)">
+  <div v-if="loading">
+    Searching...
+  </div>
   <ul v-else-if="result">
-    <li v-for="user in result.users" :key="user.id">{{ user.name }}</li>
+    <li v-for="user in result.users" :key="user.id">
+      {{ user.name }}
+    </li>
   </ul>
 </template>
 ```

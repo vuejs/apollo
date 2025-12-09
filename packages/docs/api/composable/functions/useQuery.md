@@ -41,8 +41,14 @@ const { current } = useQuery(GetUser, {
 </script>
 
 <template>
-  <div v-if="current.loading">Loading...</div>
-  <div v-else-if="current.error">Error: {{ error.message }}</div>
-  <div v-else>{{ result }}</div>
+  <div v-if="current.loading">
+    Loading...
+  </div>
+  <div v-else-if="current.error">
+    Error: {{ error.message }}
+  </div>
+  <div v-else>
+    {{ result }}
+  </div>
 </template>
 ```

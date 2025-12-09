@@ -305,7 +305,8 @@ const unsubscribe = subscribeToMore({
   document: OnMessageAdded,
   variables: { channelId },
   updateQuery: (_, { previousData, subscriptionData }) => {
-    if (!subscriptionData.data) return previousData
+    if (!subscriptionData.data)
+      return previousData
     return {
       ...previousData,
       messages: [...previousData.messages, subscriptionData.data.messageAdded]
@@ -415,4 +416,3 @@ Fires when `resultState` is `'complete'`, `'partial'`, or `'streaming'`. Does no
 Event triggered when streaming query data is received.
 
 Fires only when `resultState` is `'streaming'`. Use with `@defer` or `@stream` directive.
-

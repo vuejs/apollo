@@ -135,4 +135,3 @@ A function used to update the Apollo Client cache after the mutation completes.
 > `optional` **updateQueries**: `Record`\<`string`, (`prev`, `options`) => `object`\>
 
 A `MutationQueryReducersMap`, which is map from query names to mutation query reducers. Briefly, this map defines how to incorporate the results of the mutation into the results of queries that are currently being watched by your application.
-

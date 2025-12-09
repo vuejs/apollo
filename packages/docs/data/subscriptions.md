@@ -256,4 +256,3 @@ See [`SubscribeToMoreOptions`](/api/composable/@vue/namespaces/useQuery/interfac
 ## Options
 
 See [`useSubscription.Options`](/api/composable/@vue/namespaces/useSubscription/interfaces/Options) for all available options.
-
