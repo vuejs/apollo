@@ -179,6 +179,32 @@ The `graphql()` function:
 - Returns a `TypedDocumentNode` with full type inference
 - Automatically includes fragment definitions
 
+### Enabling Data Masking Types
+
+By default, Apollo Client doesn't modify operation types regardless of whether they are masked or unmasked. To use GraphQL Codegen's masking format with your operation types, you need to tell Apollo Client to use the associated GraphQL Codegen masking types.
+
+Create a TypeScript declaration file (e.g., `apollo-client.d.ts`) in your project:
+
+```ts
+// This import is necessary to ensure all Apollo Client imports
+// are still available to the rest of the application.
+import '@apollo/client'
+import type { GraphQLCodegenDataMasking } from '@apollo/client/masking'
+
+declare module '@apollo/client' {
+  interface TypeOverrides extends GraphQLCodegenDataMasking.TypeOverrides {}
+}
+```
+
+This extends Apollo Client's `TypeOverrides` interface with the GraphQL Codegen data masking types, ensuring that:
+- Masked types don't include fields from fragment spreads
+- The `@unmask` directive properly unmasks types
+- `FragmentType` works correctly for type-safe fragment props
+
+::: tip
+Make sure TypeScript can find this declaration file. It should be in a location covered by your `tsconfig.json`'s `include` patterns.
+:::
+
 ### Type-Safe Fragments
 
 Use `FragmentType` from `@apollo/client` to type component props that receive fragment data:

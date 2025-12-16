@@ -3,7 +3,7 @@
 Data masking prevents components from accessing GraphQL fields they didn't explicitly request. This creates loosely coupled components that are more resistant to breaking changes.
 
 ::: tip Recommended: Use with GraphQL Codegen
-Data masking works best with [GraphQL Codegen](https://the-guild.dev/graphql/codegen) for type-safe masked types. See the [TypeScript page](/data/typescript) for setup instructions.
+Data masking works best with [GraphQL Codegen](https://the-guild.dev/graphql/codegen) for type-safe masked types. See the [TypeScript page](/data/typescript) for setup instructions, including the required [type augmentation](/data/typescript#enabling-data-masking-types) to make masked types work correctly.
 :::
 
 ## The Problem
@@ -208,7 +208,14 @@ const client = new ApolloClient({
 })
 ```
 
-### 3. Refactor Components
+### 3. Configure TypeScript (if applicable)
+
+If you're using TypeScript with GraphQL Codegen, you need to:
+
+1. Update your codegen config to generate masked types (see [TypeScript setup](/data/typescript#configuration))
+2. Create the type augmentation file (see [Enabling Data Masking Types](/data/typescript#enabling-data-masking-types))
+
+### 4. Refactor Components
 
 Gradually refactor components to use `useFragment` and remove `@unmask` directives:
 
