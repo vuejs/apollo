@@ -16,8 +16,8 @@ import type { EventHookOn } from '@vueuse/core'
 import type { Subscription } from 'rxjs'
 import type { RenameKey } from './util/types.ts'
 import { NetworkStatus } from '@apollo/client'
-import { computed, onScopeDispose, ref, shallowRef, toRef, toValue } from '@vue/reactivity'
-import { nextTick, onServerPrefetch, watch } from '@vue/runtime-core'
+import { computed, getCurrentScope, onScopeDispose, ref, shallowRef, toRef, toValue } from '@vue/reactivity'
+import { getCurrentInstance, nextTick, onServerPrefetch, watch } from '@vue/runtime-core'
 import { createEventHook, useDebounceFn, useThrottleFn } from '@vueuse/core'
 import { equal } from '@wry/equality'
 import { useApolloClient } from './useApolloClient.ts'
@@ -1003,6 +1003,9 @@ export function useQueryImpl<
   // #endregion
 
   // #region Core State
+  const currentScope = getCurrentScope()
+  const currentInstance = getCurrentInstance()
+
   const observableQuery = shallowRef<ObservableQuery<TData, TVariables>>()
   const subscription = shallowRef<Subscription>()
 
@@ -1020,7 +1023,8 @@ export function useQueryImpl<
   const networkStatus = computed(() => currentState.value.networkStatus)
   const error = computed(() => currentState.value.error)
 
-  trackQuery(loading)
+  if (currentScope)
+    trackQuery(loading)
   // #endregion
 
   // #region Events
@@ -1137,10 +1141,15 @@ export function useQueryImpl<
   // #endregion
 
   // #region Cleanup
-  onScopeDispose(() => {
-    subscription.value?.unsubscribe()
-    observableQuery.value?.stop()
-  })
+  if (currentScope) {
+    onScopeDispose(() => {
+      subscription.value?.unsubscribe()
+      observableQuery.value?.stop()
+    })
+  }
+  else {
+    console.warn('[Vue apollo] useQuery() is called outside of an active effect scope and the query will not be automatically stopped.')
+  }
   // #endregion
 
   // #region Public API
@@ -1258,16 +1267,18 @@ export function useQueryImpl<
     }).then(onfulfilled, onrejected)
   }
 
-  onServerPrefetch(() => {
-    if (
-      (vueApolloQueryOptions.value.prefetch ?? true)
-      && isEnabled.value
-    ) {
-      return { then }
-    }
+  if (currentInstance) {
+    onServerPrefetch(() => {
+      if (
+        (vueApolloQueryOptions.value.prefetch ?? true)
+        && isEnabled.value
+      ) {
+        return { then }
+      }
 
-    return Promise.resolve()
-  })
+      return Promise.resolve()
+    })
+  }
 
   return {
     then,
