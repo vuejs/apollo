@@ -410,7 +410,7 @@ export function useFragmentImpl<
         },
       })
     }
-  })
+  }, { immediate: true })
   // #endregion
 
   // #region Cleanup
