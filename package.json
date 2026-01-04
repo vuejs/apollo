@@ -9,6 +9,7 @@
     "build:packages-docs": "pnpm build && node scripts/inlineInheritDoc.ts",
     "build": "pnpm run -r --filter \"vue-apollo*\" --filter \"@vue/apollo*\" build",
     "docs:dev": "pnpm run -r --filter \"private-vue-apollo-docs\" dev",
+    "docs:build": "pnpm run build:packages-docs && pnpm run -r --filter \"private-vue-apollo-docs\" build",
     "lint": "eslint . --cache",
     "release": "pnpm run build && pnpm run test && sheep release -b v5",
     "test": "pnpm run -r --sequential test"

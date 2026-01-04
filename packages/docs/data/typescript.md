@@ -186,10 +186,10 @@ By default, Apollo Client doesn't modify operation types regardless of whether t
 Create a TypeScript declaration file (e.g., `apollo-client.d.ts`) in your project:
 
 ```ts
+import type { GraphQLCodegenDataMasking } from '@apollo/client/masking'
 // This import is necessary to ensure all Apollo Client imports
 // are still available to the rest of the application.
 import '@apollo/client'
-import type { GraphQLCodegenDataMasking } from '@apollo/client/masking'
 
 declare module '@apollo/client' {
   interface TypeOverrides extends GraphQLCodegenDataMasking.TypeOverrides {}
