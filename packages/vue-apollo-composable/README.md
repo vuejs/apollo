@@ -9,7 +9,7 @@
   <img src="https://cdn-images-1.medium.com/max/400/1*H9AANoofLqjS10Xd5TwRYw.png">
 </p>
 
-:book: Documentation [**for Vue 3**](http://v4.apollo.vuejs.org) | [for Vue 2](https://apollo.vuejs.org/)
+[:book: Documentation](https://v5.apollo.vuejs.org/)
 
 [:pen: Contributing guide](./CONTRIBUTING.md)
 
@@ -20,6 +20,15 @@ npm i @vue/apollo-composable
 pnpm i @vue/apollo-composable
 yarn add @vue/apollo-composable
 ```
+
+## Special Sponsor
+
+<p align="center">
+  <a href="https://itcare.net" target="_blank">
+    <img src='https://raw.githubusercontent.com/vuejs/apollo/refs/heads/v5/packages/docs/public/sponsors/it-care.svg' width="400px" />
+    <br>ITcare
+  </a>
+</p>
 
 ## Sponsors
 
