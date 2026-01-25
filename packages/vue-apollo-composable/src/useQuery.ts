@@ -1,41 +1,41 @@
 import type {
-  ApolloClient,
-  ApolloError,
-  ApolloQueryResult,
-  FetchMoreQueryOptions,
-  MaybeMasked,
-  ObservableQuery,
-  ObservableSubscription,
-  OperationVariables,
-  SubscribeToMoreOptions,
-  TypedDocumentNode,
-  Unmasked,
-  UpdateQueryMapFn,
-  WatchQueryOptions,
+    ApolloClient,
+    ApolloError,
+    ApolloQueryResult,
+    FetchMoreQueryOptions,
+    MaybeMasked,
+    ObservableQuery,
+    ObservableSubscription,
+    OperationVariables,
+    SubscribeToMoreOptions,
+    TypedDocumentNode,
+    Unmasked,
+    UpdateQueryMapFn,
+    WatchQueryOptions,
 } from '@apollo/client/core/index.js'
 import type { DocumentNode } from 'graphql'
-import type {
-  Ref,
-} from 'vue-demi'
-import type { ReactiveFunction } from './util/ReactiveFunction'
 import { debounce, throttle } from 'throttle-debounce'
+import type {
+    Ref,
+} from 'vue-demi'
 import {
-  computed,
-  getCurrentInstance,
-  getCurrentScope,
-  nextTick,
-  onScopeDispose,
-  onServerPrefetch,
-  ref,
-  shallowRef,
-  unref,
-  watch,
+    computed,
+    getCurrentInstance,
+    getCurrentScope,
+    nextTick,
+    onScopeDispose,
+    onServerPrefetch,
+    ref,
+    shallowRef,
+    unref,
+    watch,
 } from 'vue-demi'
 import { useApolloClient } from './useApolloClient'
 import { isServer } from './util/env'
 import { trackQuery } from './util/loadingTracking'
 import { paramToReactive } from './util/paramToReactive'
 import { paramToRef } from './util/paramToRef'
+import type { ReactiveFunction } from './util/ReactiveFunction'
 import { resultErrorsToApolloError, toApolloError } from './util/toApolloError'
 import { useEventHook } from './util/useEventHook'
 
@@ -92,6 +92,8 @@ export interface UseQueryReturn<TResult, TVariables extends OperationVariables> 
   }) => Promise<ApolloQueryResult<MaybeMasked<TFetchData>>> | undefined
   updateQuery: (mapFn: UpdateQueryMapFn<TResult, TVariables>) => void
   subscribeToMore: <TSubscriptionVariables extends OperationVariables = OperationVariables, TSubscriptionData = TResult>(options: SubscribeToMoreOptions<TResult, TSubscriptionVariables, TSubscriptionData> | Ref<SubscribeToMoreOptions<TResult, TSubscriptionVariables, TSubscriptionData>> | ReactiveFunction<SubscribeToMoreOptions<TResult, TSubscriptionVariables, TSubscriptionData>>) => void
+  startPolling: (pollInterval: number) => void
+  stopPolling: () => void
   onResult: (fn: (param: ApolloQueryResult<TResult>, context: OnResultContext) => void) => {
     off: () => void
   }
@@ -642,6 +644,43 @@ export function useQueryImpl<
     item.unsubscribeFns.push(unsubscribe)
   }
 
+  // Polling
+
+  /**
+   * Start polling the query with the specified interval
+   */
+  function startPolling(pollInterval: number) {
+    if (query.value) {
+      query.value.startPolling(pollInterval)
+    }
+  }
+
+  /**
+   * Stop polling the query
+   */
+  function stopPolling() {
+    if (query.value) {
+      query.value.stopPolling()
+    }
+  }
+
+  // Watch for pollInterval changes in options
+  // This handles dynamic changes to pollInterval without requiring a full query restart
+  watch(() => currentOptions.value?.pollInterval, (newPollInterval, oldPollInterval) => {
+    // Only update polling if the query is already started and the interval actually changed
+    // Note: When options change, applyOptions calls restart() which recreates the query,
+    // so polling will be set correctly via watchQuery options. This watch handles
+    // cases where pollInterval changes independently or when we want to update without restart.
+    if (newPollInterval !== oldPollInterval && started && query.value && !restarting) {
+      if (newPollInterval == null || newPollInterval === 0) {
+        stopPolling()
+      }
+      else {
+        startPolling(newPollInterval)
+      }
+    }
+  })
+
   // Auto start & stop
 
   watch(isEnabled, (value) => {
@@ -687,6 +726,8 @@ export function useQueryImpl<
     fetchMore,
     subscribeToMore,
     updateQuery,
+    startPolling,
+    stopPolling,
     onResult: resultEvent.on,
     onError: errorEvent.on,
   }

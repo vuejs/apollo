@@ -97,5 +97,9 @@ export const router = createRouter({
       path: '/update-query',
       component: () => import('./components/UpdateQuery.vue'),
     },
+    {
+      path: '/polling',
+      component: () => import('./components/Polling.vue'),
+    },
   ],
 })

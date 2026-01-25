@@ -1,12 +1,12 @@
 import type { OperationVariables } from '@apollo/client/core'
-import type {
-  ExampleQuery,
-  ExampleQueryVariables,
-} from '../fixtures/graphql-example-types'
 import { useQuery } from '../../src'
+import type {
+    ExampleQuery,
+    ExampleQueryVariables,
+} from '../fixtures/graphql-example-types'
 import {
-  ExampleDocument,
-  ExampleTypedQueryDocument,
+    ExampleDocument,
+    ExampleTypedQueryDocument,
 } from '../fixtures/graphql-example-types'
 import { assertExactType } from './assertions'
 
@@ -193,6 +193,53 @@ import { assertExactType } from './assertions'
   )
 }
 
+// =============================================================================
+// Polling methods: startPolling and stopPolling
+// - startPolling should accept a number (pollInterval in ms)
+// - stopPolling should accept no arguments
+// =============================================================================
+{
+  const useQueryWithPolling = useQuery<ExampleQuery, ExampleQueryVariables>(
+    ExampleDocument,
+    { id: 'polling-test' },
+  )
+
+  // startPolling should accept a number
+  useQueryWithPolling.startPolling(1000)
+  useQueryWithPolling.startPolling(500)
+
+  // stopPolling should accept no arguments
+  useQueryWithPolling.stopPolling()
+
+  // Verify types
+  assertExactType<typeof useQueryWithPolling.startPolling, (pollInterval: number) => void>(
+    useQueryWithPolling.startPolling,
+  )
+  assertExactType<typeof useQueryWithPolling.stopPolling, () => void>(
+    useQueryWithPolling.stopPolling,
+  )
+}
+
+// =============================================================================
+// Polling with initial pollInterval in options
+// - startPolling and stopPolling should be available even when pollInterval is set initially
+// =============================================================================
+{
+  const useQueryWithInitialPolling = useQuery<ExampleQuery, ExampleQueryVariables>(
+    ExampleDocument,
+    { id: 'initial-polling' },
+    {
+      pollInterval: 500,
+    },
+  )
+
+  // Should be able to call startPolling to change interval
+  useQueryWithInitialPolling.startPolling(1000)
+
+  // Should be able to call stopPolling
+  useQueryWithInitialPolling.stopPolling()
+}
+
 // ====== Expected failures, uncomment to test ======
 
 // // @ts-expect-error - should require variables to be OperationType
@@ -206,3 +253,13 @@ import { assertExactType } from './assertions'
 
 // // @ts-expect-error - this should expect two arguments
 // const useQueryAllTypedMissingVariables = useQuery<ExampleQuery, ExampleQueryVariables>(ExampleDocument)
+
+// // @ts-expect-error - startPolling should require a number argument
+// const useQueryPollingTest = useQuery(ExampleDocument)
+// useQueryPollingTest.startPolling()
+
+// // @ts-expect-error - startPolling should require a number argument
+// useQueryPollingTest.startPolling('1000')
+
+// // @ts-expect-error - stopPolling should not accept arguments
+// useQueryPollingTest.stopPolling(1000)
