@@ -13,7 +13,7 @@ import { DefaultApolloClient } from './useApolloClient.ts'
 import { useGlobalQueryLoading, useQueryLoading } from './useLoading.ts'
 import { useQuery } from './useQuery.ts'
 
-const PORT = 4000
+const PORT = Number.parseInt(process.env.PORT ?? '4000')
 
 let server: ReturnType<typeof startServer> | undefined
 const apolloClient = createApolloClient(PORT)
