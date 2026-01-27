@@ -1,5 +1,48 @@
 # Changelog
 
+## v5.0.0-alpha.1
+
+[compare changes](https://github.com/vuejs/apollo/compare/v4.2.2...v5.0.0-alpha.1)
+
+### 🚀 Enhancements
+
+- **apollo-composable:** Rewrite for apollo-client v4 ([a4b478d](https://github.com/vuejs/apollo/commit/a4b478d))
+
+### 🩹 Fixes
+
+- **useMutation:** Options should always be optional for `mutate` calls ([fb671ad](https://github.com/vuejs/apollo/commit/fb671ad))
+- Enhance useQuery implementation with current scope checks ([adafd87](https://github.com/vuejs/apollo/commit/adafd87))
+- **useFragment:** Create subscription for first observable ([6792a10](https://github.com/vuejs/apollo/commit/6792a10))
+
+### 📖 Documentation
+
+- Add basic initial guide section ([2d08e70](https://github.com/vuejs/apollo/commit/2d08e70))
+- Update navigation links and add sponsor section ([284066b](https://github.com/vuejs/apollo/commit/284066b))
+- **useQuery:** Update useQuery JSDoc comments ([4797c3d](https://github.com/vuejs/apollo/commit/4797c3d))
+- Add basic usage docs ([25aefb1](https://github.com/vuejs/apollo/commit/25aefb1))
+- Add all core concepts ([d164989](https://github.com/vuejs/apollo/commit/d164989))
+- Lint documentation files ([9b58315](https://github.com/vuejs/apollo/commit/9b58315))
+- Fix homepage api link ([19bb0db](https://github.com/vuejs/apollo/commit/19bb0db))
+- Add instructions for enabling data masking types in Apollo Client ([57e1c1a](https://github.com/vuejs/apollo/commit/57e1c1a))
+- Update README ([f88b0d5](https://github.com/vuejs/apollo/commit/f88b0d5))
+
+### 🏡 Chore
+
+- Update lockfile ([aee328b](https://github.com/vuejs/apollo/commit/aee328b))
+- Add docs:build script ([2f8a3c3](https://github.com/vuejs/apollo/commit/2f8a3c3))
+- Specify dist tag ([e39452a](https://github.com/vuejs/apollo/commit/e39452a))
+- Fix test script to use vitest run ([6cc3826](https://github.com/vuejs/apollo/commit/6cc3826))
+
+### ✅ Tests
+
+- **apollo-composable:** Switch to pure SSE link ([bcde707](https://github.com/vuejs/apollo/commit/bcde707))
+- Add PORT env var support ([1c7571f](https://github.com/vuejs/apollo/commit/1c7571f))
+
+### ❤️ Contributors
+
+- Guillaume Chau ([@Akryum](http://github.com/Akryum))
+- Nicolai Moraru ([@nickmessing](http://github.com/nickmessing))
+
 ## v4.2.2
 
 [compare changes](https://github.com/vuejs/apollo/compare/v4.2.1...v4.2.2)
