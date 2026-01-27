@@ -11,7 +11,7 @@
     "docs:dev": "pnpm run -r --filter \"private-vue-apollo-docs\" dev",
     "docs:build": "pnpm run build:packages-docs && pnpm run -r --filter \"private-vue-apollo-docs\" build",
     "lint": "eslint . --cache",
-    "release": "pnpm run build && pnpm run test && sheep release -b v5",
+    "release": "pnpm run build && pnpm run test && sheep release -b v5 --tag next",
     "test": "pnpm run -r --sequential test"
   },
   "devDependencies": {
