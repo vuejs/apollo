@@ -44,7 +44,7 @@
     "test": "vitest"
   },
   "peerDependencies": {
-    "@apollo/client": "^4.1.0-alpha.8",
+    "@apollo/client": "^4.1.0",
     "@vue/reactivity": "^3.5.0",
     "@vue/runtime-core": "^3.5.0",
     "@vueuse/core": "^14.0.0",

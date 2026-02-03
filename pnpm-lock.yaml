@@ -13,8 +13,8 @@ catalogs:
       specifier: ^6.5.1
       version: 6.5.1
     '@apollo/client':
-      specifier: ^4.1.0-alpha.8
-      version: 4.1.0-alpha.8
+      specifier: ^4.1.0
+      version: 4.1.3
     '@graphql-codegen/cli':
       specifier: ^6.1.0
       version: 6.1.0
@@ -149,7 +149,7 @@ importers:
     devDependencies:
       '@apollo/client':
         specifier: 'catalog:'
-        version: 4.1.0-alpha.8(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(rxjs@7.8.2)
+        version: 4.1.3(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(rxjs@7.8.2)
       '@graphql-codegen/cli':
         specifier: 'catalog:'
         version: 6.1.0(@parcel/watcher@2.5.1)(@types/node@24.10.1)(graphql@16.12.0)(typescript@5.9.3)
@@ -184,8 +184,8 @@ importers:
   packages/vue-apollo-composable:
     dependencies:
       '@apollo/client':
-        specifier: ^4.1.0-alpha.8
-        version: 4.1.0-alpha.8(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(rxjs@7.8.2)
+        specifier: ^4.1.0
+        version: 4.1.3(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(rxjs@7.8.2)
       '@vue/reactivity':
         specifier: ^3.5.0
         version: 3.5.25
@@ -391,8 +391,8 @@ packages:
   '@antfu/install-pkg@1.1.0':
     resolution: {integrity: sha512-MGQsmw10ZyI+EJo45CdSER4zEb+p31LpDAFp2Z3gkSd1yqVZGi0Ebx++YTEMonJy4oChEMLsxZ64j8FH6sSqtQ==}
 
-  '@apollo/client@4.1.0-alpha.8':
-    resolution: {integrity: sha512-E3ujbKRkowP2uHIyniCEE5ph8nuGVyqOBJawuduP/Z6KyeTCNJLBZYG7fCULPGlb3wzbJelwdbuGhy7w8x0pQA==}
+  '@apollo/client@4.1.3':
+    resolution: {integrity: sha512-2D0eN9R0IHj9qp1RwjM1/brKqcBGldlDfY0YiP5ecCj9FtVrhOtXqMj98SZ1CA0YGDY5X+dxx32Ljh7J0VHTfA==}
     peerDependencies:
       graphql: ^16.0.0
       graphql-ws: ^5.5.5 || ^6.0.3
@@ -5145,7 +5145,7 @@ snapshots:
       package-manager-detector: 1.6.0
       tinyexec: 1.0.2
 
-  '@apollo/client@4.1.0-alpha.8(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(rxjs@7.8.2)':
+  '@apollo/client@4.1.3(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(rxjs@7.8.2)':
     dependencies:
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.12.0)
       '@wry/caches': 1.0.1

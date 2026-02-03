@@ -7,21 +7,21 @@ Install Apollo Client and Vue Apollo:
 ::: code-group
 
 ```shell [npm]
-npm install @apollo/client@next @vue/apollo-composable@next graphql
+npm install @apollo/client @vue/apollo-composable@next graphql
 ```
 
 ```shell [yarn]
-yarn add @apollo/client@next @vue/apollo-composable@next graphql
+yarn add @apollo/client @vue/apollo-composable@next graphql
 ```
 
 ```shell [pnpm]
-pnpm add @apollo/client@next @vue/apollo-composable@next graphql
+pnpm add @apollo/client @vue/apollo-composable@next graphql
 ```
 
 :::
 
-::: warning Pre-release Versions
-Vue Apollo v5 requires Apollo Client 4.1+, both currently in pre-release. The `@next` tag installs the latest pre-release version.
+::: warning Pre-release Version
+Vue Apollo v5 is currently in pre-release. The `@next` tag installs the latest pre-release version.
 :::
 
 ## Step 2: Create an Apollo Client
