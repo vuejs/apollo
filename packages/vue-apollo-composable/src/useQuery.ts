@@ -280,11 +280,6 @@ export function useQueryImpl<
       query: currentDocument,
       variables: currentVariables ?? {} as TVariables,
       ...currentOptions.value,
-      ...(isServer && currentOptions.value?.fetchPolicy !== 'no-cache')
-        ? {
-            fetchPolicy: 'network-only',
-          }
-        : {},
     })
 
     startQuerySubscription()

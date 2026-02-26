@@ -30,10 +30,6 @@ export default class SmartQuery extends SmartApollo {
       })
     }
 
-    if (isServer) {
-      this.options.fetchPolicy = 'network-only'
-    }
-
     if (!options.manual) {
       this.hasDataField = Object.prototype.hasOwnProperty.call(this.vm.$data, key)
       if (this.hasDataField) {
