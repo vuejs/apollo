@@ -286,10 +286,15 @@ export function useQueryImpl<
 
     // Make the cache data available to the component immediately
     // This prevents SSR hydration mismatches
-    if (!isServer && (firstStart || !currentOptions.value?.keepPreviousResult) && (currentOptions.value?.fetchPolicy !== 'no-cache' || currentOptions.value.notifyOnNetworkStatusChange)) {
+    if ((firstStart || !currentOptions.value?.keepPreviousResult) && (currentOptions.value?.fetchPolicy !== 'no-cache' || currentOptions.value.notifyOnNetworkStatusChange)) {
       const currentResult = query.value.getCurrentResult(false)
 
-      if (!currentResult.loading || currentResult.partial || currentOptions.value?.notifyOnNetworkStatusChange) {
+      // SSR: Allow reusing cached results
+      // CSR: Allow showing cached results immediately, but also show loading state if the query is currently loading and not showing partial data
+      const ssrCheck = isServer && currentOptions.value?.prefetch !== false && !currentResult.loading
+      const csrCheck = !isServer && (!currentResult.loading || currentResult.partial || currentOptions.value?.notifyOnNetworkStatusChange)
+
+      if (ssrCheck || csrCheck) {
         onNextResult(currentResult)
         ignoreNextResult = !currentResult.loading
       }
