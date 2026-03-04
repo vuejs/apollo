@@ -1,5 +1,26 @@
 # Changelog
 
+## v5.0.0-alpha.2
+
+[compare changes](https://github.com/vuejs/apollo/compare/v5.0.0-alpha.1...v5.0.0-alpha.2)
+
+### 🩹 Fixes
+
+- **@vue/apollo-composable:** Fix lazy variables reactivity ([#1607](https://github.com/vuejs/apollo/pull/1607))
+
+### 📖 Documentation
+
+- Update installation instructions and Nuxt guide for Apollo Client setup ([#1602](https://github.com/vuejs/apollo/pull/1602))
+
+### 🏡 Chore
+
+- Use vitest run ([3419b3e](https://github.com/vuejs/apollo/commit/3419b3e))
+
+### ❤️ Contributors
+
+- Guillaume Chau ([@Akryum](http://github.com/Akryum))
+- Nick Messing ([@nickmessing](http://github.com/nickmessing))
+
 ## v5.0.0-alpha.1
 
 [compare changes](https://github.com/vuejs/apollo/compare/v4.2.2...v5.0.0-alpha.1)
