@@ -999,7 +999,7 @@ export function useQueryImpl<
     else {
       currentVariables.value = newVariables
     }
-  })
+  }, { flush: 'sync' })
   // #endregion
 
   // #region Core State
