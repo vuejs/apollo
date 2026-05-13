@@ -75,7 +75,7 @@ export declare namespace useSubscription {
 
       /**
        * Determines if your subscription should be unsubscribed and subscribed again
-       * when an input to the hook (such as `subscription` or `variables`) changes.
+       * when an input to the composable (such as `subscription` or `variables`) changes.
        *
        * @default true
        * @group 4. Vue-Apollo

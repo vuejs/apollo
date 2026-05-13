@@ -1,10 +1,10 @@
 # Fragments
 
-A [GraphQL fragment](http://graphql.org/learn/queries/#fragments) is a reusable set of fields that can be shared across multiple queries and mutations. Fragments are especially useful for [colocating data requirements](#colocating-fragments) with components.
+A [GraphQL fragment](http://graphql.org/learn/queries/#fragments) is a reusable set of fields you can spread into multiple queries and mutations. They are especially useful for [colocating data requirements](#colocating-fragments) with the components that render them.
 
-## Defining Fragments
+## Defining fragments
 
-Define a fragment on a specific type:
+Define a fragment on a specific GraphQL type:
 
 ```ts
 const USER_FRAGMENT = gql`
@@ -16,7 +16,7 @@ const USER_FRAGMENT = gql`
 `
 ```
 
-Include the fragment in a query using the spread operator (`...`) and interpolation:
+Include the fragment in a query with the spread operator and interpolation:
 
 ```ts
 const GET_USER = gql`
@@ -30,12 +30,12 @@ const GET_USER = gql`
 `
 ```
 
-## Reading Fragment Data with `useFragment`
+## Reading fragment data with `useFragment`
 
-The [`useFragment`](/api/composable/functions/useFragment) composable creates a reactive binding to fragment data in the Apollo cache. It watches for changes and updates automatically when the cache changes.
+[`useFragment`](/api/composable/functions/useFragment) creates a reactive binding to fragment data in the Apollo cache. It watches for changes and updates automatically when the cache changes.
 
-::: warning Cache Identification Required
-`useFragment` only works with data that can be identified by the cache. Entities must have a unique cache ID (typically `__typename` + `id`).
+::: warning Cache identification required
+`useFragment` only works with entities the cache can identify. Each entity needs a unique cache ID, normally `__typename` plus the entity's key field (usually `id`).
 :::
 
 ```vue twoslash
@@ -49,6 +49,7 @@ interface UserFieldsFragment { id: string, name: string, email: string }
 declare const USER_FRAGMENT: TypedDocumentNode<UserFieldsFragment>
 // ---cut---
 const { user } = defineProps<{ user: { __typename: 'User', id: string } }>()
+
 const { current } = useFragment({
   fragment: USER_FRAGMENT,
   from: () => user,
@@ -62,11 +63,18 @@ const { current } = useFragment({
 </template>
 ```
 
-The `from` option accepts an object with `__typename` and the entity's key fields (usually `id`). You can pass the whole object from a parent query.
+The `from` option accepts:
 
-### Working with Arrays
+- An object with `__typename` and the key field, for example `{ __typename: 'User', id: '1' }`.
+- A reference object like `{ __ref: 'User:1' }`.
+- A string cache ID directly, for example `'User:1'`.
+- An array of any of the above (see [Working with arrays](#working-with-arrays)).
 
-`useFragment` supports arrays of entities:
+Like `useQuery`, `useFragment` exposes both a `current` ref (with `result`, `resultState`, `complete`, `missing`) and individual refs. We recommend `current` for the same reason: it narrows the type of `result` based on `resultState`. See [Queries](/data/queries#why-we-recommend-current) for the rationale.
+
+### Working with arrays
+
+Pass an array of entities to read several at once:
 
 ```ts twoslash
 import { TypedDocumentNode } from '@apollo/client'
@@ -78,22 +86,18 @@ declare const USER_FRAGMENT: TypedDocumentNode<UserFieldsFragment>
 const { users } = defineProps<{
   users: Array<{ __typename: 'User', id: string }>
 }>()
+
 const { current } = useFragment({
   fragment: USER_FRAGMENT,
-  from: () => users, // Array of identifiable entities
+  from: () => users,
 })
-
-if (current.value.resultState === 'complete') {
-  console.log(current.value.result)
-//                          ^?
-}
 ```
 
-When `from` is an array, `current.result` is an array where each item corresponds to the same index in `from`. The result is `complete` only when all items are complete.
+`current.result` is an array of items where each index lines up with `from`. `resultState` is `'complete'` only when every item is complete.
 
-### Event Hook
+### Event hook
 
-React to fragment data changes:
+React to fragment data changes imperatively:
 
 ```ts twoslash
 import { DocumentNode } from '@apollo/client'
@@ -113,19 +117,17 @@ onNextState((state) => {
 })
 ```
 
-## Colocating Fragments
+## Colocating fragments
 
-Colocate fragment definitions with the components that use them. This keeps data requirements close to the UI that renders them.
+Colocate fragment definitions with the components that read them. Each component owns its own data requirements, and parent components include those fragments in their queries.
 
-::: tip Recommended: Use GraphQL Codegen
-[GraphQL Codegen](https://the-guild.dev/graphql/codegen) automatically merges fragment definitions from `.graphql` files and components, eliminating the need for manual imports and interpolation. See the [TypeScript page](/data/typescript) for setup instructions.
+::: tip Recommended: GraphQL Codegen
+[GraphQL Codegen](https://the-guild.dev/graphql/codegen) merges fragment definitions across your codebase automatically, removing the need for manual imports and interpolation. See [TypeScript](/data/typescript) for setup.
 :::
 
-### Manual Fragment Colocation
+### Manual fragment colocation
 
-Since `export const` is not available in `<script setup>`, use a separate `<script>` block for exports.
-
-Parent components import and include child fragments in their queries:
+Since `export const` is not allowed in `<script setup>`, use a separate `<script>` block for exports.
 
 ::: code-group
 
@@ -143,7 +145,7 @@ export const USER_AVATAR_FRAGMENT = gql`
 </script>
 
 <script setup lang="ts">
-// Component setup code here
+// Component setup code
 </script>
 ```
 
@@ -173,16 +175,16 @@ const { current } = useQuery(GET_USER_PROFILE, { variables: { id: '1' } })
 
 :::
 
-::: tip Fragment Naming
-Prefix fragment names with the component name (e.g., `UserAvatarFields`) to make them easily identifiable when combined with other fragments.
+::: tip Fragment naming
+Prefix fragment names with the component name (`UserAvatarFields`) so they remain identifiable when many fragments are composed together.
 :::
 
-## Fragment Registry
+## Fragment registry
 
-Register fragments globally with `createFragmentRegistry` to use them by name without interpolation.
+You can register fragments globally with `createFragmentRegistry` and reference them by name without interpolation:
 
-::: warning Not recommended with GraphQL Codegen
-Do not use the fragment registry when using the `graphql` function generated by the [GraphQL Codegen client preset](https://the-guild.dev/graphql/codegen/plugins/presets/preset-client). The client preset creates precompiled GraphQL documents that already include fragment definitions.
+::: warning Not for use with GraphQL Codegen
+Do not use the fragment registry alongside the `graphql` function from the [GraphQL Codegen client preset](https://the-guild.dev/graphql/codegen/plugins/presets/preset-client). The client preset emits precompiled documents that already include fragment definitions.
 :::
 
 ```ts
@@ -201,7 +203,7 @@ const client = new ApolloClient({
 })
 ```
 
-Then reference fragments by name without `${}` interpolation:
+Now you can spread `UserFields` without importing it:
 
 ```ts
 const GET_USER = gql`
@@ -213,12 +215,15 @@ const GET_USER = gql`
 `
 ```
 
-## Options
+## Options and result reference
 
-See [`useFragment.Options`](/api/composable/@vue/namespaces/useFragment/interfaces/Options) for all available options.
+For every available option and method, see:
 
-## Next Steps
+- [`useFragment.Options`](/api/composable/@vue/namespaces/useFragment/interfaces/Options)
+- [`useFragment.Result`](/api/composable/@vue/namespaces/useFragment/interfaces/Result)
 
-- [Data Masking](/data/data-masking) - Isolate component data requirements with data masking
-- [Caching](/caching/overview) - Learn how Apollo Client caches data
-- [TypeScript](/data/typescript) - Type-safe fragments with GraphQL Codegen
+## Next steps
+
+- [Data Masking](/data/data-masking) isolates component data requirements.
+- [Caching](/caching/overview) explains how the cache stores and identifies entities.
+- [TypeScript](/data/typescript) sets up GraphQL Codegen for type-safe fragments.

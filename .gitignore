@@ -4,3 +4,4 @@ dist/
 cache/
 .eslintcache
 coverage/
+packages/vue-apollo-composable/.api-reports

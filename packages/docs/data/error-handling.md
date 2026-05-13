@@ -1,22 +1,22 @@
 # Error Handling
 
-Apollo Client can encounter a variety of errors when executing operations on your GraphQL server. Vue Apollo helps you handle these errors according to their type, enabling you to show appropriate information to the user when an error occurs.
+Apollo Client surfaces failures in a uniform `error` field. This page covers how to read those errors, classify them, and recover.
 
-## Understanding Errors
+## Categories of errors
 
-Errors in Apollo Client fall into two main categories: **GraphQL errors** and **network errors**. Apollo Client adds any encountered errors to the `error` field returned by composables like `useQuery`, wrapped in the appropriate error instance.
+Errors fall into two broad categories: GraphQL errors and network errors.
 
-### GraphQL Errors
+### GraphQL errors
 
-These are errors related to the server-side execution of a GraphQL operation:
+These come from the server-side execution of a GraphQL operation:
 
-- **Syntax errors** (e.g., a query was malformed)
-- **Validation errors** (e.g., a query included a field that doesn't exist)
-- **Resolver errors** (e.g., an error occurred while attempting to populate a query field)
+- **Syntax errors** (the query was malformed).
+- **Validation errors** (the query referenced a field that does not exist).
+- **Resolver errors** (a field's resolver threw during execution).
 
-If a syntax or validation error occurs, your server doesn't execute the operation at all. If resolver errors occur, your server can still return [partial data](#partial-data-with-resolver-errors).
+If a syntax or validation error occurs, the server does not execute the operation at all. If a resolver error occurs, the server may still return [partial data](#using-partial-data).
 
-When a GraphQL error occurs, your server includes it in the `errors` array of its response:
+A GraphQL error response looks like:
 
 ```json
 {
@@ -33,31 +33,31 @@ When a GraphQL error occurs, your server includes it in the `errors` array of it
 }
 ```
 
-In Apollo Client, GraphQL errors are represented by the `CombinedGraphQLErrors` error type.
+Apollo Client represents GraphQL errors with the `CombinedGraphQLErrors` class.
 
-### Network Errors
+### Network errors
 
-These are errors encountered while attempting to communicate with your GraphQL server:
+These come from communicating with the server:
 
-- `4xx` or `5xx` response status codes
-- Network unavailable
-- Response parsing failures (invalid JSON)
-- Custom errors thrown in Apollo Link handlers
+- `4xx` or `5xx` HTTP status codes.
+- Network unavailable.
+- Response parsing failures (invalid JSON).
+- Custom errors thrown in your Apollo Link chain.
 
-Network errors are represented by several error types:
+Network errors are represented by several classes:
 
-| Error Type | Description |
-|------------|-------------|
-| `ServerError` | Server responded with a non-200 HTTP status code |
-| `ServerParseError` | Server response cannot be parsed as valid JSON |
-| `CombinedProtocolErrors` | Fatal transport-level errors during multipart HTTP subscriptions |
-| `LocalStateError` | Errors in local state configuration or execution |
+| Class | When it appears |
+|------|------|
+| `ServerError` | Server responded with a non-200 HTTP status. |
+| `ServerParseError` | Server response could not be parsed as JSON. |
+| `CombinedProtocolErrors` | Transport-level errors during multipart HTTP subscriptions. |
+| `LocalStateError` | Errors in local-state configuration or execution. |
 
-## Basic Error Handling
+## Reading errors
 
 ### Queries
 
-Access errors through the `current.error` property or the `error` ref:
+Read errors through `current.error`:
 
 ```vue twoslash
 <script setup lang="ts">
@@ -66,7 +66,7 @@ import { useQuery } from '@vue/apollo-composable'
 
 declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ users: { id: string }[] }, {}>
 // ---cut---
-const { current, error } = useQuery(gql`
+const { current } = useQuery(gql`
   query GetUsers {
     users { id }
   }
@@ -88,7 +88,7 @@ const { current, error } = useQuery(gql`
 
 ### Mutations
 
-Access errors through the `error` ref:
+Read errors through the `error` ref:
 
 ```vue twoslash
 <script setup lang="ts">
@@ -113,7 +113,7 @@ const { mutate, error, loading } = useMutation(gql`
 
 ### Subscriptions
 
-Handle errors in subscriptions using the `error` ref or `onError` callback:
+Read errors through the `error` ref, or register an `onError` callback:
 
 ```vue twoslash
 <script setup lang="ts">
@@ -140,11 +140,9 @@ onError((err) => {
 </template>
 ```
 
-## Error Event Hooks
+## Error event hooks
 
-All composables provide an `onError` event hook for handling errors imperatively:
-
-### useQuery
+Every composable exposes an `onError` event hook for imperative handling:
 
 ```ts twoslash
 import { TypedDocumentNode } from '@apollo/client'
@@ -161,12 +159,14 @@ onError((error) => {
   // Show a toast notification
   // toast.error(error.message)
 
-  // Report to error tracking service
+  // Report to an error-tracking service
   // errorTracker.capture(error)
 })
 ```
 
-### useMutation
+## Mutation throwing behavior
+
+By default, `mutate()` throws when no `onError` handler is registered. The `throws` option controls this:
 
 ```ts twoslash
 import { TypedDocumentNode } from '@apollo/client'
@@ -175,28 +175,8 @@ import { useMutation } from '@vue/apollo-composable'
 declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ createUser: { id: string } }, { name: string }>
 const CREATE_USER = gql``
 // ---cut---
-const { mutate, onError } = useMutation(CREATE_USER)
-
-onError((error) => {
-  console.error('Mutation failed:', error.message)
-})
-```
-
-## Mutation Error Throwing
-
-By default, `useMutation` throws errors when no `onError` handler is registered. Control this with the `throws` option:
-
-```ts twoslash
-import { TypedDocumentNode } from '@apollo/client'
-import { useMutation } from '@vue/apollo-composable'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ createUser: { id: string } }, { name: string }>
-const CREATE_USER = gql``
-// ---cut---
-// Never throw - check error ref instead
-const { mutate, error } = useMutation(CREATE_USER, {
-  throws: 'never',
-})
+// Never throw, read the error ref instead
+const { mutate, error } = useMutation(CREATE_USER, { throws: 'never' })
 
 async function handleSubmit() {
   await mutate({ variables: { name: 'Alice' } })
@@ -207,7 +187,7 @@ async function handleSubmit() {
 }
 ```
 
-Use `throws: 'always'` with try/catch for explicit error handling:
+Or with `throws: 'always'` and a try/catch:
 
 ```ts twoslash
 import { TypedDocumentNode } from '@apollo/client'
@@ -216,9 +196,7 @@ import { useMutation } from '@vue/apollo-composable'
 declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ createUser: { id: string } }, { name: string }>
 const CREATE_USER = gql``
 // ---cut---
-const { mutate } = useMutation(CREATE_USER, {
-  throws: 'always',
-})
+const { mutate } = useMutation(CREATE_USER, { throws: 'always' })
 
 async function handleSubmit() {
   try {
@@ -233,19 +211,17 @@ async function handleSubmit() {
 
 | Value | Behavior |
 |-------|----------|
-| `'auto'` | Throws if no `onError` handler is registered **(default)** |
-| `'always'` | Always throws errors |
-| `'never'` | Never throws, use `error` ref instead |
+| `'auto'` | Throws when no `onError` handler is registered **(default)** |
+| `'always'` | Always throws |
+| `'never'` | Never throws |
 
-## Error Policies
+## Error policies
 
-By default, Apollo Client throws away partial data and populates the `error` field. You can change this behavior with **error policies**.
-
-### Setting an Error Policy
+By default, Apollo Client discards partial data when a GraphQL error occurs and populates `error`. Change this with `errorPolicy`:
 
 ```ts twoslash
 import { TypedDocumentNode } from '@apollo/client'
-import { useMutation, useQuery } from '@vue/apollo-composable'
+import { useQuery } from '@vue/apollo-composable'
 
 declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ users: { id: string }[] }, {}>
 const GET_USERS = gql``
@@ -255,17 +231,15 @@ const { current } = useQuery(GET_USERS, {
 })
 ```
 
-### Available Policies
+| Policy | Behavior |
+|--------|----------|
+| `'none'` | Returns errors in `error` and clears `result`. **(default)** |
+| `'ignore'` | Ignores errors; `error` is not populated. `result` may still hold partial data. |
+| `'all'` | Populates both `result` and `error` so you can render both. |
 
-| Policy | Description |
-|--------|-------------|
-| `'none'` | Returns errors in the `error` field and sets `result` to `undefined`. **(default)** |
-| `'ignore'` | Errors are ignored (`error` is not populated), and any returned `data` is cached and rendered. |
-| `'all'` | Both `result` and `error` are populated, enabling you to render both partial results and error information. |
+### Using partial data
 
-### Using Partial Data
-
-With `errorPolicy: 'all'`, you can display partial data alongside error messages:
+With `errorPolicy: 'all'`, partial data is available alongside the error:
 
 ```vue twoslash
 <script setup lang="ts">
@@ -277,13 +251,11 @@ declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => T
 const { current } = useQuery(
   gql`
     query MixedResults {
-      goodField # This succeeds
-      badField # This field's resolver throws an error
+      goodField     # Resolves successfully
+      badField      # Resolver throws
     }
   `,
-  {
-    errorPolicy: 'all',
-  },
+  { errorPolicy: 'all' },
 )
 </script>
 
@@ -297,9 +269,9 @@ const { current } = useQuery(
 </template>
 ```
 
-## Identifying Error Types
+## Identifying error types
 
-Apollo Client error classes provide a static `is` method to reliably identify error types:
+Apollo Client's error classes expose a static `is` method that identifies the error reliably across realms (workers, iframes, etc.). Prefer it over `instanceof`:
 
 ```ts
 import {
@@ -311,33 +283,26 @@ import {
 
 function handleError(error: unknown) {
   if (CombinedGraphQLErrors.is(error)) {
-    // Handle GraphQL errors
     console.log('GraphQL errors:', error.errors)
   }
   else if (ServerError.is(error)) {
-    // Handle server HTTP errors
     console.log('Server error:', error.statusCode)
   }
   else if (ServerParseError.is(error)) {
-    // Handle JSON parse errors
     console.log('Parse error:', error.bodyText)
   }
   else if (CombinedProtocolErrors.is(error)) {
-    // Handle multipart subscription protocol errors
     console.log('Protocol errors:', error.errors)
   }
   else {
-    // Handle other errors
     console.log('Unknown error:', error)
   }
 }
 ```
 
-Using the static `is` method is more reliable than `instanceof` because it handles errors from different JavaScript realms correctly.
+## Centralized error handling with Apollo Link
 
-## Advanced Error Handling with Apollo Link
-
-For centralized error handling, use [ErrorLink](https://www.apollographql.com/docs/react/api/link/apollo-link-error/) in your link chain:
+For app-wide error handling, [`ErrorLink`](https://www.apollographql.com/docs/react/api/link/apollo-link-error/) intercepts every operation:
 
 ```ts
 import { ApolloClient, from, HttpLink, InMemoryCache } from '@apollo/client'
@@ -365,9 +330,9 @@ const client = new ApolloClient({
 })
 ```
 
-### Retrying on Authentication Errors
+### Retry on authentication errors
 
-Use `ErrorLink` to automatically refresh tokens and retry requests:
+`ErrorLink` can refresh a token and retry the operation:
 
 ```ts
 import { CombinedGraphQLErrors } from '@apollo/client/errors'
@@ -377,10 +342,8 @@ const errorLink = new ErrorLink(({ error, operation, forward }) => {
   if (CombinedGraphQLErrors.is(error)) {
     for (const err of error.errors) {
       if (err.extensions?.code === 'UNAUTHENTICATED') {
-        // Refresh the token
         const newToken = refreshToken()
 
-        // Update the request headers
         const oldHeaders = operation.getContext().headers
         operation.setContext({
           headers: {
@@ -389,7 +352,6 @@ const errorLink = new ErrorLink(({ error, operation, forward }) => {
           },
         })
 
-        // Retry the request
         return forward(operation)
       }
     }
@@ -398,12 +360,12 @@ const errorLink = new ErrorLink(({ error, operation, forward }) => {
 ```
 
 ::: warning
-If the retried operation also results in errors, those errors are not passed to `ErrorLink` again to prevent infinite loops. An `ErrorLink` can only retry a particular operation once.
+If the retried operation also fails, those errors do not reach `ErrorLink` again. An `ErrorLink` can only retry a particular operation once.
 :::
 
-### Retrying on Network Errors
+### Retry on network errors
 
-For network errors, use [RetryLink](https://www.apollographql.com/docs/react/api/link/apollo-link-retry/) with configurable retry logic:
+For network errors, [`RetryLink`](https://www.apollographql.com/docs/react/api/link/apollo-link-retry/) handles exponential backoff:
 
 ```ts
 import { from, HttpLink } from '@apollo/client'
@@ -424,11 +386,9 @@ const retryLink = new RetryLink({
 const link = from([retryLink, new HttpLink({ uri: '/graphql' })])
 ```
 
-## Error Handling Patterns
+## Resetting mutation errors
 
-### Resetting Mutation Errors
-
-Use the `reset` function to clear mutation errors:
+`reset()` clears mutation errors so the form can be tried again:
 
 ```vue twoslash
 <script setup lang="ts">
@@ -441,7 +401,7 @@ const CREATE_USER = gql``
 const { mutate, error, reset } = useMutation(CREATE_USER)
 
 function dismissError() {
-  reset() // Clears error and called state
+  reset()
 }
 </script>
 
@@ -455,8 +415,7 @@ function dismissError() {
 </template>
 ```
 
-## Next Steps
+## Next steps
 
-- [Queries](/data/queries) - Learn query basics
-- [Mutations](/data/mutations) - Learn mutation basics
-- [TypeScript](/data/typescript) - Type-safe error handling
+- [Queries](/data/queries) and [Mutations](/data/mutations) cover the basics.
+- [TypeScript](/data/typescript) for type-safe error handling.

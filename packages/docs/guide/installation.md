@@ -1,6 +1,6 @@
 # Installation
 
-## Step 1: Install Dependencies
+## Step 1: Install dependencies
 
 Install Apollo Client and Vue Apollo:
 
@@ -20,8 +20,8 @@ pnpm add @apollo/client @vue/apollo-composable@next graphql
 
 :::
 
-::: warning Pre-release Version
-Vue Apollo v5 is currently in pre-release. The `@next` tag installs the latest pre-release version.
+::: warning Pre-release version
+Vue Apollo v5 is currently in pre-release. The `@next` tag installs the latest pre-release build.
 :::
 
 ## Step 2: Create an Apollo Client
@@ -40,7 +40,7 @@ export const apolloClient = new ApolloClient({
 
 ## Step 3: Provide Apollo Client to Vue
 
-Use Vue's provide/inject system to make Apollo Client available to all components:
+Use Vue's provide/inject system to make the client available to every component:
 
 ```ts twoslash
 // @filename: apollo.d.ts
@@ -68,11 +68,11 @@ app.provide(DefaultApolloClient, apolloClient)
 app.mount('#app')
 ```
 
-That's it! You can now use [`useQuery`](/api/composable/functions/useQuery.md), [`useMutation`](/api/composable/functions/useMutation.md), and other composables in any component.
+That's it. You can now use [`useQuery`](/api/composable/functions/useQuery.md), [`useMutation`](/api/composable/functions/useMutation.md), and the other composables in any component.
 
-## Step 4: Your First Query
+## Step 4: Your first query
 
-Test your setup with a simple query:
+Verify the setup with a simple query:
 
 ```vue twoslash
 <script setup lang="ts">
@@ -81,7 +81,7 @@ import { useQuery } from '@vue/apollo-composable'
 
 declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ hello: string }, {}>
 // ---cut---
-const { result, loading, error } = useQuery(gql`
+const { current } = useQuery(gql`
   query Hello {
     hello
   }
@@ -89,19 +89,19 @@ const { result, loading, error } = useQuery(gql`
 </script>
 
 <template>
-  <div v-if="loading">
+  <div v-if="current.loading">
     Loading...
   </div>
-  <div v-else-if="error">
-    Error: {{ error.message }}
+  <div v-else-if="current.error">
+    Error: {{ current.error.message }}
   </div>
-  <div v-else>
-    {{ result?.hello }}
+  <div v-else-if="current.resultState === 'complete'">
+    {{ current.result.hello }}
   </div>
 </template>
 ```
 
-## IDE Integration
+## IDE integration
 
 ### VS Code
 
@@ -113,7 +113,7 @@ export default {
     service: {
       name: 'my-app',
       url: 'http://localhost:4000/graphql',
-      // localSchemaFile: './path/to/schema.graphql', - instead of url
+      // localSchemaFile: './path/to/schema.graphql', // instead of url
     },
     includes: ['src/**/*.vue', 'src/**/*.ts'],
   },
@@ -122,7 +122,7 @@ export default {
 
 ### WebStorm
 
-Install the  [JS GraphQL plugin](https://plugins.jetbrains.com/plugin/8097-js-graphql/) and create `.graphqlconfig`:
+Install the [JS GraphQL plugin](https://plugins.jetbrains.com/plugin/8097-js-graphql/) and create `.graphqlconfig`:
 
 ```json
 {
@@ -139,7 +139,7 @@ Install the  [JS GraphQL plugin](https://plugins.jetbrains.com/plugin/8097-js-gr
 }
 ```
 
-## Next Steps
+## Next steps
 
 Now that Apollo Client is set up, learn how to fetch data:
 

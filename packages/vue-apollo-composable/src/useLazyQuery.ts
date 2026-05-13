@@ -130,7 +130,7 @@ export function useLazyQuery<
 
   /**
    * Load the query with optional variables.
-   * Variables are merged with hook-level variables.
+   * Variables are merged with composable-level variables.
    */
   async function load(variables?: TVariables): Promise<MaybeMasked<TData> | undefined> {
     // If variables are provided, merge with existing variables and re-assign

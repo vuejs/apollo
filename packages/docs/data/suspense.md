@@ -1,12 +1,12 @@
 # Suspense
 
-Vue's built-in `<Suspense>` component lets you display a loading state while waiting for async dependencies to resolve. Vue Apollo integrates seamlessly with Suspense by supporting `await` in your component's setup.
+Vue's built-in `<Suspense>` component lets you display a fallback while async dependencies resolve. Vue Apollo plugs into Suspense by exposing `useQuery` as `PromiseLike`, so you can `await` it in your component's setup.
 
-## Async Setup
+## Async setup
 
-In Vue, using top-level `await` in `<script setup>` makes a component async. When wrapped in `<Suspense>`, Vue displays a fallback until the async operation completes.
+Top-level `await` in `<script setup>` turns the component async. Inside a `<Suspense>`, Vue shows the fallback until that async work completes.
 
-To use this with `useQuery`, simply prefix it with `await`:
+To use this with `useQuery`, prefix the call with `await`:
 
 ```vue
 <script setup lang="ts">
@@ -32,11 +32,11 @@ const { current } = await useQuery(gql`
 </template>
 ```
 
-When you `await useQuery()`, it resolves only after the initial data is available. This means `current.loading` will **never** be `true` on the initial render.
+`await useQuery()` resolves once the initial data is available. As a result, `current.loading` is `false` on the first render and `current.resultState` is already `'complete'`.
 
 ## Using Suspense
 
-Wrap your async component with `<Suspense>` to show a loading state:
+Wrap your async component in `<Suspense>` to show a loading state until it resolves:
 
 ```vue
 <script setup>
@@ -46,7 +46,6 @@ import UserList from './UserList.vue'
 <template>
   <Suspense>
     <UserList />
-
     <template #fallback>
       Loading users...
     </template>
@@ -54,20 +53,18 @@ import UserList from './UserList.vue'
 </template>
 ```
 
-The `#fallback` slot is displayed while `UserList` is waiting for its query to complete.
+Vue renders the `#fallback` slot until `UserList`'s async setup resolves.
 
-## Important Considerations
+## Loading state after the initial render
 
-### Loading State After Initial Render
+`await useQuery()` only handles the initial render. The query can still enter a loading state later when:
 
-While `await useQuery()` ensures data is available on initial render, the query can still enter a loading state later when:
+- Variables change and trigger a new fetch.
+- The cache is invalidated.
+- `refetch()` is called.
+- Polling triggers a refresh.
 
-- Variables change, triggering a new fetch
-- Cache is invalidated
-- `refetch()` is called
-- Polling triggers a refresh
-
-You should still handle the `current.loading` state in your template for these cases:
+Continue handling `current.loading` in the template for these cases:
 
 ```vue
 <script setup lang="ts">
@@ -92,7 +89,6 @@ const { current } = await useQuery(
 </script>
 
 <template>
-  <!-- Handle loading state for subsequent fetches -->
   <div v-if="current.loading" class="loading-overlay">
     Updating...
   </div>
@@ -102,11 +98,9 @@ const { current } = await useQuery(
 </template>
 ```
 
-### Streaming Data with `@defer`
+## Streaming data with `@defer`
 
-By default, `await useQuery()` resolves as soon as initial data arrives. When using `@defer` or `@stream` directives, you may want to wait for all deferred data to arrive before rendering.
-
-Use the [`awaitComplete`](/api/composable/@vue/namespaces/useQuery/interfaces/Options#awaitcomplete) option:
+By default, `await useQuery()` resolves as soon as the initial chunk of data arrives. With `@defer` or `@stream` directives, the initial chunk may be incomplete. Set `awaitComplete: true` to wait for all deferred chunks before resolving:
 
 ```vue
 <script setup lang="ts">
@@ -130,28 +124,26 @@ const { current } = await useQuery(
   `,
   {
     variables: { id: '1' },
-    awaitComplete: true, // Wait for deferred data too
+    awaitComplete: true,
   },
 )
 </script>
 ```
 
-Learn more about streaming in [Streaming & @defer](/advanced/streaming).
+See [Streaming & @defer](/advanced/streaming) for a deeper treatment.
 
-## Nested Async Components
+## Nested async components
 
-`<Suspense>` handles nested async dependencies automatically. If multiple child components use `await useQuery()`, the fallback is shown until all of them resolve:
+`<Suspense>` handles nested async dependencies. If several children each `await useQuery()`, the fallback stays visible until all of them resolve:
 
 ```vue
 <template>
   <Suspense>
     <Dashboard>
-      <!-- All these can use await useQuery() -->
       <UserProfile />
       <RecentActivity />
       <Stats />
     </Dashboard>
-
     <template #fallback>
       Loading dashboard...
     </template>
@@ -159,9 +151,9 @@ Learn more about streaming in [Streaming & @defer](/advanced/streaming).
 </template>
 ```
 
-## Error Handling
+## Error handling
 
-Suspense doesn't handle errors automatically. Combine it with Vue's `onErrorCaptured` hook or an error boundary component:
+Suspense does not handle errors directly. Combine it with `onErrorCaptured` or an error-boundary component:
 
 ```vue
 <script setup>
@@ -172,7 +164,7 @@ const error = ref<Error | null>(null)
 
 onErrorCaptured((err) => {
   error.value = err
-  return false // Prevent error from propagating
+  return false // Stop propagation
 })
 </script>
 
@@ -182,7 +174,6 @@ onErrorCaptured((err) => {
   </div>
   <Suspense v-else>
     <UserList />
-
     <template #fallback>
       Loading...
     </template>
@@ -190,19 +181,23 @@ onErrorCaptured((err) => {
 </template>
 ```
 
-## When to Use Suspense
+## When Suspense is the right choice
 
-Suspense works well for:
+Suspense fits well for:
 
-- **Initial page loads** where you want a unified loading state
-- **Route transitions** where you want to show a loading indicator
-- **Dashboard layouts** with multiple data dependencies
+- Initial page loads where one loading indicator covers everything.
+- Route transitions with a unified loading state.
+- Dashboard layouts with several data dependencies.
 
-For components that need fine-grained loading control or skeleton states, using `current.loading` directly may be more appropriate.
+For components that need fine-grained loading control or per-section skeleton states, reading `current.loading` directly gives you the per-query handle you need.
 
-## Next Steps
+## SSR
 
-- [Async Components](https://vuejs.org/guide/components/async) - Vue's async component documentation
-- [Suspense](https://vuejs.org/guide/built-ins/suspense) - Vue's Suspense documentation
-- [Streaming & @defer](/advanced/streaming) - Handle streaming GraphQL responses
-- [Queries](/data/queries) - Learn query basics
+Suspense works during server-side rendering. The server awaits each `useQuery` before producing HTML, so the rendered output already contains data. See [SSR Overview](/ssr/overview) for the full picture, including cache extract and restore.
+
+## Next steps
+
+- [Async Components](https://vuejs.org/guide/components/async) for Vue's async component docs.
+- [Suspense](https://vuejs.org/guide/built-ins/suspense) for Vue's Suspense docs.
+- [Streaming & @defer](/advanced/streaming) for incremental delivery.
+- [SSR Overview](/ssr/overview) for server-rendered Suspense.

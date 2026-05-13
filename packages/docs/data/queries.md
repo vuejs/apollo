@@ -1,10 +1,10 @@
 # Queries
 
-This page shows how to fetch GraphQL data in Vue with the [`useQuery`](/api/composable/functions/useQuery) composable and attach the result to your UI.
+This page shows how to fetch GraphQL data in Vue with the [`useQuery`](/api/composable/functions/useQuery) composable.
 
-## Executing a Query
+## Executing a query
 
-The [`useQuery`](/api/composable/functions/useQuery) composable is the primary way to execute queries. Call it in your component's `<script setup>` and pass a GraphQL document:
+Call `useQuery` inside `<script setup>` and pass a GraphQL document:
 
 ```vue twoslash
 <script setup lang="ts">
@@ -38,13 +38,39 @@ const { current } = useQuery(gql`
 </template>
 ```
 
-When your component renders, [`useQuery`](/api/composable/functions/useQuery) returns a [`current`](/api/composable/@vue/namespaces/useQuery/interfaces/Result.md#current) ref containing a discriminated union with [`loading`](/api/composable/@vue/namespaces/useQuery/interfaces/Current.md#loading), [`error`](/api/composable/@vue/namespaces/useQuery/interfaces/Current.md#error), [`result`](/api/composable/@vue/namespaces/useQuery/interfaces/Current.md#result), and [`resultState`](/api/composable/@vue/namespaces/useQuery/interfaces/Current.md#resultState) properties. Using [`current`](/api/composable/@vue/namespaces/useQuery/interfaces/Result.md#current) provides better type narrowing—when you check `current.resultState === 'complete'`, TypeScript knows `current.result` is defined.
+`useQuery` returns a `current` ref. Its value is a discriminated union with `result`, `resultState`, `loading`, `networkStatus`, and `error` properties.
 
-Each property is also available as an individual ref ([`result`](/api/composable/@vue/namespaces/useQuery/interfaces/Result.md#result), [`loading`](/api/composable/@vue/namespaces/useQuery/interfaces/Result.md#loading), [`error`](/api/composable/@vue/namespaces/useQuery/interfaces/Result.md#error)), but we recommend using [`current`](/api/composable/@vue/namespaces/useQuery/interfaces/Result.md#current) for type-safety.
+### Why we recommend `current`
+
+`useQuery` exposes the same information in two shapes: a single `current` ref containing the discriminated union, and individual refs like `result`, `loading`, `error` that you can destructure separately.
+
+We recommend `current` for any code that reads `result`. The `resultState` field narrows the type of `result`:
+
+```ts twoslash
+import { TypedDocumentNode } from '@apollo/client'
+import { useQuery } from '@vue/apollo-composable'
+
+declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ user: { name: string } }, {}>
+// ---cut---
+const { current } = useQuery(gql`
+  query GetUser {
+    user { name }
+  }
+`)
+
+if (current.value.resultState === 'complete') {
+  // current.value.result is typed as { user: { name: string } }
+  console.log(current.value.result.user.name)
+}
+```
+
+The individual refs work, but `result.value` is always typed as `TData | undefined` without context. Reading `current` keeps loading, network status, and data narrowing in one place.
+
+The standalone refs (`result`, `loading`, `error`, `networkStatus`) remain available for cases where you only care about one of them and do not need to access `result`.
 
 ## Variables
 
-Pass variables in the options object. The `variables` option accepts a plain object, a reactive object, or a getter function:
+Pass variables in the options object:
 
 ```vue twoslash
 <script setup lang="ts">
@@ -64,18 +90,22 @@ const { current } = useQuery(gql`
     }
   }
 `, {
-  variables: {
-    breed,
-  },
+  variables: { breed },
 })
 </script>
 ```
 
-When `breed` changes, the query automatically re-executes with the new value.
+When `breed.value` changes, the query re-executes with the new value.
 
-### Variables as a Getter
+`variables` accepts three shapes:
 
-For props or computed values, use a getter function:
+1. **An object with reactive values per key** (shown above). Each value can be a ref, a getter, or a plain value.
+2. **A ref or getter that returns the whole variables object.** Useful when you compute the variables from other reactive state.
+3. **A plain object.** Static variables, no reactivity.
+
+### Variables as a getter
+
+For props or values that change over time, a getter avoids losing reactivity:
 
 ```vue twoslash
 <script setup lang="ts">
@@ -91,140 +121,66 @@ const { current } = useQuery(gql`
     dog(breed: $breed) { id }
   }
 `, {
-  variables: () => ({
-    breed,
-  }),
-})
-</script>
-```
-
-## Caching
-
-Apollo Client automatically caches query results. When you execute the same query again, it returns cached data instantly without a network request.
-
-```vue twoslash
-<script setup lang="ts">
-import { TypedDocumentNode } from '@apollo/client'
-import { useQuery } from '@vue/apollo-composable'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ dog: { id: string, photo: string } }, { breed: string }>
-// ---cut---
-const { breed } = defineProps<{ breed: string }>()
-
-// First time: fetches from network
-// Second time with same breed: returns from cache instantly
-const { current } = useQuery(gql`
-  query GetDogPhoto($breed: String!) {
-    dog(breed: $breed) {
-      id
-      photo
-    }
-  }
-`, {
   variables: () => ({ breed }),
 })
 </script>
 ```
 
-Learn more about caching in the [Caching Overview](/caching/overview).
+### Throttle and debounce
 
-## Updating Cached Data
-
-### Polling
-
-Poll the server at a fixed interval:
-
-```vue twoslash
-<script setup lang="ts">
-import { TypedDocumentNode } from '@apollo/client'
-import { useQuery } from '@vue/apollo-composable'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ notifications: { id: string }[] }, {}>
-// ---cut---
-const { current } = useQuery(gql`
-  query GetNotifications {
-    notifications { id }
-  }
-`, {
-  pollInterval: 5000, // Poll every 5 seconds
-})
-</script>
-```
-
-Control polling dynamically:
-
-```vue twoslash
-<script setup lang="ts">
-import { TypedDocumentNode } from '@apollo/client'
-import { useQuery } from '@vue/apollo-composable'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ data: string }, {}>
-const QUERY = gql``
-// ---cut---
-const { query } = useQuery(QUERY)
-
-// Start polling every 2 seconds
-query.value?.startPolling(2000)
-
-// Stop polling
-query.value?.stopPolling()
-</script>
-```
-
-### Refetching
-
-Manually refetch in response to user actions:
-
-```vue twoslash
-<script setup lang="ts">
-import { TypedDocumentNode } from '@apollo/client'
-import { useQuery } from '@vue/apollo-composable'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ dog: { id: string, photo: string } }, { breed: string }>
-// ---cut---
-const { breed } = defineProps<{ breed: string }>()
-
-const { current, refetch } = useQuery(gql`
-  query GetDogPhoto($breed: String!) {
-    dog(breed: $breed) {
-      id
-      photo
-    }
-  }
-`, {
-  variables: () => ({ breed }),
-})
-</script>
-
-<template>
-  <img
-    v-if="current.resultState === 'complete'"
-    :src="current.result.dog.photo"
-  >
-  <button @click="refetch()">
-    Refresh
-  </button>
-</template>
-```
-
-Pass new variables to `refetch`:
+For inputs that update rapidly (search boxes, sliders), `throttle` and `debounce` reduce how often the query re-executes:
 
 ```ts twoslash
 import { TypedDocumentNode } from '@apollo/client'
 import { useQuery } from '@vue/apollo-composable'
+import { ref } from 'vue'
 
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ dog: { id: string } }, { breed: string }>
-const QUERY = gql``
+declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ search: { id: string }[] }, { q: string }>
+const SEARCH = gql``
 // ---cut---
-const { refetch } = useQuery(QUERY, { variables: { breed: 'bulldog' } })
+const term = ref('')
 
-// Refetch with different variables
-refetch({ breed: 'poodle' })
+const { current } = useQuery(SEARCH, {
+  variables: { q: term },
+  debounce: 300, // wait 300ms after the last change before re-executing
+})
 ```
 
-## Loading States
+Use `throttle` to cap the rate, `debounce` to wait for keystrokes to settle. They are mutually exclusive.
 
-The `current.loading` property indicates when a query is in flight:
+## Caching
+
+Apollo Client caches query results in a normalized in-memory cache. When you execute the same query again with the same variables, the result comes back instantly from the cache.
+
+```vue twoslash
+<script setup lang="ts">
+import { TypedDocumentNode } from '@apollo/client'
+import { useQuery } from '@vue/apollo-composable'
+
+declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ dog: { id: string, photo: string } }, { breed: string }>
+// ---cut---
+const { breed } = defineProps<{ breed: string }>()
+
+// First call with this breed: hits the network.
+// Subsequent calls with the same breed: returns from cache.
+const { current } = useQuery(gql`
+  query GetDogPhoto($breed: String!) {
+    dog(breed: $breed) {
+      id
+      photo
+    }
+  }
+`, {
+  variables: () => ({ breed }),
+})
+</script>
+```
+
+Read [Caching Overview](/caching/overview) to understand cache behavior in depth.
+
+## Loading states
+
+`current.loading` is `true` while the query is in flight:
 
 ```vue twoslash
 <script setup lang="ts">
@@ -257,7 +213,7 @@ import { useQuery } from '@vue/apollo-composable'
 declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ data: string }, {}>
 const QUERY = gql``
 // ---cut---
-const { current, refetch } = useQuery(QUERY)
+const { current } = useQuery(QUERY)
 </script>
 
 <template>
@@ -267,9 +223,11 @@ const { current, refetch } = useQuery(QUERY)
 </template>
 ```
 
-## Error Handling
+For loading indicators that aggregate multiple queries, see [Loading States](/advanced/loading-states).
 
-The `current.error` property contains any error that occurred:
+## Error handling
+
+`current.error` contains any error that occurred:
 
 ```vue twoslash
 <script setup lang="ts">
@@ -289,11 +247,11 @@ const { current } = useQuery(QUERY)
 </template>
 ```
 
-For comprehensive error handling including partial data, see [Error Handling](/data/error-handling).
+For comprehensive error handling (error policies, partial data, classifying error types), see [Error Handling](/data/error-handling).
 
-## Fetch Policies
+## Fetch policies
 
-Control how the query interacts with the cache using `fetchPolicy`:
+`fetchPolicy` controls how the query interacts with the cache:
 
 ```ts twoslash
 import { TypedDocumentNode } from '@apollo/client'
@@ -309,21 +267,22 @@ const { current } = useQuery(QUERY, {
 
 | Policy | Description |
 |--------|-------------|
-| `cache-first` | Check cache first. Fetch from network only if not in cache. **(default)** |
-| `cache-and-network` | Return cache immediately, then fetch from network and update. |
-| `network-only` | Always fetch from network, but cache the result. |
-| `cache-only` | Only read from cache, never fetch from network. |
-| `no-cache` | Always fetch from network, don't cache the result. |
+| `cache-first` | Check cache first. Hit the network only if not cached. **(default)** |
+| `cache-and-network` | Return cached data immediately, then fetch from the network and update. |
+| `network-only` | Always fetch from the network, but cache the result. |
+| `cache-only` | Read from the cache only. Never hit the network. |
+| `no-cache` | Always fetch from the network. Do not write to the cache. |
 
-## Disabling Queries
+`nextFetchPolicy` lets you switch to a different policy after the first request completes. `initialFetchPolicy` resets to a specific policy when variables change. See [`useQuery.Options`](/api/composable/@vue/namespaces/useQuery/interfaces/Options) for details.
 
-Prevent a query from executing with the `enabled` option:
+## Disabling queries
+
+Set `enabled: false` to skip execution until a condition is met:
 
 ```vue twoslash
 <script setup lang="ts">
 import { TypedDocumentNode } from '@apollo/client'
 import { useQuery } from '@vue/apollo-composable'
-import { computed } from 'vue'
 
 declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ user: { id: string } }, { id: string }>
 // ---cut---
@@ -338,18 +297,18 @@ const { current } = useQuery(
   () =>
     userId == null
       ? { enabled: false }
-      : {
-          variables: { id: userId },
-        }
+      : { variables: { id: userId } },
 )
 </script>
 ```
 
-The query won't execute until `enabled` becomes `true`.
+While `enabled` is `false`, no observable query exists. When `enabled` flips to `true`, the query starts and behaves like any other `useQuery` from that point on.
 
-## Event Hooks
+For queries that run in response to a user action (search submit, button click), prefer [`useLazyQuery`](/advanced/lazy-queries) instead.
 
-React to query lifecycle events:
+## Event hooks
+
+React to query lifecycle events imperatively:
 
 ```ts twoslash
 import { TypedDocumentNode } from '@apollo/client'
@@ -360,24 +319,77 @@ const QUERY = gql``
 // ---cut---
 const { onNextState, onResult, onError } = useQuery(QUERY)
 
-// Called on every state change with the full current object
-onNextState((current) => {
-  console.log('State:', current.resultState, current.loading)
+// Fires on every state change (loading, network status, result)
+onNextState((state) => {
+  console.log('State:', state.resultState, state.loading)
 })
 
-// Called when result is available (complete, partial, or streaming)
-onResult((result) => {
-  console.log('Data received:', result.data)
+// Fires when result data arrives (complete, partial, or streaming)
+onResult((data) => {
+  console.log('Data received:', data)
 })
 
-// Called when an error occurs
+// Fires when an error occurs
 onError((error) => {
   console.error('Query failed:', error)
 })
 ```
 
-## Next Steps
+`onResult` has three variants you can listen to individually: `onCompleteResult`, `onPartialResult`, and `onStreamingResult`. The plain `onResult` fires for all three.
 
-- [Mutations](/data/mutations) - Learn how to update data
-- [Lazy Queries](/advanced/lazy-queries) - Execute queries on demand
-- [Error Handling](/data/error-handling) - Handle errors gracefully
+## Keeping previous data
+
+When variables change, `result` is cleared by default while the new request is in flight. Set `keepPreviousResult: true` to keep showing the previous data until the new data arrives:
+
+```ts twoslash
+import { TypedDocumentNode } from '@apollo/client'
+import { useQuery } from '@vue/apollo-composable'
+import { ref } from 'vue'
+
+declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ data: string }, { id: string }>
+const QUERY = gql``
+// ---cut---
+const id = ref('1')
+
+const { current } = useQuery(QUERY, {
+  variables: { id },
+  keepPreviousResult: true,
+})
+// When id changes, current.result keeps the old value
+// until the new query completes.
+```
+
+This pattern is useful for filters and pagination, where flashing an empty state on every change would be jarring.
+
+## Awaiting the query
+
+`useQuery` returns a `PromiseLike` that resolves when initial data is available. Combined with `<Suspense>`, this gives you a server-rendered initial state and a unified loading fallback:
+
+```vue
+<script setup lang="ts">
+import { gql } from '@apollo/client'
+import { useQuery } from '@vue/apollo-composable'
+
+const { current } = await useQuery(gql`
+  query GetUsers {
+    users { id name }
+  }
+`)
+</script>
+```
+
+See [Suspense](/data/suspense) for the full pattern, including SSR and streaming considerations.
+
+## Options and result reference
+
+For every available option and method, see:
+
+- [`useQuery.Options`](/api/composable/@vue/namespaces/useQuery/interfaces/Options)
+- [`useQuery.Result`](/api/composable/@vue/namespaces/useQuery/interfaces/Result)
+
+## Next steps
+
+- [Refetching](/data/refetching) re-execute queries on demand or on a schedule.
+- [Lazy Queries](/advanced/lazy-queries) run queries in response to user actions.
+- [Mutations](/data/mutations) update data and reflect the changes in your queries.
+- [Error Handling](/data/error-handling) classify and recover from errors.

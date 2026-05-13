@@ -1,10 +1,10 @@
 # TypeScript
 
-GraphQL's type system pairs naturally with TypeScript to provide end-to-end type safety from your schema to your Vue components.
+GraphQL's type system pairs naturally with TypeScript. Together they give you end-to-end type safety from your schema to your Vue components.
 
-## GraphQL Codegen (Recommended)
+## GraphQL Codegen (recommended)
 
-We recommend using [GraphQL Code Generator](https://the-guild.dev/graphql/codegen) with the client preset to automatically generate TypeScript types from your schema. This works seamlessly with Apollo Client's [data masking](/data/data-masking) feature.
+[GraphQL Code Generator](https://the-guild.dev/graphql/codegen) with the client preset generates TypeScript types directly from your schema. It works seamlessly with Apollo Client's [data masking](/data/data-masking) feature.
 
 ### Installation
 
@@ -29,7 +29,7 @@ yarn add @graphql-typed-document-node/core
 
 ### Configuration
 
-Create a `codegen.ts` file at the root of your project:
+Create `codegen.ts` at the root of your project:
 
 ```ts twoslash
 import type { CodegenConfig } from '@graphql-codegen/cli'
@@ -86,9 +86,9 @@ yarn codegen
 
 :::
 
-### Watch Mode
+### Watch mode
 
-For development, you can run codegen in watch mode to automatically regenerate types when your GraphQL documents change:
+To regenerate types whenever your GraphQL documents change:
 
 ::: code-group
 
@@ -106,7 +106,7 @@ yarn codegen --watch
 
 :::
 
-Watch mode requires `@parcel/watcher` as a dev dependency:
+Watch mode needs `@parcel/watcher` as a dev dependency:
 
 ::: code-group
 
@@ -126,7 +126,7 @@ yarn add -D @parcel/watcher
 
 ### Usage
 
-Import the `graphql` function from the generated output and use it to define your queries inline:
+Import the `graphql` function from the generated output and define your queries inline:
 
 ```vue
 <script setup lang="ts">
@@ -175,20 +175,18 @@ const { current } = useQuery(graphql(`
 ```
 
 The `graphql()` function:
-- Parses your GraphQL document at build time
-- Returns a `TypedDocumentNode` with full type inference
-- Automatically includes fragment definitions
 
-### Enabling Data Masking Types
+- Parses your GraphQL document at build time.
+- Returns a `TypedDocumentNode` with full type inference.
+- Automatically includes fragment definitions.
 
-By default, Apollo Client doesn't modify operation types regardless of whether they are masked or unmasked. To use GraphQL Codegen's masking format with your operation types, you need to tell Apollo Client to use the associated GraphQL Codegen masking types.
+### Enabling data masking types
 
-Create a TypeScript declaration file (e.g., `apollo-client.d.ts`) in your project:
+By default, Apollo Client does not modify operation types regardless of whether they are masked or unmasked. To make GraphQL Codegen's masking types match runtime behavior, augment Apollo Client's `TypeOverrides`:
 
 ```ts
 import type { GraphQLCodegenDataMasking } from '@apollo/client/masking'
-// This import is necessary to ensure all Apollo Client imports
-// are still available to the rest of the application.
+// This import keeps the rest of @apollo/client's types available.
 import '@apollo/client'
 
 declare module '@apollo/client' {
@@ -196,16 +194,13 @@ declare module '@apollo/client' {
 }
 ```
 
-This extends Apollo Client's `TypeOverrides` interface with the GraphQL Codegen data masking types, ensuring that:
-- Masked types don't include fields from fragment spreads
-- The `@unmask` directive properly unmasks types
-- `FragmentType` works correctly for type-safe fragment props
+Place this file (for example `apollo-client.d.ts`) somewhere your `tsconfig.json` `include` covers. With the augmentation in place:
 
-::: tip
-Make sure TypeScript can find this declaration file. It should be in a location covered by your `tsconfig.json`'s `include` patterns.
-:::
+- Masked types omit fields from spread fragments.
+- The `@unmask` directive correctly unmasks types.
+- `FragmentType` works for type-safe fragment props.
 
-### Type-Safe Fragments
+### Type-safe fragments
 
 Use `FragmentType` from `@apollo/client` to type component props that receive fragment data:
 
@@ -249,49 +244,87 @@ const { current } = useFragment(() => ({
 ```
 
 This pattern:
-- Uses `FragmentType` to ensure the parent passes the correct fragment reference
-- Uses `useFragment` to read fragment data from the cache
-- Works with [data masking](/data/data-masking) for isolated component data
 
-## Type Narrowing with `resultState`
+- Uses `FragmentType` so the parent must pass a correctly-typed fragment reference.
+- Uses `useFragment` to read the fragment from the cache.
+- Works with [Data Masking](/data/data-masking) for isolated component data.
 
-The `current` ref includes a `resultState` property for type-safe access to data:
+## Composable return-value shapes
 
-| State | Description | `result` Type |
-|-------|-------------|---------------|
-| `'complete'` | Data fully satisfies the query | `TData` |
-| `'partial'` | Partial data from cache | `DeepPartial<TData>` |
-| `'streaming'` | Data streaming via `@defer` | `TData` |
+Vue Apollo's composables expose different result shapes depending on what makes sense for each operation. The table below shows what each composable returns:
+
+| Composable | `current` ref (discriminated union) | Individual refs |
+|------------|-------------|------|
+| `useQuery` | `result`, `resultState`, `loading`, `networkStatus`, `error`, `partial` | `result`, `loading`, `networkStatus`, `error` |
+| `useLazyQuery` | Same as `useQuery` (inherits) | Same as `useQuery`, plus `load()` |
+| `useFragment` | `result`, `resultState`, `complete`, `missing` | `result`, `resultState`, `complete`, `missing` |
+| `useMutation` | not provided | `result`, `loading`, `called`, `error` |
+| `useSubscription` | not provided | `result`, `loading`, `error`, `variables` |
+
+For `useQuery`, `useLazyQuery`, and `useFragment` we recommend reading from `current` because the `resultState` discriminator narrows the type of `result`:
 
 ```ts
 const { current } = useQuery(GET_USERS)
 
 if (current.value.resultState === 'complete') {
-  // current.value.result is fully typed
+  // current.value.result is now fully typed as TData
   console.log(current.value.result.users)
 }
 ```
 
-## Working with Variables
+The individual refs remain available for code that only reads `loading` or `error` without accessing `result`.
 
-TypeScript validates that required variables are provided with correct types:
+For `useMutation` and `useSubscription` the discriminated union is not provided because their results do not have multiple data states. A mutation is request-response, and a subscription delivers one result at a time.
+
+## Type narrowing with `resultState`
+
+The `resultState` discriminator narrows `result` precisely. The states for `useQuery`:
+
+| State | Description | `result` Type |
+|-------|-------------|---------------|
+| `'complete'` | Data fully satisfies the query | `TData` |
+| `'partial'` | Partial data from cache (with `returnPartialData: true`) | `DeepPartial<TData>` |
+| `'streaming'` | Data streaming via `@defer` or `@stream` | `TData` |
+| `'empty'` | No data yet | `undefined` |
 
 ```ts
-// ❌ TypeScript Error: Property 'variables' is missing
+const { current } = useQuery(GET_USERS, { returnPartialData: true })
+
+if (current.value.resultState === 'complete') {
+  // TData
+}
+else if (current.value.resultState === 'partial') {
+  // DeepPartial<TData>
+}
+else if (current.value.resultState === 'streaming') {
+  // TData (still arriving)
+}
+```
+
+For `useFragment` the states are `'complete'` and `'partial'`, and follow the same narrowing pattern.
+
+## Working with variables
+
+TypeScript validates required variables and their types:
+
+```ts
+// TypeScript Error: Property 'variables' is missing
 const { current } = useQuery(GET_USER_QUERY)
 
-// ❌ TypeScript Error: Property 'id' is missing
+// TypeScript Error: Property 'id' is missing
 const { current } = useQuery(GET_USER_QUERY, { variables: {} })
 
-// ✅ Correct: Required variable provided
+// OK
 const { current } = useQuery(GET_USER_QUERY, {
   variables: { id: '1' },
 })
 ```
 
+When variables are entirely optional (the query has no required variables), the `variables` option itself is optional.
+
 ## Manual TypedDocumentNode
 
-If you're not using GraphQL Codegen, you can manually type documents with `TypedDocumentNode`:
+If you do not use GraphQL Codegen, you can type documents manually with `TypedDocumentNode`:
 
 ```ts
 import type { TypedDocumentNode } from '@apollo/client'
@@ -311,12 +344,12 @@ const GET_USERS: TypedDocumentNode<GetUsersQuery, GetUsersVariables> = gql`
 ```
 
 ::: tip
-Always provide the variables type, even for queries without variables. Use `Record<string, never>` for empty variables to prevent accidentally passing variables.
+Always provide the variables type. For queries with no variables, use `Record<string, never>` so accidental variables produce a type error.
 :::
 
-## Next Steps
+## Next steps
 
-- [Queries](/data/queries) - Type-safe queries with Vue Apollo
-- [Mutations](/data/mutations) - Type-safe mutations
-- [Fragments](/data/fragments) - Colocate types with fragments
-- [Data Masking](/data/data-masking) - Isolate component data requirements
+- [Queries](/data/queries) for type-safe queries.
+- [Mutations](/data/mutations) for type-safe mutations.
+- [Fragments](/data/fragments) for colocated fragment types.
+- [Data Masking](/data/data-masking) for isolated component data.

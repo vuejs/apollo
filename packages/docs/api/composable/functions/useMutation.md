@@ -51,11 +51,9 @@ async function addTodo(text: string) {
 </script>
 
 <template>
-  <button :disabled="loading" @click="addTodo('New task')">
+  <button @click="addTodo('New task')" :disabled="loading">
     {{ loading ? 'Adding...' : 'Add Todo' }}
   </button>
-  <p v-if="error">
-    Error: {{ error.message }}
-  </p>
+  <p v-if="error">Error: {{ error.message }}</p>
 </template>
 ```

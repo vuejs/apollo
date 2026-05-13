@@ -300,12 +300,12 @@ export declare namespace useMutation {
     variables?: TVariables
 
     /**
-     * Context can be a callback function that receives the hook-level context
+     * Context can be a callback function that receives the composable-level context
      * and returns the final context value.
      *
      * @group 2. Networking options
      */
-    context?: DefaultContext | ((hookContext: DefaultContext | undefined) => DefaultContext)
+    context?: DefaultContext | ((composableContext: DefaultContext | undefined) => DefaultContext)
   }
 
   /** Type for mutate function that requires variables. */
@@ -384,7 +384,7 @@ export declare namespace useMutation {
          *
          * @group 2. Networking options
          */
-        context?: DefaultContext | ((hookContext: DefaultContext | undefined) => DefaultContext)
+        context?: DefaultContext | ((composableContext: DefaultContext | undefined) => DefaultContext)
       }
 
       /** Mutation result returned from mutate(). */
@@ -494,14 +494,14 @@ export function useMutation<
 
   // #region Input Normalization
   const document = toRef(mutation)
-  const hookOptions = toRef(options) as Ref<useMutation.Options<TData, TVariables> | undefined>
+  const composableOptions = toRef(options) as Ref<useMutation.Options<TData, TVariables> | undefined>
   // #endregion
 
   // #region Apollo Client
   const { resolveClient } = useApolloClient()
 
   function getClient() {
-    return resolveClient(hookOptions.value?.clientId)
+    return resolveClient(composableOptions.value?.clientId)
   }
   // #endregion
 
@@ -511,7 +511,7 @@ export function useMutation<
    * Unwraps all nested reactive values.
    */
   const variables = computed(() => {
-    const vars = toValue(hookOptions.value?.variables)
+    const vars = toValue(composableOptions.value?.variables)
 
     if (vars == null) {
       return undefined
@@ -570,18 +570,18 @@ export function useMutation<
     const client = getClient()
     const currentMutationId = ++mutationId
 
-    // Get current hook options
-    const currentHookOptions = hookOptions.value ?? {}
+    // Get current composable options
+    const currentComposableOptions = composableOptions.value ?? {}
 
     // Extract non-Apollo options
-    const { clientId: _clientId, throws: _throws, variables: _hookVars, ...apolloHookOptions } = currentHookOptions
+    const { clientId: _clientId, throws: _throws, variables: _composableVars, ...apolloComposableOptions } = currentComposableOptions
 
     // Build merged options for Apollo
     const mergedOptions: ApolloClient.MutateOptions<TData, TVariables> = {
       mutation: document.value,
-      ...apolloHookOptions,
+      ...apolloComposableOptions,
       ...executeOptions,
-      // Merge variables: hook variables (resolved) + execute variables
+      // Merge variables: composable-level variables (resolved) + execute variables
       variables: (executeOptions?.variables ?? variables.value)
         ? {
             ...(variables.value as TVariables),
@@ -590,8 +590,8 @@ export function useMutation<
         : undefined,
       // Handle context callback
       context: typeof executeOptions?.context === 'function'
-        ? executeOptions.context(currentHookOptions.context)
-        : (executeOptions?.context ?? currentHookOptions.context),
+        ? executeOptions.context(currentComposableOptions.context)
+        : (executeOptions?.context ?? currentComposableOptions.context),
     } as ApolloClient.MutateOptions<TData, TVariables>
 
     // Reset error and set loading
@@ -633,7 +633,7 @@ export function useMutation<
       errorEvent.trigger(mutationError)
 
       // Determine whether to throw
-      const throwsBehavior = currentHookOptions.throws ?? 'auto'
+      const throwsBehavior = currentComposableOptions.throws ?? 'auto'
       if (
         throwsBehavior === 'always'
         || (throwsBehavior === 'auto' && !hasErrorListeners())
@@ -679,7 +679,7 @@ export function useMutation<
     onDone: doneEvent.on,
     onError,
     document,
-    options: hookOptions,
+    options: composableOptions,
   }
   // #endregion
 }

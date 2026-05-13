@@ -1,12 +1,12 @@
 # Data Masking
 
-Data masking prevents components from accessing GraphQL fields they didn't explicitly request. This creates loosely coupled components that are more resistant to breaking changes.
+Data masking prevents components from accessing GraphQL fields they did not explicitly request. The result is loosely coupled components that are more resistant to breaking changes when fragments evolve.
 
-::: tip Recommended: Use with GraphQL Codegen
-Data masking works best with [GraphQL Codegen](https://the-guild.dev/graphql/codegen) for type-safe masked types. See the [TypeScript page](/data/typescript) for setup instructions, including the required [type augmentation](/data/typescript#enabling-data-masking-types) to make masked types work correctly.
+::: tip Recommended: use with GraphQL Codegen
+Data masking works best with [GraphQL Codegen](https://the-guild.dev/graphql/codegen) so that masked types match runtime behavior. See [TypeScript](/data/typescript) for setup, including the required [type augmentation](/data/typescript#enabling-data-masking-types).
 :::
 
-## The Problem
+## The problem masking solves
 
 Consider a parent component that fetches posts and a child component that displays post details:
 
@@ -37,7 +37,7 @@ const GET_POSTS = gql`
 
 const { current } = useQuery(GET_POSTS)
 
-// Filter by publishedAt (defined in PostDetailsFragment)
+// Filter by publishedAt (defined in PostDetailsFragment, not in this query directly)
 const published = current.value.result?.posts.filter(post => post.publishedAt)
 ```
 
@@ -60,11 +60,11 @@ export const POST_DETAILS_FRAGMENT = gql`
 
 :::
 
-If `PostDetails` removes `publishedAt` from its fragment (because it no longer displays it), the parent component breaks silently. This **implicit dependency** between components becomes harder to track as applications grow.
+The parent reads `publishedAt`, but `publishedAt` is defined in the child's fragment. If `PostDetails` later removes `publishedAt` from its fragment (because it no longer displays it), the parent breaks silently. This implicit dependency between components grows harder to track as the app grows.
 
-## Enabling Data Masking
+## Enabling data masking
 
-Enable data masking in the Apollo Client constructor:
+Pass `dataMasking: true` to the Apollo Client constructor:
 
 ```ts twoslash {6}
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
@@ -72,15 +72,15 @@ import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
 const client = new ApolloClient({
   link: new HttpLink({ uri: 'https://api.example.com/graphql' }),
   cache: new InMemoryCache(),
-  dataMasking: true, // Enable data masking
+  dataMasking: true,
 })
 ```
 
-With data masking enabled, fields defined in fragments are hidden from components that don't own them. The parent component can only access fields it explicitly requests.
+With masking on, fields defined only in a fragment are hidden from queries that include that fragment. The parent can only see the fields it requested directly.
 
-## Reading Masked Data
+## Reading masked data
 
-Use [`useFragment`](/api/composable/functions/useFragment) to read masked fragment data in components:
+Use [`useFragment`](/api/composable/functions/useFragment) inside the component that owns the fragment:
 
 ```vue twoslash
 <script setup lang="ts">
@@ -95,9 +95,7 @@ declare const POST_DETAILS_FRAGMENT: TypedDocumentNode<{
 }>
 // ---cut-end---
 
-const {
-  post
-} = defineProps<{
+const { post } = defineProps<{
   post: { __typename: 'Post', id: string }
 }>()
 
@@ -115,18 +113,18 @@ const { current } = useFragment({
 </template>
 ```
 
-The `data` from `useFragment` contains only the fields defined in the fragment—not fields from parent queries or sibling fragments.
+`current.result` only contains the fields defined in the fragment. Parent queries do not leak into it, and sibling fragments do not leak either.
 
-## Fixing the Parent Component
+## Fixing the parent component
 
-With data masking, the parent component must explicitly request any fields it needs:
+With data masking on, the parent must explicitly request any fields it needs:
 
 ```ts
 const GET_POSTS = gql`
   query GetPosts {
     posts {
       id
-      publishedAt  # Now explicit - won't break if fragment changes
+      publishedAt    # Explicit, no longer dependent on the child fragment
       ...PostDetailsFragment
     }
   }
@@ -134,11 +132,11 @@ const GET_POSTS = gql`
 `
 ```
 
-Now if `PostDetails` removes `publishedAt` from its fragment, the parent query still works because it requests the field directly.
+Now if `PostDetails` removes `publishedAt`, the parent query still works because it requests the field directly.
 
-## The `@unmask` Directive
+## The `@unmask` directive
 
-Use `@unmask` to selectively disable masking for specific fragments:
+`@unmask` selectively disables masking for a specific fragment spread:
 
 ```graphql
 query GetPosts {
@@ -150,12 +148,12 @@ query GetPosts {
 ```
 
 ::: warning Use sparingly
-The `@unmask` directive is an escape hatch. Prefer adding needed fields to the parent query explicitly. `@unmask` is primarily useful during [incremental adoption](#incremental-adoption).
+`@unmask` is an escape hatch. Prefer adding the needed fields to the parent query explicitly. Reach for `@unmask` only during [incremental adoption](#incremental-adoption).
 :::
 
-### Migrate Mode
+### Migrate mode
 
-During migration, use `@unmask(mode: "migrate")` to get development warnings when accessing would-be masked fields:
+While migrating, `@unmask(mode: "migrate")` logs a development warning whenever you read a field that would otherwise be masked:
 
 ```graphql
 query GetPosts {
@@ -166,11 +164,9 @@ query GetPosts {
 }
 ```
 
-This logs warnings in development when you access fields that would be masked, helping you identify implicit dependencies.
+This helps you find every implicit dependency before removing the `@unmask` directive.
 
-## What Gets Masked
-
-Data masking applies to all operation types that read data:
+## What gets masked
 
 | API | Masked |
 |-----|--------|
@@ -182,13 +178,15 @@ Data masking applies to all operation types that read data:
 | `subscribeToMore` `updateQuery` callback | No |
 | Cache APIs (`readQuery`, `readFragment`) | No |
 
-## Incremental Adoption
+Cache APIs and mutation update callbacks deal with the underlying cache directly, so masking does not apply to them.
 
-For existing applications, adopt data masking incrementally:
+## Incremental adoption
 
-### 1. Add `@unmask` to All Fragments
+You can adopt data masking gradually in an existing codebase:
 
-Before enabling data masking, add `@unmask(mode: "migrate")` to all fragment spreads to prevent breaking changes:
+### 1. Add `@unmask(mode: "migrate")` everywhere
+
+Before enabling `dataMasking`, add `@unmask(mode: "migrate")` to every fragment spread so nothing breaks:
 
 ```graphql
 query GetPosts {
@@ -199,7 +197,7 @@ query GetPosts {
 }
 ```
 
-### 2. Enable Data Masking
+### 2. Enable data masking
 
 ```ts
 const client = new ApolloClient({
@@ -210,21 +208,19 @@ const client = new ApolloClient({
 
 ### 3. Configure TypeScript (if applicable)
 
-If you're using TypeScript with GraphQL Codegen, you need to:
+If you use TypeScript with GraphQL Codegen:
 
-1. Update your codegen config to generate masked types (see [TypeScript setup](/data/typescript#configuration))
-2. Create the type augmentation file (see [Enabling Data Masking Types](/data/typescript#enabling-data-masking-types))
+1. Update your codegen config to emit masked types ([TypeScript setup](/data/typescript#configuration)).
+2. Add the type augmentation file ([Enabling data masking types](/data/typescript#enabling-data-masking-types)).
 
-### 4. Refactor Components
+### 4. Refactor components
 
-Gradually refactor components to use `useFragment` and remove `@unmask` directives:
+1. Watch the console for "accessing masked field" warnings.
+2. Update components to use `useFragment` for the data they own.
+3. Add any required fields to parent queries explicitly.
+4. Remove `@unmask` directives when no warnings remain.
 
-1. Look for console warnings about accessing masked fields
-2. Update components to use `useFragment` for their fragment data
-3. Add any needed fields explicitly to parent queries
-4. Remove `@unmask` when no warnings remain
+## Next steps
 
-## Next Steps
-
-- [Fragments](/data/fragments) - Learn about GraphQL fragments and `useFragment`
-- [TypeScript](/data/typescript) - Set up GraphQL Codegen for type-safe data masking
+- [Fragments](/data/fragments) covers fragment basics and `useFragment`.
+- [TypeScript](/data/typescript) sets up GraphQL Codegen for type-safe masked data.

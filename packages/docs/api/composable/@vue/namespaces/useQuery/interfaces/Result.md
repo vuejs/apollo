@@ -273,8 +273,7 @@ const unsubscribe = subscribeToMore({
   document: OnMessageAdded,
   variables: { channelId },
   updateQuery: (_, { previousData, subscriptionData }) => {
-    if (!subscriptionData.data)
-      return previousData
+    if (!subscriptionData.data) return previousData
     return {
       ...previousData,
       messages: [...previousData.messages, subscriptionData.data.messageAdded]

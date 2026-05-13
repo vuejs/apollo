@@ -27,8 +27,6 @@ const connecting = useSubscriptionLoading()
 </script>
 
 <template>
-  <div v-if="connecting">
-    Connecting...
-  </div>
+  <div v-if="connecting">Connecting...</div>
 </template>
 ```
