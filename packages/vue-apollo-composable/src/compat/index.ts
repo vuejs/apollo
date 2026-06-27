@@ -48,6 +48,7 @@ export {
 
 // v4-style wrappers (this folder)
 export {
+  type ApolloFetchMoreResultV4,
   type ApolloQueryResultV4,
   type DocumentParameter,
   type OptionsParameter,

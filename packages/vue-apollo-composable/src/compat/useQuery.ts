@@ -16,13 +16,14 @@ import { useQueryImpl } from '../useQuery.ts'
 // #region Types
 
 /**
- * v4-style `useQuery` options. Adds Vue-Apollo-specific flags to
- * `ApolloClient.WatchQueryOptions`. Identical surface to v4's `UseQueryOptions`.
+ * v4-style `useQuery` options. Also accepts variables in options so native v5
+ * call sites can move to the compat import during incremental migrations.
  */
 export type UseQueryOptions<
   TResult = any,
   TVariables extends OperationVariables = OperationVariables,
 > = Omit<ApolloClient.WatchQueryOptions<TResult, TVariables>, 'query' | 'variables'> & {
+  variables?: VariablesParameter<TVariables>
   clientId?: string
   enabled?: boolean | Ref<boolean>
   throttle?: number
@@ -61,6 +62,13 @@ export interface ApolloQueryResultV4<TResult> {
   partial?: boolean | undefined
 }
 
+/**
+ * v4-style `fetchMore` result shape (`data` instead of v5's `result`).
+ */
+export type ApolloFetchMoreResultV4<TResult> = Omit<useQueryV5.FetchMoreResult<TResult>, 'result'> & {
+  data: useQueryV5.FetchMoreResult<TResult>['result']
+}
+
 export interface UseQueryReturn<TResult, TVariables extends OperationVariables> {
   result: Readonly<Ref<TResult | undefined>>
   loading: Readonly<Ref<boolean>>
@@ -74,7 +82,12 @@ export interface UseQueryReturn<TResult, TVariables extends OperationVariables> 
   options: Readonly<Ref<UseQueryOptions<TResult, TVariables> | undefined>>
   query: Readonly<Ref<ObservableQuery<TResult, TVariables> | undefined>>
   refetch: (variables?: TVariables) => Promise<(ApolloQueryResultV4<TResult> & Record<string, unknown>) | undefined>
-  fetchMore: useQueryV5.Base.Result<TResult, TVariables>['fetchMore']
+  fetchMore: <
+    TFetchData = TResult,
+    TFetchVars extends OperationVariables = TVariables,
+  >(
+    options: ObservableQuery.FetchMoreOptions<TResult, TVariables, TFetchData, TFetchVars>,
+  ) => Promise<ApolloFetchMoreResultV4<TFetchData>> | undefined
   updateQuery: (mapFn: UpdateQueryMapFn<TResult, TVariables>) => void
   subscribeToMore: useQueryV5.Base.Result<TResult, TVariables>['subscribeToMore']
   onResult: (fn: (result: ApolloQueryResultV4<TResult>, context: OnResultContext) => void) => { off: () => void }
@@ -189,6 +202,21 @@ export function buildCompatQuery<
     } as ApolloQueryResultV4<TResult> & Record<string, unknown>
   }
 
+  function fetchMore<
+    TFetchData = TResult,
+    TFetchVars extends OperationVariables = TVariables,
+  >(
+    options: ObservableQuery.FetchMoreOptions<TResult, TVariables, TFetchData, TFetchVars>,
+  ) {
+    return v5.fetchMore<TFetchData, TFetchVars>(options)?.then((res) => {
+      const { result, ...rest } = res
+      return {
+        data: result,
+        ...rest,
+      } as ApolloFetchMoreResultV4<TFetchData>
+    })
+  }
+
   // v4 restart was sync void; v5 returns a Promise. Discard the promise to match v4 typing.
   function restart() {
     void v5.restart()
@@ -207,7 +235,7 @@ export function buildCompatQuery<
     options: v5.options as unknown as Readonly<Ref<UseQueryOptions<TResult, TVariables> | undefined>>,
     query: v5.query,
     refetch,
-    fetchMore: v5.fetchMore,
+    fetchMore,
     updateQuery: v5.updateQuery,
     subscribeToMore: v5.subscribeToMore,
     onResult,

@@ -40,7 +40,7 @@ Compat returns the v4-style flat refs only (no `current` ref). Specifically:
 
 - `error` is typed `Ref<ErrorLike | null>` (the v4 shape with v5's error type).
 - `refetch` resolves with `{ data, ... }` (v4) rather than `{ result, ... }` (v5).
-- `fetchMore` resolves the v5 shape (`{ result, ... }`) since v4's `fetchMore` already had that as `data`. We re-expose v5's `fetchMore` directly.
+- `fetchMore` resolves with `{ data, ... }` (v4) rather than `{ result, ... }` (v5).
 - `onResult`, `onError`, `onDone` callbacks receive a second `{ client }` argument as v4 did.
 
 ### Re-exports from the main entry

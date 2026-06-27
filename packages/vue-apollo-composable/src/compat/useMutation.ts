@@ -103,6 +103,9 @@ export function useMutation<
       ...(overrideOptions as object | undefined),
       ...(variables != null ? { variables } : {}),
     } as Parameters<typeof v5.mutate>[0])
+    if (result.data === undefined && result.error != null) {
+      return null
+    }
     return result as MutateResultV4<TResult>
   }
 

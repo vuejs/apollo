@@ -34,6 +34,28 @@ const ERROR_QUERY = gql`
   }
 ` as TypedDocumentNode<{ canThrowError: string }, { shouldError: boolean }>
 
+const NULLABLE_ERROR_QUERY = gql`
+  query NullableError($shouldError: Boolean!) {
+    nullableError(shouldError: $shouldError)
+  }
+` as TypedDocumentNode<{ nullableError: string | null }, { shouldError: boolean }>
+
+const PAGINATED_TODOS = gql`
+  query PaginatedTodos($limit: Int!, $offset: Int!) {
+    paginatedTodos(limit: $limit, offset: $offset) {
+      items {
+        id
+        text
+      }
+      totalCount
+      hasMore
+    }
+  }
+` as TypedDocumentNode<
+  { paginatedTodos: { items: Array<{ id: string, text: string }>, totalCount: number, hasMore: boolean } },
+  { limit: number, offset: number }
+>
+
 const CREATE_USER = gql`
   mutation CreateUser($input: CreateUserInput!) {
     createUser(input: $input) {
@@ -67,6 +89,15 @@ const INCREMENT_COUNTER = gql`
 const RESET_MUTATION = gql`mutation { reset }`
 // #endregion
 
+function withTimeout<T>(promise: Promise<T>, timeout = 500): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<never>((_, reject) => {
+      setTimeout(() => reject(new Error('Timed out waiting for promise to settle')), timeout)
+    }),
+  ])
+}
+
 describe('compat layer', () => {
   beforeAll(() => {
     server = startServer(PORT)
@@ -77,9 +108,11 @@ describe('compat layer', () => {
     await apolloClient.clearStore()
   })
 
-  afterAll(() => {
+  afterAll(async () => {
     apolloClient.stop()
-    stopServer(server)
+    const disposableLink = apolloClient.link as { dispose?: () => void }
+    disposableLink.dispose?.()
+    await stopServer(server)
   })
 
   // #region useQuery
@@ -178,6 +211,29 @@ describe('compat layer', () => {
       wrapper.unmount()
     })
 
+    it('accepts variables in options for v5 migration', async () => {
+      const TestComponent = defineComponent({
+        setup() {
+          const { result, loading } = useQuery(ECHO_QUERY, undefined, {
+            variables: { message: 'from-options' },
+          })
+          return { result, loading }
+        },
+        render() {
+          return h('div', this.result?.echo ?? '')
+        },
+      })
+
+      const wrapper = mount(TestComponent, {
+        global: { provide: { [DefaultApolloClient]: apolloClient } },
+      })
+
+      await until(() => wrapper.vm.loading).toBe(false, { timeout: 500 })
+      expect(wrapper.text()).toBe('from-options')
+
+      wrapper.unmount()
+    })
+
     it('error ref is null (not undefined) initially', async () => {
       const TestComponent = defineComponent({
         setup() {
@@ -245,6 +301,35 @@ describe('compat layer', () => {
       expect(withData).toBeDefined()
       expect(withData?.data).toEqual({ hello: 'world' })
       expect(withData?.client).toBe(apolloClient)
+
+      wrapper.unmount()
+    })
+
+    it('fetchMore resolves with v4-shape { data } object', async () => {
+      const TestComponent = defineComponent({
+        setup() {
+          const { fetchMore, loading } = useQuery(PAGINATED_TODOS, {
+            limit: 1,
+            offset: 0,
+          })
+          return { fetchMore, loading }
+        },
+        render() {
+          return h('div', 'test')
+        },
+      })
+
+      const wrapper = mount(TestComponent, {
+        global: { provide: { [DefaultApolloClient]: apolloClient } },
+      })
+
+      await until(() => wrapper.vm.loading).toBe(false, { timeout: 500 })
+      const more = await wrapper.vm.fetchMore({
+        variables: { limit: 1, offset: 1 },
+      })
+
+      expect(more?.data.paginatedTodos.items).toHaveLength(1)
+      expect(more?.data.paginatedTodos.items[0]?.text).toBe('Build Vue app')
 
       wrapper.unmount()
     })
@@ -356,6 +441,28 @@ describe('compat layer', () => {
       wrapper.unmount()
     })
 
+    it('mutate resolves to null when throws: never swallows an error', async () => {
+      const TestComponent = defineComponent({
+        setup() {
+          const { mutate } = useMutation(FAILING_MUTATION, { throws: 'never' })
+          return { mutate }
+        },
+        render() {
+          return h('div', 'test')
+        },
+      })
+
+      const wrapper = mount(TestComponent, {
+        global: { provide: { [DefaultApolloClient]: apolloClient } },
+      })
+
+      const result = await wrapper.vm.mutate({ message: 'boom' })
+
+      expect(result).toBeNull()
+
+      wrapper.unmount()
+    })
+
     it('onDone fires with v4 { data } shape and { client } context', async () => {
       let seen: { data: unknown, client: ApolloClient | null } | null = null
 
@@ -440,6 +547,64 @@ describe('compat layer', () => {
       if (first === false)
         throw new Error('first call should return a Promise')
       expect(first?.echo).toBe('alpha')
+
+      wrapper.unmount()
+    })
+
+    it('load resolves when errorPolicy ignores a result-state error', async () => {
+      const TestComponent = defineComponent({
+        setup() {
+          const { load } = useLazyQuery(
+            NULLABLE_ERROR_QUERY,
+            { shouldError: true },
+            { errorPolicy: 'ignore' },
+          )
+          return { load }
+        },
+        render() {
+          return h('div', 'test')
+        },
+      })
+
+      const wrapper = mount(TestComponent, {
+        global: { provide: { [DefaultApolloClient]: apolloClient } },
+      })
+
+      const first = wrapper.vm.load()
+      expect(first).not.toBe(false)
+      if (first === false)
+        throw new Error('first call should return a Promise')
+
+      await expect(withTimeout(first)).resolves.toEqual({ nullableError: null })
+
+      wrapper.unmount()
+    })
+
+    it('load does not reject result-state errors that v4 delivered through onResult', async () => {
+      const TestComponent = defineComponent({
+        setup() {
+          const { load } = useLazyQuery(
+            NULLABLE_ERROR_QUERY,
+            { shouldError: true },
+            { errorPolicy: 'all' },
+          )
+          return { load }
+        },
+        render() {
+          return h('div', 'test')
+        },
+      })
+
+      const wrapper = mount(TestComponent, {
+        global: { provide: { [DefaultApolloClient]: apolloClient } },
+      })
+
+      const first = wrapper.vm.load()
+      expect(first).not.toBe(false)
+      if (first === false)
+        throw new Error('first call should return a Promise')
+
+      await expect(withTimeout(first)).resolves.toEqual({ nullableError: null })
 
       wrapper.unmount()
     })

@@ -14,12 +14,14 @@ import { useSubscription as useSubscriptionV5Impl } from '../useSubscription.ts'
 // #region Types
 
 /**
- * v4-style `useSubscription` options. Same surface as v4's `UseSubscriptionOptions`.
+ * v4-style `useSubscription` options. Also accepts variables in options so
+ * native v5 call sites can move to the compat import during incremental migrations.
  */
 export type UseSubscriptionOptions<
   TResult = any,
-  TVariables = OperationVariables,
-> = Omit<ApolloClient.SubscribeOptions<TResult, TVariables extends OperationVariables ? TVariables : OperationVariables>, 'query' | 'variables'> & {
+  TVariables extends OperationVariables = OperationVariables,
+> = Omit<ApolloClient.SubscribeOptions<TResult, TVariables>, 'query' | 'variables'> & {
+  variables?: VariablesParameter<TVariables>
   clientId?: string
   enabled?: boolean | Ref<boolean>
   throttle?: number

@@ -93,22 +93,28 @@ export function useLazyQuery<
       offResult = query.onResult((result) => {
         if (settled || result.loading)
           return
-        if (result.error) {
-          settled = true
-          cleanup()
-          reject(result.error)
-          return
-        }
-        if (result.data !== undefined) {
-          settled = true
-          cleanup()
-          resolve(result.data)
-        }
+        settled = true
+        cleanup()
+        resolve(result.data)
       }).off
 
       offError = query.onError((err) => {
         if (settled)
           return
+        const errorPolicy = query.options.value?.errorPolicy
+        if (errorPolicy === 'all' || errorPolicy === 'ignore') {
+          // v5 emits `onError` from the state handler before compat's
+          // `onResult` listener receives that same non-loading state. v4's
+          // `load()` resolved from `onResult` first for these error policies.
+          queueMicrotask(() => {
+            if (settled)
+              return
+            settled = true
+            cleanup()
+            reject(err)
+          })
+          return
+        }
         settled = true
         cleanup()
         reject(err)
