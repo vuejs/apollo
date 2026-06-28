@@ -192,3 +192,4 @@ true
 > `optional` **throttle**: `number`
 
 Throttle variable updates (ms).
+

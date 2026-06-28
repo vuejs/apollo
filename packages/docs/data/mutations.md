@@ -1,10 +1,10 @@
 # Mutations
 
-This page shows how to update data with the [`useMutation`](/api/composable/functions/useMutation) composable.
+This page covers updating data with the [`useMutation`](/api/composable/functions/useMutation) composable.
 
-## Executing a Mutation
+## Executing a mutation
 
-Unlike [`useQuery`](/api/composable/functions/useQuery), [`useMutation`](/api/composable/functions/useMutation) doesn't execute automatically. Instead, it returns a `mutate` function that you call to trigger the mutation:
+Unlike [`useQuery`](/data/queries), `useMutation` does not execute automatically. It returns a `mutate` function that you call when you want the mutation to run:
 
 ```vue twoslash
 <script setup lang="ts">
@@ -44,17 +44,22 @@ async function handleSubmit() {
 </template>
 ```
 
-The [`useMutation`](/api/composable/functions/useMutation) composable returns:
+`useMutation` returns the following refs and helpers:
 
-- `mutate` - A function to execute the mutation
-- `loading` - A ref indicating if the mutation is in flight
-- `error` - A ref containing any error that occurred
-- `called` - A ref indicating if the mutation has been called
-- `result` - A ref containing the mutation result
+- `mutate(options?)` triggers the mutation, returns a promise resolving to the result.
+- `loading` is `true` while the mutation is in flight.
+- `error` contains any error from the mutation.
+- `called` is `true` once `mutate` has been called at least once.
+- `result` holds the most recent mutation result data.
+- `reset()` resets `result`, `error`, `loading`, and `called` to their initial state.
+
+::: tip Why flat refs and not `current`?
+`useMutation` does not expose a `current` discriminated union the way `useQuery` does. A mutation is request-response: it does not have streaming or partial states. Using individual refs keeps the API close to how you naturally consume a mutation. See [TypeScript](/data/typescript#composable-return-value-shapes) for the comparison.
+:::
 
 ## Variables
 
-Pass variables when calling `mutate`:
+The most common pattern is to pass variables when calling `mutate`:
 
 ```ts twoslash
 import { TypedDocumentNode } from '@apollo/client'
@@ -65,11 +70,10 @@ const CREATE_TODO = gql``
 // ---cut---
 const { mutate } = useMutation(CREATE_TODO)
 
-// Pass variables when executing
 mutate({ variables: { text: 'Buy groceries' } })
 ```
 
-You can also provide reactive variables in the options instead of passing them to `mutate`:
+You can also declare reactive variables in the composable options. They are resolved each time `mutate` is called:
 
 ```ts twoslash
 import { TypedDocumentNode } from '@apollo/client'
@@ -82,18 +86,18 @@ const CREATE_TODO = gql``
 const text = ref('')
 
 const { mutate } = useMutation(CREATE_TODO, {
-  variables: {
-    text, // Reactive - uses current value when mutate() is called
-  },
+  variables: { text }, // Resolved on each mutate() call
 })
 
-// Call without variables - uses reactive variables from options
+// No variables needed; uses current text.value
 mutate()
 ```
 
-## Tracking Mutation Status
+When variables come from both composable options and the `mutate` call, the call-time variables win, merged on top of the composable variables.
 
-Use `loading`, `error`, and `called` to track the mutation state:
+## Tracking mutation status
+
+Use `loading`, `error`, and `called` to track state in your template:
 
 ```vue twoslash
 <script setup lang="ts">
@@ -114,14 +118,14 @@ const { mutate, loading, error, called } = useMutation(LOGIN)
     Login failed: {{ error.message }}
   </div>
   <div v-else-if="called">
-    Login successful!
+    Login successful.
   </div>
 </template>
 ```
 
-## Resetting State
+## Resetting state
 
-Reset the mutation state with the `reset` function:
+`reset()` clears `result`, `error`, and `called` so the mutation looks fresh:
 
 ```vue twoslash
 <script setup lang="ts">
@@ -134,7 +138,7 @@ const LOGIN = gql``
 const { mutate, error, reset } = useMutation(LOGIN)
 
 function dismissError() {
-  reset() // Clears error and resets called state
+  reset()
 }
 </script>
 
@@ -148,13 +152,17 @@ function dismissError() {
 </template>
 ```
 
-## Updating Cached Data
+## Updating cached data after a mutation
 
-After a mutation, you often need to update the cached data. There are two approaches:
+A successful mutation often invalidates queries that read the same data. Apollo Client offers several ways to keep the cache in sync:
 
-### Refetching Queries
+1. **Return the modified entity from the mutation.** If your mutation result includes the full entity (with `__typename` and the key field), Apollo's normalized cache updates every query that reads that entity automatically. This is the simplest case and requires no extra wiring.
+2. **`refetchQueries`** re-runs specific queries on the server after the mutation completes.
+3. **The `update` function** lets you modify the cache directly so the UI updates without another network round trip.
 
-Use `refetchQueries` to refetch specific queries after the mutation:
+See [Cache Updates](/caching/cache-updates) for the full guide. Quick examples below.
+
+### Refetching queries
 
 ```ts twoslash
 import { TypedDocumentNode } from '@apollo/client'
@@ -166,15 +174,15 @@ declare const GET_TODOS: TypedDocumentNode<{ todos: { id: string }[] }, {}>
 // ---cut---
 const { mutate } = useMutation(CREATE_TODO, {
   refetchQueries: [
-    GET_TODOS, // DocumentNode
-    'GetTodos', // Query name as string
+    GET_TODOS, // by document
+    'GetTodos', // or by operation name
   ],
 })
 ```
 
-### The `update` Function
+### `update` function
 
-For more control, use the `update` function to manually modify the cache:
+For more control, use `update` to modify the cache directly:
 
 ```ts twoslash
 import { TypedDocumentNode } from '@apollo/client'
@@ -186,27 +194,24 @@ declare const GET_TODOS: TypedDocumentNode<{ todos: { id: string, text: string }
 // ---cut---
 const { mutate } = useMutation(CREATE_TODO, {
   update(cache, { data }) {
-    // Read the current todos from cache
-    const existing = cache.readQuery({ query: GET_TODOS })
+    if (!data?.createTodo)
+      return
 
-    if (existing && data?.createTodo) {
-      // Write back with the new todo added
-      cache.writeQuery({
-        query: GET_TODOS,
-        data: {
-          todos: [...existing.todos, data.createTodo],
-        },
-      })
-    }
+    const existing = cache.readQuery({ query: GET_TODOS })
+    if (!existing)
+      return
+
+    cache.writeQuery({
+      query: GET_TODOS,
+      data: { todos: [...existing.todos, data.createTodo] },
+    })
   },
 })
 ```
 
-Learn more about cache updates in [Cache Updates](/caching/cache-updates).
-
 ## Optimistic UI
 
-Provide an `optimisticResponse` to update the UI immediately before the server responds:
+Provide an `optimisticResponse` to update the UI immediately, before the server responds:
 
 ```ts twoslash
 import { TypedDocumentNode } from '@apollo/client'
@@ -230,11 +235,11 @@ mutate({
 })
 ```
 
-The optimistic response is used immediately, then replaced with the real data when the server responds. Learn more in [Optimistic UI](/caching/optimistic-ui).
+Apollo Client writes the optimistic response into the cache immediately, fires your `update` function with it, then replaces it with the real result when the server responds. See [Optimistic UI](/caching/optimistic-ui) for the full pattern, including rollback on error.
 
-## Event Hooks
+## Event hooks
 
-React to mutation lifecycle events:
+React to mutation outcomes imperatively:
 
 ```ts twoslash
 import { TypedDocumentNode } from '@apollo/client'
@@ -254,9 +259,9 @@ onError((error) => {
 })
 ```
 
-## Error Handling
+## Error throwing behavior
 
-By default, `useMutation` throws errors when no `onError` handler is registered. Control this with the `throws` option:
+By default, `mutate()` throws errors if no `onError` handler is registered. The `throws` option controls this:
 
 ```ts twoslash
 import { TypedDocumentNode } from '@apollo/client'
@@ -265,17 +270,14 @@ import { useMutation } from '@vue/apollo-composable'
 declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ createTodo: { id: string } }, { text: string }>
 const CREATE_TODO = gql``
 // ---cut---
-const { mutate } = useMutation(CREATE_TODO, {
-  throws: 'never', // Never throw, check error ref instead
-})
+// Never throw, check the error ref instead
+const { mutate, error } = useMutation(CREATE_TODO, { throws: 'never' })
 
-// Or use try/catch with throws: 'always'
-const { mutate: mutateWithThrow } = useMutation(CREATE_TODO, {
-  throws: 'always',
-})
+// Always throw, use try/catch
+const { mutate: createWithThrow } = useMutation(CREATE_TODO, { throws: 'always' })
 
 try {
-  await mutateWithThrow({ variables: { text: 'test' } })
+  await createWithThrow({ variables: { text: 'test' } })
 }
 catch (e) {
   console.error('Mutation failed:', e)
@@ -285,11 +287,22 @@ catch (e) {
 | Value | Behavior |
 |-------|----------|
 | `'auto'` | Throws if no `onError` handler is registered **(default)** |
-| `'always'` | Always throws errors |
-| `'never'` | Never throws, use `error` ref instead |
+| `'always'` | Always throws |
+| `'never'` | Never throws; check the `error` ref |
 
-## Next Steps
+## Multiple calls in flight
 
-- [Cache Updates](/caching/cache-updates) - Learn how to update the cache after mutations
-- [Optimistic UI](/caching/optimistic-ui) - Improve perceived performance with optimistic updates
-- [Error Handling](/data/error-handling) - Handle errors gracefully
+If you call `mutate()` again while a previous call is still pending, Vue Apollo ignores the older response. Only the most recent call updates `result` and `error`. The earlier promise still settles with its own result, so awaiters of the earlier call see what they expect.
+
+## Options and result reference
+
+For every available option and method, see:
+
+- [`useMutation.Options`](/api/composable/@vue/namespaces/useMutation/interfaces/Options)
+- [`useMutation.Result`](/api/composable/@vue/namespaces/useMutation/interfaces/Result)
+
+## Next steps
+
+- [Cache Updates](/caching/cache-updates) keeps queries in sync after mutations.
+- [Optimistic UI](/caching/optimistic-ui) improves perceived performance.
+- [Error Handling](/data/error-handling) handles mutation failures comprehensively.

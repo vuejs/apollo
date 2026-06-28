@@ -1,6 +1,6 @@
 # Introduction
 
-**Vue Apollo** is the official [Apollo Client](https://www.apollographql.com/docs/react) integration for [Vue.js](https://vuejs.org/). It enables you to manage both local and remote data with GraphQL, using Vue's Composition API.
+**Vue Apollo** is the official [Apollo Client](https://www.apollographql.com/docs/react) integration for [Vue.js](https://vuejs.org/). It lets you manage local and remote GraphQL data through Vue's reactivity system.
 
 <div class="tip custom-block" style="padding-top: 8px">
 Ready to try it out? Skip to the <a href="./installation">Installation</a>.
@@ -8,13 +8,13 @@ Ready to try it out? Skip to the <a href="./installation">Installation</a>.
 
 ## Features
 
-- **Declarative data fetching** with [`useQuery`](/api/composable/functions/useQuery.md) - write a query and receive reactive data
-- **Automatic caching** - respond instantly to queries with cached data
-- **Real-time updates** with subscriptions and `@defer` streaming
-- **Full TypeScript support** with GraphQL Codegen integration
-- **Vue-native reactivity** - variables can be refs, reactive objects, or getters
+- **Declarative data fetching** with [`useQuery`](/api/composable/functions/useQuery.md). Write a query, receive reactive data.
+- **Automatic caching**. Apollo's normalized cache serves repeated queries instantly and keeps all queries that read the same entity in sync.
+- **Real-time updates** through subscriptions and the `@defer` and `@stream` directives.
+- **Full TypeScript support** with GraphQL Codegen integration.
+- **Vue-native reactivity**. Variables can be refs, reactive objects, or getters; query results are refs you read from templates.
 
-## Quick Example
+## Quick example
 
 ```vue twoslash
 <script setup lang="ts">
@@ -23,7 +23,7 @@ import { useQuery } from '@vue/apollo-composable'
 
 declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ users: { id: string, name: string }[] }, {}>
 // ---cut---
-const { result, loading } = useQuery(gql`
+const { current } = useQuery(gql`
   query GetUsers {
     users {
       id
@@ -34,11 +34,11 @@ const { result, loading } = useQuery(gql`
 </script>
 
 <template>
-  <div v-if="loading">
+  <div v-if="current.loading">
     Loading...
   </div>
-  <ul v-else>
-    <li v-for="user in result?.users" :key="user.id">
+  <ul v-else-if="current.resultState === 'complete'">
+    <li v-for="user in current.result.users" :key="user.id">
       {{ user.name }}
     </li>
   </ul>
@@ -52,8 +52,8 @@ const { result, loading } = useQuery(gql`
 | Vue | 3.5+ |
 | Apollo Client | 4.1+ |
 
-::: warning Apollo Client 4.1 Required
-Vue Apollo requires `@apollo/client` version 4.1.0 or higher. This version includes features like improved TypeScript support that Vue Apollo depends on.
+::: warning Apollo Client 4.1 required
+Vue Apollo requires `@apollo/client` version 4.1.0 or higher. The features Vue Apollo depends on (improved TypeScript inference, the `DataState` discriminated union, incremental delivery handlers) are only available from 4.1 onward.
 :::
 
 ## Sponsors

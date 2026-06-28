@@ -29,9 +29,7 @@ const loading = useQueryLoading()
 </script>
 
 <template>
-  <div v-if="loading">
-    Loading...
-  </div>
+  <div v-if="loading">Loading...</div>
   <div v-else>
     <UserList :users="users" />
     <PostList :posts="posts" />

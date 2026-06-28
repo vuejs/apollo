@@ -31,3 +31,4 @@ The client ID to resolve. If omitted, resolves the default client.
 #### Returns
 
 [`ApolloClient`](https://www.apollographql.com/docs/react/api/core/ApolloClient)
+

@@ -18,6 +18,7 @@ const guideSidebar = [
       { text: 'Queries', link: '/data/queries' },
       { text: 'Mutations', link: '/data/mutations' },
       { text: 'Subscriptions', link: '/data/subscriptions' },
+      { text: 'Refetching', link: '/data/refetching' },
       { text: 'Fragments', link: '/data/fragments' },
       { text: 'Data Masking', link: '/data/data-masking' },
       { text: 'Suspense', link: '/data/suspense' },
@@ -46,7 +47,6 @@ const guideSidebar = [
     text: 'Local State',
     items: [
       { text: 'Overview', link: '/local-state/overview' },
-      { text: 'Reactive Variables', link: '/local-state/reactive-variables' },
     ],
   },
   {
@@ -64,14 +64,21 @@ const guideSidebar = [
     items: [
       { text: 'Basic HTTP', link: '/networking/basic-http' },
       { text: 'Authentication', link: '/networking/authentication' },
-      { text: 'SSE', link: '/networking/sse' },
-      { text: 'WebSocket', link: '/networking/websocket' },
     ],
   },
   {
     text: 'Server-Side Rendering',
     items: [
+      { text: 'Overview', link: '/ssr/overview' },
       { text: 'Nuxt', link: '/ssr/nuxt' },
+    ],
+  },
+  {
+    text: 'Migrating from v4',
+    items: [
+      { text: 'What\'s changed in v5', link: '/migration/whats-changed' },
+      { text: 'Migration guide', link: '/migration/guide' },
+      { text: 'Compat layer', link: '/migration/compat' },
     ],
   },
 ]
@@ -115,6 +122,7 @@ export default defineConfig({
       '/advanced/': guideSidebar,
       '/networking/': guideSidebar,
       '/ssr/': guideSidebar,
+      '/migration/': guideSidebar,
       '/api/composable/': [
         {
           text: '@vue/apollo-composable',

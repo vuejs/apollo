@@ -4,7 +4,11 @@ export default antfu(
   {
     vue: true,
     typescript: true,
-    ignores: ['src/docs'],
+    ignores: [
+      'src/docs',
+      'packages/vue-apollo-composable/.api-reports',
+      'packages/docs/api',
+    ],
     rules: {
       'ts/no-namespace': 'off',
       'ts/no-empty-object-type': 'off',

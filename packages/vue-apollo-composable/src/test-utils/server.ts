@@ -77,6 +77,7 @@ export const schema = createSchema({
 
       # Error testing
       canThrowError(shouldError: Boolean!): String!
+      nullableError(shouldError: Boolean!): String
 
       # User queries
       user(id: ID!): User
@@ -215,6 +216,12 @@ export const schema = createSchema({
       canThrowError: (_parent, args: { shouldError: boolean }) => {
         if (args.shouldError) {
           throw new Error('An error occurred as requested.')
+        }
+        return 'No error'
+      },
+      nullableError: (_parent, args: { shouldError: boolean }) => {
+        if (args.shouldError) {
+          throw new Error('A nullable error occurred as requested.')
         }
         return 'No error'
       },
