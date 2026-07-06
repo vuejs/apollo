@@ -1,5 +1,22 @@
 # Changelog
 
+## v4.2.3
+
+[compare changes](https://github.com/vuejs/apollo/compare/v4.2.2...v4.2.3)
+
+### 🩹 Fixes
+
+- Bump serialize-javascript to ^7.0.3 to patch GHSA-5c6j-r48x-rmvq ([#1611](https://github.com/vuejs/apollo/pull/1611))
+
+### 🤖 CI
+
+- Declare workflow-level `contents: read` on 5 workflows ([#1610](https://github.com/vuejs/apollo/pull/1610))
+
+### ❤️ Contributors
+
+- Lazizbek Ergashev ([@lazerg](http://github.com/lazerg))
+- Arpit Jain ([@arpitjain099](http://github.com/arpitjain099))
+
 ## v4.2.2
 
 [compare changes](https://github.com/vuejs/apollo/compare/v4.2.1...v4.2.2)
