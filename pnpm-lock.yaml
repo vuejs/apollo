@@ -7,7 +7,7 @@ settings:
 overrides:
   js-yaml: ^3.13.1
   eslint-scope: ^5
-  serialize-javascript: ^6.0.0
+  serialize-javascript: ^7.0.3
   subscriptions-transport-ws: ^0.9
 
 importers:
@@ -548,8 +548,8 @@ importers:
   packages/vue-apollo-ssr:
     dependencies:
       serialize-javascript:
-        specifier: ^6.0.0
-        version: 6.0.2
+        specifier: ^7.0.3
+        version: 7.0.7
     devDependencies:
       '@apollo/client':
         specifier: ^3.7.7
@@ -7265,9 +7265,6 @@ packages:
     resolution: {integrity: sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==}
     engines: {node: '>=8'}
 
-  randombytes@2.1.0:
-    resolution: {integrity: sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==}
-
   range-parser@1.2.1:
     resolution: {integrity: sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==}
     engines: {node: '>= 0.6'}
@@ -7620,8 +7617,9 @@ packages:
     resolution: {integrity: sha512-dW41u5VfLXu8SJh5bwRmyYUbAoSB3c9uQh6L8h/KtsFREPWpbX1lrljJo186Jc4nmci/sGUZ9a0a0J2zgfq2hw==}
     engines: {node: '>= 0.8.0'}
 
-  serialize-javascript@6.0.2:
-    resolution: {integrity: sha512-Saa1xPByTTq2gdeFZYLLo+RFE35NHZkAbqZeWNd3BpzppeVisAqpDjcp8dyf6uIvEqJRd46jemmyA4iFIeVk8g==}
+  serialize-javascript@7.0.7:
+    resolution: {integrity: sha512-YAy8Od6KV+uuwUuU50np8fGB/Aues6Y0nAhA9y/hId74PlKUcme4pXcBD46NWKr1Q4osN/iseZ17YqO1XfmI8g==}
+    engines: {node: '>=20.0.0'}
 
   serve-index@1.9.1:
     resolution: {integrity: sha512-pXHfKNP4qujrtteMrSBb0rc8HJ9Ms/GrXwcUtUtD5s4ewDJI8bT3Cz2zTVRMKtri49pLx2e0Ya8ziP5Ya2pZZw==}
@@ -13080,7 +13078,7 @@ snapshots:
       globby: 11.1.0
       normalize-path: 3.0.0
       schema-utils: 3.3.0
-      serialize-javascript: 6.0.2
+      serialize-javascript: 7.0.7
       webpack: 5.98.0(esbuild@0.25.1)
     optional: true
 
@@ -13091,7 +13089,7 @@ snapshots:
       globby: 11.1.0
       normalize-path: 3.0.0
       schema-utils: 3.3.0
-      serialize-javascript: 6.0.2
+      serialize-javascript: 7.0.7
       webpack: 5.98.0(esbuild@0.8.57)
 
   core-js-compat@3.41.0:
@@ -13190,7 +13188,7 @@ snapshots:
       jest-worker: 27.5.1
       postcss: 8.5.3
       schema-utils: 4.3.0
-      serialize-javascript: 6.0.2
+      serialize-javascript: 7.0.7
       source-map: 0.6.1
       webpack: 5.98.0(esbuild@0.25.1)
     optionalDependencies:
@@ -13203,7 +13201,7 @@ snapshots:
       jest-worker: 27.5.1
       postcss: 8.5.3
       schema-utils: 4.3.0
-      serialize-javascript: 6.0.2
+      serialize-javascript: 7.0.7
       source-map: 0.6.1
       webpack: 5.98.0(esbuild@0.8.57)
     optionalDependencies:
@@ -17033,10 +17031,6 @@ snapshots:
 
   quick-lru@4.0.1: {}
 
-  randombytes@2.1.0:
-    dependencies:
-      safe-buffer: 5.2.1
-
   range-parser@1.2.1: {}
 
   raw-body@2.5.2:
@@ -17325,7 +17319,7 @@ snapshots:
       '@babel/code-frame': 7.26.2
       jest-worker: 24.9.0
       rollup: 1.32.1
-      serialize-javascript: 6.0.2
+      serialize-javascript: 7.0.7
       uglify-js: 3.19.3
 
   rollup-pluginutils@2.8.2:
@@ -17468,9 +17462,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  serialize-javascript@6.0.2:
-    dependencies:
-      randombytes: 2.1.0
+  serialize-javascript@7.0.7: {}
 
   serve-index@1.9.1:
     dependencies:
@@ -18055,7 +18047,7 @@ snapshots:
       '@jridgewell/trace-mapping': 0.3.25
       jest-worker: 27.5.1
       schema-utils: 4.3.0
-      serialize-javascript: 6.0.2
+      serialize-javascript: 7.0.7
       terser: 5.39.0
       webpack: 5.98.0(esbuild@0.25.1)
     optionalDependencies:
@@ -18066,7 +18058,7 @@ snapshots:
       '@jridgewell/trace-mapping': 0.3.25
       jest-worker: 27.5.1
       schema-utils: 4.3.0
-      serialize-javascript: 6.0.2
+      serialize-javascript: 7.0.7
       terser: 5.39.0
       webpack: 5.98.0(esbuild@0.8.57)
     optionalDependencies:

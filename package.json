@@ -29,7 +29,7 @@
   "pnpm": {
     "overrides": {
       "eslint-scope": "^5",
-      "serialize-javascript": "^6.0.0",
+      "serialize-javascript": "^7.0.3",
       "subscriptions-transport-ws": "^0.9"
     },
     "peerDependencyRules": {
