@@ -1,6 +1,6 @@
 # Mutations
 
-Now that's we've learned [how to fetch data](./query), the next logical step is to study how to update data using **mutations**. If you need a refresher on mutations or GraphQL documents, read [this guide](https://graphql.org/learn/queries/#mutations).
+Now that's we've learned [how to fetch data](./query), the next logical step is to study how to update data using **mutations**. If you need a refresher on mutations or GraphQL documents, read [this guide](https://graphql.org/learn/mutations/).
 
 ## Executing a mutation
 

@@ -1,6 +1,6 @@
 # 变更
 
-现在我们已经学习了[如何获取数据](./query)，下一步是学习如何使用**变更**来更新数据。如果你需要复习变更或 GraphQL 文档，请阅读[本指南](https://graphql.org/learn/queries/#mutations)。
+现在我们已经学习了[如何获取数据](./query)，下一步是学习如何使用**变更**来更新数据。如果你需要复习变更或 GraphQL 文档，请阅读[本指南](https://graphql.org/learn/mutations/)。
 
 ## 执行一个变更
 
