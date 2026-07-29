@@ -141,9 +141,11 @@ export function useLazyQuery<
     // Start the query
     queryResult.start()
 
-    // Wait for the query to complete or error
+    // Wait for the query to complete or error. A retained result belongs to the previous
+    // variables, so it does not count as having loaded.
     await until(() =>
-      queryResult.current.value.resultState === 'complete'
+      (queryResult.current.value.resultState === 'complete'
+        && !queryResult.current.value.isPreviousResult)
       || queryResult.current.value.error != null,
     ).toBe(true, { timeout: 30000 })
 

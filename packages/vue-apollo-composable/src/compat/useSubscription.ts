@@ -35,7 +35,7 @@ type DocumentParameter<TResult, TVariables> = MaybeRefOrGetter<DocumentNode | Ty
 type VariablesParameter<TVariables extends OperationVariables>
   = | MaybeRefOrGetter<TVariables>
     | { [Key in keyof TVariables]: MaybeRefOrGetter<TVariables[Key]> }
-type OptionsParameter<TResult, TVariables> = MaybeRefOrGetter<UseSubscriptionOptions<TResult, TVariables>>
+type OptionsParameter<TResult, TVariables extends OperationVariables> = MaybeRefOrGetter<UseSubscriptionOptions<TResult, TVariables>>
 
 /**
  * v4-style subscription result payload (`data` rather than v5's flatter `result.data`).
@@ -54,7 +54,7 @@ export interface OnErrorContext {
   client: ApolloClient
 }
 
-export interface UseSubscriptionReturn<TResult, TVariables> {
+export interface UseSubscriptionReturn<TResult, TVariables extends OperationVariables> {
   result: Readonly<Ref<TResult | undefined>>
   loading: Readonly<Ref<boolean>>
   error: Readonly<Ref<ErrorLike | null>>
@@ -74,13 +74,13 @@ export interface UseSubscriptionReturn<TResult, TVariables> {
 
 export function useSubscription<TResult = any>(
   document: DocumentParameter<TResult, undefined>,
-): UseSubscriptionReturn<TResult, undefined>
+): UseSubscriptionReturn<TResult, Record<string, never>>
 
 export function useSubscription<TResult = any>(
   document: DocumentParameter<TResult, undefined>,
   variables: undefined | null,
-  options: OptionsParameter<TResult, null>,
-): UseSubscriptionReturn<TResult, null>
+  options: OptionsParameter<TResult, Record<string, never>>,
+): UseSubscriptionReturn<TResult, Record<string, never>>
 
 export function useSubscription<TResult = any, TVariables extends OperationVariables = OperationVariables>(
   document: DocumentParameter<TResult, TVariables>,

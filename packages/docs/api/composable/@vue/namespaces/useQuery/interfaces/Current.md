@@ -17,6 +17,16 @@ For more information, see [Handling operation errors](https://www.apollographql.
 
 ***
 
+### isPreviousResult
+
+> **isPreviousResult**: `boolean`
+
+If `true`, `result` was kept from the previous variables by the `keepPreviousResult` option, and does not correspond to the current `variables`.
+
+`resultState`, `result` and `partial` describe the retained result, so narrowing on `resultState` is always safe. `loading`, `networkStatus` and `error` describe the request that is replacing it.
+
+***
+
 ### ~~partial~~
 
 > **partial**: `boolean`
@@ -61,7 +71,11 @@ Describes the completeness of `result`.
 
 > **loading**: `boolean`
 
-If `true`, the query is still in flight.
+If `true`, the query is busy. That covers a request in flight, new variables
+waiting out the `debounce`/`throttle` timer, and the hand-over in between, where
+the variables have been accepted but the request has not gone out yet.
+
+Broader than `networkStatus < 7`, which describes only the request itself.
 
 ***
 
@@ -71,4 +85,16 @@ If `true`, the query is still in flight.
 
 A number indicating the current network state of the query's associated request. [See possible values.](https://github.com/apollographql/apollo-client/blob/d96f4578f89b933c281bb775a39503f6cdb59ee8/src/core/networkStatus.ts#L4)
 
+Describes the network only: it stays `ready` while `pending` is `true`.
+
 Used in conjunction with the [`notifyOnNetworkStatusChange`](./Options.md#notifyonnetworkstatuschange) option.
+
+***
+
+### pending
+
+> **pending**: `boolean`
+
+If `true`, `variables` have changed and a request is committed, but has not been issued yet because of the `debounce` or `throttle` option.
+
+`loading` covers this window as well; use `pending` to tell a timer that has not elapsed apart from a request that is actually on the wire.

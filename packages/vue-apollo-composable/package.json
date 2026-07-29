@@ -46,7 +46,8 @@
     "coverage": "vitest run --coverage",
     "dev": "pnpm nodemon -w ./src -e ts -x pnpm build",
     "prepublishOnly": "pnpm run test && pnpm run build",
-    "test": "vitest run"
+    "test": "vitest run",
+    "typecheck": "tsc --build"
   },
   "peerDependencies": {
     "@apollo/client": "^4.1.0",

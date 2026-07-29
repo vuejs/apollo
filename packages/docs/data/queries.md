@@ -361,6 +361,65 @@ const { current } = useQuery(QUERY, {
 
 This pattern is useful for filters and pagination, where flashing an empty state on every change would be jarring.
 
+A retained result is reported as a normal result: `resultState`, `result` and `partial` all describe the data you are still showing, so narrowing on `resultState === 'complete'` keeps working. `isPreviousResult` tells the two apart, and `loading` describes the request that is on its way to replace it:
+
+```vue twoslash
+<script setup lang="ts">
+import { TypedDocumentNode } from '@apollo/client'
+import { useQuery } from '@vue/apollo-composable'
+import { ref } from 'vue'
+
+declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ products: { id: string, name: string }[] }, { term: string }>
+const SearchProducts = gql``
+// ---cut---
+const term = ref('')
+
+const { current } = useQuery(SearchProducts, {
+  variables: { term },
+  keepPreviousResult: true,
+})
+</script>
+
+<template>
+  <ul v-if="current.resultState === 'complete'" :class="{ stale: current.isPreviousResult }">
+    <li v-for="product in current.result.products" :key="product.id">
+      {{ product.name }}
+    </li>
+  </ul>
+  <p v-else-if="!current.loading">
+    No products found.
+  </p>
+</template>
+```
+
+`resultState` describes the data being handed back; `loading`, `networkStatus` and `error` describe the request. Retention only ever changes the former.
+
+## Loading and the debounce window
+
+`loading` is `true` from the moment the query accepts new variables, not from the moment the request goes out. With `debounce` or `throttle`, that includes the window where the timer has not yet elapsed — so a search-as-you-type field shows a spinner on the keystroke rather than after the delay:
+
+```ts twoslash
+import { TypedDocumentNode } from '@apollo/client'
+import { useQuery } from '@vue/apollo-composable'
+import { ref } from 'vue'
+
+declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ products: { id: string }[] }, { term: string }>
+const SearchProducts = gql``
+// ---cut---
+const term = ref('')
+
+const { loading, pending } = useQuery(SearchProducts, {
+  variables: { term },
+  debounce: 300,
+})
+// loading: true from the keystroke until the results land
+// pending: true only while the debounce timer is running
+```
+
+`pending` separates the two halves for the cases that need it (request metrics, cancel affordances). `networkStatus` describes the network alone and stays `ready` throughout the debounce window, so `loading` is deliberately broader than `networkStatus < 7`: it also spans the hand-over where the variables have been accepted but the request has not gone out yet.
+
+Variables that are rebuilt with deeply equal contents never report as pending, since no request will follow. Neither do variables that change and change back before the timer elapses.
+
 ## Awaiting the query
 
 `useQuery` returns a `PromiseLike` that resolves when initial data is available. Combined with `<Suspense>`, this gives you a server-rendered initial state and a unified loading fallback:
