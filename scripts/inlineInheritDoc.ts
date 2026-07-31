@@ -126,7 +126,9 @@ async function generateApiModel(modelFile: string, baseConfigPath: string): Prom
 }
 
 async function processFiles(model: ApiModel) {
-  const inheritDocRegex = /\{\s*@inheritDoc\s+(\S+)\s*\}/g
+  // Anchored to the line so the indentation and comment shape are known: the inlined lines
+  // have to be re-prefixed, or the JSDoc block ends up ragged.
+  const inheritDocRegex = /^([ \t]*)(\/\*\*|\*)[ \t]*\{\s*@inheritDoc\s+(\S+)\s*\}[ \t]*(\*\/)?/gm
 
   // Process all .d.ts files in dist
   const dtsFiles = findDtsFiles(distDir)
@@ -136,14 +138,32 @@ async function processFiles(model: ApiModel) {
     let content = fs.readFileSync(filePath, 'utf-8')
     let fileReplacements = 0
 
-    content = content.replace(inheritDocRegex, (match, canonicalReference) => {
-      const replacement = getCommentFor(canonicalReference, model)
-      if (replacement) {
+    content = content.replace(
+      inheritDocRegex,
+      (match, indent: string, opener: string, canonicalReference: string, closer: string | undefined) => {
+        const replacement = getCommentFor(canonicalReference, model)
+        if (!replacement) {
+          return match
+        }
+
         fileReplacements++
-        return replacement
-      }
-      return match
-    })
+
+        const isBlockOpener = opener === '/**'
+        const linePrefix = isBlockOpener ? `${indent} *` : `${indent}*`
+        const body = replacement
+          .split('\n')
+          .map(line => (line ? `${linePrefix} ${line}` : linePrefix))
+          .join('\n')
+
+        if (!isBlockOpener) {
+          return body
+        }
+
+        return closer
+          ? `${indent}/**\n${body}\n${indent} */`
+          : `${indent}/**\n${body}`
+      },
+    )
 
     if (fileReplacements > 0) {
       fs.writeFileSync(filePath, content)

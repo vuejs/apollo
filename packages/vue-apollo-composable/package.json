@@ -42,9 +42,9 @@
     "dist"
   ],
   "scripts": {
-    "build": "unbuild",
+    "build": "unbuild && node ../../scripts/inlineInheritDoc.ts",
     "coverage": "vitest run --coverage",
-    "dev": "pnpm nodemon -w ./src -e ts -x pnpm build",
+    "dev": "pnpm nodemon -w ./src -e ts -x unbuild",
     "prepublishOnly": "pnpm run test && pnpm run build",
     "test": "vitest run",
     "typecheck": "tsc --build"
