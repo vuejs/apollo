@@ -1,6 +1,6 @@
 import type { DocumentNode, TypedDocumentNode } from '@apollo/client'
 import { gql, NetworkStatus } from '@apollo/client'
-import { computed, reactive, ref } from '@vue/reactivity'
+import { computed, effectScope, reactive, ref } from '@vue/reactivity'
 import { defineComponent, h, nextTick, Suspense } from '@vue/runtime-core'
 import { createSSRApp } from '@vue/runtime-dom'
 import { renderToString } from '@vue/server-renderer'
@@ -9,7 +9,7 @@ import { promiseTimeout, until } from '@vueuse/core'
 import { afterAll, afterEach, assertType, beforeAll, describe, expect, it, vi } from 'vitest'
 import { createApolloClient } from './test-utils/client.ts'
 import { startServer, stopServer } from './test-utils/server.ts'
-import { DefaultApolloClient } from './useApolloClient.ts'
+import { DefaultApolloClient, provideApolloClient } from './useApolloClient.ts'
 import { useGlobalQueryLoading, useQueryLoading } from './useLoading.ts'
 import { useQuery } from './useQuery.ts'
 
@@ -82,6 +82,15 @@ const DEFER_QUERY = gql`
     hello
     ... @defer {
       slow(delay: 1000)
+    }
+  }
+` as TypedDocumentNode<{ hello: string, slow?: string }, {}>
+
+const DEFER_FAST_QUERY = gql`
+  query DeferFastQuery {
+    hello
+    ... @defer {
+      slow(delay: 150)
     }
   }
 ` as TypedDocumentNode<{ hello: string, slow?: string }, {}>
@@ -1112,15 +1121,20 @@ describe('useQuery', () => {
 
     await until(() => wrapper.vm.current.resultState).toBe('complete', { timeout: 200 })
     expect(wrapper.find('div').text()).toBe('first')
+    expect(wrapper.vm.current.isPreviousResult).toBe(false)
 
     // Change variables - should keep previous result while loading
     wrapper.vm.message = 'second'
     await nextTick()
 
-    // Result should still be 'first' while loading
+    // Result should still be 'first' while loading, reported as a retained result rather
+    // than as an empty one.
     expect(wrapper.vm.result?.echo).toBe('first')
+    expect(wrapper.vm.current.resultState).toBe('complete')
+    expect(wrapper.vm.current.isPreviousResult).toBe(true)
+    expect(wrapper.vm.current.loading).toBe(true)
 
-    await until(() => wrapper.vm.current.resultState).toBe('complete', { timeout: 200 })
+    await until(() => wrapper.vm.current.isPreviousResult).toBe(false, { timeout: 200 })
     expect(wrapper.find('div').text()).toBe('second')
 
     wrapper.unmount()
@@ -1654,6 +1668,34 @@ describe('useQuery', () => {
     const html = await renderToString(app)
     expect(html).toContain('world')
     expect(html).toContain('class="data"')
+  })
+  // #endregion
+
+  // #region awaitComplete
+  it('should resolve on the first non-empty state by default', async () => {
+    const scope = effectScope()
+    const query = scope.run(() =>
+      provideApolloClient(apolloClient)(() => useQuery(DEFER_FAST_QUERY)),
+    )!
+
+    await query
+    expect(query.current.value.resultState).toBe('streaming')
+    expect(query.result.value?.slow).toBeUndefined()
+
+    scope.stop()
+  })
+
+  it('awaitComplete should wait for the deferred data', async () => {
+    const scope = effectScope()
+    const query = scope.run(() =>
+      provideApolloClient(apolloClient)(() => useQuery(DEFER_FAST_QUERY, { awaitComplete: true })),
+    )!
+
+    await query
+    expect(query.current.value.resultState).toBe('complete')
+    expect(query.result.value?.slow).toBe('done')
+
+    scope.stop()
   })
   // #endregion
 

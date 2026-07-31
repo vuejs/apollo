@@ -328,8 +328,8 @@ describe('compat layer', () => {
         variables: { limit: 1, offset: 1 },
       })
 
-      expect(more?.data.paginatedTodos.items).toHaveLength(1)
-      expect(more?.data.paginatedTodos.items[0]?.text).toBe('Build Vue app')
+      expect(more?.data?.paginatedTodos.items).toHaveLength(1)
+      expect(more?.data?.paginatedTodos.items[0]?.text).toBe('Build Vue app')
 
       wrapper.unmount()
     })

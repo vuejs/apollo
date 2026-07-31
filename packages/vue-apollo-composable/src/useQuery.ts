@@ -106,6 +106,10 @@ export declare namespace useQuery {
       /**
        * Keep previous result while loading new data.
        *
+       * The retained result is reported as a normal result — `resultState`, `result` and
+       * `partial` all describe it — with `isPreviousResult` set to `true` so it can be
+       * told apart from a fresh one.
+       *
        * @defaultValue false
        * @group 4. Vue-Apollo
        */
@@ -237,11 +241,47 @@ export declare namespace useQuery {
     TVariables extends OperationVariables = OperationVariables,
   > = Options<TData, TVariables> | DisabledOptions<TData, TVariables>
 
+  /**
+   * Apollo's query result with Vue-Apollo naming: `result`/`resultState` instead of
+   * `data`/`dataState`. This is the state as Apollo reports it, before Vue-Apollo layers
+   * {@link VueApolloState} on top.
+   */
+  export type ResultState<
+    TData,
+    TStates extends DataState<TData>['dataState'] = DataState<TData>['dataState'],
+  > = RenameKey<RenameKey<ObservableQuery.Result<TData, TStates>, 'dataState', 'resultState'>, 'data', 'result'>
+
+  /** State tracked by Vue-Apollo itself, on top of what Apollo reports. */
+  export interface VueApolloState {
+    /**
+     * If `true`, `variables` have changed and a request is committed, but has not been
+     * issued yet because of the `debounce` or `throttle` option.
+     *
+     * `loading` covers this window as well; use `pending` to tell a timer that has not
+     * elapsed apart from a request that is actually on the wire.
+     *
+     * @group 2. Network info
+     */
+    pending: boolean
+
+    /**
+     * If `true`, `result` was kept from the previous variables by the `keepPreviousResult`
+     * option, and does not correspond to the current `variables`.
+     *
+     * `resultState`, `result` and `partial` describe the retained result, so narrowing on
+     * `resultState` is always safe. `loading`, `networkStatus` and `error` describe the
+     * request that is replacing it.
+     *
+     * @group 1. Operation data
+     */
+    isPreviousResult: boolean
+  }
+
   /** Query result with Vue-Apollo naming: `result`/`resultState` instead of `data`/`dataState`. */
   export type Current<
     TData,
     TStates extends DataState<TData>['dataState'] = DataState<TData>['dataState'],
-  > = RenameKey<RenameKey<ObservableQuery.Result<TData, TStates>, 'dataState', 'resultState'>, 'data', 'result'>
+  > = ResultState<TData, TStates> & VueApolloState
 
   /** FetchMore result with Vue-Apollo naming: `result` instead of `data`. */
   export type FetchMoreResult<TData> = RenameKey<ApolloClient.QueryResult<MaybeMasked<TData>>, 'data', 'result'>
@@ -254,14 +294,30 @@ export declare namespace useQuery {
     > {
 
       /**
-       * If `true`, the query is still in flight.
+       * If `true`, the query is busy. That covers a request in flight, new variables
+       * waiting out the `debounce`/`throttle` timer, and the hand-over in between, where
+       * the variables have been accepted but the request has not gone out yet.
+       *
+       * Broader than `networkStatus < 7`, which describes only the request itself.
        *
        * @group 2. Network info
        */
       loading: Readonly<Ref<boolean>>
 
       /**
+       * {@inheritDoc @vue/apollo-composable!useQuery.VueApolloState#pending:member}
+       */
+      pending: Readonly<Ref<boolean>>
+
+      /**
+       * {@inheritDoc @vue/apollo-composable!useQuery.VueApolloState#isPreviousResult:member}
+       */
+      isPreviousResult: Readonly<Ref<boolean>>
+
+      /**
        * A number indicating the current network state of the query's associated request. [See possible values.](https://github.com/apollographql/apollo-client/blob/d96f4578f89b933c281bb775a39503f6cdb59ee8/src/core/networkStatus.ts#L4)
+       *
+       * Describes the network only: it stays `ready` while `pending` is `true`.
        *
        * Used in conjunction with the [`notifyOnNetworkStatusChange`](./Options.md#notifyonnetworkstatuschange) option.
        *
@@ -613,14 +669,26 @@ export declare namespace useQuery {
         resultState: 'empty' | 'complete' | 'streaming' | 'partial'
 
         /**
-         * If `true`, the query is still in flight.
+         * If `true`, the query is busy. That covers a request in flight, new variables
+         * waiting out the `debounce`/`throttle` timer, and the hand-over in between, where
+         * the variables have been accepted but the request has not gone out yet.
+         *
+         * Broader than `networkStatus < 7`, which describes only the request itself.
          *
          * @group 2. Network info
          */
         loading: boolean
 
+        /** {@inheritDoc @vue/apollo-composable!useQuery.VueApolloState#pending:member} */
+        pending: boolean
+
+        /** {@inheritDoc @vue/apollo-composable!useQuery.VueApolloState#isPreviousResult:member} */
+        isPreviousResult: boolean
+
         /**
          * A number indicating the current network state of the query's associated request. [See possible values.](https://github.com/apollographql/apollo-client/blob/d96f4578f89b933c281bb775a39503f6cdb59ee8/src/core/networkStatus.ts#L4)
+         *
+         * Describes the network only: it stays `ready` while `pending` is `true`.
          *
          * Used in conjunction with the [`notifyOnNetworkStatusChange`](./Options.md#notifyonnetworkstatuschange) option.
          *
@@ -781,6 +849,12 @@ export declare namespace useQuery {
         /** {@inheritDoc @vue/apollo-composable!useQuery.Base.Result#loading:member} */
         loading: Ref<boolean>
 
+        /** {@inheritDoc @vue/apollo-composable!useQuery.VueApolloState#pending:member} */
+        pending: Ref<boolean>
+
+        /** {@inheritDoc @vue/apollo-composable!useQuery.VueApolloState#isPreviousResult:member} */
+        isPreviousResult: Ref<boolean>
+
         /** {@inheritDoc @vue/apollo-composable!useQuery.Base.Result#networkStatus:member} */
         networkStatus: Ref<NetworkStatus>
 
@@ -849,18 +923,30 @@ function shouldReobserve<TData, TVariables extends OperationVariables>(
   )
 }
 
-function toCurrent<
+function toResultState<
   TData,
   TStates extends
   DataState<TData>['dataState'] = DataState<TData>['dataState'],
->(result: ObservableQuery.Result<TData, TStates>): useQuery.Current<TData, TStates> {
+>(result: ObservableQuery.Result<TData, TStates>): useQuery.ResultState<TData, TStates> {
   const { data, dataState, ...rest } = result
 
   return {
     result: data,
     resultState: dataState,
     ...rest,
-  } as useQuery.Current<TData, TStates>
+  } as useQuery.ResultState<TData, TStates>
+}
+
+/**
+ * Compares every key rather than a fixed list, so a field Apollo adds to its result cannot
+ * flow through `toResultState`'s spread and be silently swallowed. `result` is compared by
+ * identity: retaining reuses the object, a new result never does.
+ */
+function isSameState<TData>(a: useQuery.Current<TData>, b: useQuery.Current<TData>) {
+  const keys = Object.keys(a) as Array<keyof useQuery.Current<TData>>
+
+  return keys.length === Object.keys(b).length
+    && keys.every(key => a[key] === b[key])
 }
 
 function toFetchMoreResult<TData>(result: ApolloClient.QueryResult<TData>): useQuery.FetchMoreResult<TData> {
@@ -922,6 +1008,7 @@ export function useQueryImpl<
       debounce,
       prefetch,
       keepPreviousResult,
+      awaitComplete,
     } = options.value ?? {}
 
     return {
@@ -931,6 +1018,7 @@ export function useQueryImpl<
       debounce,
       prefetch,
       keepPreviousResult,
+      awaitComplete,
     } as useQuery.Base.VueApolloOptions
   })
   // #endregion
@@ -976,14 +1064,42 @@ export function useQueryImpl<
   /** The actual variables sent to Apollo (may be delayed by debounce/throttle) */
   const currentVariables = shallowRef(variables.value)
 
-  const setDebouncedVariables = useDebounceFn((newVariables: TVariables) => {
+  /**
+   * `true` while `variables` have moved ahead of what has actually been handed to Apollo,
+   * which is exactly the `debounce`/`throttle` window.
+   */
+  const pending = computed(() => {
+    const { debounce, throttle } = vueApolloQueryOptions.value
+    if (debounce == null && throttle == null) {
+      return false
+    }
+    return !equal(variables.value, currentVariables.value)
+  })
+
+  /**
+   * Bridges the gap between `pending` clearing (on write) and `loading` being set on the
+   * next flush, when the watcher below reobserves.
+   */
+  const isCommitting = ref(false)
+
+  function commitVariables(newVariables: TVariables) {
+    if (equal(newVariables, currentVariables.value)) {
+      // No request will follow, so there is nothing to stay busy for.
+      currentVariables.value = newVariables
+      return
+    }
+
+    isCommitting.value = true
     currentVariables.value = newVariables
-  }, () => vueApolloQueryOptions.value.debounce ?? 0)
+  }
+
+  const setDebouncedVariables = useDebounceFn(
+    commitVariables,
+    () => vueApolloQueryOptions.value.debounce ?? 0,
+  )
 
   const setThrottledVariables = useThrottleFn(
-    (newVariables: TVariables) => {
-      currentVariables.value = newVariables
-    },
+    commitVariables,
     () => vueApolloQueryOptions.value.throttle ?? 0,
     true, // trailing edge
   )
@@ -997,7 +1113,7 @@ export function useQueryImpl<
       setThrottledVariables(newVariables)
     }
     else {
-      currentVariables.value = newVariables
+      commitVariables(newVariables)
     }
   }, { flush: 'sync' })
   // #endregion
@@ -1009,19 +1125,75 @@ export function useQueryImpl<
   const observableQuery = shallowRef<ObservableQuery<TData, TVariables>>()
   const subscription = shallowRef<Subscription>()
 
-  const currentState = shallowRef<useQuery.Current<TData>>({
+  /**
+   * `isPreviousResult` lives in here rather than its own ref so committing a state is a
+   * single write, and no watcher can catch a fresh result still flagged as retained.
+   */
+  const currentState = shallowRef<useQuery.ResultState<TData> & Pick<useQuery.VueApolloState, 'isPreviousResult'>>({
     result: undefined,
     loading: false,
     networkStatus: NetworkStatus.ready,
     resultState: 'empty',
     partial: false,
+    isPreviousResult: false,
   })
+
+  /**
+   * Retains the previous result when `keepPreviousResult` is on and the incoming state has
+   * none. `result`/`resultState`/`partial` move together so the union stays truthful;
+   * `loading`/`networkStatus`/`error` always come from the incoming state.
+   */
+  function applyState(newState: useQuery.ResultState<TData>) {
+    const previousState = currentState.value
+
+    if (
+      newState.resultState === 'empty'
+      && vueApolloQueryOptions.value.keepPreviousResult
+      && previousState.resultState !== 'empty'
+    ) {
+      const { error: _previousError, ...retainedResult } = previousState
+
+      currentState.value = {
+        ...retainedResult,
+        ...(newState.error !== undefined && { error: newState.error }),
+        loading: newState.loading,
+        networkStatus: newState.networkStatus,
+        isPreviousResult: true,
+      }
+      return
+    }
+
+    currentState.value = { ...newState, isPreviousResult: false }
+  }
 
   // Computed refs for public API - defined early so trackQuery can be called before query starts
   const result = computed(() => currentState.value.result)
-  const loading = computed(() => currentState.value.loading)
   const networkStatus = computed(() => currentState.value.networkStatus)
   const error = computed(() => currentState.value.error)
+  const isPreviousResult = computed(() => currentState.value.isPreviousResult)
+
+  /** Busy from the moment new variables are accepted, not when the request goes out. */
+  const loading = computed(() => pending.value || isCommitting.value || currentState.value.loading)
+
+  /**
+   * Returns the previous object when nothing actually changed, so `watch(current)` and
+   * `onNextState` do not report a change that is not one.
+   */
+  let lastCurrent: useQuery.Current<TData> | undefined
+  const current = computed<useQuery.Current<TData>>(() => {
+    const newCurrent = {
+      ...currentState.value,
+      loading: loading.value,
+      pending: pending.value,
+    }
+
+    if (lastCurrent !== undefined && isSameState(lastCurrent, newCurrent)) {
+      return lastCurrent
+    }
+
+    lastCurrent = newCurrent
+    return newCurrent
+  })
 
   if (currentScope)
     trackQuery(loading)
@@ -1035,30 +1207,17 @@ export function useQueryImpl<
   const streamingResultEvent = createEventHook<unknown>()
   const errorEvent = createEventHook<ErrorLike>()
 
-  // Event handlers - trigger specific events based on state
-  nextStateEvent.on((newState) => {
-    // When keepPreviousResult is true and new state has no result,
-    // preserve the previous result while still updating loading/networkStatus/resultState
-    if (
-      newState.resultState === 'empty'
-      && vueApolloQueryOptions.value.keepPreviousResult
-      && currentState.value.result != null
-    ) {
-      currentState.value = {
-        ...newState,
-        result: currentState.value.result,
-      } as unknown as useQuery.Current<TData>
-    }
-    else {
-      currentState.value = newState
-    }
+  // Mirrors the public state, so it also fires for the debounce/throttle window.
+  watch(current, (newCurrent) => {
+    void nextStateEvent.trigger(newCurrent)
+  }, { flush: 'sync' })
 
-    // Trigger error event
+  /** Keyed off the incoming state: a retained result is not a new result. */
+  function triggerResultEvents(newState: useQuery.ResultState<TData>) {
     if (newState.error) {
       errorEvent.trigger(newState.error)
     }
 
-    // Trigger result events based on resultState
     if (newState.resultState === 'complete') {
       completeResultEvent.trigger(newState.result)
       resultEvent.trigger(newState.result)
@@ -1071,7 +1230,7 @@ export function useQueryImpl<
       streamingResultEvent.trigger(newState.result)
       resultEvent.trigger(newState.result)
     }
-  })
+  }
   // #endregion
 
   // #region Observable Query
@@ -1095,9 +1254,12 @@ export function useQueryImpl<
       }
 
       if (newObservableQuery) {
-        currentState.value = toCurrent(newObservableQuery.getCurrentResult())
+        // Via applyState so a query toggled off and back on keeps its previous result.
+        applyState(toResultState(newObservableQuery.getCurrentResult()))
         subscription.value = newObservableQuery.subscribe((newState) => {
-          nextStateEvent.trigger(toCurrent(newState))
+          const nextState = toResultState(newState)
+          applyState(nextState)
+          triggerResultEvents(nextState)
         })
       }
     },
@@ -1115,27 +1277,36 @@ export function useQueryImpl<
     }
   }, { immediate: true, flush: 'sync' })
 
-  /** React to option changes - reobserve or apply new options as needed */
+  /**
+   * React to option changes - reobserve or apply new options as needed.
+   *
+   * Kept on the default `pre` flush so writes in the same tick coalesce into one request.
+   */
   watch(apolloWatchQueryOptions, (newOptions, oldOptions) => {
-    if (observableQuery.value == null) {
-      return
-    }
+    try {
+      if (observableQuery.value == null) {
+        return
+      }
 
-    if (
-      shouldReobserve(
-        oldOptions as Readonly<ApolloClient.WatchQueryOptions<unknown, OperationVariables>>,
-        newOptions as Readonly<ApolloClient.WatchQueryOptions<unknown, OperationVariables>>,
-      )
-    ) {
-      observableQuery.value?.reobserve(newOptions)
-    }
-    else {
-      observableQuery.value?.applyOptions(newOptions)
-    }
+      if (
+        shouldReobserve(
+          oldOptions as Readonly<ApolloClient.WatchQueryOptions<unknown, OperationVariables>>,
+          newOptions as Readonly<ApolloClient.WatchQueryOptions<unknown, OperationVariables>>,
+        )
+      ) {
+        observableQuery.value?.reobserve(newOptions)
+      }
+      else {
+        observableQuery.value?.applyOptions(newOptions)
+      }
 
-    const newCurrent = toCurrent(observableQuery.value.getCurrentResult())
-    if (newCurrent.resultState === 'empty' && !vueApolloQueryOptions.value.keepPreviousResult) {
-      currentState.value = newCurrent
+      const newState = toResultState(observableQuery.value.getCurrentResult())
+      if (newState.resultState === 'empty') {
+        applyState(newState)
+      }
+    }
+    finally {
+      isCommitting.value = false
     }
   })
   // #endregion
@@ -1202,9 +1373,11 @@ export function useQueryImpl<
   }
 
   const response = {
-    current: currentState,
+    current,
     result,
     loading,
+    pending,
+    isPreviousResult,
     networkStatus,
     error,
 
@@ -1229,15 +1402,30 @@ export function useQueryImpl<
     onError: errorEvent.on,
   } as useQuery.Result<TData, TVariables>
 
+  /**
+   * A retained result belongs to the previous variables, so awaiting must wait past it for
+   * the data that was actually asked for.
+   */
+  function isAwaited(state: useQuery.Current<TData>) {
+    // Settle on an error only once nothing more is coming, so a mid-stream error does not
+    // pre-empt `awaitComplete`. Without this a failed replacement for a retained result
+    // never reaches a fresh state and the await hangs.
+    if (state.error != null && !state.loading) {
+      return true
+    }
+    if (state.isPreviousResult) {
+      return false
+    }
+    return vueApolloQueryOptions.value.awaitComplete
+      ? state.resultState === 'complete'
+      : state.resultState !== 'empty'
+  }
+
   function then(
     onfulfilled?: ((value: useQuery.Result<TData, TVariables>) => void | PromiseLike<void>),
     onrejected?: ((reason: any) => void | PromiseLike<void>),
   ): PromiseLike<any> {
-    if (
-      vueApolloQueryOptions.value.awaitComplete
-        ? currentState.value.resultState === 'complete'
-        : currentState.value.resultState !== 'empty'
-    ) {
+    if (isAwaited(current.value)) {
       if (error.value) {
         return Promise.reject(error.value).then(onfulfilled, onrejected)
       }
@@ -1246,13 +1434,9 @@ export function useQueryImpl<
 
     return new Promise<useQuery.Result<TData, TVariables>>((resolve, reject) => {
       const stopWatch = watch(
-        currentState,
+        current,
         (newState) => {
-          if (
-            vueApolloQueryOptions.value.awaitComplete
-              ? newState.resultState === 'complete'
-              : newState.resultState !== 'empty'
-          ) {
+          if (isAwaited(newState)) {
             stopWatch()
             if (newState.error) {
               reject(newState.error)
