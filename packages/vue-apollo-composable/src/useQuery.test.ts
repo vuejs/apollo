@@ -1,6 +1,6 @@
 import type { DocumentNode, TypedDocumentNode } from '@apollo/client'
 import { gql, NetworkStatus } from '@apollo/client'
-import { computed, effectScope, reactive, ref } from '@vue/reactivity'
+import { computed, effectScope, isReactive, reactive, ref } from '@vue/reactivity'
 import { defineComponent, h, nextTick, Suspense } from '@vue/runtime-core'
 import { createSSRApp } from '@vue/runtime-dom'
 import { renderToString } from '@vue/server-renderer'
@@ -173,6 +173,32 @@ describe('useQuery', () => {
     await until(() => wrapper.vm.current.loading).toBe(false, { timeout: 200 })
     expect(wrapper.find('div').text()).toEqual('world')
 
+    wrapper.unmount()
+  })
+
+  it('should pass a plain DocumentNode to Apollo by reference, without reactive wrapping', async () => {
+    const spy = vi.spyOn(apolloClient, 'watchQuery')
+
+    const TestComponent = defineComponent({
+      setup() {
+        const { current } = useQuery(HELLO_QUERY)
+        return { current }
+      },
+      render() {
+        return h('div', this.current.loading ? 'loading' : 'done')
+      },
+    })
+
+    const wrapper = mount(TestComponent, {
+      global: { provide: { [DefaultApolloClient]: apolloClient } },
+    })
+
+    await until(() => spy.mock.calls.length > 0).toBe(true, { timeout: 200 })
+    const passedQuery = spy.mock.calls[0]?.[0].query
+    expect(passedQuery).toBe(HELLO_QUERY)
+    expect(isReactive(passedQuery)).toBe(false)
+
+    spy.mockRestore()
     wrapper.unmount()
   })
   // #endregion

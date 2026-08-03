@@ -377,7 +377,7 @@ export function useSubscription<
   const currentScope = getCurrentScope()
 
   // #region Input Normalization
-  const document = toRef(subscription)
+  const document = computed(() => toValue(subscription))
   const optionsRef = toRef(options) as Ref<useSubscription.Options<TData, TVariables> | undefined>
   // #endregion
 

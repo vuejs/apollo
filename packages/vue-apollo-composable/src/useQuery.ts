@@ -965,7 +965,7 @@ export function useQueryImpl<
   lazy = false,
 ) {
   // #region Input Normalization
-  const document = toRef(sourceDocument)
+  const document = computed(() => toValue(sourceDocument))
   const options = toRef(sourceOptions) as Ref<useQuery.Options<TData, TVariables> | undefined>
   // #endregion
 

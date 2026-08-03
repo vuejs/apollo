@@ -493,7 +493,7 @@ export function useMutation<
   const currentScope = getCurrentScope()
 
   // #region Input Normalization
-  const document = toRef(mutation)
+  const document = computed(() => toValue(mutation))
   const composableOptions = toRef(options) as Ref<useMutation.Options<TData, TVariables> | undefined>
   // #endregion
 
