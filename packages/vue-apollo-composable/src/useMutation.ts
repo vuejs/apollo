@@ -12,7 +12,7 @@ import type {
 import type { ApolloCache } from '@apollo/client/cache'
 import type { MaybeRefOrGetter, Ref } from '@vue/reactivity'
 import type { EventHookOn } from '@vueuse/core'
-import { computed, getCurrentScope, onScopeDispose, ref, shallowRef, toRef, toValue } from '@vue/reactivity'
+import { computed, getCurrentScope, onScopeDispose, ref, shallowRef, toValue } from '@vue/reactivity'
 import { nextTick } from '@vue/runtime-core'
 import { createEventHook } from '@vueuse/core'
 import { useApolloClient } from './useApolloClient.ts'
@@ -494,7 +494,7 @@ export function useMutation<
 
   // #region Input Normalization
   const document = computed(() => toValue(mutation))
-  const composableOptions = toRef(options) as Ref<useMutation.Options<TData, TVariables> | undefined>
+  const composableOptions = computed(() => toValue(options))
   // #endregion
 
   // #region Apollo Client

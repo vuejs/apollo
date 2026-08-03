@@ -12,7 +12,7 @@ import type {
 import type { MaybeRefOrGetter, Ref } from '@vue/reactivity'
 import type { EventHookOn } from '@vueuse/core'
 import type { Subscription } from 'rxjs'
-import { computed, getCurrentScope, onScopeDispose, ref, shallowRef, toRef, toValue } from '@vue/reactivity'
+import { computed, getCurrentScope, onScopeDispose, ref, shallowRef, toValue } from '@vue/reactivity'
 import { nextTick, watch } from '@vue/runtime-core'
 import { createEventHook, useDebounceFn, useThrottleFn } from '@vueuse/core'
 import { equal } from '@wry/equality'
@@ -378,7 +378,7 @@ export function useSubscription<
 
   // #region Input Normalization
   const document = computed(() => toValue(subscription))
-  const optionsRef = toRef(options) as Ref<useSubscription.Options<TData, TVariables> | undefined>
+  const optionsRef = computed(() => toValue(options) as useSubscription.Options<TData, TVariables> | undefined)
   // #endregion
 
   // #region Apollo Client

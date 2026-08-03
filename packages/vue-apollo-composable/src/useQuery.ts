@@ -16,7 +16,7 @@ import type { EventHookOn } from '@vueuse/core'
 import type { Subscription } from 'rxjs'
 import type { RenameKey } from './util/types.ts'
 import { NetworkStatus } from '@apollo/client'
-import { computed, getCurrentScope, onScopeDispose, ref, shallowRef, toRef, toValue } from '@vue/reactivity'
+import { computed, getCurrentScope, onScopeDispose, ref, shallowRef, toValue } from '@vue/reactivity'
 import { getCurrentInstance, nextTick, onServerPrefetch, watch } from '@vue/runtime-core'
 import { createEventHook, useDebounceFn, useThrottleFn } from '@vueuse/core'
 import { equal } from '@wry/equality'
@@ -966,7 +966,7 @@ export function useQueryImpl<
 ) {
   // #region Input Normalization
   const document = computed(() => toValue(sourceDocument))
-  const options = toRef(sourceOptions) as Ref<useQuery.Options<TData, TVariables> | undefined>
+  const options = computed(() => toValue(sourceOptions))
   // #endregion
 
   // #region Options Parsing
