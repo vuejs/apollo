@@ -10,7 +10,7 @@ import type { MaybeRefOrGetter, Ref } from '@vue/reactivity'
 import type { EventHookOn } from '@vueuse/core'
 import type { Subscription } from 'rxjs'
 import type { RenameKey } from './util/types.ts'
-import { computed, onScopeDispose, shallowRef, toRef, toValue } from '@vue/reactivity'
+import { computed, onScopeDispose, shallowRef, toValue } from '@vue/reactivity'
 import { watch } from '@vue/runtime-core'
 import { createEventHook } from '@vueuse/core'
 import { useApolloClient } from './useApolloClient.ts'
@@ -306,7 +306,7 @@ export function useFragmentImpl<
   sourceOptions: MaybeRefOrGetter<useFragment.Options<TData, TVariables>>,
 ): useFragment.Result<TData> | useFragment.Result<TData[]> {
   // #region Input Normalization
-  const options = toRef(sourceOptions) as Ref<useFragment.Options<TData, TVariables>>
+  const options = computed(() => toValue(sourceOptions))
   // #endregion
 
   // #region Apollo Client
