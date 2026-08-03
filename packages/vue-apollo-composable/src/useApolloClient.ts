@@ -214,7 +214,7 @@ export function useApolloClient(clientId?: useApolloClient.ClientId): useApolloC
 export declare namespace provideApolloClient {
   export type Callback<TFnResult> = () => TFnResult
 
-  export type Result<TFnResult = any> = (fn: Callback<TFnResult>) => TFnResult
+  export type Result = <TFnResult>(fn: Callback<TFnResult>) => TFnResult
 
   export namespace DocumentationTypes {
     /** @group Providers Namespaces */
@@ -264,7 +264,7 @@ export function provideApolloClient(client: ApolloClient): provideApolloClient.R
 
 export declare namespace provideApolloClients {
   export type Callback<TFnResult> = () => TFnResult
-  export type Result<TFnResult = any> = (fn: Callback<TFnResult>) => TFnResult
+  export type Result = <TFnResult>(fn: Callback<TFnResult>) => TFnResult
 
   export namespace DocumentationTypes {
     /** @group Providers Namespaces */
