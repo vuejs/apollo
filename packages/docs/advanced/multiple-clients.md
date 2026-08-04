@@ -45,13 +45,8 @@ The dictionary must contain a `default` entry. That is the client used when no `
 :::: composition-api
 Pass `clientId` in the composable options:
 
-```vue twoslash
+```vue
 <script setup lang="ts">
-import { TypedDocumentNode } from '@apollo/client'
-import { useQuery } from '@vue/apollo-composable'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ pageViews: number }, {}>
-// ---cut---
 const PAGE_VIEWS: TypedDocumentNode<{ pageViews: number }, {}>
   = gql`
     query PageViews {
@@ -71,12 +66,8 @@ The same option works on [`useMutation`](/data/mutations), [`useSubscription`](/
 :::: components-api
 Set the `clientId` prop:
 
-```vue twoslash
+```vue
 <script setup lang="ts">
-import { TypedDocumentNode } from '@apollo/client'
-
-declare const PageViews: TypedDocumentNode<{ pageViews: number }, Record<string, never>>
-// ---cut---
 import { ApolloQuery } from '@vue/apollo-components'
 </script>
 
@@ -134,14 +125,7 @@ the client directly.
 `clientId` is read each time the underlying observable is created. You can vary it based on a ref to switch clients at runtime, but the query is re-created whenever it changes, which means the previous result is lost and a new fetch starts.
 
 :::: composition-api
-```ts twoslash
-import { TypedDocumentNode } from '@apollo/client'
-import { useQuery } from '@vue/apollo-composable'
-import { ref } from 'vue'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<any, any>
-const QUERY: TypedDocumentNode<any, any> = gql``
-// ---cut---
+```ts
 const env = ref<'default' | 'staging'>('default')
 
 const { current } = useQuery(QUERY, () => ({

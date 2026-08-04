@@ -115,13 +115,7 @@ The order matters: links run from left to right on the request, and the response
 Use the `context` option on any operation to pass per-call data through the link chain:
 
 :::: composition-api
-```ts twoslash
-import { TypedDocumentNode } from '@apollo/client'
-import { useQuery } from '@vue/apollo-composable'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<any, any>
-const QUERY: TypedDocumentNode<any, any> = gql``
-// ---cut---
+```ts
 useQuery(QUERY, {
   context: {
     headers: {

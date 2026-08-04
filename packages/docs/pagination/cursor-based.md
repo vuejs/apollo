@@ -78,13 +78,8 @@ Storing items in a map keyed by id makes duplicate handling automatic: if the sa
 ## Separate cursor: usage
 
 :::: composition-api
-```vue twoslash
+```vue
 <script setup lang="ts">
-import { TypedDocumentNode } from '@apollo/client'
-import { useQuery } from '@vue/apollo-composable'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ feed: { items: Array<{ id: string, message: string }>, nextCursor: string | null, hasMore: boolean } }, { cursor?: string | null, limit: number }>
-// ---cut---
 const FEED_QUERY: TypedDocumentNode<{ feed: { items: Array<{ id: string, message: string }>, nextCursor: string | null, hasMore: boolean } }, { cursor?: string | null, limit: number }>
   = gql`
     query Feed($cursor: String, $limit: Int!) {
@@ -135,12 +130,8 @@ function loadMore() {
 ::::
 
 :::: components-api
-```vue twoslash
+```vue
 <script setup lang="ts">
-import { TypedDocumentNode } from '@apollo/client'
-
-declare const Feed: TypedDocumentNode<{ feed: { items: Array<{ id: string, message: string }>, nextCursor: string | null, hasMore: boolean } }, { cursor?: string | null, limit: number }>
-// ---cut---
 import { ApolloQuery } from '@vue/apollo-components'
 </script>
 
@@ -194,13 +185,8 @@ The helper handles `edges`, `pageInfo`, and the standard cursor naming.
 Usage:
 
 :::: composition-api
-```vue twoslash
+```vue
 <script setup lang="ts">
-import { TypedDocumentNode } from '@apollo/client'
-import { useQuery } from '@vue/apollo-composable'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ comments: { edges: Array<{ node: { id: string, text: string } }>, pageInfo: { endCursor: string | null, hasNextPage: boolean } } }, { cursor?: string | null }>
-// ---cut---
 const COMMENTS_QUERY: TypedDocumentNode<{ comments: { edges: Array<{ node: { id: string, text: string } }>, pageInfo: { endCursor: string | null, hasNextPage: boolean } } }, { cursor?: string | null }>
   = gql`
     query Comments($cursor: String) {
@@ -249,12 +235,8 @@ function loadMore() {
 ::::
 
 :::: components-api
-```vue twoslash
+```vue
 <script setup lang="ts">
-import { TypedDocumentNode } from '@apollo/client'
-
-declare const Comments: TypedDocumentNode<{ comments: { edges: Array<{ node: { id: string, text: string } }>, pageInfo: { endCursor: string | null, hasNextPage: boolean } } }, { cursor?: string | null }>
-// ---cut---
 import { ApolloQuery } from '@vue/apollo-components'
 </script>
 

@@ -61,14 +61,8 @@ The `merge` function in the field policy decides how a new page combines with wh
 :::: composition-api
 Vue Apollo's [`useQuery`](/api/composable/functions/useQuery) returns a `fetchMore` function for loading the next page:
 
-```vue twoslash
+```vue
 <script setup lang="ts">
-import { TypedDocumentNode } from '@apollo/client'
-import { useQuery } from '@vue/apollo-composable'
-import { ref } from 'vue'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ feed: Array<{ id: string, message: string }> }, { offset: number, limit: number }>
-// ---cut---
 const FEED_QUERY: TypedDocumentNode<{ feed: Array<{ id: string, message: string }> }, { offset: number, limit: number }>
   = gql`
     query Feed($offset: Int!, $limit: Int!) {
@@ -113,12 +107,8 @@ function loadMore() {
 `fetchMore` is a `#data` slot prop, and inside `#data` the list is guaranteed to exist, so
 the offset can be computed inline with no guard:
 
-```vue twoslash
+```vue
 <script setup lang="ts">
-import { TypedDocumentNode } from '@apollo/client'
-
-declare const Feed: TypedDocumentNode<{ feed: Array<{ id: string, message: string }> }, { offset: number, limit: number }>
-// ---cut---
 import { ApolloQuery } from '@vue/apollo-components'
 </script>
 
@@ -160,14 +150,8 @@ You typically want the `offsetLimitPagination` helper (or a cursor equivalent) c
 If you keep pagination state in a Vue ref, the query re-executes when it changes. This is useful for "paginate by setting the page number" UIs:
 
 :::: composition-api
-```vue twoslash
+```vue
 <script setup lang="ts">
-import { TypedDocumentNode } from '@apollo/client'
-import { useQuery } from '@vue/apollo-composable'
-import { computed, ref } from 'vue'
-
-declare const FEED_QUERY: TypedDocumentNode<{ feed: Array<{ id: string }> }, { offset: number, limit: number }>
-// ---cut---
 const page = ref(0)
 const pageSize = 20
 
@@ -194,12 +178,8 @@ For paginated lists you typically want `keepPreviousResult: true` so the list do
 ::::
 
 :::: components-api
-```vue twoslash
+```vue
 <script setup lang="ts">
-import { TypedDocumentNode } from '@apollo/client'
-
-declare const Feed: TypedDocumentNode<{ feed: Array<{ id: string, message: string }> }, { offset: number, limit: number }>
-// ---cut---
 import { ApolloQuery } from '@vue/apollo-components'
 import { ref } from 'vue'
 

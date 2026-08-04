@@ -22,13 +22,8 @@ the element unmounts. Components were the primary API in v4, so see
 [migrating from v4](/migration/components) if you are upgrading.
 
 :::: composition-api
-```vue twoslash
+```vue
 <script setup lang="ts">
-import { TypedDocumentNode } from '@apollo/client'
-import { useQuery } from '@vue/apollo-composable'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ users: { id: string, name: string }[] }, Record<string, never>>
-// ---cut---
 const { current } = useQuery(gql`
   query GetUsers {
     users {
@@ -53,12 +48,8 @@ const { current } = useQuery(gql`
 ::::
 
 :::: components-api
-```vue twoslash
+```vue
 <script setup lang="ts">
-import { TypedDocumentNode } from '@apollo/client'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ users: { id: string, name: string }[] }, Record<string, never>>
-// ---cut---
 import { ApolloQuery } from '@vue/apollo-components'
 </script>
 

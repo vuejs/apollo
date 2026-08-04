@@ -46,13 +46,8 @@ The helper defines a `merge` function that concatenates pages as they arrive, so
 ## Loading more with `fetchMore`
 
 :::: composition-api
-```vue twoslash
+```vue
 <script setup lang="ts">
-import { TypedDocumentNode } from '@apollo/client'
-import { useQuery } from '@vue/apollo-composable'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ feed: Array<{ id: string, message: string }> }, { offset: number, limit: number }>
-// ---cut---
 const FEED_QUERY: TypedDocumentNode<{ feed: Array<{ id: string, message: string }> }, { offset: number, limit: number }>
   = gql`
     query Feed($offset: Int!, $limit: Int!) {
@@ -93,12 +88,8 @@ function loadMore() {
 ::::
 
 :::: components-api
-```vue twoslash
+```vue
 <script setup lang="ts">
-import { TypedDocumentNode } from '@apollo/client'
-
-declare const Feed: TypedDocumentNode<{ feed: Array<{ id: string, message: string }> }, { offset: number, limit: number }>
-// ---cut---
 import { ApolloQuery } from '@vue/apollo-components'
 </script>
 
@@ -147,14 +138,8 @@ See [Apollo's `keyArgs` reference](https://www.apollographql.com/docs/react/pagi
 To use offset-based pagination with reactive variables (page-number UI), drive `offset` from a ref:
 
 :::: composition-api
-```vue twoslash
+```vue
 <script setup lang="ts">
-import { TypedDocumentNode } from '@apollo/client'
-import { useQuery } from '@vue/apollo-composable'
-import { computed, ref } from 'vue'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ feed: Array<{ id: string }> }, { offset: number, limit: number }>
-// ---cut---
 const FEED_QUERY: TypedDocumentNode<{ feed: Array<{ id: string }> }, { offset: number, limit: number }>
   = gql`
     query Feed($offset: Int!, $limit: Int!) {
@@ -190,12 +175,8 @@ This pattern replaces the page rather than appending. With `keepPreviousResult: 
 ::::
 
 :::: components-api
-```vue twoslash
+```vue
 <script setup lang="ts">
-import { TypedDocumentNode } from '@apollo/client'
-
-declare const Feed: TypedDocumentNode<{ feed: Array<{ id: string }> }, { offset: number, limit: number }>
-// ---cut---
 import { ApolloQuery } from '@vue/apollo-components'
 import { ref } from 'vue'
 

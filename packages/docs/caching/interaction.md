@@ -12,13 +12,7 @@ There are two common contexts where you interact with the cache:
 
 Apollo Client passes the cache as the first argument to `update`:
 
-```ts twoslash
-import { TypedDocumentNode } from '@apollo/client'
-import { useMutation } from '@vue/apollo-composable'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ createTodo: { id: string, text: string } }, { text: string }>
-const CREATE_TODO: TypedDocumentNode<{ createTodo: { id: string, text: string } }, { text: string }> = gql``
-// ---cut---
+```ts
 useMutation(CREATE_TODO, {
   update(cache, { data }) {
     // `cache` is the ApolloCache instance

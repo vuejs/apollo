@@ -119,12 +119,8 @@ const { current } = useQuery(gql`
 ::::
 
 :::: components-api
-```vue twoslash
+```vue
 <script setup lang="ts">
-import { TypedDocumentNode } from '@apollo/client'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ company: { ceo: string } }, Record<string, never>>
-// ---cut---
 import { ApolloQuery } from '@vue/apollo-components'
 
 const Company = gql`

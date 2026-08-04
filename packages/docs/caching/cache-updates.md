@@ -27,12 +27,7 @@ client, not to either API.
 
 If a mutation returns the modified entity (with `__typename` and the key field), Apollo Client merges it into the normalized cache automatically. Every query that reads that entity re-emits with the new value:
 
-```ts twoslash
-import { TypedDocumentNode } from '@apollo/client'
-import { useMutation } from '@vue/apollo-composable'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ updateTodo: { id: string, text: string, completed: boolean } }, { id: string, completed: boolean }>
-// ---cut---
+```ts
 useMutation(gql`
   mutation UpdateTodo($id: ID!, $completed: Boolean!) {
     updateTodo(id: $id, completed: $completed) {
@@ -58,14 +53,7 @@ For those, you need one of the patterns below.
 
 The simplest way to update lists after a mutation: tell Apollo which queries to refetch.
 
-```ts twoslash
-import { TypedDocumentNode } from '@apollo/client'
-import { useMutation } from '@vue/apollo-composable'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ createTodo: { id: string } }, { text: string }>
-const CREATE_TODO: TypedDocumentNode<{ createTodo: { id: string } }, { text: string }> = gql``
-declare const GET_TODOS: TypedDocumentNode<{ todos: { id: string }[] }, {}>
-// ---cut---
+```ts
 const { mutate } = useMutation(CREATE_TODO, {
   refetchQueries: [
     GET_TODOS,
@@ -105,14 +93,7 @@ See [Refetching](/data/refetching) for more on the refetch family.
 
 When you want to keep the UI in sync without an extra network call, write the change to the cache directly:
 
-```ts twoslash
-import { TypedDocumentNode } from '@apollo/client'
-import { useMutation } from '@vue/apollo-composable'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ createTodo: { id: string, text: string, completed: boolean, __typename: 'Todo' } }, { text: string }>
-const CREATE_TODO: TypedDocumentNode<{ createTodo: { id: string, text: string, completed: boolean, __typename: 'Todo' } }, { text: string }> = gql``
-declare const GET_TODOS: TypedDocumentNode<{ todos: { id: string, text: string }[] }, {}>
-// ---cut---
+```ts
 const { mutate } = useMutation(CREATE_TODO, {
   update(cache, { data }) {
     if (!data?.createTodo)
@@ -138,13 +119,7 @@ const { mutate } = useMutation(CREATE_TODO, {
 
 `cache.modify` is often a cleaner alternative because you do not need to read and re-write entire queries:
 
-```ts twoslash
-import { gql, TypedDocumentNode } from '@apollo/client'
-import { useMutation } from '@vue/apollo-composable'
-
-declare const _gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ createTodo: { id: string, text: string, completed: boolean, __typename: 'Todo' } }, { text: string }>
-const CREATE_TODO: TypedDocumentNode<{ createTodo: { id: string, text: string, completed: boolean, __typename: 'Todo' } }, { text: string }> = _gql``
-// ---cut---
+```ts
 const { mutate } = useMutation(CREATE_TODO, {
   update(cache, { data }) {
     if (!data?.createTodo)

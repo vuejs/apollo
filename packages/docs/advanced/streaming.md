@@ -53,13 +53,8 @@ Pick the one your server supports. See [Apollo's @defer docs](https://www.apollo
 ## Reading a streaming query
 
 :::: composition-api
-```vue twoslash
+```vue
 <script setup lang="ts">
-import { TypedDocumentNode } from '@apollo/client'
-import { useQuery } from '@vue/apollo-composable'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ user: { id: string, name: string, activity?: Array<{ id: string, kind: string }> } }, { id: string }>
-// ---cut---
 const PROFILE: TypedDocumentNode<{ user: { id: string, name: string, activity?: Array<{ id: string, kind: string }> } }, { id: string }>
   = gql`
     query Profile($id: ID!) {
@@ -109,12 +104,8 @@ const { current } = useQuery(PROFILE, { variables: { id: '1' } })
 `#data` renders from the first chunk onwards, so the non-deferred fields appear immediately
 and the deferred ones fill in underneath as they land:
 
-```vue twoslash
+```vue
 <script setup lang="ts">
-import { TypedDocumentNode } from '@apollo/client'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ user: { id: string, name: string, activity?: Array<{ id: string, kind: string }> } }, { id: string }>
-// ---cut---
 import { ApolloQuery } from '@vue/apollo-components'
 </script>
 
@@ -206,12 +197,8 @@ in the template exactly as it does in script. See
 [Two ways to read the result](/data/queries#two-ways-to-read-the-result) for how the two
 rendering modes differ:
 
-```vue twoslash
+```vue
 <script setup lang="ts">
-import { TypedDocumentNode } from '@apollo/client'
-
-declare const Profile: TypedDocumentNode<{ user: { id: string, name: string, activity?: Array<{ id: string, kind: string }> } }, { id: string }>
-// ---cut---
 import { ApolloQuery } from '@vue/apollo-components'
 </script>
 

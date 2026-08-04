@@ -24,15 +24,8 @@ otherwise uses only components.
 
 ## Per-scope loading
 
-```vue twoslash
+```vue
 <script setup lang="ts">
-import { TypedDocumentNode } from '@apollo/client'
-import { useQuery, useQueryLoading } from '@vue/apollo-composable'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<any, any>
-declare const GET_USERS: TypedDocumentNode<{ users: { id: string, name: string }[] }, {}>
-declare const GET_POSTS: TypedDocumentNode<{ posts: { id: string, title: string }[] }, {}>
-// ---cut---
 const { current: users } = useQuery(GET_USERS)
 const { current: posts } = useQuery(GET_POSTS)
 
@@ -54,13 +47,7 @@ const loading = useQueryLoading()
 
 Use the same shape for mutations and subscriptions:
 
-```ts twoslash
-import { TypedDocumentNode } from '@apollo/client'
-import { useMutation, useMutationLoading } from '@vue/apollo-composable'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ updateUser: { id: string } }, { id: string }>
-const UPDATE_USER: TypedDocumentNode<{ updateUser: { id: string } }, { id: string }> = gql``
-// ---cut---
+```ts
 const { mutate: updateUser } = useMutation(UPDATE_USER)
 const saving = useMutationLoading()
 ```
@@ -71,7 +58,7 @@ Per-scope tracking is automatically scoped to the component that calls these com
 
 `useGlobalQueryLoading`, `useGlobalMutationLoading`, and `useGlobalSubscriptionLoading` track every operation in the entire app. Useful for app-shell loading indicators:
 
-```vue twoslash
+```vue
 <script setup lang="ts">
 import { useGlobalQueryLoading } from '@vue/apollo-composable'
 
@@ -109,13 +96,7 @@ For the "indicator for one specific operation" case, do not reach for these comp
 :::: composition-api
 Use the `loading` ref the original composable returned:
 
-```ts twoslash
-import { TypedDocumentNode } from '@apollo/client'
-import { useMutation } from '@vue/apollo-composable'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<any, any>
-const SAVE: TypedDocumentNode<any, any> = gql``
-// ---cut---
+```ts
 const { mutate: save, loading } = useMutation(SAVE)
 // `loading` is true while this specific save is running
 ```
@@ -137,10 +118,7 @@ Use the `loading` slot prop, which is scoped to that one element:
 
 Want a single indicator that flips on while any operation is running? Compose them:
 
-```ts twoslash
-import { useGlobalMutationLoading, useGlobalQueryLoading, useGlobalSubscriptionLoading } from '@vue/apollo-composable'
-import { computed } from 'vue'
-// ---cut---
+```ts
 const queries = useGlobalQueryLoading()
 const mutations = useGlobalMutationLoading()
 const subscriptions = useGlobalSubscriptionLoading()

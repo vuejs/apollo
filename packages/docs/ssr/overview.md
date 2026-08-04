@@ -228,12 +228,8 @@ useQuery(QUERY, { prefetch: false })
 ::::
 
 :::: components-api
-```vue twoslash
+```vue
 <script setup lang="ts">
-import { TypedDocumentNode } from '@apollo/client'
-
-declare const Query: TypedDocumentNode<{ user: { id: string } }, Record<string, never>>
-// ---cut---
 import { ApolloQuery } from '@vue/apollo-components'
 
 const isClient = typeof window !== 'undefined'
