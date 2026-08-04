@@ -1,6 +1,6 @@
 # What's changed in v5
 
-This page is a high-level reference of what changed between Vue Apollo v4 and v5. For a step-by-step walkthrough, see the [Migration guide](/migration/guide). For the compatibility layer that smooths the transition, see [Compat layer](/migration/compat).
+This page is a high-level reference of what changed between Vue Apollo v4 and v5. For a step-by-step walkthrough, see the [Migration guide](/migration/guide). For the compatibility layer that smooths the transition, see [Compat layer](/migration/compat). If your app uses `<ApolloQuery>` and friends, see [Migrating v4 components](/migration/components).
 
 ## Why v5
 
@@ -63,7 +63,7 @@ The flat refs (`result`, `loading`, `error`, `networkStatus`) remain available, 
 
 `useMutation` and `useSubscription` keep their flat-ref-only shape because their results do not have multiple data states.
 
-See [TypeScript: Composable return-value shapes](/data/typescript#composable-return-value-shapes) for the full comparison.
+See [TypeScript: Result shapes](/data/typescript#result-shapes) for the full comparison.
 
 ## Error type
 
@@ -145,10 +145,28 @@ In the per-key form, each value can independently be a ref, a getter, or a plain
 | Removed deps | | `vue-demi`, `throttle-debounce` |
 | Added deps | | `@vueuse/core`, `@wry/equality`, `rxjs` |
 
-Internal utilities that v4 maintained (`paramToReactive`, `paramToRef`, `useEventHook`, `toApolloError`, etc.) are gone in v5, replaced by VueUse primitives.
+Internal utilities that v4 maintained (`paramToReactive`, `paramToRef`, `useEventHook`, `toApolloError`, etc.) are gone in v5.
+
+## Components
+
+`@vue/apollo-components` is still published, and `<ApolloQuery>`, `<ApolloMutation>` and `<ApolloSubscribeToMore>` still have their v4 names. What changed:
+
+| | v4 | v5 |
+|---|---|---|
+| Built on | `@vue/apollo-option` and `this.$apollo` | `@vue/apollo-composable` |
+| Setup | `app.use(apolloProvider)` | `app.provide(DefaultApolloClient, client)` |
+| Rendering | A `<div>` wrapper, configurable with `tag` | Renderless |
+| `<ApolloQuery>` slots | One default slot with a `result` object | `#loading` / `#error` / `#empty` / `#data`, plus the default slot |
+| Typing | Untyped slot props | Slot props and event payloads inferred from the document |
+| Added | | `<ApolloSubscription>`, `<ApolloFragment>` |
+| Removed | | `@vue/apollo-option`, and with it the Options API integration |
+
+There is no compat layer for the components. See [Migrating v4 components](/migration/components) for the prop, slot and event tables.
 
 ## Next steps
 
 - [Migration guide](/migration/guide) walks through the upgrade step by step.
 - [Compat layer](/migration/compat) lets v4-style call signatures keep working during migration.
+- [Migrating v4 components](/migration/components) covers `<ApolloQuery>` and friends.
+- [Components API](/api/components/) lists every prop, event and slot.
 - [TypeScript](/data/typescript) covers the new type-narrowing patterns.

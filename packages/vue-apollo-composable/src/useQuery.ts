@@ -106,9 +106,9 @@ export declare namespace useQuery {
       /**
        * Keep previous result while loading new data.
        *
-       * The retained result is reported as a normal result — `resultState`, `result` and
-       * `partial` all describe it — with `isPreviousResult` set to `true` so it can be
-       * told apart from a fresh one.
+       * The retained result is reported as a normal result, so `resultState`, `result` and
+       * `partial` all describe it, with `isPreviousResult` set to `true` so it can be told
+       * apart from a fresh one.
        *
        * @defaultValue false
        * @group 4. Vue-Apollo
@@ -340,6 +340,9 @@ export declare namespace useQuery {
        *
        * Fires when `resultState` is `'complete'`, `'partial'`, or `'streaming'`.
        * Does not fire for `'empty'` state or errors.
+       *
+       * A result served from the cache during the `useQuery()` call is replayed on the
+       * next tick, so a handler registered right after the call still receives it.
        *
        * @group 6. Events
        */
@@ -1125,6 +1128,9 @@ export function useQueryImpl<
   const observableQuery = shallowRef<ObservableQuery<TData, TVariables>>()
   const subscription = shallowRef<Subscription>()
 
+  /** Gates the initial replay below: a delivery after setup makes it redundant. */
+  let deliveries = 0
+
   /**
    * `isPreviousResult` lives in here rather than its own ref so committing a state is a
    * single write, and no watcher can catch a fresh result still flagged as retained.
@@ -1257,6 +1263,7 @@ export function useQueryImpl<
         // Via applyState so a query toggled off and back on keeps its previous result.
         applyState(toResultState(newObservableQuery.getCurrentResult()))
         subscription.value = newObservableQuery.subscribe((newState) => {
+          deliveries++
           const nextState = toResultState(newState)
           applyState(nextState)
           triggerResultEvents(nextState)
@@ -1276,6 +1283,25 @@ export function useQueryImpl<
       observableQuery.value = undefined
     }
   }, { immediate: true, flush: 'sync' })
+
+  /*
+   * A result already in the cache is applied above, while this function is still running,
+   * so it reaches the event hooks before the caller can register any. Replay it once they
+   * can exist. Skipped when the subscription has since delivered a result of its own.
+   */
+  if (currentState.value.resultState !== 'empty') {
+    const initialState = currentState.value
+    const deliveriesAtSetup = deliveries
+
+    void nextTick(() => {
+      if (deliveries !== deliveriesAtSetup) {
+        return
+      }
+
+      void nextStateEvent.trigger(current.value)
+      triggerResultEvents(initialState)
+    })
+  }
 
   /**
    * React to option changes - reobserve or apply new options as needed.

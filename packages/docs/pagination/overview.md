@@ -58,6 +58,7 @@ The `merge` function in the field policy decides how a new page combines with wh
 
 ## Loading the next page
 
+:::: composition-api
 Vue Apollo's [`useQuery`](/api/composable/functions/useQuery) returns a `fetchMore` function for loading the next page:
 
 ```vue twoslash
@@ -106,19 +107,59 @@ function loadMore() {
   </button>
 </template>
 ```
+::::
+
+:::: components-api
+`fetchMore` is a `#data` slot prop, and inside `#data` the list is guaranteed to exist, so
+the offset can be computed inline with no guard:
+
+```vue twoslash
+<script setup lang="ts">
+import { TypedDocumentNode } from '@apollo/client'
+
+declare const Feed: TypedDocumentNode<{ feed: Array<{ id: string, message: string }> }, { offset: number, limit: number }>
+// ---cut---
+import { ApolloQuery } from '@vue/apollo-components'
+</script>
+
+<template>
+  <ApolloQuery :query="Feed" :variables="{ offset: 0, limit: 10 }">
+    <template #loading>
+      Loading...
+    </template>
+    <template #data="{ data, loading, fetchMore }">
+      <ul>
+        <li v-for="item in data.feed" :key="item.id">
+          {{ item.message }}
+        </li>
+      </ul>
+      <button
+        :disabled="loading"
+        @click="fetchMore({ variables: { offset: data.feed.length, limit: 10 } })"
+      >
+        Load more
+      </button>
+    </template>
+  </ApolloQuery>
+</template>
+```
+
+The `variables` prop stays at the *first* page throughout. `fetchMore` does not change it.
+::::
 
 When you call `fetchMore`, Apollo:
 
 1. Sends a query with the new variables.
 2. Merges the result with the cached value using the field policy's `merge` function.
-3. Notifies any active query that reads the field, including this one. The `current.result` ref updates with the merged list.
+3. Notifies any active query that reads the field, including this one. The rendered list updates with the merged value.
 
 You typically want the `offsetLimitPagination` helper (or a cursor equivalent) configured for the field, otherwise `merge` defaults to replacing the cached value with the new page.
 
 ## With reactive variables
 
-If you keep pagination state in a Vue ref, `useQuery` re-executes when it changes. This is useful for "paginate by setting the page number" UIs:
+If you keep pagination state in a Vue ref, the query re-executes when it changes. This is useful for "paginate by setting the page number" UIs:
 
+:::: composition-api
 ```vue twoslash
 <script setup lang="ts">
 import { TypedDocumentNode } from '@apollo/client'
@@ -150,6 +191,50 @@ const { current } = useQuery(FEED_QUERY, {
 ```
 
 For paginated lists you typically want `keepPreviousResult: true` so the list does not blink to empty between pages.
+::::
+
+:::: components-api
+```vue twoslash
+<script setup lang="ts">
+import { TypedDocumentNode } from '@apollo/client'
+
+declare const Feed: TypedDocumentNode<{ feed: Array<{ id: string, message: string }> }, { offset: number, limit: number }>
+// ---cut---
+import { ApolloQuery } from '@vue/apollo-components'
+import { ref } from 'vue'
+
+const page = ref(0)
+const pageSize = 20
+</script>
+
+<template>
+  <ApolloQuery
+    :query="Feed"
+    :variables="{ offset: page * pageSize, limit: pageSize }"
+    keepPreviousResult
+  >
+    <template #data="{ data, isPreviousResult }">
+      <ul :class="{ stale: isPreviousResult }">
+        <li v-for="item in data.feed" :key="item.id">
+          {{ item.message }}
+        </li>
+      </ul>
+    </template>
+  </ApolloQuery>
+
+  <button :disabled="page === 0" @click="page--">
+    Previous
+  </button>
+  <button @click="page++">
+    Next
+  </button>
+</template>
+```
+
+For paginated lists you almost always want `keepPreviousResult`, so the list does not
+blink to empty between pages. It is off by default. See
+[Keeping previous data](/data/queries#keeping-previous-data).
+::::
 
 ::: tip `fetchMore` vs reactive variables
 Use `fetchMore` when you want to grow an in-place list (infinite scroll, "load more" button). Use reactive variables when each page replaces the previous one (numbered pagination, "next page" navigation).
@@ -163,6 +248,27 @@ After a mutation adds or removes an item from a paginated list, the cache does n
 - `refetchQueries` to refetch the affected list query.
 
 For lists where order matters and the server controls it (chronological feeds, server-side sort), `refetchQueries` is usually more reliable.
+
+:::: components-api
+[`<ApolloMutation>`](/api/components/ApolloMutation) has props only for `mutation`,
+`variables` and `clientId`. Both `update` and `refetchQueries` reach `useMutation` through
+the `options` prop, which takes the full
+[`useMutation.Options`](/api/composable/@vue/namespaces/useMutation/interfaces/Options)
+object:
+
+```vue-html
+<ApolloMutation
+  v-slot="{ mutate }"
+  :mutation="AddFeedItem"
+  :options="{ refetchQueries: [Feed], update: insertIntoFeed }"
+  @error="console.error"
+>
+  <button @click="mutate({ variables: { message } })">
+    Add
+  </button>
+</ApolloMutation>
+```
+::::
 
 ## Next steps
 

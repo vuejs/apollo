@@ -77,6 +77,7 @@ Storing items in a map keyed by id makes duplicate handling automatic: if the sa
 
 ## Separate cursor: usage
 
+:::: composition-api
 ```vue twoslash
 <script setup lang="ts">
 import { TypedDocumentNode } from '@apollo/client'
@@ -131,8 +132,43 @@ function loadMore() {
   </button>
 </template>
 ```
+::::
 
-Each call to `loadMore` passes the cursor from the previous page. Apollo merges the new items into the cached list using the `merge` function configured above.
+:::: components-api
+```vue twoslash
+<script setup lang="ts">
+import { TypedDocumentNode } from '@apollo/client'
+
+declare const Feed: TypedDocumentNode<{ feed: { items: Array<{ id: string, message: string }>, nextCursor: string | null, hasMore: boolean } }, { cursor?: string | null, limit: number }>
+// ---cut---
+import { ApolloQuery } from '@vue/apollo-components'
+</script>
+
+<template>
+  <ApolloQuery :query="Feed" :variables="{ limit: 10 }">
+    <template #data="{ data, loading, fetchMore }">
+      <ul>
+        <li v-for="item in data.feed.items" :key="item.id">
+          {{ item.message }}
+        </li>
+      </ul>
+      <button
+        v-if="data.feed.hasMore"
+        :disabled="loading"
+        @click="fetchMore({ variables: { cursor: data.feed.nextCursor, limit: 10 } })"
+      >
+        Load more
+      </button>
+    </template>
+  </ApolloQuery>
+</template>
+```
+
+`#data` only renders once there is a result, so `data.feed.hasMore` and
+`data.feed.nextCursor` are safe to read without checking for one first.
+::::
+
+Each `fetchMore` call passes the cursor from the previous page. Apollo merges the new items into the cached list using the `merge` function configured above.
 
 ## Relay-style connections
 
@@ -157,6 +193,7 @@ The helper handles `edges`, `pageInfo`, and the standard cursor naming.
 
 Usage:
 
+:::: composition-api
 ```vue twoslash
 <script setup lang="ts">
 import { TypedDocumentNode } from '@apollo/client'
@@ -209,6 +246,37 @@ function loadMore() {
   </button>
 </template>
 ```
+::::
+
+:::: components-api
+```vue twoslash
+<script setup lang="ts">
+import { TypedDocumentNode } from '@apollo/client'
+
+declare const Comments: TypedDocumentNode<{ comments: { edges: Array<{ node: { id: string, text: string } }>, pageInfo: { endCursor: string | null, hasNextPage: boolean } } }, { cursor?: string | null }>
+// ---cut---
+import { ApolloQuery } from '@vue/apollo-components'
+</script>
+
+<template>
+  <ApolloQuery :query="Comments">
+    <template #data="{ data, fetchMore }">
+      <ul>
+        <li v-for="edge in data.comments.edges" :key="edge.node.id">
+          {{ edge.node.text }}
+        </li>
+      </ul>
+      <button
+        v-if="data.comments.pageInfo.hasNextPage"
+        @click="fetchMore({ variables: { cursor: data.comments.pageInfo.endCursor } })"
+      >
+        Load more
+      </button>
+    </template>
+  </ApolloQuery>
+</template>
+```
+::::
 
 ## Inserting new items into a paginated list
 
@@ -219,6 +287,27 @@ The cache cannot tell which page a newly-created item belongs to, so a mutation 
 3. For optimistic UI, use an `optimisticResponse` plus an `update` callback that inserts into the merged list.
 
 See [Cache Updates](/caching/cache-updates) for the insertion patterns.
+
+:::: components-api
+[`<ApolloMutation>`](/api/components/ApolloMutation) has props only for `mutation`,
+`variables` and `clientId`. `update`, `refetchQueries` and `optimisticResponse` all reach
+`useMutation` through the `options` prop, which takes the full
+[`useMutation.Options`](/api/composable/@vue/namespaces/useMutation/interfaces/Options)
+object:
+
+```vue-html
+<ApolloMutation
+  v-slot="{ mutate }"
+  :mutation="PostFeedItem"
+  :options="{ optimisticResponse: pendingItem, update: insertIntoFeed }"
+  @error="console.error"
+>
+  <button @click="mutate({ variables: { message } })">
+    Post
+  </button>
+</ApolloMutation>
+```
+::::
 
 ## Key arguments
 

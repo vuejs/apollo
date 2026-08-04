@@ -46,3 +46,9 @@ jobs:
 
       - name: Tests
         run: pnpm run test
+
+      - name: Docs
+        run: pnpm run docs:build
+
+      - name: Generated API reference is up to date
+        run: git diff --exit-code packages/docs/api

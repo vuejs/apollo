@@ -1,6 +1,6 @@
 # Loading States
 
-Each composable exposes its own `loading` ref, but real apps often want to combine them: a single indicator for the whole page, an app-wide loading bar, a "saving" toast that tracks every mutation. Vue Apollo ships six composables for aggregating loading state across multiple operations.
+Every operation exposes its own `loading` state, but real apps often want to combine them: a single indicator for the whole page, an app-wide loading bar, a "saving" toast that tracks every mutation. Vue Apollo ships six composables for aggregating loading state across multiple operations.
 
 | Scope | Queries | Mutations | Subscriptions |
 |-------|---------|-----------|---------------|
@@ -8,6 +8,19 @@ Each composable exposes its own `loading` ref, but real apps often want to combi
 | Whole app | `useGlobalQueryLoading` | `useGlobalMutationLoading` | `useGlobalSubscriptionLoading` |
 
 The per-scope composables track every `useQuery`/`useMutation`/`useSubscription` called within the current Vue effect scope (typically the component that calls them, plus anything they call recursively). The global composables track every operation in the entire app.
+
+:::: components-api
+::: warning Components have their own scope
+`<ApolloQuery>` runs its `useQuery` inside its *own* component instance, so a
+`useQueryLoading()` in the surrounding `<script setup>` will never see it. Reach for the
+**global** composables when the operations are declared as elements, or for the `loading`
+slot prop when you only care about one of them.
+
+Everything on this page is written in the composables because these six *are* composables:
+there is no component form of an aggregate counter. They work the same in a file that
+otherwise uses only components.
+:::
+::::
 
 ## Per-scope loading
 
@@ -88,10 +101,13 @@ Unlike the per-scope variants, the global composables can be called anywhere, in
 |------|------------|
 | Loading indicator for a specific component or section | Per-scope: `useQueryLoading`, etc. |
 | App-wide top loading bar | Global: `useGlobalQueryLoading` |
-| Disable a button while a specific mutation is in flight | `loading` ref returned by that `useMutation` directly |
+| Disable a button while a specific mutation is in flight | The `loading` of that mutation alone |
 | Combine queries and mutations into one indicator | Two refs, combined with `computed(() => queries.value || saving.value)` |
 
-For the "indicator for one specific operation" case, do not reach for these composables. Use the `loading` ref the original composable returned:
+For the "indicator for one specific operation" case, do not reach for these composables.
+
+:::: composition-api
+Use the `loading` ref the original composable returned:
 
 ```ts twoslash
 import { TypedDocumentNode } from '@apollo/client'
@@ -103,6 +119,19 @@ const SAVE: TypedDocumentNode<any, any> = gql``
 const { mutate: save, loading } = useMutation(SAVE)
 // `loading` is true while this specific save is running
 ```
+::::
+
+:::: components-api
+Use the `loading` slot prop, which is scoped to that one element:
+
+```vue-html
+<ApolloMutation v-slot="{ mutate, loading }" :mutation="Save" @error="console.error">
+  <button :disabled="loading" @click="mutate()">
+    Save
+  </button>
+</ApolloMutation>
+```
+::::
 
 ## Combining categories
 
@@ -123,7 +152,7 @@ const anyLoading = computed(
 
 ## SSR
 
-The global composables avoid cross-request contamination during SSR. Each server request gets isolated tracking, so a slow request from one user does not affect another. You can safely use them in components that render on the server.
+The global composables avoid cross-request contamination during SSR. You can safely use them in components that render on the server.
 
 The per-scope composables are also SSR-safe, but the counters are scoped to the current request's effect scope.
 

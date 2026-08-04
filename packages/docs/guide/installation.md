@@ -4,6 +4,7 @@
 
 Install Apollo Client and Vue Apollo:
 
+:::: composition-api
 ::: code-group
 
 ```shell [npm]
@@ -19,9 +20,38 @@ pnpm add @apollo/client @vue/apollo-composable@next graphql
 ```
 
 :::
+::::
+
+:::: components-api
+`@vue/apollo-components` lists `@vue/apollo-composable` as a peer dependency, so install
+both.
+
+::: code-group
+
+```shell [npm]
+npm install @apollo/client @vue/apollo-composable@next @vue/apollo-components@next graphql
+```
+
+```shell [yarn]
+yarn add @apollo/client @vue/apollo-composable@next @vue/apollo-components@next graphql
+```
+
+```shell [pnpm]
+pnpm add @apollo/client @vue/apollo-composable@next @vue/apollo-components@next graphql
+```
+
+:::
+::::
 
 ::: warning Pre-release version
 Vue Apollo v5 is currently in pre-release. The `@next` tag installs the latest pre-release build.
+:::
+
+::: tip Choosing an API
+The selector at the top of the sidebar switches every example in the guide between the
+**Composition API** (`useQuery` and friends) and the **Components API** (`<ApolloQuery>`
+and friends). They are the same library, so you can pick per component and change your
+mind later. See the [API overview](/api/) for how to choose.
 :::
 
 ## Step 2: Create an Apollo Client
@@ -68,12 +98,20 @@ app.provide(DefaultApolloClient, apolloClient)
 app.mount('#app')
 ```
 
+:::: composition-api
 That's it. You can now use [`useQuery`](/api/composable/functions/useQuery.md), [`useMutation`](/api/composable/functions/useMutation.md), and the other composables in any component.
+::::
+
+:::: components-api
+That's it. You can now use [`<ApolloQuery>`](/api/components/ApolloQuery),
+[`<ApolloMutation>`](/api/components/ApolloMutation) and the rest in any template.
+::::
 
 ## Step 4: Your first query
 
 Verify the setup with a simple query:
 
+:::: composition-api
 ```vue twoslash
 <script setup lang="ts">
 import { TypedDocumentNode } from '@apollo/client'
@@ -100,6 +138,39 @@ const { current } = useQuery(gql`
   </div>
 </template>
 ```
+::::
+
+:::: components-api
+```vue twoslash
+<script setup lang="ts">
+import { TypedDocumentNode } from '@apollo/client'
+
+declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ hello: string }, Record<string, never>>
+// ---cut---
+import { ApolloQuery } from '@vue/apollo-components'
+</script>
+
+<template>
+  <ApolloQuery
+    :query="gql`
+      query Hello {
+        hello
+      }
+    `"
+  >
+    <template #loading>
+      Loading...
+    </template>
+    <template #error="{ error }">
+      Error: {{ error.message }}
+    </template>
+    <template #data="{ data }">
+      {{ data.hello }}
+    </template>
+  </ApolloQuery>
+</template>
+```
+::::
 
 ## IDE integration
 

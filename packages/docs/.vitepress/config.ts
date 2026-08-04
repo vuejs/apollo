@@ -1,6 +1,33 @@
 import { transformerTwoslash } from '@shikijs/vitepress-twoslash'
+import container from 'markdown-it-container'
 import { defineConfig } from 'vitepress'
 import typedocSidebar from '../api/composable/typedoc-sidebar.json'
+import { API_FLAVORS, DEFAULT_FLAVOR, STORAGE_KEY } from './apiFlavors.ts'
+
+/**
+ * Applies the stored flavor before first paint.
+ *
+ * Runs from `head`, so it beats hydration: without it every page would render the default
+ * flavor and then visibly swap for anyone who picked another one.
+ */
+const flavorScript = `
+try {
+  var f = localStorage.getItem(${JSON.stringify(STORAGE_KEY)}) || ${JSON.stringify(DEFAULT_FLAVOR)}
+  if (${JSON.stringify(API_FLAVORS.map(flavor => flavor.value))}.indexOf(f) !== -1) {
+    document.documentElement.classList.add('api-pref-' + f)
+  }
+} catch (e) {}
+`.trim()
+
+/** Generated so `apiFlavors.ts` stays the only place a flavor is declared. */
+const flavorStyle = [
+  `html:not([class*='api-pref-']) .api-flavor--${DEFAULT_FLAVOR} { display: block }`,
+  ...API_FLAVORS.flatMap(({ value }, index) => [
+    `html.api-pref-${value} { --api-flavor-index: ${index} }`,
+    `html.api-pref-${value} .api-flavor--${value} { display: block }`,
+    `html.api-pref-${value} .api-preference__option[data-flavor='${value}'] { color: var(--vp-c-brand-1) }`,
+  ]),
+].join('\n')
 
 // Shared sidebar for guide sections
 const guideSidebar = [
@@ -79,6 +106,7 @@ const guideSidebar = [
       { text: 'What\'s changed in v5', link: '/migration/whats-changed' },
       { text: 'Migration guide', link: '/migration/guide' },
       { text: 'Compat layer', link: '/migration/compat' },
+      { text: 'Components', link: '/migration/components' },
     ],
   },
 ]
@@ -89,10 +117,48 @@ export default defineConfig({
   description: 'Apollo/GraphQL integration for VueJS',
   markdown: {
     codeTransformers: [
-      transformerTwoslash() as any,
+      transformerTwoslash({
+        twoslashOptions: {
+          /*
+           * Drops one diagnostic from generated code the reader never sees.
+           *
+           * A template whose only root is one of our generic SFCs makes Vue language tools
+           * read `$el` off that component's instance type, which under twoslash's setup
+           * does not carry `ComponentPublicInstance`. `vue-tsc` checks the same examples
+           * cleanly, so the example itself is fine.
+           *
+           * `filterNode` runs before error validation, so the node is gone rather than
+           * merely expected. Scoped to this message so real 2339s still fail the build.
+           */
+          filterNode(node) {
+            return !(node.type === 'error' && node.code === 2339 && node.text.includes('\'$el\''))
+          },
+        },
+      }) as any,
     ],
+    config(md) {
+      /*
+       * One container per flavor, `:::: composition-api` to `::::`, shown or hidden by CSS.
+       *
+       * Written with four colons rather than three so a flavor block can wrap the
+       * three-colon containers (`code-group`, `tip`, `warning`) it usually needs to.
+       * markdown-it-container only nests when the outer marker is the longer one.
+       */
+      for (const { value } of API_FLAVORS) {
+        md.use(container, `${value}-api`, {
+          render: (tokens: { nesting: number }[], index: number) =>
+            tokens[index].nesting === 1
+              ? `<div class="api-flavor api-flavor--${value}">\n`
+              : '</div>\n',
+        })
+      }
+    },
   },
-  head: [['link', { rel: 'icon', href: '/favicon.png' }]],
+  head: [
+    ['link', { rel: 'icon', href: '/favicon.png' }],
+    ['script', {}, flavorScript],
+    ['style', {}, flavorStyle],
+  ],
   themeConfig: {
     socialLinks: [{ icon: 'github', link: 'https://github.com/vuejs/apollo' }],
     footer: {
@@ -106,7 +172,14 @@ export default defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Guide', link: '/guide/' },
-      { text: 'API Reference', link: '/api/composable/' },
+      {
+        text: 'API Reference',
+        items: [
+          { text: 'Overview', link: '/api/' },
+          { text: '@vue/apollo-composable', link: '/api/composable/' },
+          { text: '@vue/apollo-components', link: '/api/components/' },
+        ],
+      },
       {
         text: 'Sponsor',
         link: 'https://github.com/sponsors/Akryum',
@@ -123,11 +196,34 @@ export default defineConfig({
       '/networking/': guideSidebar,
       '/ssr/': guideSidebar,
       '/migration/': guideSidebar,
+      '/api/': [
+        {
+          text: 'API Reference',
+          link: '/api/',
+          items: [
+            { text: '@vue/apollo-composable', link: '/api/composable/' },
+            { text: '@vue/apollo-components', link: '/api/components/' },
+          ],
+        },
+      ],
       '/api/composable/': [
         {
           text: '@vue/apollo-composable',
           link: '/api/composable/',
           items: typedocSidebar,
+        },
+      ],
+      '/api/components/': [
+        {
+          text: '@vue/apollo-components',
+          link: '/api/components/',
+          items: [
+            { text: 'ApolloQuery', link: '/api/components/ApolloQuery' },
+            { text: 'ApolloMutation', link: '/api/components/ApolloMutation' },
+            { text: 'ApolloSubscription', link: '/api/components/ApolloSubscription' },
+            { text: 'ApolloSubscribeToMore', link: '/api/components/ApolloSubscribeToMore' },
+            { text: 'ApolloFragment', link: '/api/components/ApolloFragment' },
+          ],
         },
       ],
     },

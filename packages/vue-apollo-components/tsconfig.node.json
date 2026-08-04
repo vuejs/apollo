@@ -1,0 +1,7 @@
+{
+  "extends": "../vue-apollo-composable/tsconfig.base.json",
+  "compilerOptions": {
+    "types": ["node"]
+  },
+  "include": ["vite.config.ts"]
+}

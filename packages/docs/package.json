@@ -4,12 +4,15 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "api:components": "node scripts/generateComponentApi.ts",
+    "api:generate": "typedoc && pnpm run api:components",
+    "check:flavors": "node scripts/checkApiFlavors.ts",
+    "build": "pnpm run check:flavors && pnpm run api:generate && vitepress build",
     "dev": "vitepress dev",
-    "build": "pnpm run api:generate && vitepress build",
-    "preview": "vitepress preview",
-    "api:generate": "typedoc"
+    "preview": "vitepress preview"
   },
   "dependencies": {
+    "@vue/apollo-components": "workspace:*",
     "@vue/apollo-composable": "workspace:*",
     "vue-github-button": "catalog:"
   },
@@ -17,13 +20,17 @@
     "@apollo/client": "catalog:",
     "@graphql-codegen/cli": "catalog:",
     "@shikijs/vitepress-twoslash": "catalog:",
+    "@types/markdown-it-container": "catalog:",
+    "@vueuse/core": "catalog:",
     "graphql": "catalog:",
     "graphql-sse": "catalog:",
     "graphql-tag": "catalog:",
+    "markdown-it-container": "catalog:",
     "typedoc": "catalog:",
     "typedoc-plugin-markdown": "catalog:",
     "typedoc-vitepress-theme": "catalog:",
     "vitepress": "catalog:",
-    "vue": "catalog:"
+    "vue": "catalog:",
+    "vue-component-meta": "catalog:"
   }
 }

@@ -4,6 +4,12 @@
 
 For a step-by-step migration that uses this layer, see the [Migration guide](/migration/guide). For a high-level summary of the v4 to v5 changes, see [What's changed in v5](/migration/whats-changed).
 
+::: warning Composables only
+`@vue/apollo-components` has no compat entry point. Its v5 rewrite changes props, slots and
+events with no shim, so those changes have to be made up front. See
+[Migrating v4 components](/migration/components).
+:::
+
 ## Purpose
 
 Vue Apollo v5 introduced breaking changes to nearly every composable's call signature (variables moved into options, `mutate(variables)` became `mutate({ variables })`, the error type changed). Migrating a large codebase line-by-line in one shot is painful. The compat layer keeps the v4 surface compilable while you do the rest of the upgrade incrementally.
@@ -32,7 +38,7 @@ The compat module re-exports everything from the main entry, so a single find-re
 | `useQuery` | `useQuery(doc)`, `useQuery(doc, vars)`, `useQuery(doc, vars, options)`, `useQuery(doc, undefined, options)` | Variables can be positional or in options. |
 | `useSubscription` | Same 3-arg form as `useQuery` | Variables can be positional or in options. |
 | `useMutation` | `useMutation(doc, options?)`. `mutate(variables, overrides)` keeps the v4 two-arg form. | The composable signature was already compatible; the call signature is wrapped. |
-| `useLazyQuery` | `useLazyQuery(doc, vars?, options?)`. `load(document?, variables?)` keeps v4's two-arg form and first-call-only semantics. | See [`useLazyQuery` notes](#uselazyquery) below. |
+| `useLazyQuery` | `useLazyQuery(doc, vars?, options?)`. `load(document?, variables?)` keeps v4's two-arg form and first-call-only semantics. | See [`useLazyQuery` notes](#uselazyquery-notes) below. |
 
 ### Return-shape wrapping
 
@@ -211,4 +217,4 @@ There is no deprecation timeline on the compat module itself, but every new feat
 
 - [Migration guide](/migration/guide) is the prescriptive walkthrough.
 - [What's changed in v5](/migration/whats-changed) is the high-level reference.
-- [TypeScript: Composable return-value shapes](/data/typescript#composable-return-value-shapes) compares v5 native composable shapes.
+- [TypeScript: Result shapes](/data/typescript#result-shapes) compares v5 native composable shapes.

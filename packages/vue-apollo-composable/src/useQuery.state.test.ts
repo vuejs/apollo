@@ -641,6 +641,54 @@ describe('useQuery variable commits', () => {
 })
 // #endregion
 
+// #region Cache hits
+describe('useQuery with a result already in the cache', () => {
+  /*
+   * The cached result is applied while `useQuery()` is still running, so it reaches the
+   * event hooks before the caller has had a chance to register any.
+   */
+  it('delivers the cached result to handlers registered after the call', async () => {
+    const { client } = createMockClient([mock('a', ['a1'])])
+
+    const warm = createQuery(client, () => ({ variables: { term: 'a' } }))!
+    await until(() => warm.query.current.value.resultState).toBe('complete')
+
+    const { query } = createQuery(client, () => ({
+      variables: { term: 'a' },
+      fetchPolicy: 'cache-only',
+    }))!
+
+    const onResult = vi.fn()
+    const onCompleteResult = vi.fn()
+    const onNextState = vi.fn()
+    query.onResult(onResult)
+    query.onCompleteResult(onCompleteResult)
+    query.onNextState(onNextState)
+
+    expect(query.current.value.resultState).toBe('complete')
+
+    await nextTick()
+
+    expect(onResult).toHaveBeenCalledTimes(1)
+    expect(onCompleteResult).toHaveBeenCalledTimes(1)
+    expect(onNextState).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not replay when the result arrives from the link', async () => {
+    const { client } = createMockClient([mock('a', ['a1'])])
+    const { query } = createQuery(client, () => ({ variables: { term: 'a' } }))!
+
+    const onResult = vi.fn()
+    query.onResult(onResult)
+
+    await until(() => query.current.value.resultState).toBe('complete')
+    await promiseTimeout(REQUEST_DELAY)
+
+    expect(onResult).toHaveBeenCalledTimes(1)
+  })
+})
+// #endregion
+
 // #region Types
 describe('useQuery state types', () => {
   it('types the new state fields', () => {

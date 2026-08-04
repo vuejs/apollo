@@ -6,6 +6,7 @@ Apollo Client is a comprehensive state-management library for JavaScript. With G
 
 You write a query, and Apollo Client handles fetching, caching, and updating the UI:
 
+:::: composition-api
 ```vue twoslash
 <script setup lang="ts">
 import { TypedDocumentNode } from '@apollo/client'
@@ -24,6 +25,37 @@ const { current } = useQuery(gql`
 `)
 </script>
 ```
+::::
+
+:::: components-api
+```vue twoslash
+<script setup lang="ts">
+import { TypedDocumentNode } from '@apollo/client'
+
+declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ todos: { id: string, text: string, completed: boolean }[] }, Record<string, never>>
+// ---cut---
+import { ApolloQuery } from '@vue/apollo-components'
+</script>
+
+<template>
+  <ApolloQuery
+    :query="gql`
+      query GetTodos {
+        todos {
+          id
+          text
+          completed
+        }
+      }
+    `"
+  >
+    <template #data="{ data }">
+      {{ data.todos.length }} todos
+    </template>
+  </ApolloQuery>
+</template>
+```
+::::
 
 You do not need to track loading states by hand, juggle error branches, or update the cache after every mutation. Apollo Client handles all of it.
 
@@ -44,7 +76,10 @@ Because the cache is normalized by `__typename` + `id`, any query that reads an 
 
 ## Vue-native reactivity
 
-Vue Apollo plugs into Vue's reactivity system. Query variables can be refs, reactive objects, getters, or even per-key reactive maps:
+Vue Apollo plugs into Vue's reactivity system.
+
+:::: composition-api
+Query variables can be refs, reactive objects, getters, or even per-key reactive maps:
 
 ```vue twoslash
 <script setup lang="ts">
@@ -70,6 +105,44 @@ const { current } = useQuery(gql`
 ```
 
 When `userId` changes, the query re-executes with the new value. No watcher boilerplate required.
+::::
+
+:::: components-api
+Variables are a prop, so they are reactive for the same reason every other binding is:
+
+```vue twoslash
+<script setup lang="ts">
+import { TypedDocumentNode } from '@apollo/client'
+
+declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ user: { id: string, name: string } }, { id: string }>
+// ---cut---
+import { ApolloQuery } from '@vue/apollo-components'
+import { ref } from 'vue'
+
+const userId = ref('1')
+</script>
+
+<template>
+  <ApolloQuery
+    :query="gql`
+      query User($id: ID!) {
+        user(id: $id) {
+          id
+          name
+        }
+      }
+    `"
+    :variables="{ id: userId }"
+  >
+    <template #data="{ data }">
+      {{ data.user.name }}
+    </template>
+  </ApolloQuery>
+</template>
+```
+
+When `userId` changes, the query re-executes with the new value. No refs inside the object, no getters, no watcher boilerplate.
+::::
 
 ## TypeScript support
 
@@ -77,7 +150,6 @@ With [GraphQL Codegen](/data/typescript), every query, mutation, and result is f
 
 ```ts twoslash
 import type { TypedDocumentNode } from '@apollo/client'
-import { useQuery } from '@vue/apollo-composable'
 
 declare const graphql: (q: string) => TypedDocumentNode<{ user: { id: string, name: string, email: string } }, { id: string }>
 
@@ -91,11 +163,15 @@ const UserQuery = graphql(`
     }
   }
 `)
-
-const { current } = useQuery(UserQuery, { variables: { id: '1' } })
 ```
 
+:::: composition-api
 `current.result` is typed precisely, including narrowing by `current.resultState` so partial and streaming states are handled safely.
+::::
+
+:::: components-api
+Passing that document to `<ApolloQuery>` types its `variables` prop, its slot props and its event payloads, and `#data` hands you the fully-resolved shape with no narrowing to write.
+::::
 
 ## When to use Apollo Client
 
@@ -106,4 +182,6 @@ Apollo Client is a good fit when:
 - You want real-time updates through subscriptions, `@defer`, or `@stream`.
 - You value TypeScript correctness throughout the stack.
 
-For simple REST APIs or apps that do little caching, lighter alternatives exist. For GraphQL apps with non-trivial caching needs, Apollo Client is the most complete option.
+If your backend speaks REST rather than GraphQL, [rstore](https://rstore.dev/) covers much of the same ground for Vue and Nuxt.
+
+For apps that do little caching, something lighter still may be enough. For GraphQL apps with non-trivial caching needs, Apollo Client is the most complete option.

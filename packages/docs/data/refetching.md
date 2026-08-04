@@ -1,9 +1,12 @@
 # Refetching
 
-Sometimes you want fresh data from the server. Refetching covers four related patterns: re-running a single query on demand, refetching specific queries after a mutation, polling, and refetching across the whole app from outside any single composable.
+Cached data goes stale. A query reads the cache and only reaches the network when it has to, which means a result can outlive the truth on the server.
+
+Refetching is how you ask again on purpose. This page covers four ways to do it: re-running a single query on demand, polling on a fixed cadence, refetching after a mutation, and refetching across the whole app from outside a component.
 
 ## Refetching a single query
 
+:::: composition-api
 Every `useQuery` exposes a `refetch` function:
 
 ```vue twoslash
@@ -39,11 +42,50 @@ const { current, refetch } = useQuery(gql`
 ```
 
 `refetch()` returns a promise that resolves with the new result.
+::::
+
+:::: components-api
+`refetch` is handed to both `#data` and `#error`:
+
+```vue twoslash
+<script setup lang="ts">
+import { TypedDocumentNode } from '@apollo/client'
+
+declare const GetDogPhoto: TypedDocumentNode<{ dog: { id: string, photo: string } }, { breed: string }>
+// ---cut---
+import { ApolloQuery } from '@vue/apollo-components'
+
+const { breed } = defineProps<{ breed: string }>()
+</script>
+
+<template>
+  <ApolloQuery :query="GetDogPhoto" :variables="{ breed }">
+    <template #error="{ error, refetch }">
+      {{ error.message }}
+      <button @click="refetch()">
+        Try again
+      </button>
+    </template>
+    <template #data="{ data, loading, refetch }">
+      <img :src="data.dog.photo">
+      <button :disabled="loading" @click="refetch()">
+        Refresh
+      </button>
+    </template>
+  </ApolloQuery>
+</template>
+```
+
+`refetch()` returns a promise that resolves with the new result. `#data` keeps rendering
+throughout, with `loading` reporting the request in flight, so a refresh never blanks the
+image.
+::::
 
 ### Refetch with different variables
 
 You can pass new variables for a one-off refetch:
 
+:::: composition-api
 ```ts twoslash
 import { TypedDocumentNode } from '@apollo/client'
 import { useQuery } from '@vue/apollo-composable'
@@ -61,16 +103,52 @@ await refetch({ breed: 'poodle' })
 // The reactive variables ref does not change
 console.log(variables.value.breed) // 'bulldog'
 ```
+::::
+
+:::: components-api
+```vue twoslash
+<script setup lang="ts">
+import { TypedDocumentNode } from '@apollo/client'
+
+declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ dog: { id: string, photo: string } }, { breed: string }>
+// ---cut---
+import { ApolloQuery } from '@vue/apollo-components'
+</script>
+
+<template>
+  <ApolloQuery
+    :query="gql`
+      query GetDogPhoto($breed: String!) {
+        dog(breed: $breed) {
+          id
+          photo
+        }
+      }
+    `"
+    :variables="{ breed: 'bulldog' }"
+  >
+    <template #data="{ data, refetch }">
+      <img :src="data.dog.photo">
+      <!-- One-time refetch with different variables. The `variables` prop is untouched. -->
+      <button @click="refetch({ breed: 'poodle' })">
+        Show a poodle
+      </button>
+    </template>
+  </ApolloQuery>
+</template>
+```
+::::
 
 ::: warning Variables passed to `refetch` are not persisted
-`refetch({ id: 2 })` uses those variables for that one request. The reactive `variables` ref keeps its previous value, and the next change to your declared `variables` (or another refetch with no args) goes back to using them.
+`refetch({ id: 2 })` uses those variables for that one request. The query's declared variables keep their previous value, and the next change to them, or another refetch with no arguments, goes back to using them.
 
-If you want the new variables to stick, update the reactive variable source instead.
+If you want the new variables to stick, change the declared variables instead.
 :::
 
 ## Polling
 
-Set `pollInterval` (in milliseconds) to re-run a query at a fixed cadence:
+:::: composition-api
+Set `pollInterval` (in milliseconds) to re-run a query at a fixed interval:
 
 ```vue twoslash
 <script setup lang="ts">
@@ -90,11 +168,29 @@ const { current } = useQuery(gql`
 ```
 
 Polling pauses when the query is stopped, when the component is unmounted, or when `enabled` flips to `false`. It resumes when the query becomes active again.
+::::
+
+:::: components-api
+Set the `pollInterval` prop (in milliseconds) to re-run a query at a fixed interval:
+
+```vue-html
+<ApolloQuery :query="GetNotifications" :pollInterval="5000">
+```
+
+Polling pauses while the component is unmounted, while `disabled` is `true`, and after
+`stop()`. It resumes when the query becomes active again. Unmounting is all it takes to
+stop a poll:
+
+```vue-html
+<ApolloQuery v-if="panelOpen" :query="GetNotifications" :pollInterval="5000">
+```
+::::
 
 ### Skipping individual poll attempts
 
 If you want polling to continue but occasionally skip a poll (for example, while a modal is open), use `skipPollAttempt`:
 
+:::: composition-api
 ```ts twoslash
 import { TypedDocumentNode } from '@apollo/client'
 import { useQuery } from '@vue/apollo-composable'
@@ -110,11 +206,26 @@ useQuery(QUERY, {
   skipPollAttempt: () => isModalOpen.value,
 })
 ```
+::::
+
+:::: components-api
+There is no prop for it, so pass it through `options`, which takes the whole
+[`useQuery.Options`](/api/composable/@vue/namespaces/useQuery/interfaces/Options) object:
+
+```vue-html
+<ApolloQuery
+  :query="GetNotifications"
+  :pollInterval="5000"
+  :options="{ skipPollAttempt: () => isModalOpen }"
+>
+```
+::::
 
 When `skipPollAttempt` returns `true`, that one poll is skipped. The next poll runs at the normal interval.
 
 ### Imperative polling control
 
+:::: composition-api
 For full control, reach into the underlying `ObservableQuery`:
 
 ```vue twoslash
@@ -136,11 +247,46 @@ query.value?.stopPolling()
 ```
 
 `query` is a ref to the underlying [`ObservableQuery`](https://www.apollographql.com/docs/react/api/core/ObservableQuery). It is `undefined` while the query is disabled.
+::::
+
+:::: components-api
+A template ref on `<ApolloQuery>` exposes the whole
+[`useQuery.Result`](/api/composable/@vue/namespaces/useQuery/interfaces/Result), refs
+already unwrapped, including the underlying `ObservableQuery`:
+
+```vue
+<script setup lang="ts">
+import { ApolloQuery } from '@vue/apollo-components'
+import { useTemplateRef } from 'vue'
+import { GetNotifications } from './queries'
+
+const notifications = useTemplateRef('notifications')
+
+function pause() {
+  notifications.value?.query?.stopPolling()
+}
+</script>
+
+<template>
+  <ApolloQuery ref="notifications" :query="GetNotifications" :pollInterval="5000">
+    <template #data="{ data }">
+      {{ data.notifications.length }}
+      <button @click="pause()">
+        Pause
+      </button>
+    </template>
+  </ApolloQuery>
+</template>
+```
+
+`query` is `undefined` while `disabled` is `true`.
+::::
 
 ## Refetching after a mutation
 
-A successful mutation often invalidates queries that display the same data. The simplest way to refresh those queries is to list them in `refetchQueries` on `useMutation`:
+A successful mutation often invalidates queries that display the same data. The simplest way to refresh those queries is to list them in `refetchQueries`:
 
+:::: composition-api
 ```ts twoslash
 import { TypedDocumentNode } from '@apollo/client'
 import { useMutation } from '@vue/apollo-composable'
@@ -156,6 +302,26 @@ const { mutate } = useMutation(CREATE_TODO, {
   ],
 })
 ```
+::::
+
+:::: components-api
+```vue-html
+<ApolloMutation
+  v-slot="{ mutate }"
+  :mutation="CreateTodo"
+  :options="{ refetchQueries: [GetTodos, 'GetTodos'] }"
+  @error="console.error"
+>
+  <button @click="mutate({ variables: { text } })">
+    Add
+  </button>
+</ApolloMutation>
+```
+
+`refetchQueries` accepts documents and operation names alike. Everything on
+[`useMutation.Options`](/api/composable/@vue/namespaces/useMutation/interfaces/Options) is
+reachable this way, including `awaitRefetchQueries` and `onQueryUpdated` below.
+::::
 
 You can also pass:
 
@@ -171,17 +337,29 @@ An **active query** is one that has at least one subscriber (a mounted component
 
 By default, `mutate` resolves as soon as the mutation completes. The triggered refetches happen in parallel. If you want `mutate` to wait until the refetches finish too, set `awaitRefetchQueries`:
 
+:::: composition-api
 ```ts
 const { mutate } = useMutation(CREATE_TODO, {
   refetchQueries: [GET_TODOS],
   awaitRefetchQueries: true,
 })
 ```
+::::
+
+:::: components-api
+```vue-html
+<ApolloMutation
+  :mutation="CreateTodo"
+  :options="{ refetchQueries: [GetTodos], awaitRefetchQueries: true }"
+>
+```
+::::
 
 ### `onQueryUpdated`
 
 For finer control, `onQueryUpdated` intercepts each refetch attempt. Return `false` to skip, `true` to proceed, or a promise to wait for it:
 
+:::: composition-api
 ```ts
 const { mutate } = useMutation(CREATE_TODO, {
   refetchQueries: [GET_TODOS],
@@ -194,8 +372,34 @@ const { mutate } = useMutation(CREATE_TODO, {
   },
 })
 ```
+::::
 
-This is also the way to refetch queries after an `update` callback modifies the cache. See [Cache Updates](/caching/cache-updates#refetching-after-update) for the full pattern.
+:::: components-api
+```vue
+<script setup lang="ts">
+import type { ObservableQuery } from '@apollo/client'
+import { ApolloMutation } from '@vue/apollo-components'
+import { CreateTodo, GetTodos } from './queries'
+
+function onQueryUpdated(observableQuery: ObservableQuery) {
+  // Skip queries whose variables are not relevant
+  if (observableQuery.queryName === 'SomeUnrelatedQuery') {
+    return false
+  }
+  return observableQuery.refetch()
+}
+</script>
+
+<template>
+  <ApolloMutation
+    :mutation="CreateTodo"
+    :options="{ refetchQueries: [GetTodos], onQueryUpdated }"
+  />
+</template>
+```
+::::
+
+This is also the way to refetch queries after an `update` callback modifies the cache. See [Cache Updates](/caching/cache-updates#refetch-after-update) for the full pattern.
 
 ## Refetching outside components
 
@@ -230,10 +434,10 @@ See the upstream [`client.refetchQueries` reference](https://www.apollographql.c
 
 | Goal | Tool |
 |------|------|
-| Pull fresh data once, on a user action (refresh button) | `refetch()` from `useQuery` |
+| Pull fresh data once, on a user action (refresh button) | `refetch()` |
 | Stream updates continuously from the server | [Subscriptions](/data/subscriptions) |
-| Keep one query in sync at a fixed cadence | `pollInterval` |
-| Update queries after a mutation | `refetchQueries` on `useMutation` |
+| Keep one query in sync at a fixed interval | `pollInterval` |
+| Update queries after a mutation | `refetchQueries` on the mutation |
 | Refetch many queries from any context | `client.refetchQueries(...)` |
 | Avoid the network entirely | [Direct cache updates](/caching/cache-updates) |
 

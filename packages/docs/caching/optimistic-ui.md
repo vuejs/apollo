@@ -2,6 +2,27 @@
 
 For many mutations, you can predict the result before the server responds. Apollo Client lets you write that predicted result into the cache immediately so the UI updates without waiting for the network. When the real result arrives, Apollo replaces the optimistic value. If the mutation fails, Apollo rolls the optimistic value back.
 
+:::: components-api
+::: tip Reading this page with `<ApolloMutation>`
+`optimisticResponse` is a mutation option, so it reaches the component through the `options`
+prop, which takes the full
+[`useMutation.Options`](/api/composable/@vue/namespaces/useMutation/interfaces/Options)
+object. It can also go through the argument to `mutate()` when it depends on what the user
+just did:
+
+```vue-html
+<ApolloMutation v-slot="{ mutate }" :mutation="UpdateComment" @error="console.error">
+  <button @click="mutate({ variables, optimisticResponse })">
+    Save
+  </button>
+</ApolloMutation>
+```
+
+`mutate()` takes the same object `useMutation`'s `mutate` does, so every snippet below
+transfers unchanged.
+:::
+::::
+
 ## The `optimisticResponse` option
 
 Pass `optimisticResponse` to `mutate` to enable optimistic updates:

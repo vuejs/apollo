@@ -45,6 +45,7 @@ The helper defines a `merge` function that concatenates pages as they arrive, so
 
 ## Loading more with `fetchMore`
 
+:::: composition-api
 ```vue twoslash
 <script setup lang="ts">
 import { TypedDocumentNode } from '@apollo/client'
@@ -89,8 +90,39 @@ function loadMore() {
   </button>
 </template>
 ```
+::::
 
-`fetchMore` uses the original query and variables, overridden by what you pass. With the `offsetLimitPagination` helper installed, the new page is appended to the cached list automatically. `current.result.feed` updates to include every item received so far.
+:::: components-api
+```vue twoslash
+<script setup lang="ts">
+import { TypedDocumentNode } from '@apollo/client'
+
+declare const Feed: TypedDocumentNode<{ feed: Array<{ id: string, message: string }> }, { offset: number, limit: number }>
+// ---cut---
+import { ApolloQuery } from '@vue/apollo-components'
+</script>
+
+<template>
+  <ApolloQuery :query="Feed" :variables="{ offset: 0, limit: 10 }">
+    <template #data="{ data, loading, fetchMore }">
+      <ul>
+        <li v-for="item in data.feed" :key="item.id">
+          {{ item.message }}
+        </li>
+      </ul>
+      <button
+        :disabled="loading"
+        @click="fetchMore({ variables: { offset: data.feed.length } })"
+      >
+        Load more
+      </button>
+    </template>
+  </ApolloQuery>
+</template>
+```
+::::
+
+`fetchMore` uses the original query and variables, overridden by what you pass. With the `offsetLimitPagination` helper installed, the new page is appended to the cached list automatically. The rendered list grows to include every item received so far.
 
 ## Key arguments
 
@@ -112,8 +144,9 @@ See [Apollo's `keyArgs` reference](https://www.apollographql.com/docs/react/pagi
 
 ## Reactive variables
 
-To use offset-based pagination with reactive variables (page-number UI), put `offset` and `limit` into refs:
+To use offset-based pagination with reactive variables (page-number UI), drive `offset` from a ref:
 
+:::: composition-api
 ```vue twoslash
 <script setup lang="ts">
 import { TypedDocumentNode } from '@apollo/client'
@@ -154,11 +187,57 @@ const { current } = useQuery(FEED_QUERY, {
 ```
 
 This pattern replaces the page rather than appending. With `keepPreviousResult: true`, the previous page stays on screen while the new one loads.
+::::
+
+:::: components-api
+```vue twoslash
+<script setup lang="ts">
+import { TypedDocumentNode } from '@apollo/client'
+
+declare const Feed: TypedDocumentNode<{ feed: Array<{ id: string }> }, { offset: number, limit: number }>
+// ---cut---
+import { ApolloQuery } from '@vue/apollo-components'
+import { ref } from 'vue'
+
+const page = ref(0)
+const pageSize = 20
+</script>
+
+<template>
+  <ApolloQuery
+    :query="Feed"
+    :variables="{ offset: page * pageSize, limit: pageSize }"
+    keepPreviousResult
+  >
+    <template #data="{ data, isPreviousResult }">
+      <ul :class="{ stale: isPreviousResult }">
+        <li v-for="item in data.feed" :key="item.id">
+          {{ item.id }}
+        </li>
+      </ul>
+    </template>
+  </ApolloQuery>
+
+  <button :disabled="page === 0" @click="page--">
+    Previous
+  </button>
+  <button @click="page++">
+    Next
+  </button>
+</template>
+```
+
+This pattern replaces the page rather than appending. With `keepPreviousResult`, the
+previous page stays on screen while the new one loads, marked `isPreviousResult` so you can
+dim it until the new page lands. It is off by default. See
+[Keeping previous data](/data/queries#keeping-previous-data).
+::::
 
 ## Refreshing all pages
 
 When you need to refresh the entire merged list (for example after a server-side reorder), refetch the original query:
 
+:::: composition-api
 ```ts
 const { refetch } = useQuery(FEED_QUERY, {
   variables: { offset: 0, limit: 10 },
@@ -166,6 +245,17 @@ const { refetch } = useQuery(FEED_QUERY, {
 
 await refetch()
 ```
+::::
+
+:::: components-api
+```vue-html
+<template #data="{ refetch }">
+  <button @click="refetch()">
+    Refresh
+  </button>
+</template>
+```
+::::
 
 The cache is rebuilt from the new response.
 

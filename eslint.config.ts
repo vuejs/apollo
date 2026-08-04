@@ -13,6 +13,8 @@ export default antfu(
       'ts/no-namespace': 'off',
       'ts/no-empty-object-type': 'off',
       'import/first': 'off',
+      'vue/attribute-hyphenation': ['error', 'never'],
+      'vue/v-on-event-hyphenation': ['error', 'never'],
     },
   },
   {

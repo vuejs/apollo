@@ -19,6 +19,7 @@ export const theme = ref<'light' | 'dark'>('light')
 
 ```ts
 import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
 export const useAuthStore = defineStore('auth', () => {
   const token = ref<string | null>(null)
@@ -63,14 +64,14 @@ Apollo Client provides [`makeVar`](https://www.apollographql.com/docs/react/loca
 
 Vue Apollo intentionally does not ship a `useReactiveVar` composable, for two reasons:
 
-1. Vue already has a complete reactivity system (`ref`, `computed`, `watch`). It does not need a parallel one.
+1. Vue already has a complete reactivity system (`ref`, `computed`, `watch`).
 2. For nearly all use cases, a Vue ref or Pinia store is a better fit than `makeVar`.
 
 If you do need a reactive variable for Apollo field policies, you can read it from Vue by subscribing manually:
 
 ```ts
 import { makeVar } from '@apollo/client/cache'
-import { onScopeDispose, ref, shallowRef } from 'vue'
+import { onScopeDispose, shallowRef } from 'vue'
 
 export function useApolloReactiveVar<T>(rv: ReturnType<typeof makeVar<T>>) {
   const state = shallowRef(rv())
@@ -89,7 +90,7 @@ But unless you have a specific reason to keep state inside Apollo's cache layer 
 
 When you do go the Apollo local-state route, the two mechanisms are:
 
-- **Field policies with `read` functions.** Configure a type policy whose `read` returns the local value. Most flexible, no resolver overhead, recommended.
+- **Field policies with `read` functions.** Configure a type policy whose `read` returns the local value. Most flexible, and the recommended approach.
 - **Local resolvers.** Implement resolvers for `@client` fields the same way you would for a server. Older approach; Apollo Client v4 still supports it but field policies are now preferred.
 
 Both are documented in detail in the Apollo docs:
@@ -105,7 +106,7 @@ From a Vue Apollo perspective, both work the same: query as usual, and `@client`
 |------|------|
 | Component-local UI state (open/closed, active tab) | Vue ref |
 | App-wide state shared across components (auth, theme) | Pinia store |
-| Server data with caching | `useQuery` |
+| Server data with caching | A query |
 | Client-only field accessed through a GraphQL query | Apollo field policy with `read` |
 | Client-only field accessed everywhere except GraphQL | Vue ref or Pinia store |
 

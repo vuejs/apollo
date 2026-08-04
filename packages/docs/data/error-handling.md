@@ -57,6 +57,7 @@ Network errors are represented by several classes:
 
 ### Queries
 
+:::: composition-api
 Read errors through `current.error`:
 
 ```vue twoslash
@@ -85,9 +86,50 @@ const { current } = useQuery(gql`
   </div>
 </template>
 ```
+::::
+
+:::: components-api
+The `#error` slot covers the case where the query failed and there is nothing to show. It
+receives `refetch`, so the retry lives in the template:
+
+```vue twoslash
+<script setup lang="ts">
+import { TypedDocumentNode } from '@apollo/client'
+
+declare const GetUsers: TypedDocumentNode<{ users: { id: string }[] }, Record<string, never>>
+// ---cut---
+import { ApolloQuery } from '@vue/apollo-components'
+</script>
+
+<template>
+  <ApolloQuery :query="GetUsers">
+    <template #loading>
+      Loading...
+    </template>
+    <template #error="{ error, refetch }">
+      <p class="error">
+        Error: {{ error.message }}
+      </p>
+      <button @click="refetch()">
+        Try again
+      </button>
+    </template>
+    <template #data="{ data }">
+      {{ data.users.length }} users
+    </template>
+  </ApolloQuery>
+</template>
+```
+
+Slot resolution is data-first, so a refetch that fails over data already on screen keeps
+rendering `#data` rather than replacing a working page with an error. Those failures reach
+the `@error` event, where a toast is usually the right treatment. See
+[Two ways to read the result](/data/queries#two-ways-to-read-the-result).
+::::
 
 ### Mutations
 
+:::: composition-api
 Read errors through the `error` ref:
 
 ```vue twoslash
@@ -110,9 +152,42 @@ const { mutate, error, loading } = useMutation(gql`
   </p>
 </template>
 ```
+::::
+
+:::: components-api
+`error` is a slot prop on the default slot:
+
+```vue
+<script setup lang="ts">
+import { ApolloMutation } from '@vue/apollo-components'
+import { CreateUser } from './queries'
+</script>
+
+<template>
+  <ApolloMutation
+    v-slot="{ mutate, loading, error }"
+    :mutation="CreateUser"
+    @error="failure => console.error('Create failed:', failure)"
+  >
+    <button :disabled="loading" @click="mutate({ variables: { name: 'Alice' } })">
+      Create
+    </button>
+    <p v-if="error" class="error">
+      {{ error.message }}
+    </p>
+  </ApolloMutation>
+</template>
+```
+
+`<ApolloMutation>` bridges `@error` to `onError` only while the parent is actually
+listening, so binding the event is what makes `mutate()` resolve here. Leave `@error`
+unbound and the same call rejects instead, exactly as it would under `useMutation`'s
+`throws: 'auto'`. See [Error throwing behavior](/data/mutations#error-throwing-behavior).
+::::
 
 ### Subscriptions
 
+:::: composition-api
 Read errors through the `error` ref, or register an `onError` callback:
 
 ```vue twoslash
@@ -139,9 +214,39 @@ onError((err) => {
   </div>
 </template>
 ```
+::::
+
+:::: components-api
+Read errors from the `error` slot prop, next to the `restart` that reconnects:
+
+```vue twoslash
+<script setup lang="ts">
+import { TypedDocumentNode } from '@apollo/client'
+
+declare const OnMessageAdded: TypedDocumentNode<{ messageAdded: { id: string } }, Record<string, never>>
+// ---cut---
+import { ApolloSubscription } from '@vue/apollo-components'
+</script>
+
+<template>
+  <ApolloSubscription v-slot="{ error, restart }" :subscription="OnMessageAdded">
+    <div v-if="error">
+      Connection error: {{ error.message }}
+      <button @click="restart()">
+        Reconnect
+      </button>
+    </div>
+  </ApolloSubscription>
+</template>
+```
+
+The same failure is also emitted as `@error`, which is what
+[Error event hooks](#error-event-hooks) below covers.
+::::
 
 ## Error event hooks
 
+:::: composition-api
 Every composable exposes an `onError` event hook for imperative handling:
 
 ```ts twoslash
@@ -163,11 +268,48 @@ onError((error) => {
   // errorTracker.capture(error)
 })
 ```
+::::
+
+:::: components-api
+`<ApolloQuery>`, `<ApolloMutation>`, `<ApolloSubscription>` and `<ApolloSubscribeToMore>`
+emit `@error`. `<ApolloFragment>` has none.
+
+```vue
+<script setup lang="ts">
+import type { ErrorLike } from '@apollo/client'
+import { ApolloQuery } from '@vue/apollo-components'
+import { GetUsers } from './queries'
+
+function report(error: ErrorLike) {
+  console.error('Query failed:', error.message)
+
+  // Show a toast notification
+  // toast.error(error.message)
+
+  // Report to an error-tracking service
+  // errorTracker.capture(error)
+}
+</script>
+
+<template>
+  <ApolloQuery :query="GetUsers" @error="report">
+    <template #data="{ data }">
+      {{ data.users.length }}
+    </template>
+  </ApolloQuery>
+</template>
+```
+
+Unlike `#error`, the event fires for every failure, including one that lands on top of a
+result the reader is still looking at. That makes it the right place for logging and
+toasts, and `#error` the right place for the empty-page treatment.
+::::
 
 ## Mutation throwing behavior
 
 By default, `mutate()` throws when no `onError` handler is registered. The `throws` option controls this:
 
+:::: composition-api
 ```ts twoslash
 import { TypedDocumentNode } from '@apollo/client'
 import { useMutation } from '@vue/apollo-composable'
@@ -208,6 +350,7 @@ async function handleSubmit() {
   }
 }
 ```
+::::
 
 | Value | Behavior |
 |-------|----------|
@@ -215,10 +358,25 @@ async function handleSubmit() {
 | `'always'` | Always throws |
 | `'never'` | Never throws |
 
+:::: components-api
+`<ApolloMutation>` has the same default. Binding `@error` is what registers a handler under
+`'auto'`, so `mutate()` resolves and the failure arrives on the event; with nothing bound it
+rejects. `throws` has no dedicated prop, so set it through `options`, which takes the full
+[`useMutation.Options`](/api/composable/@vue/namespaces/useMutation/interfaces/Options)
+object:
+
+```vue-html
+<ApolloMutation :mutation="CreateUser" :options="{ throws: 'always' }" />
+```
+
+See [Error throwing behavior](/data/mutations#error-throwing-behavior) for the full table.
+::::
+
 ## Error policies
 
 By default, Apollo Client discards partial data when a GraphQL error occurs and populates `error`. Change this with `errorPolicy`:
 
+:::: composition-api
 ```ts twoslash
 import { TypedDocumentNode } from '@apollo/client'
 import { useQuery } from '@vue/apollo-composable'
@@ -230,6 +388,16 @@ const { current } = useQuery(GET_USERS, {
   errorPolicy: 'all',
 })
 ```
+::::
+
+:::: components-api
+`errorPolicy` has no dedicated prop; set it through `options`, which takes the full
+[`useQuery.Options`](/api/composable/@vue/namespaces/useQuery/interfaces/Options) object:
+
+```vue-html
+<ApolloQuery :query="GetUsers" :options="{ errorPolicy: 'all' }">
+```
+::::
 
 | Policy | Behavior |
 |--------|----------|
@@ -241,6 +409,7 @@ const { current } = useQuery(GET_USERS, {
 
 With `errorPolicy: 'all'`, partial data is available alongside the error:
 
+:::: composition-api
 ```vue twoslash
 <script setup lang="ts">
 import { TypedDocumentNode } from '@apollo/client'
@@ -268,6 +437,41 @@ const { current } = useQuery(
   </div>
 </template>
 ```
+::::
+
+:::: components-api
+`#data` types its `data` prop as a complete result, so a partial one would be handed to you
+under a type that promises fields it does not have. Use the default slot instead, where
+`resultState` narrows `result` honestly, exactly as it does in script:
+
+```vue twoslash
+<script setup lang="ts">
+import { TypedDocumentNode } from '@apollo/client'
+
+declare const MixedResults: TypedDocumentNode<{ goodField: string, badField: string }, Record<string, never>>
+// ---cut---
+import { ApolloQuery } from '@vue/apollo-components'
+</script>
+
+<template>
+  <ApolloQuery
+    v-slot="{ result, resultState, error }"
+    :query="MixedResults"
+    :options="{ errorPolicy: 'all' }"
+  >
+    <div v-if="error" class="warning">
+      Some data couldn't be loaded: {{ error.message }}
+    </div>
+    <p v-if="resultState !== 'empty'">
+      Good field: {{ result.goodField }}
+    </p>
+  </ApolloQuery>
+</template>
+```
+
+The two modes mix, so a `#data` slot can still handle the everything-worked case while the
+default slot renders the warning banner above it.
+::::
 
 ## Identifying error types
 
@@ -359,8 +563,8 @@ const errorLink = new ErrorLink(({ error, operation, forward }) => {
 })
 ```
 
-::: warning
-If the retried operation also fails, those errors do not reach `ErrorLink` again. An `ErrorLink` can only retry a particular operation once.
+::: warning `ErrorLink` retries an operation only once
+If the retried operation also fails, those errors do not reach `ErrorLink` again.
 :::
 
 ### Retry on network errors
@@ -390,6 +594,7 @@ const link = from([retryLink, new HttpLink({ uri: '/graphql' })])
 
 `reset()` clears mutation errors so the form can be tried again:
 
+:::: composition-api
 ```vue twoslash
 <script setup lang="ts">
 import { TypedDocumentNode } from '@apollo/client'
@@ -414,6 +619,34 @@ function dismissError() {
   </div>
 </template>
 ```
+::::
+
+:::: components-api
+`reset()` is a slot prop:
+
+```vue
+<script setup lang="ts">
+import { ApolloMutation } from '@vue/apollo-components'
+import { CreateUser } from './queries'
+</script>
+
+<template>
+  <ApolloMutation v-slot="{ mutate, error, reset }" :mutation="CreateUser" @error="console.error">
+    <button @click="mutate({ variables: { name: 'Alice' } })">
+      Create
+    </button>
+    <div v-if="error" class="error">
+      {{ error.message }}
+      <button @click="reset()">
+        Dismiss
+      </button>
+    </div>
+  </ApolloMutation>
+</template>
+```
+
+See [Resetting state](/data/mutations#resetting-state) for what else it clears.
+::::
 
 ## Next steps
 

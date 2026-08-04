@@ -2,6 +2,12 @@
 
 [`useLazyQuery`](/api/composable/functions/useLazyQuery) is for queries where the variables are not known up front. Reach for it when a query should run in response to a user action (search submit, button click, modal open) rather than automatically on mount.
 
+:::: components-api
+::: warning Composition API only
+There is no `<ApolloLazyQuery>`.
+:::
+::::
+
 ## When to use lazy vs enabled
 
 | Situation | Tool |

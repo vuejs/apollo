@@ -24,9 +24,25 @@ For ordinary components (no `await` in setup), Vue Apollo registers an `onServer
 
 This means you can write a typical Vue Apollo component and it just works in SSR. No special wrapping required.
 
+:::: components-api
+`<ApolloQuery>` server-renders the same way. `#data` is what the server emits. The two
+ways of holding a query back differ here: `prefetch: false` leaves it enabled, so the
+server emits `#loading`, while a `disabled` query renders nothing at all.
+::::
+
 ### Top-level await with Suspense
 
 If you use `await useQuery()` in `<script setup>`, the component becomes async. Wrapped in `<Suspense>`, the server waits for the await before rendering. This is the same pattern that produces a useful client-side loading state from [Suspense](/data/suspense).
+
+:::: components-api
+::: warning Composition API only
+`<ApolloQuery>` cannot suspend. Suspense needs the `await` to happen in the *suspending*
+component's own `setup`.
+
+Use `await useQuery(...)` in `<script setup>` for the components you want to suspend, and
+`<ApolloQuery>` everywhere else. They can appear in the same tree.
+:::
+::::
 
 Both approaches produce a server-rendered result with real data.
 
@@ -55,6 +71,15 @@ With `awaitComplete: true`:
 This negates the performance benefit of `@defer` (the whole point being to render fast and fill in slow), so reach for it only when partial data on the server would produce misleading HTML.
 
 `onServerPrefetch` uses `awaitComplete` automatically when the `prefetch` option is enabled (which it is by default).
+
+:::: components-api
+`<ApolloQuery>` has no prop for it, so pass it through `options`, which takes the whole
+[`useQuery.Options`](/api/composable/@vue/namespaces/useQuery/interfaces/Options) object:
+
+```vue-html
+<ApolloQuery :query="Query" :options="{ awaitComplete: true }" />
+```
+::::
 
 ## Plain Vue SSR recipe
 
@@ -186,6 +211,7 @@ const apolloClient = new ApolloClient({
 
 To run a query only on the client (for example, a query that depends on `window`):
 
+:::: composition-api
 ```ts
 import { useQuery } from '@vue/apollo-composable'
 
@@ -199,6 +225,35 @@ Or set `prefetch: false`:
 ```ts
 useQuery(QUERY, { prefetch: false })
 ```
+::::
+
+:::: components-api
+```vue twoslash
+<script setup lang="ts">
+import { TypedDocumentNode } from '@apollo/client'
+
+declare const Query: TypedDocumentNode<{ user: { id: string } }, Record<string, never>>
+// ---cut---
+import { ApolloQuery } from '@vue/apollo-components'
+
+const isClient = typeof window !== 'undefined'
+</script>
+
+<template>
+  <ApolloQuery :query="Query" :disabled="!isClient" />
+</template>
+```
+
+The check has to live in `<script setup>`: an SFC template resolves bare identifiers
+against the component instance, so `typeof window` in the binding would always be
+`'undefined'`.
+
+Or set `prefetch: false`:
+
+```vue-html
+<ApolloQuery :query="Query" :options="{ prefetch: false }" />
+```
+::::
 
 `prefetch: false` skips the `onServerPrefetch` registration but the query still executes if `enabled` is true. The component renders the loading state on the server, which the client then hydrates and resolves.
 

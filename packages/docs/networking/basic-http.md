@@ -112,8 +112,9 @@ The order matters: links run from left to right on the request, and the response
 
 ## Per-request context
 
-Use the `context` option on `useQuery`, `useMutation`, or `useSubscription` to pass per-call data through the link chain:
+Use the `context` option on any operation to pass per-call data through the link chain:
 
+:::: composition-api
 ```ts twoslash
 import { TypedDocumentNode } from '@apollo/client'
 import { useQuery } from '@vue/apollo-composable'
@@ -129,6 +130,19 @@ useQuery(QUERY, {
   },
 })
 ```
+::::
+
+:::: components-api
+`<ApolloQuery>` has no `context` prop, so pass it through `options`, which takes the whole
+[`useQuery.Options`](/api/composable/@vue/namespaces/useQuery/interfaces/Options) object:
+
+```vue-html
+<ApolloQuery
+  :query="Query"
+  :options="{ context: { headers: { 'x-custom-header': 'value' } } }"
+/>
+```
+::::
 
 Links that read context (most auth links, persisted-query links) can use this. The context flows through every link until something acts on it.
 
