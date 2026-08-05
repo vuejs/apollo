@@ -6,13 +6,13 @@ This page introduces the cache from a Vue Apollo perspective. For deep internals
 
 ## What the cache buys you
 
-When `useQuery` runs, Apollo Client:
+When a query runs, Apollo Client:
 
 1. Looks for the requested data in the cache.
 2. If found (and `fetchPolicy` allows), returns it immediately, no network request needed.
 3. If missing, sends the query, then stores the response in the cache.
 
-Every component that uses `useQuery` for a piece of data shares the same cache entry. When that entry changes, every dependent `useQuery` updates its reactive refs automatically. You do not have to invalidate anything by hand.
+Every component that queries a piece of data shares the same cache entry. When that entry changes, every query that depends on it updates automatically. You do not have to invalidate anything by hand.
 
 ## Normalization in one paragraph
 
@@ -24,6 +24,7 @@ For a complete walkthrough, see [Apollo's Caching Overview](https://www.apollogr
 
 When the cache changes, queries that read the affected data refresh. The two queries below both read `Todo:5`, so the second component reflects mutations made through the first:
 
+:::: composition-api
 ::: code-group
 
 ```vue [TodoList.vue]
@@ -91,8 +92,62 @@ const { mutate: toggle } = useMutation(gql`
 ```
 
 :::
+::::
 
-After `toggle` runs, the mutation result `{ id, completed }` updates `Todo:5` in the cache. Both queries see the change immediately. No `refetchQueries`, no manual subscription.
+:::: components-api
+::: code-group
+
+```vue [TodoList.vue]
+<script setup lang="ts">
+import { ApolloQuery } from '@vue/apollo-components'
+import { TodoList } from './queries'
+</script>
+
+<template>
+  <ApolloQuery :query="TodoList">
+    <template #data="{ data }">
+      <ul>
+        <li v-for="todo in data.todos" :key="todo.id">
+          {{ todo.text }}
+        </li>
+      </ul>
+    </template>
+  </ApolloQuery>
+</template>
+```
+
+```vue [TodoDetail.vue]
+<script setup lang="ts">
+import { ApolloMutation, ApolloQuery } from '@vue/apollo-components'
+import { TodoDetail, Toggle } from './queries'
+
+const { id } = defineProps<{ id: string }>()
+</script>
+
+<template>
+  <ApolloQuery :query="TodoDetail" :variables="{ id }">
+    <template #data="{ data }">
+      <ApolloMutation v-slot="{ mutate }" :mutation="Toggle" @error="console.error">
+        <input
+          type="checkbox"
+          :checked="data.todo.completed"
+          @change="mutate({ variables: { id } })"
+        >
+      </ApolloMutation>
+      {{ data.todo.text }}
+    </template>
+  </ApolloQuery>
+</template>
+```
+
+:::
+
+Both documents in `./queries` select `id` alongside the fields they render. Without the key
+field in the selection set the cache cannot file the two results under the same `Todo:5`
+entry, and the components stop tracking each other.
+::::
+
+After the toggle runs, the mutation result `{ id, completed }` updates `Todo:5` in the cache. Both queries see the change immediately. No `refetchQueries`, no manual subscription.
 
 ## When the cache is not enough
 
@@ -112,7 +167,7 @@ For each of those, you describe the cache change yourself or refetch the affecte
 
 ## Fetch policies
 
-`fetchPolicy` on `useQuery` controls how the cache is consulted on each call:
+`fetchPolicy` controls how the cache is consulted on each call:
 
 | Policy | Behavior |
 |--------|----------|
@@ -123,6 +178,14 @@ For each of those, you describe the cache change yourself or refetch the affecte
 | `no-cache` | Always fetch from the network. Do not write to the cache. |
 
 `cache-and-network` is a useful default for screens where freshness matters but you do not want to block on the network: users see the cached result immediately, then the screen updates when the request returns.
+
+:::: components-api
+`<ApolloQuery>` takes the policy as a prop:
+
+```vue-html
+<ApolloQuery :query="TodoList" fetchPolicy="cache-and-network">
+```
+::::
 
 ## Configuration
 

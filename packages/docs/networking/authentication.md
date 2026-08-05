@@ -145,7 +145,7 @@ Apollo's cache reflects "what the current user is allowed to see." On login or l
 
 Call `client.resetStore()` to clear the cache and refetch every active query:
 
-```vue twoslash
+```vue
 <script setup lang="ts">
 import { useApolloClient } from '@vue/apollo-composable'
 

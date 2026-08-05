@@ -165,9 +165,9 @@ Debounce variable updates (ms).
 
 Keep previous result while loading new data.
 
-The retained result is reported as a normal result — `resultState`, `result` and
-`partial` all describe it — with `isPreviousResult` set to `true` so it can be
-told apart from a fresh one.
+The retained result is reported as a normal result, so `resultState`, `result` and
+`partial` all describe it, with `isPreviousResult` set to `true` so it can be told
+apart from a fresh one.
 
 #### Default Value
 

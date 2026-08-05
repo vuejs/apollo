@@ -1,0 +1,9 @@
+{
+  "extends": "../vue-apollo-composable/tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "types": []
+  },
+  "include": ["src/**/*.ts", "src/**/*.vue"],
+  "exclude": ["src/**/*.test.ts", "src/test-utils", "src/type-tests"]
+}

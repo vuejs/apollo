@@ -14,7 +14,7 @@ import type { MaybeRefOrGetter, Ref } from '@vue/reactivity'
 import type { EventHookOn } from '@vueuse/core'
 import { computed, getCurrentScope, onScopeDispose, ref, shallowRef, toValue } from '@vue/reactivity'
 import { nextTick } from '@vue/runtime-core'
-import { createEventHook } from '@vueuse/core'
+import { createEventHook, tryOnScopeDispose } from '@vueuse/core'
 import { useApolloClient } from './useApolloClient.ts'
 import { trackMutation } from './util/loadingTracking.ts'
 
@@ -550,12 +550,20 @@ export function useMutation<
   function onError(fn: (error: ErrorLike) => void) {
     errorListenerCount++
     const { off } = errorEvent.on(fn)
-    return {
-      off: () => {
-        errorListenerCount--
-        off()
-      },
+    let removed = false
+
+    function remove() {
+      if (removed) {
+        return
+      }
+      removed = true
+      errorListenerCount--
+      off()
     }
+
+    tryOnScopeDispose(remove)
+
+    return { off: remove }
   }
 
   function hasErrorListeners(): boolean {

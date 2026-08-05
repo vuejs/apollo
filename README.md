@@ -29,6 +29,7 @@ In this monorepository:
 | Package | Description |
 |---------|-------------|
 |[@vue/apollo-composable](./packages/vue-apollo-composable) |Composition API|
+|[@vue/apollo-components](./packages/vue-apollo-components) |Components API, built on the composables|
 
 ## Special Sponsor
 

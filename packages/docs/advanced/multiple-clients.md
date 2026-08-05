@@ -42,15 +42,11 @@ The dictionary must contain a `default` entry. That is the client used when no `
 
 ## Using a specific client
 
+:::: composition-api
 Pass `clientId` in the composable options:
 
-```vue twoslash
+```vue
 <script setup lang="ts">
-import { TypedDocumentNode } from '@apollo/client'
-import { useQuery } from '@vue/apollo-composable'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ pageViews: number }, {}>
-// ---cut---
 const PAGE_VIEWS: TypedDocumentNode<{ pageViews: number }, {}>
   = gql`
     query PageViews {
@@ -64,7 +60,39 @@ const { current } = useQuery(PAGE_VIEWS, {
 </script>
 ```
 
-Without `clientId`, the default client handles the operation. The same option works on [`useMutation`](/data/mutations), [`useSubscription`](/data/subscriptions), [`useLazyQuery`](/advanced/lazy-queries), and [`useFragment`](/data/fragments).
+The same option works on [`useMutation`](/data/mutations), [`useSubscription`](/data/subscriptions), [`useLazyQuery`](/advanced/lazy-queries), and [`useFragment`](/data/fragments).
+::::
+
+:::: components-api
+Set the `clientId` prop:
+
+```vue
+<script setup lang="ts">
+import { ApolloQuery } from '@vue/apollo-components'
+</script>
+
+<template>
+  <ApolloQuery :query="PageViews" clientId="analytics">
+    <template #data="{ data }">
+      {{ data.pageViews }} views
+    </template>
+  </ApolloQuery>
+</template>
+```
+
+[`<ApolloMutation>`](/api/components/ApolloMutation),
+[`<ApolloSubscription>`](/api/components/ApolloSubscription) and
+[`<ApolloFragment>`](/api/components/ApolloFragment) take the same prop.
+[`<ApolloSubscribeToMore>`](/api/components/ApolloSubscribeToMore) always uses whichever
+client its enclosing `<ApolloQuery>` picked.
+
+Because the prop is a normal binding, a client can be chosen per element without any of the
+plumbing a composable would need:
+
+```vue-html
+<ApolloQuery :query="PageViews" :clientId="isPreview ? 'staging' : 'default'">
+```
+::::
 
 ## Resolving clients imperatively
 
@@ -85,24 +113,32 @@ await analytics.mutate({
 
 `resolveClient()` with no argument returns the default client.
 
+:::: components-api
+This is for code, not templates. An element that already picks its client with `clientId`
+never needs to resolve one by hand, so reach for `useApolloClient` only where the call
+happens outside the template: a store action, a route guard, an event handler that talks to
+the client directly.
+::::
+
 ## Switching clients reactively
 
 `clientId` is read each time the underlying observable is created. You can vary it based on a ref to switch clients at runtime, but the query is re-created whenever it changes, which means the previous result is lost and a new fetch starts.
 
-```ts twoslash
-import { TypedDocumentNode } from '@apollo/client'
-import { useQuery } from '@vue/apollo-composable'
-import { ref } from 'vue'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<any, any>
-const QUERY: TypedDocumentNode<any, any> = gql``
-// ---cut---
+:::: composition-api
+```ts
 const env = ref<'default' | 'staging'>('default')
 
 const { current } = useQuery(QUERY, () => ({
   clientId: env.value,
 }))
 ```
+::::
+
+:::: components-api
+```vue-html
+<ApolloQuery :query="Query" :clientId="env">
+```
+::::
 
 This is fine for occasional switches (an admin tool toggling between staging and prod). For per-feature splits, prefer setting `clientId` once per component or per query, not reactively.
 
@@ -125,6 +161,14 @@ const result = cleanup(() => {
 ```
 
 See [Outside Components](/advanced/outside-components) for the full pattern.
+
+:::: components-api
+::: warning Composition API only
+`provideApolloClients` exists to give composables an injection context they would otherwise
+lack. Components run inside a template, so they always have one and resolve `clientId`
+against the `ApolloClients` map the app provided.
+:::
+::::
 
 ## When to reach for multiple clients
 

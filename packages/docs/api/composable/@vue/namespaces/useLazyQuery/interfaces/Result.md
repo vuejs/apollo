@@ -430,6 +430,8 @@ Event triggered when query result data is received.
 
 Fires when `resultState` is `'complete'`, `'partial'`, or `'streaming'`. Does not fire for `'empty'` state or errors.
 
+A result served from the cache during the `useQuery()` call is replayed on the next tick, so a handler registered right after the call still receives it.
+
 ***
 
 ### onStreamingResult

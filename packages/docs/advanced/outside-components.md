@@ -2,7 +2,18 @@
 
 Vue Apollo's composables rely on Vue's injection system to find the Apollo client. Inside a component's `<script setup>` (or any code that runs in a component's effect scope) the client is found through `inject(DefaultApolloClient)` automatically.
 
-Outside of that context, `useQuery` and friends have no way to resolve a client. [`provideApolloClient`](/api/composable/functions/provideApolloClient) and [`provideApolloClients`](/api/composable/functions/provideApolloClients) bridge that gap by stashing the client in module-level state for the duration of a callback.
+Outside of that context, `useQuery` and friends have no way to resolve a client. [`provideApolloClient`](/api/composable/functions/provideApolloClient) and [`provideApolloClients`](/api/composable/functions/provideApolloClients) bridge that gap for the duration of a callback.
+
+:::: components-api
+::: warning Composition API only
+This page is about calling composables outside a component setup: Pinia stores, route
+guards, plain modules. Components only exist inside a template, so they always have the
+injection context and never need this.
+
+Use the `clientId` prop to pick a non-default client from a template; see
+[Multiple Clients](/advanced/multiple-clients).
+:::
+::::
 
 ## When you need this
 
@@ -35,8 +46,6 @@ const result = provideApolloClient(apolloClient)(() => {
   `)
 })
 ```
-
-The client is bound for the duration of the inner function. Composables called inside that function resolve the client through module state instead of Vue injection.
 
 ## Vue Router guards
 

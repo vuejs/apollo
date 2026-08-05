@@ -2,6 +2,12 @@
 
 [`useLazyQuery`](/api/composable/functions/useLazyQuery) is for queries where the variables are not known up front. Reach for it when a query should run in response to a user action (search submit, button click, modal open) rather than automatically on mount.
 
+:::: components-api
+::: warning Composition API only
+There is no `<ApolloLazyQuery>`.
+:::
+::::
+
 ## When to use lazy vs enabled
 
 | Situation | Tool |
@@ -14,14 +20,8 @@
 
 ## Basic usage
 
-```vue twoslash
+```vue
 <script setup lang="ts">
-import { TypedDocumentNode } from '@apollo/client'
-import { useLazyQuery } from '@vue/apollo-composable'
-import { ref } from 'vue'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ users: { id: string, name: string }[] }, { term: string }>
-// ---cut---
 const SEARCH_USERS: TypedDocumentNode<{ users: { id: string, name: string }[] }, { term: string }>
   = gql`
     query SearchUsers($term: String!) {
@@ -70,13 +70,7 @@ The result also lands in `current.result` and the individual refs (`result`, `lo
 
 Calling `load` again with different variables re-runs the query:
 
-```ts twoslash
-import { TypedDocumentNode } from '@apollo/client'
-import { useLazyQuery } from '@vue/apollo-composable'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ users: { id: string }[] }, { term: string }>
-const SEARCH_USERS: TypedDocumentNode<{ users: { id: string }[] }, { term: string }> = gql``
-// ---cut---
+```ts
 const { load } = useLazyQuery(SEARCH_USERS)
 
 await load({ term: 'alice' }) // First search
@@ -91,14 +85,7 @@ Each call merges new variables on top of the previously-loaded ones.
 
 You can still set reactive `variables` in options, which acts as the default for `load`:
 
-```ts twoslash
-import { TypedDocumentNode } from '@apollo/client'
-import { useLazyQuery } from '@vue/apollo-composable'
-import { ref } from 'vue'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ users: { id: string }[] }, { term: string, limit: number }>
-const SEARCH_USERS: TypedDocumentNode<{ users: { id: string }[] }, { term: string, limit: number }> = gql``
-// ---cut---
+```ts
 const term = ref('')
 const limit = ref(10)
 

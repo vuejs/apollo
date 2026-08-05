@@ -80,6 +80,7 @@ With masking on, fields defined only in a fragment are hidden from queries that 
 
 ## Reading masked data
 
+:::: composition-api
 Use [`useFragment`](/api/composable/functions/useFragment) inside the component that owns the fragment:
 
 ```vue twoslash
@@ -114,6 +115,49 @@ const { current } = useFragment({
 ```
 
 `current.result` only contains the fields defined in the fragment. Parent queries do not leak into it, and sibling fragments do not leak either.
+::::
+
+:::: components-api
+Use [`<ApolloFragment>`](/api/components/ApolloFragment) inside the component that owns the
+fragment. The masked object the parent passed down goes straight into `from`:
+
+```vue twoslash
+<script setup lang="ts">
+import { TypedDocumentNode } from '@apollo/client'
+
+declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ title: string, publishedAt: string }>
+// ---cut---
+import { ApolloFragment } from '@vue/apollo-components'
+
+const { post } = defineProps<{
+  post: { __typename: 'Post', id: string }
+}>()
+</script>
+
+<template>
+  <ApolloFragment
+    :fragment="gql`
+      fragment PostDetailsFragment on Post {
+        title
+        publishedAt
+      }
+    `"
+    :from="post"
+  >
+    <template #data="{ data }">
+      <h2>{{ data.title }}</h2>
+      <p>{{ data.publishedAt }}</p>
+    </template>
+  </ApolloFragment>
+</template>
+```
+
+`data` only contains the fields defined in the fragment. Parent queries do not leak into it,
+and sibling fragments do not leak either.
+
+With masking enabled, a component cannot read the fragment's fields from the `post` prop
+it receives. `<ApolloFragment>` unmasks them in the template.
+::::
 
 ## Fixing the parent component
 
@@ -178,7 +222,12 @@ This helps you find every implicit dependency before removing the `@unmask` dire
 | `subscribeToMore` `updateQuery` callback | No |
 | Cache APIs (`readQuery`, `readFragment`) | No |
 
-Cache APIs and mutation update callbacks deal with the underlying cache directly, so masking does not apply to them.
+:::: components-api
+Every row above applies to the components too. A masked field is missing from
+[`<ApolloQuery>`](/api/components/ApolloQuery)'s `#data` slot and from its `@result`
+payload, and still present inside an `update` callback passed through
+[`<ApolloMutation>`](/api/components/ApolloMutation)'s `options` prop.
+::::
 
 ## Incremental adoption
 
@@ -216,7 +265,7 @@ If you use TypeScript with GraphQL Codegen:
 ### 4. Refactor components
 
 1. Watch the console for "accessing masked field" warnings.
-2. Update components to use `useFragment` for the data they own.
+2. Read the data a component owns through [`useFragment`](/api/composable/functions/useFragment) or [`<ApolloFragment>`](/api/components/ApolloFragment).
 3. Add any required fields to parent queries explicitly.
 4. Remove `@unmask` directives when no warnings remain.
 

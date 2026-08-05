@@ -4,13 +4,20 @@ This page walks through upgrading a Vue Apollo v4 codebase to v5 using the compa
 
 For a quick scan of what changed, see [What's changed in v5](/migration/whats-changed). For the compat surface in detail, see [Compat layer](/migration/compat).
 
+::: tip Using `<ApolloQuery>` and friends?
+This page is about the composables, which are what the compat layer covers. The components
+were rewritten with no compat shim, so they upgrade separately. See
+[Migrating v4 components](/migration/components), and do that pass first if your templates
+are where most of the Apollo code lives.
+:::
+
 ## Prerequisites
 
 Before starting:
 
 - **Vue 3.5 or higher.** v5 drops Vue 2 support and relies on Vue 3.5 features (per-key reactive variables, top-level reactive props destructuring). If you are on Vue 3.4 or earlier, upgrade Vue first.
 - **Apollo Client 4.1 or higher.** v5 uses the namespaced types and the `DataState` discriminated union introduced in Apollo Client v4.
-- **Drop `vue-demi` from your project's direct dependencies** if it was there. v5 imports from `@vue/reactivity` and `@vue/runtime-core` directly.
+- **Drop `vue-demi` from your project's direct dependencies** if it was there.
 
 ## Step 1: Update dependencies
 
@@ -337,4 +344,5 @@ import { computed, ref } from 'vue-demi'
 
 - [Compat layer](/migration/compat) covers the compat module in detail, including its known gaps.
 - [What's changed in v5](/migration/whats-changed) is the reference companion to this guide.
+- [Migrating v4 components](/migration/components) covers `@vue/apollo-components`, which compat does not.
 - [Queries](/data/queries), [Mutations](/data/mutations), and [Subscriptions](/data/subscriptions) cover the v5 API in depth.

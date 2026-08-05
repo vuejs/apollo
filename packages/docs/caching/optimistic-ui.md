@@ -2,17 +2,33 @@
 
 For many mutations, you can predict the result before the server responds. Apollo Client lets you write that predicted result into the cache immediately so the UI updates without waiting for the network. When the real result arrives, Apollo replaces the optimistic value. If the mutation fails, Apollo rolls the optimistic value back.
 
+:::: components-api
+::: tip Reading this page with `<ApolloMutation>`
+`optimisticResponse` is a mutation option, so it reaches the component through the `options`
+prop, which takes the full
+[`useMutation.Options`](/api/composable/@vue/namespaces/useMutation/interfaces/Options)
+object. It can also go through the argument to `mutate()` when it depends on what the user
+just did:
+
+```vue-html
+<ApolloMutation v-slot="{ mutate }" :mutation="UpdateComment" @error="console.error">
+  <button @click="mutate({ variables, optimisticResponse })">
+    Save
+  </button>
+</ApolloMutation>
+```
+
+`mutate()` takes the same object `useMutation`'s `mutate` does, so every snippet below
+transfers unchanged.
+:::
+::::
+
 ## The `optimisticResponse` option
 
 Pass `optimisticResponse` to `mutate` to enable optimistic updates:
 
-```vue twoslash
+```vue
 <script setup lang="ts">
-import { TypedDocumentNode } from '@apollo/client'
-import { useMutation } from '@vue/apollo-composable'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ updateComment: { __typename: 'Comment', id: string, content: string } }, { commentId: string, commentContent: string }>
-// ---cut---
 const UPDATE_COMMENT = gql`
   mutation UpdateComment($commentId: ID!, $commentContent: String!) {
     updateComment(commentId: $commentId, content: $commentContent) {
@@ -56,14 +72,8 @@ function updateComment(commentId: string, commentContent: string) {
 
 For mutations that create new entities (where there is no server-assigned id yet), supply a temporary id:
 
-```vue twoslash
+```vue
 <script setup lang="ts">
-import { TypedDocumentNode } from '@apollo/client'
-import { useMutation } from '@vue/apollo-composable'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ addTodo: { __typename: 'Todo', id: string, text: string, completed: boolean } }, { text: string }>
-declare const GET_TODOS: TypedDocumentNode<{ todos: Array<{ __typename: 'Todo', id: string, text: string, completed: boolean }> }, {}>
-// ---cut---
 const ADD_TODO = gql`
   mutation AddTodo($text: String!) {
     addTodo(text: $text) {
@@ -117,13 +127,7 @@ When the server responds with the real todo, its id replaces `temp-<...>` in the
 
 `optimisticResponse` can be a function that returns the predicted result or the `IGNORE` sentinel to skip the optimistic update entirely:
 
-```ts twoslash
-import { TypedDocumentNode } from '@apollo/client'
-import { useMutation } from '@vue/apollo-composable'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ updateComment: { __typename: 'Comment', id: string, content: string } }, { commentId: string, commentContent: string }>
-const UPDATE_COMMENT: TypedDocumentNode<{ updateComment: { __typename: 'Comment', id: string, content: string } }, { commentId: string, commentContent: string }> = gql``
-// ---cut---
+```ts
 const { mutate } = useMutation(UPDATE_COMMENT)
 
 function updateComment(commentId: string, commentContent: string) {

@@ -12,19 +12,24 @@ There are two common contexts where you interact with the cache:
 
 Apollo Client passes the cache as the first argument to `update`:
 
-```ts twoslash
-import { TypedDocumentNode } from '@apollo/client'
-import { useMutation } from '@vue/apollo-composable'
-
-declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ createTodo: { id: string, text: string } }, { text: string }>
-const CREATE_TODO: TypedDocumentNode<{ createTodo: { id: string, text: string } }, { text: string }> = gql``
-// ---cut---
+```ts
 useMutation(CREATE_TODO, {
   update(cache, { data }) {
     // `cache` is the ApolloCache instance
   },
 })
 ```
+
+:::: components-api
+The callback is the same one; it reaches the component through the `options` prop, which
+takes the full
+[`useMutation.Options`](/api/composable/@vue/namespaces/useMutation/interfaces/Options)
+object:
+
+```vue-html
+<ApolloMutation :mutation="CreateTodo" :options="{ update }" />
+```
+::::
 
 ### From `useApolloClient`
 
@@ -209,7 +214,7 @@ This is the safe way to construct cache IDs because it respects any `keyFields` 
 
 ## Watching for changes outside components
 
-The `useQuery` composable subscribes to cache changes automatically. If you need the same behavior outside a component setup (in a worker, a store action, an event listener), use `client.watchQuery` directly:
+A query running inside a component subscribes to cache changes automatically. If you need the same behavior outside a component setup (in a worker, a store action, an event listener), use `client.watchQuery` directly:
 
 ```ts
 import { useApolloClient } from '@vue/apollo-composable'
@@ -230,7 +235,7 @@ subscription.unsubscribe()
 observable.stop()
 ```
 
-For fragment-level watching outside components, the equivalent is `client.watchFragment`. Inside a component, prefer [`useFragment`](/data/fragments).
+For fragment-level watching outside components, the equivalent is `client.watchFragment`. Inside a component, prefer the fragment bindings covered in [Fragments](/data/fragments).
 
 ## Deleting and invalidating
 

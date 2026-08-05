@@ -13,13 +13,13 @@ hero:
       link: /guide/
     - theme: alt
       text: API Reference
-      link: /api/composable/
+      link: /api/
 features:
 - title: Automatic updates
   details: Don't think about updating the UI or refetching the queries!
   icon: ✨
-- title: Supports all Vue APIs
-  details: Option API, Composition API or Components
+- title: Composables or components
+  details: useQuery in script, or ApolloQuery in the template. Same client, same cache.
   icon: 🧩
 - title: SSR-ready
   details: Run your queries on the server before rendering the page HTML

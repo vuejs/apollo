@@ -1,19 +1,13 @@
 # Subscriptions
 
-This page covers GraphQL subscriptions with the [`useSubscription`](/api/composable/functions/useSubscription) composable for real-time updates.
+A GraphQL subscription is a long-lived read. Instead of answering once and closing, the server holds the connection open and pushes a new result every time the data changes, so the client learns about it without asking.
 
-## Overview
+That makes it the only one of the three operation types the client does not drive. A [query](/data/queries) runs when you ask, a [mutation](/data/mutations) when you call it, and a subscription whenever the server has something to say.
 
-Subscriptions maintain an active connection to your GraphQL server, allowing the server to push updates to the client in real time.
-
-They are useful for:
+Subscriptions are useful for:
 
 - **Small, incremental changes to large objects.** Fetch initial state with a query, then receive updates to individual fields as they occur.
 - **Low-latency, real-time updates.** Chat messages, notifications, live data feeds.
-
-::: tip When to use subscriptions
-For most use cases, prefer [polling](/data/refetching#polling) or [refetching on demand](/data/refetching). Reach for subscriptions when you need real-time push updates from the server.
-:::
 
 ## Transport setup
 
@@ -151,7 +145,7 @@ SSE runs over plain HTTP. Pass standard `fetch` headers (auth, etc.) through the
 
 ### Multipart HTTP
 
-The default `HttpLink` can also serve subscriptions when the server supports `multipart/mixed` responses. No extra library or configuration is required: Apollo Client adds the right headers when it sees a subscription operation. Support depends on your server (Apollo Router, Yoga, and several others support it).
+The default `HttpLink` can also serve subscriptions when the server supports `multipart/mixed` responses. No extra library or configuration is required. Support depends on your server (Apollo Router, Yoga, and several others support it).
 
 ## Defining a subscription
 
@@ -177,6 +171,7 @@ const ON_NEW_MESSAGE: TypedDocumentNode<
 
 ## Executing a subscription
 
+:::: composition-api
 ```vue twoslash
 <script setup lang="ts">
 import { TypedDocumentNode } from '@apollo/client'
@@ -217,13 +212,66 @@ const { result, loading, error } = useSubscription(gql`
 - `error` contains any error from the subscription.
 - `start()`, `stop()`, `restart()` control the subscription lifecycle.
 - `variables` is a ref holding the current variables.
+::::
 
-::: tip Why flat refs and not `current`?
-A subscription delivers one result at a time. There is no streaming or partial state to disambiguate, so a discriminated union would not narrow anything. The individual refs match the API directly. See [TypeScript](/data/typescript#composable-return-value-shapes) for the comparison across composables.
-:::
+:::: components-api
+`<ApolloSubscription>` has a single slot, and it is optional. With one, you render the
+latest payload:
+
+```vue twoslash
+<script setup lang="ts">
+import { TypedDocumentNode } from '@apollo/client'
+
+declare const gql: (literals: TemplateStringsArray, ...placeholders: any[]) => TypedDocumentNode<{ newMessage: { id: string, text: string, author: string } }, { channelId: string }>
+// ---cut---
+import { ApolloSubscription } from '@vue/apollo-components'
+</script>
+
+<template>
+  <ApolloSubscription
+    v-slot="{ result, loading, error }"
+    :subscription="gql`
+      subscription OnNewMessage($channelId: ID!) {
+        newMessage(channelId: $channelId) {
+          id
+          text
+          author
+        }
+      }
+    `"
+    :variables="{ channelId: '1' }"
+  >
+    <div v-if="loading">
+      Connecting...
+    </div>
+    <div v-else-if="error">
+      Error: {{ error.message }}
+    </div>
+    <div v-else-if="result">
+      New message from {{ result.newMessage.author }}: {{ result.newMessage.text }}
+    </div>
+  </ApolloSubscription>
+</template>
+```
+
+The slot gives you `result`, `loading`, `error`, `start`, `stop` and `restart`.
+
+Without a slot the component renders nothing at all, which is often what you want: a
+subscription frequently exists to *cause an effect* rather than to display something.
+`@result` is then the whole API.
+
+```vue-html
+<ApolloSubscription
+  :subscription="OnNewMessage"
+  :variables="{ channelId }"
+  @result="playChime"
+/>
+```
+::::
 
 ## Variables
 
+:::: composition-api
 Subscriptions support the same reactive variable patterns as queries:
 
 ```ts twoslash
@@ -266,9 +314,31 @@ useSubscription(ON_NEW_MESSAGE, {
 ```
 
 `debounce` and `throttle` are also available for variable updates, with the same semantics as in [Queries](/data/queries#throttle-and-debounce).
+::::
+
+:::: components-api
+Bind `variables` as a prop. The subscription unsubscribes and resubscribes whenever they
+change:
+
+```vue-html
+<ApolloSubscription :subscription="OnNewMessage" :variables="{ channelId }" />
+```
+
+`shouldResubscribe`, `debounce` and `throttle` have no dedicated props; pass them through
+`options`:
+
+```vue-html
+<ApolloSubscription
+  :subscription="OnNewMessage"
+  :variables="{ channelId }"
+  :options="{ shouldResubscribe: false }"
+/>
+```
+::::
 
 ## Lifecycle control
 
+:::: composition-api
 Manage the connection imperatively:
 
 ```vue twoslash
@@ -298,9 +368,41 @@ function reconnect() {
   </button>
 </template>
 ```
+::::
+
+:::: components-api
+`start`, `stop` and `restart` are all slot props:
+
+```vue twoslash
+<script setup lang="ts">
+import { TypedDocumentNode } from '@apollo/client'
+
+declare const Notifications: TypedDocumentNode<{ notifications: { id: string } }, Record<string, never>>
+// ---cut---
+import { ApolloSubscription } from '@vue/apollo-components'
+</script>
+
+<template>
+  <ApolloSubscription v-slot="{ start, stop, restart }" :subscription="Notifications">
+    <button @click="stop()">
+      Pause
+    </button>
+    <button @click="start()">
+      Resume
+    </button>
+    <button @click="restart()">
+      Reconnect
+    </button>
+  </ApolloSubscription>
+</template>
+```
+
+For pausing declaratively, prefer the `disabled` prop below, which survives re-renders.
+::::
 
 ### Conditionally enabling
 
+:::: composition-api
 Use `enabled` to gate the subscription on a condition:
 
 ```ts twoslash
@@ -319,9 +421,26 @@ const { result } = useSubscription(NOTIFICATIONS, {
 ```
 
 While `enabled` is `false`, no connection exists. When it flips to `true`, the subscription starts.
+::::
+
+:::: components-api
+Use the `disabled` prop:
+
+```vue-html
+<ApolloSubscription :subscription="Notifications" :disabled="!isConnected" />
+```
+
+While `disabled` is `true`, no connection exists. When it flips to `false`, the subscription
+starts.
+
+As with [`<ApolloQuery>`](/data/queries#disabling-queries), the prop is `disabled` rather
+than the composable's `enabled`, so that an absent prop means "on". `options: { enabled }`
+still works.
+::::
 
 ## Event hooks
 
+:::: composition-api
 ```ts twoslash
 import { TypedDocumentNode } from '@apollo/client'
 import { useSubscription } from '@vue/apollo-composable'
@@ -347,9 +466,35 @@ onComplete(() => {
 ```
 
 `onComplete` fires when the server closes the subscription cleanly (for example, after a finite stream like a countdown).
+::::
+
+:::: components-api
+The three hooks are emitted as `@result`, `@error` and `@complete`:
+
+```vue
+<script setup lang="ts">
+import { ApolloSubscription } from '@vue/apollo-components'
+import { OnNewMessage } from './subscriptions'
+</script>
+
+<template>
+  <ApolloSubscription
+    :subscription="OnNewMessage"
+    :variables="{ channelId: '1' }"
+    @result="result => console.log('New message:', result.newMessage)"
+    @error="error => console.error('Subscription error:', error)"
+    @complete="() => console.log('Subscription completed')"
+  />
+</template>
+```
+
+`@complete` fires when the server closes the subscription cleanly (for example, after a
+finite stream like a countdown).
+::::
 
 ## Subscribing to query updates
 
+:::: composition-api
 `subscribeToMore` lets you fetch initial data with a query and stream updates into it via a subscription. The merged result behaves like a single, continuously-updated query.
 
 ```vue twoslash
@@ -414,15 +559,111 @@ watch(
 ```
 
 The first argument to `updateQuery` (`_prev`) is deprecated in Apollo Client v4. Read from `options.previousData` with the `options.complete` guard for type-safe access.
+::::
+
+:::: components-api
+[`<ApolloSubscribeToMore>`](/api/components/ApolloSubscribeToMore) does this declaratively.
+Drop it inside an `<ApolloQuery>` and it subscribes to the query it finds, with no `watch`
+and no waiting for the query to load first:
+
+```vue
+<script setup lang="ts">
+import type { SubscribeToMoreUpdateQueryFn } from '@apollo/client'
+import { ApolloQuery, ApolloSubscribeToMore } from '@vue/apollo-components'
+import { GetMessages, OnNewMessage } from './operations'
+
+const { channelId } = defineProps<{ channelId: string }>()
+
+const addMessage: SubscribeToMoreUpdateQueryFn<
+  { messages: { id: string, text: string }[] },
+  { channelId: string },
+  { newMessage: { id: string, text: string } }
+> = (_prev, { subscriptionData, previousData, complete }) => {
+  if (!complete || !subscriptionData.data)
+    return
+
+  return {
+    ...previousData,
+    messages: [...previousData.messages, subscriptionData.data.newMessage],
+  }
+}
+</script>
+
+<template>
+  <ApolloQuery :query="GetMessages" :variables="{ channelId }">
+    <ApolloSubscribeToMore
+      :document="OnNewMessage"
+      :variables="{ channelId }"
+      :updateQuery="addMessage"
+    />
+
+    <template #loading>
+      Loading...
+    </template>
+    <template #error="{ error }">
+      Error: {{ error.message }}
+    </template>
+    <template #data="{ data }">
+      <ul>
+        <li v-for="msg in data.messages" :key="msg.id">
+          {{ msg.text }}
+        </li>
+      </ul>
+    </template>
+  </ApolloQuery>
+</template>
+```
+
+The component renders nothing. It subscribes on mount, unsubscribes on unmount, and
+resubscribes when `document`, `variables` or `context` change. Changing `updateQuery`
+alone never resubscribes.
+
+The `context` prop is passed to the link chain for this subscription alone, which is where
+per-subscription headers or link options belong:
+
+```vue-html
+<ApolloSubscribeToMore
+  :document="OnNewMessage"
+  :variables="{ channelId }"
+  :context="{ headers: { 'x-channel': channelId } }"
+  :updateQuery="addMessage"
+/>
+```
+
+::: warning It must be inside an `<ApolloQuery>`
+`<ApolloSubscribeToMore>` injects the surrounding query, and throws on mount if there is
+none. It can sit anywhere in the default slot, including alongside `#data`.
+
+The parent query's types are not visible to it, so `updateQuery` is checked against the
+subscription's types only. Annotate the callback yourself, as above, to get the parent
+query's result type back.
+:::
+
+Errors from the subscription surface on its own `@error` event rather than on the query.
 
 See [`SubscribeToMoreOptions`](/api/composable/@vue/namespaces/useQuery/interfaces/SubscribeToMoreOptions) for all available options.
+::::
+
+:::: composition-api
+See [`SubscribeToMoreOptions`](/api/composable/@vue/namespaces/useQuery/interfaces/SubscribeToMoreOptions) for all available options.
+::::
 
 ## Options and result reference
 
+:::: composition-api
 For every available option and method, see:
 
 - [`useSubscription.Options`](/api/composable/@vue/namespaces/useSubscription/interfaces/Options)
 - [`useSubscription.Result`](/api/composable/@vue/namespaces/useSubscription/interfaces/Result)
+::::
+
+:::: components-api
+For every prop, event and slot prop, see:
+
+- [`<ApolloSubscription>`](/api/components/ApolloSubscription)
+- [`<ApolloSubscribeToMore>`](/api/components/ApolloSubscribeToMore)
+- [`useSubscription.Options`](/api/composable/@vue/namespaces/useSubscription/interfaces/Options), for the `options` prop
+::::
 
 ## Next steps
 

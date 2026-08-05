@@ -1,0 +1,69 @@
+{
+  "name": "@vue/apollo-components",
+  "type": "module",
+  "version": "5.0.0-alpha.2",
+  "description": "Apollo GraphQL components for Vue",
+  "author": "Guillaume Chau <guillaume.b.chau@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://apollo.vuejs.org/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vuejs/apollo.git",
+    "directory": "packages/vue-apollo-components"
+  },
+  "bugs": {
+    "url": "https://github.com/vuejs/apollo/issues"
+  },
+  "keywords": [
+    "vue",
+    "apollo",
+    "graphql",
+    "components"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "prepublishOnly": "pnpm run test && pnpm run build",
+    "test": "vitest run",
+    "typecheck": "pnpm --filter @vue/apollo-composable build && vue-tsc --build"
+  },
+  "peerDependencies": {
+    "@apollo/client": "^4.1.0",
+    "@vue/apollo-composable": "workspace:^",
+    "@vue/reactivity": "^3.5.0",
+    "@wry/equality": "^0.5.6",
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@apollo/client": "catalog:",
+    "@types/node": "catalog:",
+    "@vitejs/plugin-vue": "catalog:",
+    "@vue/apollo-composable": "workspace:*",
+    "@vue/reactivity": "catalog:",
+    "@vue/test-utils": "catalog:",
+    "@wry/equality": "catalog:",
+    "graphql": "catalog:",
+    "jsdom": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vite-plugin-dts": "catalog:",
+    "vitest": "catalog:",
+    "vue": "catalog:",
+    "vue-tsc": "catalog:"
+  }
+}

@@ -2,6 +2,16 @@
 
 Vue's built-in `<Suspense>` component lets you display a fallback while async dependencies resolve. Vue Apollo plugs into Suspense by exposing `useQuery` as `PromiseLike`, so you can `await` it in your component's setup.
 
+:::: components-api
+::: warning Composition API only
+`<ApolloQuery>` cannot suspend. Suspense requires the `await` to happen in the suspending
+component's own `setup`.
+
+Use `await useQuery(...)` in `<script setup>` for the components you want to suspend. The
+rest of the tree can keep using `<ApolloQuery>`; the two mix freely.
+:::
+::::
+
 ## Async setup
 
 Top-level `await` in `<script setup>` turns the component async. Inside a `<Suspense>`, Vue shows the fallback until that async work completes.
@@ -156,14 +166,14 @@ See [Streaming & @defer](/advanced/streaming) for a deeper treatment.
 Suspense does not handle errors directly. Combine it with `onErrorCaptured` or an error-boundary component:
 
 ```vue
-<script setup>
+<script setup lang="ts">
 import { onErrorCaptured, ref } from 'vue'
 import UserList from './UserList.vue'
 
 const error = ref<Error | null>(null)
 
 onErrorCaptured((err) => {
-  error.value = err
+  error.value = err as Error
   return false // Stop propagation
 })
 </script>

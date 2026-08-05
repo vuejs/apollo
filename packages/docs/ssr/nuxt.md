@@ -89,10 +89,11 @@ What this does:
 - The `app:rendered` hook serializes the cache into Nuxt's payload after server rendering.
 - `ssrForceFetchDelay` lets cached queries revalidate from the network shortly after hydration, useful for slightly stale data.
 
-## Step 3: Use the composables
+## Step 3: Fetch some data
 
 In any page or component:
 
+:::: composition-api
 ```vue
 <script setup>
 import { gql } from '@apollo/client'
@@ -115,6 +116,37 @@ const { current } = useQuery(gql`
 ```
 
 `useQuery` registers an `onServerPrefetch` hook automatically, so Nuxt waits for the data before rendering the page. The result is in HTML, and the client hydrates without a re-fetch.
+::::
+
+:::: components-api
+```vue
+<script setup lang="ts">
+import { ApolloQuery } from '@vue/apollo-components'
+
+const Company = gql`
+  query {
+    company {
+      ceo
+    }
+  }
+`
+</script>
+
+<template>
+  <ApolloQuery :query="Company">
+    <template #data="{ data }">
+      {{ data.company.ceo }}
+    </template>
+  </ApolloQuery>
+</template>
+```
+
+`<ApolloQuery>` registers an `onServerPrefetch` hook automatically, so Nuxt waits for the
+data before rendering the page. The result is in HTML, and the client hydrates without a
+re-fetch.
+
+Nuxt auto-imports do not cover this package, so import the components explicitly.
+::::
 
 ## Awaiting queries with Suspense
 
@@ -136,6 +168,16 @@ const { current } = await useQuery(gql`
 ```
 
 Nuxt wraps pages in `<Suspense>` automatically, so this works without extra setup. See [Suspense](/data/suspense) for the full pattern.
+
+:::: components-api
+::: warning Composition API only
+`<ApolloQuery>` cannot suspend, so a page built from it renders through its slots rather
+than blocking. Nuxt still waits for the data.
+
+Use `await useQuery(...)` in `<script setup>` for the pages you want to block, and
+`<ApolloQuery>` everywhere else. They can appear in the same tree.
+:::
+::::
 
 ## Authentication in Nuxt
 
