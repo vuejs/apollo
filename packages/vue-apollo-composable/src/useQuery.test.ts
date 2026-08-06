@@ -634,6 +634,45 @@ describe('useQuery', () => {
 
     wrapper.unmount()
   })
+
+  it('should start with the resolved variables when enabled and variables land in the same tick', async () => {
+    const spy = vi.spyOn(apolloClient, 'watchQuery')
+
+    const TestComponent = defineComponent({
+      setup() {
+        const open = ref(false)
+        const { current, variables } = useQuery(ECHO_QUERY, () =>
+          !open.value
+            ? { enabled: false }
+            : { variables: { message: 'hello' }, fetchPolicy: 'no-cache' as const })
+
+        return { current, variables, open }
+      },
+      render() {
+        return h('div', this.current.resultState === 'complete' ? this.current.result.echo : 'no result')
+      },
+    })
+
+    const wrapper = mount(TestComponent, {
+      global: { provide: { [DefaultApolloClient]: apolloClient } },
+    })
+
+    expect(spy).not.toHaveBeenCalled()
+
+    // One write turns the query on and gives it its variables.
+    wrapper.vm.open = true
+
+    expect(spy.mock.calls[0]?.[0].variables).toEqual({ message: 'hello' })
+    expect(wrapper.vm.variables).toEqual({ message: 'hello' })
+    expect(wrapper.vm.current.loading).toBe(true)
+
+    await until(() => wrapper.vm.current.resultState).toBe('complete', { timeout: 200 })
+    expect(wrapper.find('div').text()).toBe('hello')
+    expect(wrapper.vm.current.loading).toBe(false)
+
+    spy.mockRestore()
+    wrapper.unmount()
+  })
   // #endregion
 
   // #region Lifecycle
