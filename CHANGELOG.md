@@ -1,5 +1,17 @@
 # Changelog
 
+## v5.0.0-alpha.4
+
+[compare changes](https://github.com/vuejs/apollo/compare/v5.0.0-alpha.3...v5.0.0-alpha.4)
+
+### 🩹 Fixes
+
+- **useQuery:** Apply variable commits as a single write ([#1618](https://github.com/vuejs/apollo/pull/1618))
+
+### ❤️ Contributors
+
+- Nick Messing ([@nickmessing](http://github.com/nickmessing))
+
 ## v5.0.0-alpha.3
 
 [compare changes](https://github.com/vuejs/apollo/compare/v5.0.0-alpha.2...v5.0.0-alpha.3)
