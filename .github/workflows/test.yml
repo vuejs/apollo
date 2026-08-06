@@ -52,3 +52,40 @@ jobs:
 
       - name: Generated API reference is up to date
         run: git diff --exit-code packages/docs/api
+
+  test-vue-rc:
+    runs-on: ubuntu-latest
+    name: Test against Vue release candidate
+
+    steps:
+      - name: Set alternate npm integrity keys
+        run: |
+          echo COREPACK_INTEGRITY_KEYS="$(curl https://registry.npmjs.org/-/npm/v1/keys | jq -c '{npm: .keys}')" >> $GITHUB_ENV
+      - uses: actions/checkout@v4
+      - run: corepack enable
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Resolve the Vue release candidate
+        run: |
+          VUE_RC="$(npm view vue dist-tags.rc)"
+          echo "Testing against Vue $VUE_RC"
+          # Pinned to the resolved version rather than the `rc` tag so every package in the
+          # tree lands on one Vue — two copies mean two reactive graphs and bogus failures.
+          npm pkg set \
+            "pnpm.overrides.vue=$VUE_RC" \
+            "pnpm.overrides.@vue/reactivity=$VUE_RC" \
+            "pnpm.overrides.@vue/runtime-core=$VUE_RC" \
+            "pnpm.overrides.@vue/runtime-dom=$VUE_RC" \
+            "pnpm.overrides.@vue/server-renderer=$VUE_RC" \
+            "pnpm.overrides.@vue/shared=$VUE_RC"
+
+      - run: pnpm install --no-frozen-lockfile
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Tests
+        run: pnpm run test

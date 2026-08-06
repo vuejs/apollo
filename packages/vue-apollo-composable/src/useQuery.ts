@@ -1064,8 +1064,15 @@ export function useQueryImpl<
     return result as TVariables
   })
 
+  /** One write, so a re-entrant sync watcher cannot catch half a commit (Vue 3.6). */
+  const commitState = shallowRef({ variables: variables.value, committing: false })
+
   /** The actual variables sent to Apollo (may be delayed by debounce/throttle) */
-  const currentVariables = shallowRef(variables.value)
+  const currentVariables = computed<TVariables>({
+    get: () => commitState.value.variables,
+    // Writable for compat's `load(document, variables)`, which pushes variables in by hand.
+    set: variables => commitState.value = { ...commitState.value, variables },
+  })
 
   /**
    * `true` while `variables` have moved ahead of what has actually been handed to Apollo,
@@ -1083,7 +1090,10 @@ export function useQueryImpl<
    * Bridges the gap between `pending` clearing (on write) and `loading` being set on the
    * next flush, when the watcher below reobserves.
    */
-  const isCommitting = ref(false)
+  const isCommitting = computed<boolean>({
+    get: () => commitState.value.committing,
+    set: committing => commitState.value = { ...commitState.value, committing },
+  })
 
   function commitVariables(newVariables: TVariables) {
     if (equal(newVariables, currentVariables.value)) {
@@ -1092,8 +1102,7 @@ export function useQueryImpl<
       return
     }
 
-    isCommitting.value = true
-    currentVariables.value = newVariables
+    commitState.value = { variables: newVariables, committing: true }
   }
 
   const setDebouncedVariables = useDebounceFn(
