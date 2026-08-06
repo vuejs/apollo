@@ -84,5 +84,8 @@ jobs:
 
       - run: pnpm install --no-frozen-lockfile
 
+      - name: Build
+        run: pnpm run build
+
       - name: Tests
         run: pnpm run test
