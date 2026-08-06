@@ -1,5 +1,35 @@
 # Changelog
 
+## v5.0.0-alpha.3
+
+[compare changes](https://github.com/vuejs/apollo/compare/v5.0.0-alpha.2...v5.0.0-alpha.3)
+
+### 🚀 Enhancements
+
+- Add @vue/apollo-composable/compat and complete v5 docs ([#1609](https://github.com/vuejs/apollo/pull/1609))
+- **useQuery:** Report retained results properly, add pending and ([#1612](https://github.com/vuejs/apollo/pull/1612))
+- Add @vue/apollo-components & docs ([#1617](https://github.com/vuejs/apollo/pull/1617))
+
+### 🩹 Fixes
+
+- **build:** Inline @inheritDoc into published .d.ts ([#1613](https://github.com/vuejs/apollo/pull/1613))
+- **useApolloClient:** Preserve generics in provideApolloClient result type ([#1614](https://github.com/vuejs/apollo/pull/1614))
+- **@vue/apollo-composable:** Preserve DocumentNode identity in composables ([#1616](https://github.com/vuejs/apollo/pull/1616))
+
+### 🏡 Chore
+
+- Update checkout action to use v4 ([249bbab](https://github.com/vuejs/apollo/commit/249bbab))
+
+### 🤖 CI
+
+- Add permissions contents read ([2de2af4](https://github.com/vuejs/apollo/commit/2de2af4))
+
+### ❤️ Contributors
+
+- Nick Messing ([@nickmessing](http://github.com/nickmessing))
+- OrbitingBucket ([@OrbitingBucket](http://github.com/OrbitingBucket))
+- Guillaume Chau ([@Akryum](http://github.com/Akryum))
+
 ## v5.0.0-alpha.2
 
 [compare changes](https://github.com/vuejs/apollo/compare/v5.0.0-alpha.1...v5.0.0-alpha.2)
