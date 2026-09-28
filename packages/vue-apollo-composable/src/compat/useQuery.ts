@@ -12,6 +12,7 @@ import type { useQuery as useQueryV5 } from '../useQuery.ts'
 import { computed, toValue } from '@vue/reactivity'
 import { useApolloClient } from '../useApolloClient.ts'
 import { useQueryImpl } from '../useQuery.ts'
+import { ignoreTeardownAbort } from '../util/teardownAbort.ts'
 
 // #region Types
 
@@ -191,15 +192,17 @@ export function buildCompatQuery<
   }
 
   // v4 refetch returned `{ data, ...rest }`; v5 returns `{ result, ...rest }`. Rename back.
-  async function refetch(vars?: TVariables) {
-    const res = await v5.refetch(vars)
-    if (res == null)
-      return undefined
-    const { result, ...rest } = res
-    return {
-      data: result,
-      ...rest,
-    } as ApolloQueryResultV4<TResult> & Record<string, unknown>
+  function refetch(vars?: TVariables) {
+    const query = v5.query.value
+    return ignoreTeardownAbort(v5.refetch(vars).then((res) => {
+      if (res == null)
+        return undefined
+      const { result, ...rest } = res
+      return {
+        data: result,
+        ...rest,
+      } as ApolloQueryResultV4<TResult> & Record<string, unknown>
+    }), query)
   }
 
   function fetchMore<
@@ -208,13 +211,15 @@ export function buildCompatQuery<
   >(
     options: ObservableQuery.FetchMoreOptions<TResult, TVariables, TFetchData, TFetchVars>,
   ) {
-    return v5.fetchMore<TFetchData, TFetchVars>(options)?.then((res) => {
+    const query = v5.query.value
+    const promise = v5.fetchMore<TFetchData, TFetchVars>(options)?.then((res) => {
       const { result, ...rest } = res
       return {
         data: result,
         ...rest,
       } as ApolloFetchMoreResultV4<TFetchData>
     })
+    return promise && ignoreTeardownAbort(promise, query)
   }
 
   // v4 restart was sync void; v5 returns a Promise. Discard the promise to match v4 typing.

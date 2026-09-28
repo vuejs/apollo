@@ -22,6 +22,7 @@ import { createEventHook, useDebounceFn, useThrottleFn } from '@vueuse/core'
 import { equal } from '@wry/equality'
 import { useApolloClient } from './useApolloClient.ts'
 import { trackQuery } from './util/loadingTracking.ts'
+import { ignoreTeardownAbort, stopQuery } from './util/teardownAbort.ts'
 
 // #region Types
 export declare namespace useQuery {
@@ -1264,7 +1265,7 @@ export function useQueryImpl<
       oldObservableQuery,
     ) => {
       if (oldObservableQuery) {
-        oldObservableQuery.stop()
+        stopQuery(oldObservableQuery)
         subscription.value = undefined
       }
 
@@ -1349,8 +1350,11 @@ export function useQueryImpl<
   // #region Cleanup
   if (currentScope) {
     onScopeDispose(() => {
+      const query = observableQuery.value
       subscription.value?.unsubscribe()
-      observableQuery.value?.stop()
+      if (query) {
+        stopQuery(query)
+      }
     })
   }
   else {
@@ -1377,23 +1381,24 @@ export function useQueryImpl<
     forceDisabled.value = false
   }
 
-  async function refetch(variables?: TVariables) {
-    const res = await observableQuery.value?.refetch(variables)
-    if (res == null)
-      return undefined
+  // Not async, would unguard the promise
+  function refetch(variables?: TVariables) {
+    const query = observableQuery.value
+    if (query == null)
+      return Promise.resolve(undefined)
 
-    const { data, ...rest } = res
-    return {
+    return ignoreTeardownAbort(query.refetch(variables).then(({ data, ...rest }) => ({
       result: data,
       ...rest,
-    }
+    })), query)
   }
 
   function fetchMore<
     TFetchData = TData,
     TFetchVars extends OperationVariables = TVariables,
   >(options: ObservableQuery.FetchMoreOptions<TData, TVariables, TFetchData, TFetchVars>) {
-    return observableQuery.value?.fetchMore(options).then(toFetchMoreResult)
+    const query = observableQuery.value
+    return query && ignoreTeardownAbort(query.fetchMore(options).then(toFetchMoreResult), query)
   }
 
   function updateQuery(mapFn: UpdateQueryMapFn<TData, TVariables>) {
