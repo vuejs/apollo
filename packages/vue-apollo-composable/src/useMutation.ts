@@ -537,7 +537,8 @@ export function useMutation<
   let mutationId = 0
 
   // Track loading state for useMutationLoading/useGlobalMutationLoading
-  trackMutation(loading)
+  if (currentScope)
+    trackMutation(loading)
   // #endregion
 
   // #region Events
