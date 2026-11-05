@@ -1,5 +1,20 @@
 # Changelog
 
+## v5.0.0-alpha.5
+
+[compare changes](https://github.com/vuejs/apollo/compare/v5.0.0-alpha.4...v5.0.0-alpha.5)
+
+### 🩹 Fixes
+
+- **useQuery:** Handle AbortError coming from stopping queries ([#1620](https://github.com/vuejs/apollo/pull/1620))
+- **useMutation:** Guard loading tracking outside effect scopes ([#1622](https://github.com/vuejs/apollo/pull/1622))
+- **compat:** Preserve query error callback semantics ([#1623](https://github.com/vuejs/apollo/pull/1623))
+
+### ❤️ Contributors
+
+- Dominik Klein <dk@zammad.com>
+- Nick Messing <dot.nick.dot.messing@gmail.com>
+
 ## v5.0.0-alpha.4
 
 [compare changes](https://github.com/vuejs/apollo/compare/v5.0.0-alpha.3...v5.0.0-alpha.4)
