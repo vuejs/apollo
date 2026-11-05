@@ -181,6 +181,9 @@ export function buildCompatQuery<
   // Map from v5's `onNextState` (which fires on every state change) so we keep v4's timing.
   function onResult(fn: (result: ApolloQueryResultV4<TResult>, context: OnResultContext) => void) {
     return v5.onNextState((state) => {
+      // v4 sent failed requests only to onError with the default error policy.
+      if (state.error && (v5.query.value?.options.errorPolicy ?? 'none') === 'none')
+        return
       fn(currentToApolloQueryResult(state), { client: getClient() })
     })
   }
