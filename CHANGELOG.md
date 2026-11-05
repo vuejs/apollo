@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.0.0-beta.1
+
+[compare changes](https://github.com/vuejs/apollo/compare/v5.0.0-alpha.5...v5.0.0-beta.1)
+
 ## v5.0.0-alpha.5
 
 [compare changes](https://github.com/vuejs/apollo/compare/v5.0.0-alpha.4...v5.0.0-alpha.5)
